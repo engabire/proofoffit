@@ -1,0 +1,117 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "magicLink": "Send Magic Link",
+    "checkEmail": "Check your email for a magic link",
+    "invalidCredentials": "Invalid credentials",
+    "accountCreated": "Account created successfully"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "candidate": {
+    "title": "Candidate Dashboard",
+    "profile": "My Profile",
+    "matches": "Job Matches",
+    "applications": "Applications",
+    "resume": "Resume",
+    "preferences": "Preferences",
+    "analytics": "Analytics"
+  },
+  "employer": {
+    "title": "Employer Dashboard",
+    "intake": "Job Intake",
+    "slates": "Candidate Slates",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  },
+  "job": {
+    "title": "Job Title",
+    "company": "Company",
+    "location": "Location",
+    "type": "Job Type",
+    "salary": "Salary",
+    "description": "Description",
+    "requirements": "Requirements",
+    "apply": "Apply",
+    "save": "Save Job",
+    "share": "Share"
+  },
+  "matching": {
+    "fitScore": "Fit Score",
+    "explanation": "Why this match?",
+    "evidence": "Evidence",
+    "criteria": "Criteria",
+    "strengths": "Strengths",
+    "gaps": "Gaps"
+  },
+  "application": {
+    "status": "Status",
+    "submitted": "Submitted",
+    "pending": "Pending",
+    "reviewed": "Reviewed",
+    "interview": "Interview",
+    "rejected": "Rejected",
+    "hired": "Hired",
+    "withdrawn": "Withdrawn"
+  },
+  "pricing": {
+    "free": "Free",
+    "pro": "Pro",
+    "proPlus": "Pro+",
+    "team": "Team",
+    "perSlate": "Per-Slate",
+    "monthly": "per month",
+    "forever": "forever",
+    "perSlateUnit": "per slate",
+    "getStarted": "Get Started",
+    "startTrial": "Start Trial",
+    "mostPopular": "Most Popular"
+  },
+  "features": {
+    "title": "Features",
+    "criteriaDriven": "Criteria-Driven Matching",
+    "explainable": "Explainable Decisions",
+    "compliance": "Compliance-First",
+    "discovery": "Smart Job Discovery",
+    "tailored": "Tailored Applications",
+    "analytics": "Performance Analytics",
+    "slates": "Employer Slates",
+    "sustainable": "Carbon-Aware Processing"
+  }
+}

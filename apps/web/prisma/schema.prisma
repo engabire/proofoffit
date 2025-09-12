@@ -1,0 +1,278 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core tenant and user management
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  plan      String   @default("free") // free, pro, pro_plus, team, per_slate
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users           User[]
+  candidateProfiles CandidateProfile[]
+  employerIntakes   EmployerIntake[]
+  slates           Slate[]
+  applications     Application[]
+  consents         Consent[]
+  actionLogs       ActionLog[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  tenantId  String
+  email     String   @unique
+  role      String   @default("candidate") // candidate, employer, admin
+  locale    String   @default("en")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant           Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  candidateProfile CandidateProfile?
+  consents         Consent[]
+
+  @@map("users")
+}
+
+// Candidate profile and evidence
+model CandidateProfile {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String   @unique
+  preferences   Json     @default("{}")
+  contactPolicy Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentials  Credential[]
+  bullets      Bullet[]
+  artifacts    Artifact[]
+  applications Application[]
+
+  @@map("candidate_profiles")
+}
+
+model Credential {
+  id          String   @id @default(cuid())
+  candidateId String
+  type        String   // degree, certification, license, etc.
+  issuer      String
+  issuedOn    DateTime?
+  verified    Boolean  @default(false)
+  docUrl      String?
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("credentials")
+}
+
+model Bullet {
+  id          String   @id @default(cuid())
+  candidateId String
+  text        String
+  tags        Json     @default("{}") // {criterion, evidence_type, metric?, scope?, tool?, link?}
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("bullets")
+}
+
+model Artifact {
+  id          String   @id @default(cuid())
+  candidateId String
+  title       String
+  url         String
+  type        String   // resume, portfolio, cover_letter, etc.
+  createdAt   DateTime @default(now())
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("artifacts")
+}
+
+// Job and employer data
+model Job {
+  id           String   @id @default(cuid())
+  source       String   // usajobs, reliefweb, greenhouse, lever, etc.
+  org          String
+  title        String
+  location     String
+  workType     String   // remote, hybrid, onsite
+  pay          Json?    @default("{}")
+  description  String
+  requirements Json     @default("{}") // {must_have: [], preferred: []}
+  constraints  Json     @default("{}") // {license?, clearance?, language: []}
+  tos          Json     @default("{}") // {allowed: boolean, captcha: boolean, notes}
+  fetchedAt    DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  employerIntakes EmployerIntake[]
+  applications    Application[]
+  slates          Slate[]
+
+  @@map("jobs")
+}
+
+model EmployerIntake {
+  id               String   @id @default(cuid())
+  tenantId         String
+  jobRef           String
+  mustHave         Json     @default("[]")
+  preferred        Json     @default("[]")
+  preferenceOrder  Json     @default("[]")
+  weights          Json     @default("{}")
+  constraints      Json     @default("{}")
+  terms            Json     @default("{}")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobRef], references: [id], onDelete: Cascade)
+  slates Slate[]
+
+  @@map("employer_intakes")
+}
+
+model Slate {
+  id         String   @id @default(cuid())
+  tenantId   String
+  employerId String
+  jobRef     String
+  weights    Json     @default("{}")
+  candidates Json     @default("[]") // [{candidate_id, fit: 0..1, explanations: [], status}]
+  auditUrl   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobRef], references: [id], onDelete: Cascade)
+  intake EmployerIntake @relation(fields: [employerId], references: [id], onDelete: Cascade)
+
+  @@map("slates")
+}
+
+model Application {
+  id             String   @id @default(cuid())
+  tenantId       String
+  candidateId    String
+  jobRef         String
+  channel        String   // auto, prep_confirm, manual
+  status         String   @default("pending") // pending, submitted, interview, declined, hired
+  policyDecision Json     @default("{}")
+  documents      Json     @default("{}")
+  timestamps     Json     @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job       Job              @relation(fields: [jobRef], references: [id], onDelete: Cascade)
+
+  @@map("applications")
+}
+
+// Criteria graph for matching
+model CriteriaNode {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  label     String
+  parentId  String?
+  synonyms  String[] @default([])
+  meta      Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Self-referential relation
+  parent   CriteriaNode?  @relation("CriteriaHierarchy", fields: [parentId], references: [id])
+  children CriteriaNode[] @relation("CriteriaHierarchy")
+
+  @@map("criteria_nodes")
+}
+
+// Vector embeddings for semantic search
+model Embedding {
+  id       String @id @default(cuid())
+  objType  String // job, bullet, criteria
+  objId    String
+  vector   Unsupported("vector(768)") // pgvector extension
+  createdAt DateTime @default(now())
+
+  @@unique([objType, objId])
+  @@map("embeddings")
+}
+
+// Consent and privacy management
+model Consent {
+  id        String    @id @default(cuid())
+  tenantId  String
+  userId    String
+  scope     String    // data_sharing, marketing, analytics, etc.
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime?
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("consents")
+}
+
+// Policy sources and ToS compliance
+model PolicySource {
+  id        String   @id @default(cuid())
+  domain    String   @unique
+  allowed   Boolean  @default(false)
+  captcha   Boolean  @default(false)
+  notes     String?
+  version   String   @default("1.0")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("policy_sources")
+}
+
+// Immutable action log with hash chaining
+model ActionLog {
+  id          BigInt   @id @default(autoincrement())
+  tenantId    String
+  actorType   String   // user, system, api
+  actorId     String
+  action      String   // create, update, delete, apply, etc.
+  objType     String   // job, profile, slate, etc.
+  objId       String
+  payloadHash Bytes    // SHA256 hash of payload
+  prevHash    Bytes?   // Previous hash in chain
+  hash        Bytes    // Current hash: SHA256(prevHash + payloadHash + timestamp)
+  ts          DateTime @default(now())
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("action_log")
+}

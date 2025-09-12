@@ -1,0 +1,166 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import SignInPage from '@/app/auth/signin/page'
+import SignUpPage from '@/app/auth/signup/page'
+
+// Mock the auth helpers
+jest.mock('@/lib/auth-helpers', () => ({
+  getCurrentUserWithProfile: jest.fn(),
+}))
+
+const mockSupabase = {
+  auth: {
+    signInWithOtp: jest.fn(),
+    signOut: jest.fn(),
+    getUser: jest.fn(),
+  },
+  from: jest.fn(() => ({
+    select: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockReturnThis(),
+    update: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    single: jest.fn(),
+  })),
+}
+
+describe('Authentication Flow', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(createClientComponentClient as jest.Mock).mockReturnValue(mockSupabase)
+  })
+
+  describe('Sign In Page', () => {
+    it('renders sign in form correctly', () => {
+      render(<SignInPage />)
+      
+      expect(screen.getByText('Sign in to ProofOfFit')).toBeInTheDocument()
+      expect(screen.getByLabelText('Email')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /send magic link/i })).toBeInTheDocument()
+    })
+
+    it('handles email input correctly', () => {
+      render(<SignInPage />)
+      
+      const emailInput = screen.getByLabelText('Email')
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      
+      expect(emailInput).toHaveValue('test@example.com')
+    })
+
+    it('shows loading state when submitting', async () => {
+      mockSupabase.auth.signInWithOtp.mockResolvedValue({ data: {}, error: null })
+      
+      render(<SignInPage />)
+      
+      const emailInput = screen.getByLabelText('Email')
+      const submitButton = screen.getByRole('button', { name: /send magic link/i })
+      
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.click(submitButton)
+      
+      expect(submitButton).toBeDisabled()
+      expect(screen.getByText(/sending/i)).toBeInTheDocument()
+    })
+
+    it('handles successful sign in', async () => {
+      mockSupabase.auth.signInWithOtp.mockResolvedValue({ data: {}, error: null })
+      
+      render(<SignInPage />)
+      
+      const emailInput = screen.getByLabelText('Email')
+      const submitButton = screen.getByRole('button', { name: /send magic link/i })
+      
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.click(submitButton)
+      
+      await waitFor(() => {
+        expect(mockSupabase.auth.signInWithOtp).toHaveBeenCalledWith({
+          email: 'test@example.com',
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        })
+      })
+    })
+
+    it('handles sign in error', async () => {
+      mockSupabase.auth.signInWithOtp.mockResolvedValue({ 
+        data: null, 
+        error: { message: 'Invalid email' } 
+      })
+      
+      render(<SignInPage />)
+      
+      const emailInput = screen.getByLabelText('Email')
+      const submitButton = screen.getByRole('button', { name: /send magic link/i })
+      
+      fireEvent.change(emailInput, { target: { value: 'invalid-email' } })
+      fireEvent.click(submitButton)
+      
+      await waitFor(() => {
+        expect(screen.getByText(/error/i)).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('Sign Up Page', () => {
+    it('renders sign up form correctly', () => {
+      render(<SignUpPage />)
+      
+      expect(screen.getByText('Create your ProofOfFit account')).toBeInTheDocument()
+      expect(screen.getByLabelText('Email')).toBeInTheDocument()
+      expect(screen.getByText('I am a...')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument()
+    })
+
+    it('handles role selection', () => {
+      render(<SignUpPage />)
+      
+      const candidateRadio = screen.getByLabelText('Job Seeker')
+      const employerRadio = screen.getByLabelText('Employer')
+      
+      fireEvent.click(candidateRadio)
+      expect(candidateRadio).toBeChecked()
+      
+      fireEvent.click(employerRadio)
+      expect(employerRadio).toBeChecked()
+      expect(candidateRadio).not.toBeChecked()
+    })
+
+    it('validates required fields', async () => {
+      render(<SignUpPage />)
+      
+      const submitButton = screen.getByRole('button', { name: /create account/i })
+      fireEvent.click(submitButton)
+      
+      await waitFor(() => {
+        expect(screen.getByText(/email is required/i)).toBeInTheDocument()
+        expect(screen.getByText(/please select a role/i)).toBeInTheDocument()
+      })
+    })
+
+    it('handles successful sign up', async () => {
+      mockSupabase.auth.signInWithOtp.mockResolvedValue({ data: {}, error: null })
+      
+      render(<SignUpPage />)
+      
+      const emailInput = screen.getByLabelText('Email')
+      const candidateRadio = screen.getByLabelText('Job Seeker')
+      const submitButton = screen.getByRole('button', { name: /create account/i })
+      
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.click(candidateRadio)
+      fireEvent.click(submitButton)
+      
+      await waitFor(() => {
+        expect(mockSupabase.auth.signInWithOtp).toHaveBeenCalledWith({
+          email: 'test@example.com',
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?role=candidate`,
+          },
+        })
+      })
+    })
+  })
+})

@@ -1,0 +1,117 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "submit": "Soumettre",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "refresh": "Actualiser"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "magicLink": "Envoyer le lien magique",
+    "checkEmail": "Vérifiez votre email pour un lien magique",
+    "invalidCredentials": "Identifiants invalides",
+    "accountCreated": "Compte créé avec succès"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "about": "À propos",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "candidate": {
+    "title": "Tableau de bord candidat",
+    "profile": "Mon profil",
+    "matches": "Correspondances d'emploi",
+    "applications": "Candidatures",
+    "resume": "CV",
+    "preferences": "Préférences",
+    "analytics": "Analytiques"
+  },
+  "employer": {
+    "title": "Tableau de bord employeur",
+    "intake": "Saisie d'emploi",
+    "slates": "Listes de candidats",
+    "analytics": "Analytiques",
+    "settings": "Paramètres"
+  },
+  "job": {
+    "title": "Titre du poste",
+    "company": "Entreprise",
+    "location": "Localisation",
+    "type": "Type d'emploi",
+    "salary": "Salaire",
+    "description": "Description",
+    "requirements": "Exigences",
+    "apply": "Postuler",
+    "save": "Enregistrer l'emploi",
+    "share": "Partager"
+  },
+  "matching": {
+    "fitScore": "Score d'adéquation",
+    "explanation": "Pourquoi cette correspondance ?",
+    "evidence": "Preuve",
+    "criteria": "Critères",
+    "strengths": "Points forts",
+    "gaps": "Lacunes"
+  },
+  "application": {
+    "status": "Statut",
+    "submitted": "Soumis",
+    "pending": "En attente",
+    "reviewed": "Examiné",
+    "interview": "Entretien",
+    "rejected": "Rejeté",
+    "hired": "Embauché",
+    "withdrawn": "Retiré"
+  },
+  "pricing": {
+    "free": "Gratuit",
+    "pro": "Pro",
+    "proPlus": "Pro+",
+    "team": "Équipe",
+    "perSlate": "Par liste",
+    "monthly": "par mois",
+    "forever": "pour toujours",
+    "perSlateUnit": "par liste",
+    "getStarted": "Commencer",
+    "startTrial": "Commencer l'essai",
+    "mostPopular": "Le plus populaire"
+  },
+  "features": {
+    "title": "Fonctionnalités",
+    "criteriaDriven": "Correspondance basée sur les critères",
+    "explainable": "Décisions explicables",
+    "compliance": "Conformité d'abord",
+    "discovery": "Découverte intelligente d'emplois",
+    "tailored": "Candidatures sur mesure",
+    "analytics": "Analytiques de performance",
+    "slates": "Listes d'employeurs",
+    "sustainable": "Traitement conscient du carbone"
+  }
+}
