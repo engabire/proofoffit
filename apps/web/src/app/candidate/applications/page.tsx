@@ -6,31 +6,37 @@ import { Badge } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Building, MapPin, Clock, FileText, Eye, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/env'
+
+// Force dynamic rendering to prevent build-time data collection
+export const dynamic = 'force-dynamic'
 
 export default async function ApplicationsPage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = createServerComponentClient({ cookies })
-
+  
   if (!userData) {
     return <div>Loading...</div>
   }
 
+  // Only create Supabase client if environment variables are configured
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+
   // Get candidate profile
-  const { data: profile } = await supabase
+  const { data: profile } = supabase ? await supabase
     .from('candidate_profiles')
     .select('*')
     .eq('userId', userData.user.id)
-    .single()
+    .single() : { data: null }
 
   // Get applications
-  const { data: applications } = await supabase
+  const { data: applications } = supabase ? await supabase
     .from('applications')
     .select(`
       *,
       job:jobs(*)
     `)
     .eq('candidateId', profile?.id)
-    .order('createdAt', { ascending: false })
+    .order('createdAt', { ascending: false }) : { data: null }
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -6,24 +6,30 @@ import { Badge } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Users, Eye, Download, ExternalLink, Clock, Target } from 'lucide-react'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/env'
+
+// Force dynamic rendering to prevent build-time data collection
+export const dynamic = 'force-dynamic'
 
 export default async function SlatesPage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = createServerComponentClient({ cookies })
-
+  
   if (!userData) {
     return <div>Loading...</div>
   }
 
+  // Only create Supabase client if environment variables are configured
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+
   // Get employer intakes with their slates
-  const { data: intakes } = await supabase
+  const { data: intakes } = supabase ? await supabase
     .from('employer_intakes')
     .select(`
       *,
       job:jobs(*),
       slates(*)
     `)
-    .order('createdAt', { ascending: false })
+    .order('createdAt', { ascending: false }) : { data: null }
 
   // Mock slate data (in real app, this would come from the slate service)
   const mockSlates = intakes?.map((intake) => ({

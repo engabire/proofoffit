@@ -7,28 +7,34 @@ import { Button } from '@proof-of-fit/ui'
 import { Progress } from '@proof-of-fit/ui'
 import { MapPin, Building, DollarSign, Clock, Target, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/env'
+
+// Force dynamic rendering to prevent build-time data collection
+export const dynamic = 'force-dynamic'
 
 export default async function JobMatchesPage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = createServerComponentClient({ cookies })
-
+  
   if (!userData) {
     return <div>Loading...</div>
   }
 
+  // Only create Supabase client if environment variables are configured
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+
   // Get candidate profile
-  const { data: profile } = await supabase
+  const { data: profile } = supabase ? await supabase
     .from('candidate_profiles')
     .select('*')
     .eq('userId', userData.user.id)
-    .single()
+    .single() : { data: null }
 
   // Get recent jobs (in a real app, this would be filtered by matching algorithm)
-  const { data: jobs } = await supabase
+  const { data: jobs } = supabase ? await supabase
     .from('jobs')
     .select('*')
     .order('createdAt', { ascending: false })
-    .limit(10)
+    .limit(10) : { data: null }
 
   // Mock matching scores (in real app, this would come from the ranker service)
   const mockMatches = jobs?.map((job, index) => ({

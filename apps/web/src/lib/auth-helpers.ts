@@ -1,8 +1,13 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { isSupabaseConfigured } from './env'
 
 export async function getCurrentUser() {
+  if (!isSupabaseConfigured()) {
+    return null
+  }
+  
   const supabase = createServerComponentClient({ cookies })
   const {
     data: { user },
@@ -27,6 +32,13 @@ export async function requireAuth() {
 export async function getCurrentUserWithProfile() {
   const user = await getCurrentUser()
   if (!user) return null
+
+  if (!isSupabaseConfigured()) {
+    return {
+      user,
+      profile: null,
+    }
+  }
 
   const supabase = createServerComponentClient({ cookies })
   

@@ -2,6 +2,9 @@ import { getCurrentUserWithProfile } from '@/lib/auth-helpers'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Users, Briefcase, TrendingUp, FileText } from 'lucide-react'
 
+// Force dynamic rendering to prevent build-time data collection
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const userData = await getCurrentUserWithProfile()
   

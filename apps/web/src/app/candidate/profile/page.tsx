@@ -6,35 +6,41 @@ import { Badge } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Plus, Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/env'
+
+// Force dynamic rendering to prevent build-time data collection
+export const dynamic = 'force-dynamic'
 
 export default async function CandidateProfilePage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = createServerComponentClient({ cookies })
-
+  
   if (!userData) {
     return <div>Loading...</div>
   }
 
+  // Only create Supabase client if environment variables are configured
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+
   // Get candidate profile
-  const { data: profile } = await supabase
+  const { data: profile } = supabase ? await supabase
     .from('candidate_profiles')
     .select('*')
     .eq('userId', userData.user.id)
-    .single()
+    .single() : { data: null }
 
   // Get candidate bullets
-  const { data: bullets } = await supabase
+  const { data: bullets } = supabase ? await supabase
     .from('bullets')
     .select('*')
     .eq('candidateId', profile?.id)
-    .order('createdAt', { ascending: false })
+    .order('createdAt', { ascending: false }) : { data: null }
 
   // Get credentials
-  const { data: credentials } = await supabase
+  const { data: credentials } = supabase ? await supabase
     .from('credentials')
     .select('*')
     .eq('candidateId', profile?.id)
-    .order('issuedOn', { ascending: false })
+    .order('issuedOn', { ascending: false }) : { data: null }
 
   return (
     <div className="space-y-6">
