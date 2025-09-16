@@ -118,7 +118,6 @@ documentation/
 .github/
 
 # Package manager files
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
@@ -291,7 +290,6 @@ documentation/
 .github/
 
 # Package manager files
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
