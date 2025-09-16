@@ -1084,23 +1084,76 @@ function FitAnalysisStep({ resume, job, onComplete }: {
     // Simulate analysis
     await new Promise(resolve => setTimeout(resolve, 3000))
     
+    // Customize analysis based on actual resume data and job requirements
+    const resumeSkills = resume.parsedData.skills || []
+    const resumeExperience = resume.parsedData.experience || []
+    const resumeEducation = resume.parsedData.education || []
+    const jobRequirements = job.requirements || []
+    const jobNiceToHaves = job.niceToHaves || []
+    
+    // Calculate skill matching
+    const matchedSkills = resumeSkills.filter(skill => 
+      jobRequirements.some(req => 
+        req.toLowerCase().includes(skill.toLowerCase()) || 
+        skill.toLowerCase().includes(req.toLowerCase())
+      )
+    )
+    
+    const missingSkills = jobRequirements.filter(req => 
+      !resumeSkills.some(skill => 
+        req.toLowerCase().includes(skill.toLowerCase()) || 
+        skill.toLowerCase().includes(req.toLowerCase())
+      )
+    )
+    
+    const niceToHaveSkills = resumeSkills.filter(skill => 
+      jobNiceToHaves.some(nice => 
+        nice.toLowerCase().includes(skill.toLowerCase()) || 
+        skill.toLowerCase().includes(nice.toLowerCase())
+      )
+    )
+    
+    // Calculate experience score
+    const experienceYears = resumeExperience.length
+    const hasRelevantExperience = resumeExperience.some(exp => 
+      jobRequirements.some(req => 
+        exp.title.toLowerCase().includes(req.toLowerCase()) ||
+        exp.description.toLowerCase().includes(req.toLowerCase())
+      )
+    )
+    
+    // Calculate education score
+    const hasRelevantEducation = resumeEducation.some(edu => 
+      jobRequirements.some(req => 
+        edu.degree.toLowerCase().includes(req.toLowerCase()) ||
+        edu.institution.toLowerCase().includes('university') ||
+        edu.institution.toLowerCase().includes('college')
+      )
+    )
+    
+    // Calculate overall score based on actual data
+    const skillsScore = Math.min(100, (matchedSkills.length / Math.max(jobRequirements.length, 1)) * 100)
+    const experienceScore = Math.min(100, (experienceYears * 15) + (hasRelevantExperience ? 20 : 0))
+    const educationScore = hasRelevantEducation ? 90 : 70
+    const overallScore = Math.round((skillsScore * 0.4) + (experienceScore * 0.3) + (educationScore * 0.2) + 10)
+    
     const mockAnalysis: FitAnalysis = {
-      overallScore: 78,
+      overallScore: overallScore,
       breakdown: {
         skills: {
-          score: 85,
-          matched: ['Python', 'React', 'AWS'],
-          missing: ['Docker', 'Kubernetes']
+          score: Math.round(skillsScore),
+          matched: matchedSkills,
+          missing: missingSkills.slice(0, 3) // Limit to top 3 missing
         },
         experience: {
-          score: 80,
-          matched: ['5+ years experience', 'Full-stack development'],
-          gaps: ['Team leadership', 'Microservices architecture']
+          score: Math.round(experienceScore),
+          matched: hasRelevantExperience ? [`${experienceYears}+ years experience`, 'Relevant work history'] : [`${experienceYears}+ years experience`],
+          gaps: missingSkills.slice(0, 2).map(skill => `${skill} experience`)
         },
         education: {
-          score: 90,
+          score: educationScore,
           requirements: ['Bachelor degree in CS or related'],
-          qualifications: ['Bachelor of Computer Science']
+          qualifications: resumeEducation.map(edu => edu.degree)
         },
         location: {
           score: 100,
@@ -1114,32 +1167,32 @@ function FitAnalysisStep({ resume, job, onComplete }: {
         }
       },
       strengths: [
-        'Strong technical skills match',
-        'Relevant work experience',
-        'Remote work compatible',
-        'Salary expectations aligned'
-      ],
+        ...matchedSkills.slice(0, 2).map(skill => `Strong ${skill} skills`),
+        ...niceToHaveSkills.slice(0, 1).map(skill => `${skill} expertise (nice-to-have)`),
+        `${experienceYears}+ years of experience`,
+        hasRelevantEducation ? 'Relevant educational background' : 'Professional experience'
+      ].slice(0, 4),
       weaknesses: [
-        'Missing some required technologies',
-        'Limited leadership experience',
-        'No microservices background'
-      ],
+        ...missingSkills.slice(0, 2).map(skill => `Missing ${skill} experience`),
+        experienceYears < 3 ? 'Limited years of experience' : null,
+        !hasRelevantEducation ? 'Consider relevant education/certifications' : null
+      ].filter(Boolean).slice(0, 3),
       recommendations: [
-        'Highlight your Python and React experience',
-        'Emphasize your AWS certifications',
-        'Consider learning Docker and Kubernetes',
-        'Prepare examples of team collaboration'
-      ],
+        ...matchedSkills.slice(0, 2).map(skill => `Highlight your ${skill} experience prominently`),
+        ...niceToHaveSkills.slice(0, 1).map(skill => `Emphasize your ${skill} skills as a differentiator`),
+        missingSkills.length > 0 ? `Consider learning ${missingSkills[0]} to improve your fit` : null,
+        'Showcase your problem-solving and collaboration abilities'
+      ].filter(Boolean).slice(0, 4),
       biasIndicators: {
         detected: false,
         factors: [],
         mitigation: ['Blind resume review', 'Skills-based assessment']
       },
       auditTrail: {
-        id: 'audit_123',
+        id: `audit_${Date.now()}`,
         timestamp: new Date(),
         version: '1.0',
-        hash: 'abc123def456',
+        hash: `hash_${Date.now()}`,
         immutable: true
       }
     }
@@ -1383,23 +1436,53 @@ function ResultsStep({
     // Simulate document generation
     await new Promise(resolve => setTimeout(resolve, 2000))
     
+    // Customize documents based on resume data and job requirements
+    const resumeSkills = resume?.parsedData.skills || []
+    const resumeExperience = resume?.parsedData.experience || []
+    const jobRequirements = job.requirements || []
+    
+    // Extract relevant skills from resume that match job requirements
+    const matchingSkills = resumeSkills.filter(skill => 
+      jobRequirements.some(req => 
+        req.toLowerCase().includes(skill.toLowerCase()) || 
+        skill.toLowerCase().includes(req.toLowerCase())
+      )
+    )
+    
+    // Generate customized highlights based on actual resume data
+    const resumeHighlights = [
+      ...matchingSkills.slice(0, 2).map(skill => `${skill} expertise`),
+      resumeExperience.length > 0 ? `${resumeExperience.length}+ years experience` : 'Relevant experience',
+      resume?.parsedData.certifications?.length > 0 ? 'Professional certifications' : 'Technical skills'
+    ].slice(0, 3)
+    
+    const coverLetterHighlights = [
+      'Relevant experience',
+      'Technical skills alignment', 
+      'Cultural fit'
+    ]
+    
+    // Generate keywords based on job requirements and resume skills
+    const resumeKeywords = [...matchingSkills, ...resumeSkills.slice(0, 3)].slice(0, 5)
+    const coverLetterKeywords = ['Innovation', 'Collaboration', 'Problem-solving', 'Teamwork', 'Growth']
+    
     const mockDocuments: TailoredDocument[] = [
       {
         id: '1',
         type: 'resume',
-        content: 'Tailored resume content...',
-        highlights: ['Python expertise', 'AWS certification', '5+ years experience'],
-        keywords: ['Python', 'React', 'AWS', 'Full-stack', 'Agile'],
-        atsScore: 92,
+        content: `Tailored resume for ${job.title} at ${job.company}...`,
+        highlights: resumeHighlights,
+        keywords: resumeKeywords,
+        atsScore: Math.min(95, 70 + (matchingSkills.length * 5) + (resumeExperience.length * 2)),
         generatedAt: new Date()
       },
       {
         id: '2',
         type: 'cover_letter',
-        content: 'Tailored cover letter content...',
-        highlights: ['Relevant experience', 'Technical skills', 'Cultural fit'],
-        keywords: ['Innovation', 'Collaboration', 'Problem-solving'],
-        atsScore: 88,
+        content: `Tailored cover letter for ${job.title} at ${job.company}...`,
+        highlights: coverLetterHighlights,
+        keywords: coverLetterKeywords,
+        atsScore: Math.min(90, 75 + (matchingSkills.length * 3)),
         generatedAt: new Date()
       }
     ]
@@ -1407,6 +1490,124 @@ function ResultsStep({
     setDocuments(mockDocuments)
     setGenerating(false)
     onGenerateDocuments()
+  }
+
+  const downloadDocument = async (doc: TailoredDocument) => {
+    try {
+      // Create a mock PDF blob for demonstration
+      const pdfContent = `
+        %PDF-1.4
+        1 0 obj
+        <<
+        /Type /Catalog
+        /Pages 2 0 R
+        >>
+        endobj
+        
+        2 0 obj
+        <<
+        /Type /Pages
+        /Kids [3 0 R]
+        /Count 1
+        >>
+        endobj
+        
+        3 0 obj
+        <<
+        /Type /Page
+        /Parent 2 0 R
+        /MediaBox [0 0 612 792]
+        /Contents 4 0 R
+        >>
+        endobj
+        
+        4 0 obj
+        <<
+        /Length 200
+        >>
+        stream
+        BT
+        /F1 16 Tf
+        72 720 Td
+        (${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'}) Tj
+        0 -30 Td
+        /F1 12 Tf
+        (Generated for ${job.title} at ${job.company}) Tj
+        0 -20 Td
+        (ATS Score: ${doc.atsScore}%) Tj
+        0 -20 Td
+        (Key Highlights: ${doc.highlights.join(', ')}) Tj
+        0 -20 Td
+        (Keywords: ${doc.keywords.join(', ')}) Tj
+        ET
+        endstream
+        endobj
+        
+        xref
+        0 5
+        0000000000 65535 f 
+        0000000009 00000 n 
+        0000000058 00000 n 
+        0000000115 00000 n 
+        0000000204 00000 n 
+        trailer
+        <<
+        /Size 5
+        /Root 1 0 R
+        >>
+        startxref
+        453
+        %%EOF
+      `
+      
+      const blob = new Blob([pdfContent], { type: 'application/pdf' })
+      const url = URL.createObjectURL(blob)
+      
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${doc.type === 'resume' ? 'tailored_resume' : 'tailored_cover_letter'}_${job.company.toLowerCase().replace(/\s+/g, '_')}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      URL.revokeObjectURL(url)
+      
+      // Show success message
+      alert(`Downloaded ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'} successfully!`)
+    } catch (error) {
+      console.error('Download failed:', error)
+      alert('Download failed. Please try again.')
+    }
+  }
+
+  const previewDocument = (doc: TailoredDocument) => {
+    // For now, show an alert with document details
+    // In a real implementation, this would open a PDF viewer
+    alert(`Preview: ${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'}\n\nKey Highlights: ${doc.highlights.join(', ')}\nOptimized Keywords: ${doc.keywords.join(', ')}\nATS Score: ${doc.atsScore}%\n\nContent: ${doc.content}`)
+  }
+
+  const shareDocument = async (doc: TailoredDocument) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'}`,
+          text: `Check out my tailored ${doc.type === 'resume' ? 'resume' : 'cover letter'} for ${job.title} at ${job.company}`,
+          url: window.location.href
+        })
+      } catch (error) {
+        console.error('Share failed:', error)
+      }
+    } else {
+      // Fallback: copy to clipboard
+      const shareText = `Check out my tailored ${doc.type === 'resume' ? 'resume' : 'cover letter'} for ${job.title} at ${job.company}. Generated by ProofOfFit: ${window.location.href}`
+      try {
+        await navigator.clipboard.writeText(shareText)
+        alert('Share link copied to clipboard!')
+      } catch (error) {
+        console.error('Copy failed:', error)
+        alert('Share functionality not available')
+      }
+    }
   }
 
   return (
@@ -1515,14 +1716,26 @@ function ResultsStep({
                   </div>
                   
                   <div className="flex space-x-2">
-                    <Button className="flex-1">
+                    <Button 
+                      className="flex-1"
+                      onClick={() => downloadDocument(doc)}
+                      aria-label={`Download ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'} PDF`}
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       Download PDF
                     </Button>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={() => previewDocument(doc)}
+                      aria-label={`Preview ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'}`}
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={() => shareDocument(doc)}
+                      aria-label={`Share ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'}`}
+                    >
                       <Share2 className="w-4 h-4" />
                     </Button>
                   </div>
