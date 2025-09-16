@@ -9,14 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { RadioGroup, RadioGroupItem } from '@proof-of-fit/ui'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/env'
 
 export default function SignUpPage() {
-  const supabase = createClientComponentClient()
+  const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<'candidate' | 'employer'>('candidate')
   const [loading, setLoading] = useState(false)
 
   async function handleSignUp() {
+    if (!supabase) {
+      toast.error('Authentication not configured. Please contact support.')
+      return
+    }
+    
     try {
       setLoading(true)
       const redirectTo = `${window.location.origin}/auth/callback`

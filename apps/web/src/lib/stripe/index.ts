@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { isSupabaseConfigured } from '../env'
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!, {
   apiVersion: '2023-10-16',
@@ -37,7 +38,7 @@ export class StripeService {
 
   private get supabase() {
     if (!this._supabase) {
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      if (isSupabaseConfigured()) {
         this._supabase = createClientComponentClient()
       } else {
         throw new Error('Supabase not configured')

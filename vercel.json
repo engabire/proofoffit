@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "cd apps/web && ./build.sh",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci",
   "framework": "nextjs"

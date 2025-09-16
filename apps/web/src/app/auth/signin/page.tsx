@@ -7,13 +7,19 @@ import { Input } from '@proof-of-fit/ui'
 import { Label } from '@proof-of-fit/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { toast } from 'sonner'
+import { isSupabaseConfigured } from '@/lib/env'
 
 export default function SignInPage() {
-  const supabase = createClientComponentClient()
+  const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleMagicLink() {
+    if (!supabase) {
+      toast.error('Authentication not configured. Please contact support.')
+      return
+    }
+    
     try {
       setLoading(true)
       const redirectTo = `${window.location.origin}/auth/callback`
