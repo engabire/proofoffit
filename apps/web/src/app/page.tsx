@@ -44,6 +44,7 @@ import {
   DropdownMenuItem,
   Separator,
 } from "@proof-of-fit/ui";
+import LivingProofHero from "@/components/landing/living-proof-hero";
 
 /**
  * ProofOfFit Landing
@@ -828,77 +829,7 @@ export default function ProofOfFitLanding() {
     <div className={warmBody}>
       <Header lane={lane} setLane={setLane} />
       {/* HERO */}
-      <section id="main" className="relative overflow-hidden">
-        <SiteBackground variant={lane} />
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pt-16 pb-8">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 mt-10 items-center">
-            {/* Copy */}
-            <div id={`panel-${c.id}`} role="tabpanel" aria-labelledby={`tab-${c.id}`}>              
-              <motion.h1
-                key={c.headline}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
-                className="text-3xl md:text-5xl font-semibold tracking-tight"
-              >
-                {c.headline}
-              </motion.h1>
-              <p className={`mt-4 text-lg ${subtle}`}>{c.subhead}</p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  asChild
-                  className={`group shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition bg-gradient-to-r ${lane === "seeker" ? "from-sky-600 to-indigo-600" : "from-emerald-600 to-teal-600"} text-white`}
-                  data-evt="cta_primary"
-                  data-lane={lane}
-                >
-                  <a 
-                    href={c.primaryCta.href} 
-                    className="inline-flex items-center gap-2"
-                    aria-label={`${c.primaryCta.label} for ${lane === 'seeker' ? 'job seekers' : 'employers'}`}
-                    rel="noopener"
-                  >
-                    {c.primaryCta.label}
-                    <Sparkles className="h-4 w-4 opacity-80 group-hover:opacity-100" aria-hidden="true" />
-                  </a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="group border-2 hover:bg-white/60 dark:hover:bg-zinc-900/60"
-                  data-evt="cta_secondary"
-                  data-lane={lane}
-                >
-                  <a 
-                    href={c.secondaryCta.href} 
-                    className="inline-flex items-center gap-2"
-                    aria-label={`${c.secondaryCta.label} - Learn more about our process`}
-                    rel="noopener"
-                  >
-                    {c.secondaryCta.label}
-                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  </a>
-                </Button>
-              </div>
-              <p className={`mt-2 text-sm ${subtle} inline-flex items-center gap-2`}>
-                <Lock className="h-4 w-4" /> No credit card • Takes ~2 minutes
-              </p>
-              <Ribbons items={c.ribbons} />
-            </div>
-
-            {/* Proof card mock */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.05 }}
-              className="flex justify-center"
-            >
-              <ReceiptCard />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <LivingProofHero />
 
       <WhyChoose />
       <HowItWorks items={lane === "seeker" ? howSeeker : howEmployer} lane={lane} />
