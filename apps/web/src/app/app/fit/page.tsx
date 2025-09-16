@@ -52,6 +52,7 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  RotateCcw,
 } from "lucide-react"
 import {
   Button,
@@ -83,6 +84,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "@proof-of-fit/ui"
 
 // Types
@@ -248,31 +251,56 @@ const mockJobs: JobPosting[] = [
 ]
 
 // Components
-function StepIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
+function StepIndicator({ 
+  currentStep, 
+  totalSteps, 
+  onStepChange 
+}: { 
+  currentStep: number; 
+  totalSteps: number;
+  onStepChange?: (step: number) => void;
+}) {
+  const stepNames = ['Import Resume', 'Select Job', 'Analyze Fit', 'Download Results'];
+  
   return (
-    <div className="flex items-center justify-center space-x-2 mb-8">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div key={i} className="flex items-center">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              i < currentStep
-                ? 'bg-green-500 text-white'
-                : i === currentStep
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-600'
-            }`}
-          >
-            {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
+    <div className="mb-8">
+      <div className="flex items-center justify-center space-x-2 mb-4">
+        {Array.from({ length: totalSteps }, (_, i) => (
+          <div key={i} className="flex items-center">
+            <button
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                i < currentStep
+                  ? 'bg-green-500 text-white hover:bg-green-600'
+                  : i === currentStep
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              } ${onStepChange && i < currentStep ? 'cursor-pointer' : i === currentStep ? 'cursor-default' : 'cursor-not-allowed'}`}
+              onClick={() => {
+                if (onStepChange && i < currentStep) {
+                  onStepChange(i + 1);
+                }
+              }}
+              disabled={i > currentStep}
+              aria-label={`Step ${i + 1}: ${stepNames[i]}`}
+              title={stepNames[i]}
+            >
+              {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
+            </button>
+            {i < totalSteps - 1 && (
+              <div
+                className={`w-12 h-1 mx-2 ${
+                  i < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                }`}
+              />
+            )}
           </div>
-          {i < totalSteps - 1 && (
-            <div
-              className={`w-12 h-1 mx-2 ${
-                i < currentStep ? 'bg-green-500' : 'bg-gray-200'
-              }`}
-            />
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
+      <div className="text-center">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Step {currentStep}: {stepNames[currentStep - 1]}
+        </h3>
+      </div>
     </div>
   )
 }
@@ -1055,15 +1083,29 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       </div>
 
       {selectedJob && (
-        <div className="mt-6 text-center">
-          <Button
-            size="lg"
-            onClick={() => onSelect(selectedJob)}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600"
-          >
-            Analyze Fit for {selectedJob.title}
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+        <div className="mt-6">
+          <Card className="bg-blue-50 border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900 mb-1">
+                    Selected: {selectedJob.title}
+                  </h3>
+                  <p className="text-blue-700 text-sm">
+                    {selectedJob.company} • Ready to analyze your fit
+                  </p>
+                </div>
+                <Button
+                  size="lg"
+                  onClick={() => onSelect(selectedJob)}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                >
+                  Analyze Fit
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>
@@ -1794,10 +1836,35 @@ export default function FitReportPage() {
     setDocumentsGenerated(true)
   }
 
+  const getBreadcrumbItems = (): BreadcrumbItem[] => {
+    const stepNames = ['Import Resume', 'Select Job', 'Analyze Fit', 'Download Results'];
+    const items: BreadcrumbItem[] = [
+      { label: 'Fit Report', href: '/app/fit' }
+    ];
+    
+    for (let i = 0; i < currentStep; i++) {
+      items.push({
+        label: stepNames[i],
+        current: i === currentStep - 1
+      });
+    }
+    
+    return items;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+        {/* Breadcrumb Navigation */}
+        <div className="mb-6">
+          <Breadcrumb items={getBreadcrumbItems()} />
+        </div>
+        
+        <StepIndicator 
+          currentStep={currentStep} 
+          totalSteps={totalSteps}
+          onStepChange={setCurrentStep}
+        />
         
         <AnimatePresence mode="wait">
           {currentStep === 1 && (
@@ -1857,6 +1924,85 @@ export default function FitReportPage() {
             </motion.div>
           )}
         </AnimatePresence>
+        
+        {/* Global Navigation Buttons */}
+        <div className="mt-8 flex justify-between items-center">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (currentStep > 1) {
+                setCurrentStep(currentStep - 1);
+              } else {
+                window.history.back();
+              }
+            }}
+            className="flex items-center gap-2"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            {currentStep > 1 ? 'Previous Step' : 'Back to Home'}
+          </Button>
+          
+          <div className="flex items-center gap-4">
+            {/* Progress indicator */}
+            <div className="text-sm text-gray-600">
+              Step {currentStep} of {totalSteps}
+            </div>
+            
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  // Reset the form to start over
+                  setCurrentStep(1);
+                  setResume(null);
+                  setSelectedJob(null);
+                  setAnalysis(null);
+                  setDocumentsGenerated(false);
+                }}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Start Over
+              </Button>
+              
+              {currentStep < totalSteps && (
+                <Button
+                  onClick={() => {
+                    // Navigate to next step if data is available
+                    if (currentStep === 1 && resume) {
+                      setCurrentStep(2);
+                    } else if (currentStep === 2 && selectedJob) {
+                      setCurrentStep(3);
+                    } else if (currentStep === 3 && analysis) {
+                      setCurrentStep(4);
+                    }
+                  }}
+                  disabled={
+                    (currentStep === 1 && !resume) ||
+                    (currentStep === 2 && !selectedJob) ||
+                    (currentStep === 3 && !analysis)
+                  }
+                  className="flex items-center gap-2"
+                >
+                  Next Step
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              )}
+              
+              {currentStep === totalSteps && (
+                <Button
+                  onClick={() => {
+                    window.location.href = '/demo';
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  Try Demo
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

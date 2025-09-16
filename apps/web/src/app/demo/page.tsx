@@ -30,6 +30,8 @@ import {
   TabsTrigger,
   Switch,
   Label,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "@proof-of-fit/ui"
 
 export default function DemoPage() {
@@ -42,9 +44,19 @@ export default function DemoPage() {
   const mockBiasScore = 95
   const mockDiversityScore = 88
 
+  const getBreadcrumbItems = (): BreadcrumbItem[] => [
+    { label: 'Demo', href: '/demo' },
+    { label: activeTab === 'fit-report' ? 'Job Seeker Demo' : 'Employer Demo', current: true }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <div className="container mx-auto px-4 py-8">
+        {/* Breadcrumb Navigation */}
+        <div className="mb-6">
+          <Breadcrumb items={getBreadcrumbItems()} />
+        </div>
+        
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Interactive Demo</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -54,10 +66,32 @@ export default function DemoPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-6xl mx-auto">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="fit-report">Job Seeker Demo</TabsTrigger>
-            <TabsTrigger value="candidate-slate">Employer Demo</TabsTrigger>
-          </TabsList>
+          <div className="flex items-center justify-between mb-6">
+            <Button
+              variant="outline"
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back to Home
+            </Button>
+            
+            <TabsList className="grid grid-cols-2">
+              <TabsTrigger value="fit-report">Job Seeker Demo</TabsTrigger>
+              <TabsTrigger value="candidate-slate">Employer Demo</TabsTrigger>
+            </TabsList>
+            
+            <Button
+              onClick={() => {
+                const otherTab = activeTab === 'fit-report' ? 'candidate-slate' : 'fit-report';
+                setActiveTab(otherTab);
+              }}
+              className="flex items-center gap-2"
+            >
+              Switch Demo
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
 
           <TabsContent value="fit-report" className="mt-8">
             <Card>
@@ -81,6 +115,31 @@ export default function DemoPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {/* Demo Navigation */}
+                <div className="mb-6 flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center space-x-2 text-sm text-blue-700">
+                    <span className="font-medium">Demo Flow:</span>
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-blue-600 hover:text-blue-800">
+                      Job Analysis
+                    </Button>
+                    <ChevronRight className="w-3 h-3" />
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-blue-600 hover:text-blue-800">
+                      Fit Report
+                    </Button>
+                    <ChevronRight className="w-3 h-3" />
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-blue-600 hover:text-blue-800">
+                      Bias Analysis
+                    </Button>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setActiveTab('candidate-slate')}
+                    className="text-blue-600 border-blue-300"
+                  >
+                    Employer Demo →
+                  </Button>
+                </div>
                 <div className="grid md:grid-cols-2 gap-8">
                   {/* Left Side - Job Description */}
                   <div>
@@ -311,6 +370,31 @@ export default function DemoPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {/* Demo Navigation */}
+                <div className="mb-6 flex justify-between items-center p-4 bg-emerald-50 rounded-lg">
+                  <div className="flex items-center space-x-2 text-sm text-emerald-700">
+                    <span className="font-medium">Demo Flow:</span>
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-emerald-600 hover:text-emerald-800">
+                      Requirements
+                    </Button>
+                    <ChevronRight className="w-3 h-3" />
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-emerald-600 hover:text-emerald-800">
+                      Candidate Slate
+                    </Button>
+                    <ChevronRight className="w-3 h-3" />
+                    <Button variant="ghost" size="sm" className="h-auto p-1 text-emerald-600 hover:text-emerald-800">
+                      Compliance
+                    </Button>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setActiveTab('fit-report')}
+                    className="text-emerald-600 border-emerald-300"
+                  >
+                    ← Job Seeker Demo
+                  </Button>
+                </div>
                 <div className="space-y-6">
                   {/* Job Requirements */}
                   <div>
@@ -429,29 +513,42 @@ export default function DemoPage() {
           <p className="text-gray-600 mb-6">
             Join thousands of job seekers and employers who trust ProofOfFit for fair, transparent hiring.
           </p>
-          <div className="flex justify-center space-x-4">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600" asChild>
-              <a 
-                href="/app/fit"
-                aria-label="Get your personalized fit report - analyze your job match"
-                rel="noopener"
-                className="inline-flex items-center gap-2"
-              >
-                Get Your Fit Report
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <a 
-                href="/app/slate"
-                aria-label="Generate candidate slate - start hiring process"
-                rel="noopener"
-                className="inline-flex items-center gap-2"
-              >
-                Generate Candidate Slate
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </a>
-            </Button>
+          <div className="text-center space-y-6">
+            <div className="flex justify-center space-x-4">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600" asChild>
+                <a 
+                  href="/app/fit"
+                  aria-label="Get your personalized fit report - analyze your job match"
+                  rel="noopener"
+                  className="inline-flex items-center gap-2"
+                >
+                  Get Your Fit Report
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <a 
+                  href="/app/slate"
+                  aria-label="Generate candidate slate - start hiring process"
+                  rel="noopener"
+                  className="inline-flex items-center gap-2"
+                >
+                  Generate Candidate Slate
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
+            
+            {/* Quick Navigation */}
+            <div className="flex justify-center items-center space-x-4 text-sm text-gray-600">
+              <Button variant="ghost" size="sm" onClick={() => setActiveTab('fit-report')}>
+                ← Job Seeker Demo
+              </Button>
+              <span>|</span>
+              <Button variant="ghost" size="sm" onClick={() => setActiveTab('candidate-slate')}>
+                Employer Demo →
+              </Button>
+            </div>
           </div>
         </div>
       </div>
