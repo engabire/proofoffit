@@ -13,11 +13,14 @@ This directory contains SQL scripts to set up the ProofOfFit database with prope
    
    -- 2. Set up RLS policies
    \i 010_rls.sql
-   
+
    -- 3. Add remaining RLS policies
    \i 030_remaining_rls.sql
-   
-   -- 4. Set up ActionLog trigger
+
+   -- 4. Create gifting tables and policies
+   \i 040_gifting.sql
+
+   -- 5. Set up ActionLog trigger
    \i 020_actionlog.sql
    ```
 
@@ -29,10 +32,15 @@ This directory contains SQL scripts to set up the ProofOfFit database with prope
    ```
 
 4. **Run Prisma migrations:**
+  ```bash
+  cd apps/web
+  npm run db:push
+  npm run db:seed
+  ```
+
+5. **Deploy Supabase Edge Functions** (requires the Supabase CLI):
    ```bash
-   cd apps/web
-   npm run db:push
-   npm run db:seed
+   supabase functions deploy redeem-gift-code
    ```
 
 ## Security Features

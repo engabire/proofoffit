@@ -38,6 +38,9 @@ Before deploying, ensure you have:
 
 -- Complete RLS policies
 \i infra/supabase/030_remaining_rls.sql
+
+-- Gifting tables and policies
+\i infra/supabase/040_gifting.sql
 ```
 
 ### 1.3 Get Supabase Credentials
@@ -47,6 +50,14 @@ Before deploying, ensure you have:
    - `Project URL`
    - `anon public` key
    - `service_role` key (keep this secret!)
+
+### 1.4 Deploy Edge Function
+
+If you haven’t already, install the [Supabase CLI](https://supabase.com/docs/reference/cli/installation) and run:
+
+```bash
+supabase functions deploy redeem-gift-code
+```
 
 ## 🔧 Step 2: Set Up Vercel
 
@@ -97,6 +108,7 @@ VERCEL_PROJECT_ID=your_vercel_project_id
 STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
 ```
 
 #### App Secrets
@@ -131,6 +143,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
 
 # App
 NEXTAUTH_URL=https://your-domain.vercel.app
@@ -331,4 +344,3 @@ For deployment issues:
 - Check Vercel and Supabase documentation
 
 **Happy Deploying! 🚀**
-

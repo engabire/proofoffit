@@ -243,6 +243,37 @@ model Consent {
   @@map("consents")
 }
 
+model GiftCode {
+  id                    String   @id @default(uuid()) @db.Uuid
+  code                  String   @unique
+  months                Int
+  currency              String   @default("USD")
+  amountCents           Int      @map("amount_cents")
+  status                String   @default("active")
+  sponsorUserId         String?  @map("sponsor_user_id") @db.Uuid
+  recipientEmail        String?  @map("recipient_email")
+  message               String?
+  redeemedBy            String?  @map("redeemed_by") @db.Uuid
+  redeemedAt            DateTime? @map("redeemed_at")
+  expiresAt             DateTime  @default(dbgenerated("now() + interval '12 months'")) @map("expires_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  stripeCouponId        String?   @map("stripe_coupon_id")
+  stripePromotionCodeId String?   @map("stripe_promotion_code_id")
+  stripeSubscriptionId  String?   @map("stripe_subscription_id")
+
+  @@map("gift_codes")
+}
+
+model SponsorPool {
+  id            String   @id @default(uuid()) @db.Uuid
+  sponsorUserId String   @map("sponsor_user_id") @db.Uuid
+  amountCents   Int      @map("amount_cents")
+  currency      String   @default("USD")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("sponsor_pool")
+}
+
 // Policy sources and ToS compliance
 model PolicySource {
   id        String   @id @default(cuid())

@@ -34,10 +34,22 @@ export function Header() {
 
         <div className="hidden md:flex items-center space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/auth/signin">Sign In</Link>
+            <Link 
+              href="/auth/signin"
+              aria-label="Sign in to your ProofOfFit account"
+              rel="noopener"
+            >
+              Sign In
+            </Link>
           </Button>
           <Button asChild>
-            <Link href="/auth/signup">Get Started</Link>
+            <Link 
+              href="/auth/signup"
+              aria-label="Get started with ProofOfFit - Create your free account"
+              rel="noopener"
+            >
+              Get Started
+            </Link>
           </Button>
         </div>
 
@@ -65,10 +77,22 @@ export function Header() {
             </Link>
             <div className="pt-4 space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link href="/auth/signin">Sign In</Link>
+                <Link 
+                  href="/auth/signin"
+                  aria-label="Sign in to your account"
+                  rel="noopener"
+                >
+                  Sign In
+                </Link>
               </Button>
               <Button className="w-full" asChild>
-                <Link href="/auth/signup">Get Started</Link>
+                <Link 
+                  href="/auth/signup"
+                  aria-label="Get started - Create your free account"
+                  rel="noopener"
+                >
+                  Get Started
+                </Link>
               </Button>
             </div>
           </div>

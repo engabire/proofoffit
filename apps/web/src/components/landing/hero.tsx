@@ -27,13 +27,21 @@ export function Hero() {
           
           <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" asChild>
-              <Link href="/auth/signup">
+              <Link 
+                href="/auth/signup"
+                aria-label="Start your autopilot - Sign up for ProofOfFit to begin your job search"
+                rel="noopener"
+                className="inline-flex items-center gap-2"
+              >
                 Start Your Autopilot
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="#how-it-works">
+              <Link 
+                href="#how-it-works"
+                aria-label="See how it works - Learn about our process and features"
+              >
                 See How It Works
               </Link>
             </Button>

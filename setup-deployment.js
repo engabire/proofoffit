@@ -76,8 +76,9 @@ function checkDatabaseSetup() {
     { file: 'apps/web/prisma/schema.prisma', desc: 'Prisma schema' },
     { file: 'infra/supabase/000_extensions.sql', desc: 'Database extensions' },
     { file: 'infra/supabase/010_rls.sql', desc: 'Row-Level Security policies' },
-    { file: 'infra/supabase/020_actionlog.sql', desc: 'Action log setup' },
-    { file: 'infra/supabase/030_remaining_rls.sql', desc: 'Complete RLS policies' }
+    { file: 'infra/supabase/030_remaining_rls.sql', desc: 'Complete RLS policies' },
+    { file: 'infra/supabase/040_gifting.sql', desc: 'Gifting tables and policies' },
+    { file: 'infra/supabase/020_actionlog.sql', desc: 'Action log setup' }
   ]
   
   return checks.every(check => checkFile(check.file, check.desc))
@@ -195,4 +196,3 @@ if (require.main === module) {
 }
 
 module.exports = { main }
-

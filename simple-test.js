@@ -55,7 +55,8 @@ function checkFileStructure() {
     'infra/supabase/000_extensions.sql',
     'infra/supabase/010_rls.sql',
     'infra/supabase/020_actionlog.sql',
-    'infra/supabase/030_remaining_rls.sql'
+    'infra/supabase/030_remaining_rls.sql',
+    'infra/supabase/040_gifting.sql'
   ]
   
   const missingFiles = requiredFiles.filter(file => !fs.existsSync(file))

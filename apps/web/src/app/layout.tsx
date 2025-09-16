@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'ProofOfFit - Compliance-First Hiring OS',
   description: 'A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; employers get ranked, explainable slates.',
   keywords: ['hiring', 'recruitment', 'compliance', 'AI', 'candidate matching'],

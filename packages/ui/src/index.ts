@@ -3,6 +3,7 @@ export { cn } from './lib/utils'
 
 // UI Components
 export { Button } from './components/button'
+export { CTAButton } from './components/cta-button'
 export { Input } from './components/input'
 export { Label } from './components/label'
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './components/card'

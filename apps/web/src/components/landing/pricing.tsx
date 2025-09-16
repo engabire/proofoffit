@@ -148,7 +148,13 @@ export function Pricing() {
                     variant={plan.popular ? "default" : "outline"}
                     asChild
                   >
-                    <Link href={plan.href}>{plan.cta}</Link>
+                    <Link 
+                      href={plan.href}
+                      aria-label={`${plan.cta} - ${plan.name} plan starting at ${plan.price} per ${plan.period}`}
+                      rel="noopener"
+                    >
+                      {plan.cta}
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -184,7 +190,13 @@ export function Pricing() {
                   </ul>
                   
                   <Button className="w-full" variant="outline" asChild>
-                    <Link href={plan.href}>{plan.cta}</Link>
+                    <Link 
+                      href={plan.href}
+                      aria-label={`${plan.cta} - ${plan.name} plan at ${plan.price} per ${plan.period}`}
+                      rel="noopener"
+                    >
+                      {plan.cta}
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>

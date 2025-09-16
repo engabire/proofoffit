@@ -142,3 +142,19 @@ jobs:
           vercel-args: '--prod'
           working-directory: apps/web
           scope: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Wait for Deployment
+        run: sleep 30
+
+      - name: Verify Deployment
+        run: |
+          echo "🔍 Verifying deployment..."
+          node scripts/verify-deployment.js
+        continue-on-error: true
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Deployment verification failed!"
+          echo "Please check the deployment at https://www.proofoffit.com"
+          echo "Run 'node scripts/verify-deployment.js' locally to debug"

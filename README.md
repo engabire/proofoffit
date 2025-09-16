@@ -65,6 +65,10 @@ A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; 
    STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
    STRIPE_SECRET_KEY=your_stripe_secret_key
    STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+   STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
+
+   # Email (optional)
+   RESEND_API_KEY=your_resend_api_key
    ```
 
 4. **Set up Supabase**
