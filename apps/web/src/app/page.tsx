@@ -260,7 +260,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] bg-black text-white px-3 py-2 rounded">Skip to content</a>
       <header className={`sticky top-0 z-50 bg-white/70 dark:bg-zinc-950/60 backdrop-blur supports-[backdrop-filter]:bg-white/60 ${scrolled ? "shadow-md ring-1 ring-black/5 dark:ring-white/10" : ""}`}>
-        <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
+        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
           <a href="/" className="text-lg font-semibold tracking-tight">ProofOfFit</a>
 
           <nav className="hidden md:flex items-center gap-6 text-sm">
@@ -519,8 +519,8 @@ function ReceiptCard() {
 
 function WhyChoose() {
   return (
-    <section id="why" className="py-20">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="why" className="py-12 sm:py-20">
+      <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-2xl md:text-3xl font-semibold mb-6">Why choose ProofOfFit?</h2>
         <div className="grid md:grid-cols-4 gap-4">
           {universalWhy.map((w, i) => (
@@ -537,8 +537,8 @@ function WhyChoose() {
 
 function HowItWorks({ items, lane }: { items: { step: number; title: string; body: string }[]; lane: Lane }) {
   return (
-    <section id="how" className="py-20 bg-zinc-50 dark:bg-zinc-900">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="how" className="py-12 sm:py-20 bg-zinc-50 dark:bg-zinc-900">
+      <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-2xl md:text-3xl font-semibold mb-6">How it works</h2>
         <ol className="grid md:grid-cols-4 gap-4">
           {items.map((s) => (
@@ -581,8 +581,8 @@ function HowItWorks({ items, lane }: { items: { step: number; title: string; bod
 function Pricing({ lane }: { lane: Lane }) {
   const plans = lane === "seeker" ? pricing.seeker : pricing.employer;
   return (
-    <section id="pricing" className="py-20">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="pricing" className="py-12 sm:py-20">
+      <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-semibold">Pricing</h2>
           <p className={`text-sm ${subtle}`}>Cancel anytime. Upgrade or downgrade as needs change.</p>
@@ -641,8 +641,8 @@ function Pricing({ lane }: { lane: Lane }) {
 function DMTestimonials({ lane }: { lane: Lane }) {
   const items = testimonials[lane];
   return (
-    <section className="py-20 bg-zinc-50 dark:bg-zinc-900">
-      <div className="mx-auto max-w-6xl px-4">
+    <section className="py-12 sm:py-20 bg-zinc-50 dark:bg-zinc-900">
+      <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-2xl md:text-3xl font-semibold mb-6">What people say</h2>
         <div className="grid md:grid-cols-2 gap-4">
           {items.map((t, i) => (
@@ -751,8 +751,8 @@ function GiftSponsorPanel() {
 
 function FooterTrustBar() {
   return (
-    <footer className="mt-24 border-t bg-white/60 dark:bg-zinc-950/50 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-4 py-14">
+    <footer className="mt-12 border-t bg-white/60 dark:bg-zinc-950/50 backdrop-blur">
+      <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid md:grid-cols-5 gap-8">
           <div className="md:col-span-2">
             <a href="/" className="text-lg font-semibold">ProofOfFit</a>
