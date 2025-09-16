@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ReusableButton } from "@proof-of-fit/ui";
 
 /**
  * Proofoffit — Living Proof Hero (art + utility)
@@ -147,7 +148,12 @@ function FitReportCard() {
 
       <div className="flex items-center justify-between gap-2 rounded-xl bg-slate-50 p-2 text-xs dark:bg-slate-900">
         <span className="truncate text-slate-500">https://proofoffit.co/audit/9C2X‑A7Q</span>
-        <button className="rounded-lg border border-slate-200 bg-white px-2 py-1 font-medium hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 active:scale-[.98] dark:border-slate-700 dark:bg-slate-950 dark:hover:bg-slate-900">Copy</button>
+        <ReusableButton 
+          label="Copy" 
+          onClick={() => navigator.clipboard?.writeText('https://proofoffit.co/audit/9C2X‑A7Q')}
+          variant="secondary"
+          id="copy-audit-url"
+        />
       </div>
 
       {/* receipt edge */}
@@ -179,8 +185,16 @@ export default function LivingProofHero() {
           </ul>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <a href="#start" className="rounded-xl bg-slate-900 px-4 py-2 text-white shadow hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">Start Free</a>
-            <a href="#demo" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-900">See 5‑minute demo</a>
+            <ReusableButton 
+              label="Start Free" 
+              href="#start" 
+              variant="primary" 
+            />
+            <ReusableButton 
+              label="See 5‑minute demo" 
+              href="#demo" 
+              variant="secondary" 
+            />
           </div>
         </div>
 
