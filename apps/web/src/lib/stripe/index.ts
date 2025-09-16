@@ -33,7 +33,18 @@ export interface Customer {
 }
 
 export class StripeService {
-  private supabase = createClientComponentClient()
+  private _supabase: any = null
+
+  private get supabase() {
+    if (!this._supabase) {
+      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        this._supabase = createClientComponentClient()
+      } else {
+        throw new Error('Supabase not configured')
+      }
+    }
+    return this._supabase
+  }
 
   // Available plans
   static readonly PLANS: Record<string, SubscriptionPlan> = {
