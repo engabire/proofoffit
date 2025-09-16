@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { stripeService } from '@/lib/stripe'
 import Stripe from 'stripe'
 
+// Force dynamic rendering to prevent build-time issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 // Only initialize Stripe if environment variables are available
 const stripe = process.env.STRIPE_SECRET_KEY 
   ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' })
