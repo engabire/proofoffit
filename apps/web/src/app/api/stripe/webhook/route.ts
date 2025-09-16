@@ -3,14 +3,21 @@ import { stripeService } from '@/lib/stripe'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
-})
+// Only initialize Stripe if environment variables are available
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' })
+  : null
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
 export async function POST(req: NextRequest) {
   try {
+    // Check if required environment variables are available
+    if (!stripe || !webhookSecret) {
+      console.error('Missing required environment variables for Stripe webhook')
+      return NextResponse.json({ error: 'Webhook not configured' }, { status: 503 })
+    }
+
     const body = await req.text()
     const signature = req.headers.get('stripe-signature')!
 
@@ -23,7 +30,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
     }
 
-    const supabase = createClientComponentClient()
+    // Only create Supabase client if environment variables are available
+    const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      ? createClientComponentClient()
+      : null
+
+    if (!supabase) {
+      console.error('Supabase not configured - webhook cannot process events')
+      return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
+    }
 
     switch (event.type) {
       case 'checkout.session.completed': {
