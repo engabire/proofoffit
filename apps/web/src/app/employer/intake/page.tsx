@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { isSupabaseConfigured } from '@/lib/env'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Input } from '@proof-of-fit/ui'
@@ -15,7 +16,7 @@ import { toast } from 'sonner'
 
 export default function JobIntakePage() {
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
   const [loading, setLoading] = useState(false)
   
   const [formData, setFormData] = useState({
@@ -63,6 +64,12 @@ export default function JobIntakePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+
+    if (!supabase) {
+      toast.error('Database not configured. Please contact support.')
+      setLoading(false)
+      return
+    }
 
     try {
       // First create a job entry
