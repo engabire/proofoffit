@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proo
 import { Button } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
 import { Progress } from '@proof-of-fit/ui'
-import { stripeService, SubscriptionPlan } from '@/lib/stripe'
+import { stripeService, SubscriptionPlan, StripeService } from '@/lib/stripe'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { CreditCard, Users, FileText } from 'lucide-react'
 
@@ -30,7 +30,7 @@ export function SubscriptionCard({ tenantId }: SubscriptionCardProps) {
           .single()
 
         if (tenant) {
-          const currentPlan = stripeService.PLANS[tenant.plan]
+          const currentPlan = StripeService.PLANS[tenant.plan]
           setPlan(currentPlan)
 
           // Get usage stats

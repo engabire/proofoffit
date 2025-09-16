@@ -43,7 +43,7 @@ export class DemoSupabase {
           limit: (count: number) => ({
             then: (callback: (result: any) => void) => {
               setTimeout(() => {
-                let data = []
+                let data: any[] = []
                 switch (table) {
                   case 'jobs':
                     data = demoJobs.slice(0, count)
