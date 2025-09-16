@@ -36,6 +36,8 @@ export interface Customer {
 export class StripeService {
   private _supabase: any = null
 
+  public readonly PLANS = StripeService.PLANS
+
   private get supabase() {
     if (!this._supabase) {
       if (isSupabaseConfigured()) {
