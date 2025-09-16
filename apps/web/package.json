@@ -11,7 +11,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
-    "test:setup": "jest --setupFilesAfterEnv=./src/test/setup.ts"
+    "test:setup": "jest --setupFilesAfterEnv=./src/test/setup.ts",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",
