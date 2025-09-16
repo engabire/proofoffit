@@ -185,16 +185,8 @@ export default function LivingProofHero() {
           </ul>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <ReusableButton 
-              label="Start Free" 
-              href="#start" 
-              variant="primary" 
-            />
-            <ReusableButton 
-              label="See 5‑minute demo" 
-              href="#demo" 
-              variant="secondary" 
-            />
+            <ReusableButton id="cta-start" label="Start Free" href="/get-started" />
+            <ReusableButton id="cta-demo" label="See 5-minute demo" href="/demo" variant="secondary" />
           </div>
         </div>
 
