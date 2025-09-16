@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripeService } from '@/lib/stripe'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Stripe from 'stripe'
 
 // Only initialize Stripe if environment variables are available
@@ -31,9 +30,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Only create Supabase client if environment variables are available
-    const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      ? createClientComponentClient()
-      : null
+    let supabase = null
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      try {
+        const { createClientComponentClient } = await import('@supabase/auth-helpers-nextjs')
+        supabase = createClientComponentClient()
+      } catch (error) {
+        console.error('Failed to create Supabase client:', error)
+        return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
+      }
+    }
 
     if (!supabase) {
       console.error('Supabase not configured - webhook cannot process events')
