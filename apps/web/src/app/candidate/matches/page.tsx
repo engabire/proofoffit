@@ -37,10 +37,14 @@ export default async function JobMatchesPage() {
     .limit(10) : { data: null }
 
   // Mock matching scores (in real app, this would come from the ranker service)
-  const mockMatches = jobs?.map((job, index) => ({
-    job,
-    fitScore: Math.floor(Math.random() * 40) + 60, // 60-100%
-    explanations: [
+  const mockMatches = jobs?.map((job, index) => {
+    // Use deterministic scoring based on job ID to avoid hydration mismatch
+    const seed = job.id.toString().charCodeAt(0) + index
+    const deterministicScore = (seed % 40) + 60
+    return {
+      job,
+      fitScore: deterministicScore, // 60-100%
+      explanations: [
       {
         criterion: 'Frontend Development',
         evidence: '5+ years React experience',
@@ -62,7 +66,8 @@ export default async function JobMatchesPage() {
     ],
     strengths: ['Strong technical background', 'Leadership experience', 'Modern tech stack'],
     gaps: ['Healthcare domain experience']
-  })) || []
+    }
+  }) || []
 
   return (
     <div className="space-y-6">

@@ -1,19 +1,24 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export function ReportIssue() {
   const [submitting, setSubmitting] = useState(false)
   const [ok, setOk] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const submit = async () => {
     setSubmitting(true)
     try {
       const payload = {
-        route: typeof window !== 'undefined' ? window.location.pathname : '',
-        ua: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+        route: window.location.pathname,
+        ua: navigator.userAgent,
         tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        lang: typeof navigator !== 'undefined' ? navigator.language : '',
+        lang: navigator.language,
       }
       await fetch('/api/issues', {
         method: 'POST',
@@ -25,6 +30,10 @@ export function ReportIssue() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (
