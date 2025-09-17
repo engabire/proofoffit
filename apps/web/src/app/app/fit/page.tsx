@@ -168,6 +168,7 @@ interface JobPosting {
   }
   description: string
   requirements: string[]
+  niceToHaves?: string[]
   benefits: string[]
   postedAt: Date
   applicationDeadline?: Date
