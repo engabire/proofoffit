@@ -62,26 +62,85 @@ import LivingProofHero from "@/components/landing/living-proof-hero";
  * - A11y-first, analytics-friendly (data-*) hooks, minimal and clean Tailwind
  */
 
-// ---------- Shared theme helpers ----------
+// ---------- Differentiated Theme System ----------
+// Job Seeker: Warm, aspirational, growth-focused (sky/indigo/purple)
+// Employer: Professional, authoritative, efficiency-focused (emerald/teal/blue)
+
+const laneThemes = {
+  seeker: {
+    // Primary gradients - warm and aspirational
+    primary: "from-sky-500 via-indigo-500 to-purple-600",
+    primaryHover: "from-sky-600 via-indigo-600 to-purple-700",
+    secondary: "from-indigo-400 via-purple-500 to-pink-500",
+    
+    // Accent colors
+    accent: "sky-500",
+    accentHover: "sky-600",
+    accentLight: "sky-100",
+    accentDark: "sky-900",
+    
+    // Background gradients - dreamy and inspiring
+    background: [
+      "from-sky-200/40 via-indigo-200/30 to-purple-200/20",
+      "from-indigo-300/25 via-purple-300/20 to-pink-300/15",
+    ],
+    
+    // Text colors
+    primaryText: "text-sky-900 dark:text-sky-100",
+    secondaryText: "text-indigo-700 dark:text-indigo-300",
+    mutedText: "text-sky-600 dark:text-sky-400",
+    
+    // UI elements
+    cardBg: "bg-white/80 dark:bg-slate-900/60",
+    cardBorder: "border-sky-200 dark:border-sky-800",
+    buttonStyle: "rounded-2xl", // More rounded, friendly
+    shadowStyle: "shadow-lg shadow-sky-500/10",
+  },
+  employer: {
+    // Primary gradients - professional and authoritative
+    primary: "from-emerald-500 via-teal-500 to-cyan-600",
+    primaryHover: "from-emerald-600 via-teal-600 to-cyan-700",
+    secondary: "from-teal-400 via-cyan-500 to-blue-500",
+    
+    // Accent colors
+    accent: "emerald-500",
+    accentHover: "emerald-600",
+    accentLight: "emerald-100",
+    accentDark: "emerald-900",
+    
+    // Background gradients - clean and structured
+    background: [
+      "from-emerald-200/35 via-teal-200/25 to-cyan-200/15",
+      "from-teal-300/20 via-cyan-300/15 to-blue-300/10",
+    ],
+    
+    // Text colors
+    primaryText: "text-emerald-900 dark:text-emerald-100",
+    secondaryText: "text-teal-700 dark:text-teal-300",
+    mutedText: "text-emerald-600 dark:text-emerald-400",
+    
+    // UI elements
+    cardBg: "bg-white/90 dark:bg-slate-900/70",
+    cardBorder: "border-emerald-200 dark:border-emerald-800",
+    buttonStyle: "rounded-xl", // More structured, professional
+    shadowStyle: "shadow-lg shadow-emerald-500/10",
+  },
+} as const;
+
+// Legacy compatibility
 const laneAccent = {
-  seeker: "from-primary/90 via-sky-500 to-indigo-500",
-  employer: "from-emerald-500 via-teal-500 to-sky-500",
+  seeker: laneThemes.seeker.primary,
+  employer: laneThemes.employer.primary,
 };
 
 const warmBody = "text-slate-900 dark:text-slate-100";
 const subtle = "text-slate-600 dark:text-slate-400";
 const receiptMono = "font-mono text-sm";
 
-// Subtle hero gradient blobs (lane-aware)
+// Updated blob gradients using new theme system
 const blobGradients = {
-  seeker: [
-    "from-sky-300/60 via-indigo-300/30 to-violet-300/20",
-    "from-indigo-400/25 via-fuchsia-400/25 to-sky-300/30",
-  ],
-  employer: [
-    "from-emerald-300/55 via-teal-300/35 to-cyan-200/25",
-    "from-cyan-400/20 via-sky-400/25 to-indigo-300/30",
-  ],
+  seeker: laneThemes.seeker.background,
+  employer: laneThemes.employer.background,
   neutral: [
     "from-sky-200/45 via-indigo-200/30 to-purple-200/20",
     "from-teal-200/35 via-cyan-200/25 to-blue-200/20",
@@ -315,7 +374,8 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
     const dark = d.classList.toggle("dark");
     try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch {}
   };
-  const lanePrimary = lane === "seeker" ? "text-sky-600 dark:text-sky-400" : "text-emerald-600 dark:text-emerald-400";
+  const theme = laneThemes[lane];
+  const lanePrimary = theme.secondaryText;
 
   return (
     <>
@@ -496,24 +556,28 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
 function LaneToggle({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
   return (
     <div className="inline-flex rounded-2xl border bg-white/70 dark:bg-zinc-900/70 backdrop-blur shadow-sm" role="tablist" aria-label="Audience">
-      {(["seeker", "employer"] as Lane[]).map((l) => (
-        <button
-          key={l}
-          role="tab"
-          aria-selected={lane === l}
-          aria-controls={`panel-${l}`}
-          className={`px-4 py-2 text-sm font-medium rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-            lane === l
-              ? "bg-gradient-to-r text-white shadow-md " + laneAccent[l]
-              : "text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-          }`}
-          onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', props: { lane: l } })) } catch {} }}
-          data-evt="toggle_lane"
-          data-lane={l}
-        >
-          {laneCopy[l].label}
-        </button>
-      ))}
+      {(["seeker", "employer"] as Lane[]).map((l) => {
+        const theme = laneThemes[l];
+        const isActive = lane === l;
+        return (
+          <button
+            key={l}
+            role="tab"
+            aria-selected={isActive}
+            aria-controls={`panel-${l}`}
+            className={`px-4 py-2 text-sm font-medium ${theme.buttonStyle} focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ${
+              isActive
+                ? `bg-gradient-to-r text-white shadow-md ${theme.primary} ${theme.shadowStyle}`
+                : `text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:scale-105`
+            }`}
+            onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', props: { lane: l } })) } catch {} }}
+            data-evt="toggle_lane"
+            data-lane={l}
+          >
+            {laneCopy[l].label}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -960,7 +1024,7 @@ export default function ProofOfFitLanding() {
     <div className={warmBody}>
       <Header lane={lane} setLane={setLane} />
       {/* HERO */}
-      <LivingProofHero highlights={heroHighlights} trusted={trustedPartners} />
+      <LivingProofHero highlights={heroHighlights} trusted={trustedPartners} lane={lane} />
 
       <AIShowcase />
       <WhyChoose />

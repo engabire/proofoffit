@@ -255,16 +255,24 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                 <Button
                   type="button"
                   variant={role === 'candidate' ? 'default' : 'outline'}
-                  className={`h-auto flex-col items-start gap-1 rounded-xl border ${role === 'candidate' ? 'border-sky-200 bg-sky-500 text-white hover:bg-sky-500' : 'border-slate-200 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900'}`}
+                  className={`h-auto flex-col items-start gap-1 rounded-2xl border transition-all duration-200 ${
+                    role === 'candidate' 
+                      ? 'border-sky-200 bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 text-white shadow-lg shadow-sky-500/20 hover:shadow-sky-500/30' 
+                      : 'border-sky-200 text-sky-600 hover:bg-sky-50 dark:border-sky-800 dark:text-sky-400 dark:hover:bg-sky-950/30'
+                  }`}
                   onClick={() => setRole('candidate')}
                 >
-                  <span className="flex items-center gap-2 text-sm font-semibold"><User className="h-4 w-4" /> Candidate</span>
+                  <span className="flex items-center gap-2 text-sm font-semibold"><User className="h-4 w-4" /> Job Seeker</span>
                   <span className="text-left text-xs opacity-80">Tailored Fit Reports, sponsor codes, bias-aware insights.</span>
                 </Button>
                 <Button
                   type="button"
                   variant={role === 'employer' ? 'default' : 'outline'}
-                  className={`h-auto flex-col items-start gap-1 rounded-xl border ${role === 'employer' ? 'border-sky-200 bg-sky-500 text-white hover:bg-sky-500' : 'border-slate-200 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900'}`}
+                  className={`h-auto flex-col items-start gap-1 rounded-xl border transition-all duration-200 ${
+                    role === 'employer' 
+                      ? 'border-emerald-200 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30' 
+                      : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30'
+                  }`}
                   onClick={() => setRole('employer')}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold"><Building2 className="h-4 w-4" /> Employer</span>

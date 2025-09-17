@@ -27,15 +27,15 @@ export default async function EmployerLayout({
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/30 via-teal-50/20 to-cyan-50/10 dark:from-emerald-950/20 dark:via-teal-950/15 dark:to-cyan-950/10">
+      <header className="border-b border-emerald-200/50 dark:border-emerald-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
             <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">PF</span>
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <span className="text-white font-bold text-sm">PF</span>
               </div>
-              <span className="font-bold text-xl">ProofOfFit</span>
+              <span className="font-bold text-xl text-emerald-900 dark:text-emerald-100">ProofOfFit</span>
             </Link>
           </div>
           
@@ -44,7 +44,7 @@ export default async function EmployerLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center space-x-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
               >
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
@@ -53,7 +53,7 @@ export default async function EmployerLayout({
           </nav>
 
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">{userData.user.email}</span>
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">{userData.user.email}</span>
             <SignOutButton />
           </div>
         </div>
@@ -67,7 +67,7 @@ export default async function EmployerLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  className="flex items-center space-x-3 px-3 py-2 rounded-xl text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
                 >
                   <span>{item.icon}</span>
                   <span>{item.label}</span>

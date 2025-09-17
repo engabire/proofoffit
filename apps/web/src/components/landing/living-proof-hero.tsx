@@ -11,10 +11,75 @@ type HeroMetric = {
   icon?: React.ReactNode
 }
 
+type Lane = "seeker" | "employer"
+
 type HeroProps = {
   highlights?: readonly HeroMetric[]
   trusted?: readonly string[]
+  lane?: Lane
 }
+
+// ---------- Differentiated Theme System ----------
+const laneThemes = {
+  seeker: {
+    // Primary gradients - warm and aspirational
+    primary: "from-sky-500 via-indigo-500 to-purple-600",
+    primaryHover: "from-sky-600 via-indigo-600 to-purple-700",
+    secondary: "from-indigo-400 via-purple-500 to-pink-500",
+    
+    // Accent colors
+    accent: "sky-500",
+    accentHover: "sky-600",
+    accentLight: "sky-100",
+    accentDark: "sky-900",
+    
+    // Background gradients - dreamy and inspiring
+    background: [
+      "from-sky-200/40 via-indigo-200/30 to-purple-200/20",
+      "from-indigo-300/25 via-purple-300/20 to-pink-300/15",
+    ],
+    
+    // Text colors
+    primaryText: "text-sky-900 dark:text-sky-100",
+    secondaryText: "text-indigo-700 dark:text-indigo-300",
+    mutedText: "text-sky-600 dark:text-sky-400",
+    
+    // UI elements
+    cardBg: "bg-white/80 dark:bg-slate-900/60",
+    cardBorder: "border-sky-200 dark:border-sky-800",
+    buttonStyle: "rounded-2xl", // More rounded, friendly
+    shadowStyle: "shadow-lg shadow-sky-500/10",
+  },
+  employer: {
+    // Primary gradients - professional and authoritative
+    primary: "from-emerald-500 via-teal-500 to-cyan-600",
+    primaryHover: "from-emerald-600 via-teal-600 to-cyan-700",
+    secondary: "from-teal-400 via-cyan-500 to-blue-500",
+    
+    // Accent colors
+    accent: "emerald-500",
+    accentHover: "emerald-600",
+    accentLight: "emerald-100",
+    accentDark: "emerald-900",
+    
+    // Background gradients - clean and structured
+    background: [
+      "from-emerald-200/35 via-teal-200/25 to-cyan-200/15",
+      "from-teal-300/20 via-cyan-300/15 to-blue-300/10",
+    ],
+    
+    // Text colors
+    primaryText: "text-emerald-900 dark:text-emerald-100",
+    secondaryText: "text-teal-700 dark:text-teal-300",
+    mutedText: "text-emerald-600 dark:text-emerald-400",
+    
+    // UI elements
+    cardBg: "bg-white/90 dark:bg-slate-900/70",
+    cardBorder: "border-emerald-200 dark:border-emerald-800",
+    buttonStyle: "rounded-xl", // More structured, professional
+    shadowStyle: "shadow-lg shadow-emerald-500/10",
+  },
+} as const
 
 const useParallax = (strength = 10) => {
   const x = useMotionValue(0)
@@ -26,17 +91,19 @@ const useParallax = (strength = 10) => {
   return { x, y, rotateX, rotateY }
 }
 
-function LivingProofCanvas() {
+function LivingProofCanvas({ lane = "seeker" }: { lane?: Lane }) {
+  const theme = laneThemes[lane]
+  
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* Ambient gradients - positioned to avoid content areas */}
-      <div className="absolute -top-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-br from-sky-200/40 via-indigo-200/20 to-purple-200/10 blur-[100px] dark:from-sky-500/20 dark:via-indigo-500/15 dark:to-purple-500/10" />
-      <div className="absolute -bottom-32 -right-40 h-72 w-72 rounded-full bg-gradient-to-tr from-emerald-200/35 via-sky-200/20 to-indigo-200/10 blur-[120px] dark:from-emerald-500/20 dark:via-sky-500/15 dark:to-indigo-500/10" />
+      {/* Ambient gradients - lane-specific positioning and colors */}
+      <div className={`absolute -top-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-br ${theme.background[0]} blur-[100px]`} />
+      <div className={`absolute -bottom-32 -right-40 h-72 w-72 rounded-full bg-gradient-to-tr ${theme.background[1]} blur-[120px]`} />
       
       {/* Data network visualization - symmetrically arranged */}
       <svg className="absolute inset-0 size-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         {/* Candidate Network Cluster - Left Side */}
-        <g className="text-sky-500/50 dark:text-sky-400/40" opacity="0.7">
+        <g className={lane === "seeker" ? "text-sky-500/50 dark:text-sky-400/40" : "text-emerald-500/50 dark:text-emerald-400/40"} opacity="0.7">
           <circle cx="20" cy="30" r="1.2" fill="currentColor" />
           <circle cx="25" cy="25" r="0.9" fill="currentColor" />
           <circle cx="25" cy="35" r="1.0" fill="currentColor" />
@@ -52,7 +119,7 @@ function LivingProofCanvas() {
         </g>
 
         {/* Job Requirements Network - Right Side (mirrored) */}
-        <g className="text-indigo-500/50 dark:text-indigo-400/40" opacity="0.7">
+        <g className={lane === "seeker" ? "text-indigo-500/50 dark:text-indigo-400/40" : "text-teal-500/50 dark:text-teal-400/40"} opacity="0.7">
           <circle cx="80" cy="30" r="1.2" fill="currentColor" />
           <circle cx="75" cy="25" r="0.9" fill="currentColor" />
           <circle cx="75" cy="35" r="1.0" fill="currentColor" />
@@ -68,7 +135,7 @@ function LivingProofCanvas() {
         </g>
 
         {/* Matching Network - Bottom Center */}
-        <g className="text-emerald-500/50 dark:text-emerald-400/40" opacity="0.7">
+        <g className={lane === "seeker" ? "text-purple-500/50 dark:text-purple-400/40" : "text-cyan-500/50 dark:text-cyan-400/40"} opacity="0.7">
           <circle cx="50" cy="70" r="1.4" fill="currentColor" />
           <circle cx="45" cy="65" r="1.0" fill="currentColor" />
           <circle cx="55" cy="65" r="1.0" fill="currentColor" />
@@ -124,9 +191,10 @@ function AnnouncementBand() {
   )
 }
 
-function FitReportCard() {
+function FitReportCard({ lane = "seeker" }: { lane?: Lane }) {
   const { x, y, rotateX, rotateY } = useParallax(8)
   const [copied, setCopied] = React.useState(false)
+  const theme = laneThemes[lane]
 
   const handleCopy = async () => {
     try {
@@ -152,12 +220,12 @@ function FitReportCard() {
         y.set(0)
       }}
       style={{ rotateX, rotateY }}
-      className="relative w-full max-w-md overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br from-white/95 via-white/90 to-sky-50/80 p-6 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-transform dark:border-white/10 dark:from-slate-950/70 dark:via-slate-950/60 dark:to-slate-900/60"
+      className={`relative w-full max-w-md overflow-hidden ${theme.buttonStyle === "rounded-2xl" ? "rounded-[1.75rem]" : "rounded-[1.5rem]"} border ${theme.cardBorder} ${theme.cardBg} p-6 ${theme.shadowStyle} backdrop-blur-xl transition-transform`}
     >
       <div className="mb-4 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">
         <span className="inline-flex items-center gap-2">
           Fit Report
-          <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] text-sky-600 dark:bg-sky-900/40 dark:text-sky-200">Live</span>
+          <span className={`rounded-full ${theme.accentLight} px-2 py-0.5 text-[10px] ${theme.secondaryText} dark:${theme.accentDark}/40`}>Live</span>
         </span>
         <a href="#audit" className="inline-flex items-center gap-1 text-slate-500 transition hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-300 dark:hover:text-slate-100">
           Audit trail
@@ -168,7 +236,7 @@ function FitReportCard() {
       <div className="mb-4 flex items-end justify-between">
         <div>
           <div className="text-[11px] uppercase tracking-[0.35em] text-slate-400">Score</div>
-          <div className="mt-1 text-4xl font-semibold text-slate-900 dark:text-slate-100">78</div>
+          <div className={`mt-1 text-4xl font-semibold ${theme.primaryText}`}>78</div>
           <p className="text-xs text-slate-500 dark:text-slate-400">DevOps · SOC2 ready</p>
         </div>
         <div className="rounded-xl border border-white/80 bg-white/70 px-3 py-2 text-xs text-slate-500 shadow-sm dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-300">
@@ -178,13 +246,13 @@ function FitReportCard() {
       </div>
 
       <div className="mb-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200/70 dark:bg-slate-800/70">
-        <div className="h-full w-[78%] rounded-full bg-gradient-to-r from-sky-400 via-indigo-500 to-violet-500" />
+        <div className={`h-full w-[78%] rounded-full bg-gradient-to-r ${theme.primary}`} />
       </div>
 
-      <ul className="mb-6 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-        <li className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-sky-400" />Signals verified via GitHub + SOC2 logs</li>
-        <li className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-indigo-400" />Stretch surfaced: Terraform (coachable)</li>
-        <li className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-emerald-400" />Bias guardrails: experience-first, no alma mater</li>
+      <ul className={`mb-6 space-y-2 text-sm ${theme.mutedText}`}>
+        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${theme.accent}`} />Signals verified via GitHub + SOC2 logs</li>
+        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "indigo-400" : "teal-400"}`} />Stretch surfaced: Terraform (coachable)</li>
+        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "purple-400" : "cyan-400"}`} />Bias guardrails: experience-first, no alma mater</li>
       </ul>
 
       <div className="flex items-center justify-between gap-2 rounded-2xl bg-gradient-to-r from-slate-50 to-white/90 p-2 text-xs text-slate-500 shadow-inner dark:from-slate-900 dark:to-slate-950">
@@ -203,28 +271,44 @@ function FitReportCard() {
   )
 }
 
-export default function LivingProofHero({ highlights = [], trusted = [] }: HeroProps) {
+export default function LivingProofHero({ highlights = [], trusted = [], lane = "seeker" }: HeroProps) {
+  const theme = laneThemes[lane]
+  
   return (
     <section className="relative isolate overflow-hidden py-16 sm:py-24">
-      <LivingProofCanvas />
+      <LivingProofCanvas lane={lane} />
       <AnnouncementBand />
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-6 lg:grid-cols-12">
         <div className="relative z-10 space-y-8 lg:col-span-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-sky-100/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-sky-700 shadow-sm shadow-sky-200/60 dark:bg-sky-900/40 dark:text-sky-200">Beauty • Utility • Proof</div>
+          <div className={`inline-flex items-center gap-2 rounded-full ${theme.accentLight}/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] ${theme.secondaryText} shadow-sm ${theme.shadowStyle} dark:${theme.accentDark}/40`}>Beauty • Utility • Proof</div>
           <div className="space-y-4">
-            <h1 className="font-serif text-4xl tracking-tight text-slate-900 sm:text-5xl dark:text-white">
-              Hire with receipts. Grow with design-caliber AI.
+            <h1 className={`font-serif text-4xl tracking-tight ${theme.primaryText} sm:text-5xl`}>
+              {lane === "seeker" ? "Land interviews with proof. Grow with confidence." : "Hire with receipts. Scale with precision."}
             </h1>
-            <p className="max-w-xl text-lg text-slate-600 dark:text-slate-300">
-              ProofOfFit blends human-centered craft with enterprise rigor—delivering Fit Reports, slates, and automations that feel as elegant as they are accountable.
+            <p className={`max-w-xl text-lg ${theme.mutedText}`}>
+              {lane === "seeker" 
+                ? "ProofOfFit analyzes each job, tailors your application, and explains exactly why you match—so you apply with confidence, not hope."
+                : "ProofOfFit delivers ranked slates with transparent rationales and audit trails—faster hiring, fewer debates, better compliance."
+              }
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <ReusableButton id="cta-start" label="Get started free" href="/get-started" />
-            <ReusableButton id="cta-demo" label="Watch guided tour" href="/demo" variant="secondary" />
-            <span className="text-sm text-slate-500 dark:text-slate-400">No card • 2 minutes to first Fit Report</span>
+            <ReusableButton 
+              id="cta-start" 
+              label={lane === "seeker" ? "Get my Fit Report" : "Generate a slate"} 
+              href={lane === "seeker" ? "/app/fit" : "/app/slate"} 
+            />
+            <ReusableButton 
+              id="cta-demo" 
+              label={lane === "seeker" ? "Try interactive demo" : "See how it works"} 
+              href="/demo" 
+              variant="secondary" 
+            />
+            <span className={`text-sm ${theme.mutedText}`}>
+              {lane === "seeker" ? "No card • 2 minutes to first Fit Report" : "No setup • 5 minutes to first slate"}
+            </span>
           </div>
 
           {!!highlights.length && (
@@ -246,7 +330,7 @@ export default function LivingProofHero({ highlights = [], trusted = [] }: HeroP
         </div>
 
         <div className="relative z-10 lg:col-span-6">
-          <FitReportCard />
+          <FitReportCard lane={lane} />
         </div>
       </div>
 
