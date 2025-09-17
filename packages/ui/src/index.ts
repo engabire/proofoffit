@@ -3,7 +3,10 @@ export { cn } from './lib/utils'
 
 // UI Components
 export { Button } from './components/button'
+export { Button as ReusableButton } from './components/reusable-button'
 export { CTAButton } from './components/cta-button'
+export { Breadcrumb } from './components/breadcrumb'
+export type { BreadcrumbItem } from './components/breadcrumb'
 export { Input } from './components/input'
 export { Label } from './components/label'
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './components/card'
