@@ -40,9 +40,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:rounded-lg focus:bg-sky-600 focus:px-3 focus:py-2 focus:text-white">Skip to content</a>
         <Providers>
           <DegradedBanner />
-          {children}
+          <div id="main">{children}</div>
           <ReportIssue />
           <Toaster />
         </Providers>

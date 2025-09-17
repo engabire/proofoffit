@@ -1,13 +1,12 @@
 import * as React from "react"
 import { Button, ButtonProps } from "./button"
 import { cn } from "@/lib/utils"
-import { CTATrackingData } from "../types/analytics"
 
 export interface CTAButtonProps extends Omit<ButtonProps, 'variant'> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   href?: string
   external?: boolean
-  trackingData?: CTATrackingData
+  trackingData?: Record<string, any>
   icon?: React.ReactNode
   iconPosition?: 'left' | 'right'
 }
@@ -29,7 +28,7 @@ const CTAButton = React.forwardRef<HTMLButtonElement, CTAButtonProps>(
       // Track CTA interaction
       if (trackingData && Object.keys(trackingData).length > 0) {
         // Send tracking data to analytics
-        if (typeof window !== 'undefined' && window.gtag) {
+        if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
           window.gtag('event', 'cta_click', {
             ...trackingData,
             timestamp: new Date().toISOString()

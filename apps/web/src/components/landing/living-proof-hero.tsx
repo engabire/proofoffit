@@ -29,37 +29,74 @@ const useParallax = (strength = 10) => {
 function LivingProofCanvas() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-gradient-to-br from-sky-200/60 via-indigo-200/30 to-purple-200/20 blur-[120px] dark:from-sky-500/25 dark:via-indigo-500/20 dark:to-purple-500/15" />
-      <div className="absolute -bottom-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-emerald-200/45 via-sky-200/25 to-indigo-200/15 blur-[140px] dark:from-emerald-500/25 dark:via-sky-500/20 dark:to-indigo-500/15" />
+      {/* Ambient gradients - positioned to avoid content areas */}
+      <div className="absolute -top-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-br from-sky-200/40 via-indigo-200/20 to-purple-200/10 blur-[100px] dark:from-sky-500/20 dark:via-indigo-500/15 dark:to-purple-500/10" />
+      <div className="absolute -bottom-32 -right-40 h-72 w-72 rounded-full bg-gradient-to-tr from-emerald-200/35 via-sky-200/20 to-indigo-200/10 blur-[120px] dark:from-emerald-500/20 dark:via-sky-500/15 dark:to-indigo-500/10" />
+      
+      {/* Data network visualization - symmetrically arranged */}
       <svg className="absolute inset-0 size-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <g opacity="0.05" className="text-slate-500">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <line key={`v-${i}`} x1={(i + 1) * 9} y1="0" x2={(i + 1) * 9} y2="100" stroke="currentColor" />
-          ))}
-          {Array.from({ length: 6 }).map((_, i) => (
-            <line key={`h-${i}`} x1="0" y1={(i + 1) * 14} x2="100" y2={(i + 1) * 14} stroke="currentColor" />
-          ))}
+        {/* Candidate Network Cluster - Left Side */}
+        <g className="text-sky-500/50 dark:text-sky-400/40" opacity="0.7">
+          <circle cx="20" cy="30" r="1.2" fill="currentColor" />
+          <circle cx="25" cy="25" r="0.9" fill="currentColor" />
+          <circle cx="25" cy="35" r="1.0" fill="currentColor" />
+          <circle cx="15" cy="35" r="0.8" fill="currentColor" />
+          <circle cx="30" cy="30" r="0.8" fill="currentColor" />
+          
+          {/* Thin connections showing candidate relationships */}
+          <line x1="20" y1="30" x2="25" y2="25" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
+          <line x1="20" y1="30" x2="25" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
+          <line x1="20" y1="30" x2="15" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          <line x1="25" y1="25" x2="30" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          <line x1="25" y1="35" x2="30" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
         </g>
-        <g className="text-sky-600/70 dark:text-sky-300/70">
-          <circle cx="22" cy="30" r="1.6" />
-          <circle cx="26" cy="36" r="1.0" />
-          <circle cx="30" cy="26" r="1.2" />
-          <line x1="22" y1="30" x2="26" y2="36" stroke="currentColor" opacity=".45" />
-          <line x1="26" y1="36" x2="30" y2="26" stroke="currentColor" opacity=".45" />
+
+        {/* Job Requirements Network - Right Side (mirrored) */}
+        <g className="text-indigo-500/50 dark:text-indigo-400/40" opacity="0.7">
+          <circle cx="80" cy="30" r="1.2" fill="currentColor" />
+          <circle cx="75" cy="25" r="0.9" fill="currentColor" />
+          <circle cx="75" cy="35" r="1.0" fill="currentColor" />
+          <circle cx="85" cy="35" r="0.8" fill="currentColor" />
+          <circle cx="70" cy="30" r="0.8" fill="currentColor" />
+          
+          {/* Mirrored job requirement connections */}
+          <line x1="80" y1="30" x2="75" y2="25" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
+          <line x1="80" y1="30" x2="75" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
+          <line x1="80" y1="30" x2="85" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          <line x1="75" y1="25" x2="70" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          <line x1="75" y1="35" x2="70" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
         </g>
-        <g className="text-indigo-600/70 dark:text-indigo-300/70">
-          <circle cx="70" cy="18" r="1.4" />
-          <circle cx="75" cy="24" r="1.0" />
-          <circle cx="64" cy="24" r="1.0" />
-          <line x1="70" y1="18" x2="75" y2="24" stroke="currentColor" opacity=".45" />
-          <line x1="70" y1="18" x2="64" y2="24" stroke="currentColor" opacity=".45" />
+
+        {/* Matching Network - Bottom Center */}
+        <g className="text-emerald-500/50 dark:text-emerald-400/40" opacity="0.7">
+          <circle cx="50" cy="70" r="1.4" fill="currentColor" />
+          <circle cx="45" cy="65" r="1.0" fill="currentColor" />
+          <circle cx="55" cy="65" r="1.0" fill="currentColor" />
+          <circle cx="45" cy="75" r="0.9" fill="currentColor" />
+          <circle cx="55" cy="75" r="0.9" fill="currentColor" />
+          
+          {/* Symmetrical matching hub connections */}
+          <line x1="50" y1="70" x2="45" y2="65" stroke="currentColor" strokeWidth="0.4" opacity="0.6" />
+          <line x1="50" y1="70" x2="55" y2="65" stroke="currentColor" strokeWidth="0.4" opacity="0.6" />
+          <line x1="50" y1="70" x2="45" y2="75" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
+          <line x1="50" y1="70" x2="55" y2="75" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
         </g>
-        <g className="text-emerald-600/70 dark:text-emerald-300/70">
-          <circle cx="56" cy="72" r="1.6" />
-          <circle cx="63" cy="67" r="1.0" />
-          <circle cx="48" cy="64" r="1.1" />
-          <line x1="56" y1="72" x2="63" y2="67" stroke="currentColor" opacity=".45" />
-          <line x1="56" y1="72" x2="48" y2="64" stroke="currentColor" opacity=".45" />
+
+        {/* Symmetrical cross-network connections */}
+        <g className="text-slate-400/30 dark:text-slate-500/25" opacity="0.5">
+          {/* Left to center connections */}
+          <line x1="25" y1="35" x2="45" y2="65" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
+          <line x1="30" y1="30" x2="50" y2="70" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
+          
+          {/* Right to center connections (symmetrical) */}
+          <line x1="75" y1="35" x2="55" y2="65" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
+          <line x1="70" y1="30" x2="50" y2="70" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
+        </g>
+
+        {/* Minimal symmetrical grid structure */}
+        <g opacity="0.02" className="text-slate-500">
+          <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.3" />
+          <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.3" />
         </g>
       </svg>
     </div>

@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from '@proof-of-fit/ui'
 import { Check, Gift, Shield } from 'lucide-react'
 import { isStripeConfigured } from '@/lib/env'
 import GiftCheckoutForm from './gift-checkout-form'
+import { PageNav } from '@/components/system/page-nav'
 
 export const metadata: Metadata = {
   title: 'Sponsor ProofOfFit Pro',
@@ -78,6 +79,11 @@ export default function GiftPage() {
           </ul>
         </CardContent>
       </Card>
+
+      <PageNav
+        prev={{ href: '/', label: 'Home' }}
+        next={{ href: '/gift/success', label: 'Gift Success' }}
+      />
     </div>
   )
 }

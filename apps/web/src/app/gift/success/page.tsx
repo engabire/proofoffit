@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@proof-of-fit/ui'
 import { CheckCircle, Gift } from 'lucide-react'
 import GiftCodeClipboard from './use-copy'
+import { PageNav } from '@/components/system/page-nav'
 
 interface GiftSuccessPageProps {
   searchParams: {
@@ -50,6 +51,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
           </div>
         </CardContent>
       </Card>
+      <PageNav prev={{ href: '/gift', label: 'Gift' }} next={{ href: '/', label: 'Home' }} />
     </div>
   )
 }

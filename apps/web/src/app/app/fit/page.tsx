@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { startTimer, stopTimer } from "../../lib/analytics"
 import {
   Upload,
   FileText,
@@ -1816,6 +1817,10 @@ export default function FitReportPage() {
   const [analysis, setAnalysis] = useState<FitAnalysis | null>(null)
   const [documentsGenerated, setDocumentsGenerated] = useState(false)
 
+  useEffect(() => {
+    try { startTimer('ttffr') } catch {}
+  }, [])
+
   const totalSteps = 4
 
   const handleResumeComplete = (resumeData: ResumeData) => {
@@ -1832,6 +1837,7 @@ export default function FitReportPage() {
   const handleAnalysisComplete = (analysisData: FitAnalysis) => {
     setAnalysis(analysisData)
     try { import('../../lib/analytics').then(m => m.track({ name: 'fit_analysis_complete' })) } catch {}
+    try { stopTimer('ttffr', { page: 'fit_report' }) } catch {}
     setCurrentStep(4)
   }
 
