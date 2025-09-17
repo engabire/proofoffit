@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import type { Provider } from '@supabase/supabase-js'
 import {
   Alert,
   AlertDescription,
@@ -127,7 +128,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
     }
   }
 
-  const handleSSO = async (provider: string) => {
+  const handleSSO = async (provider: Provider) => {
     if (!supabase) {
       toast.error('Authentication not configured. Please contact support.')
       return
