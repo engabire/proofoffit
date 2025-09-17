@@ -4,6 +4,7 @@ import './globals.css'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { DegradedBanner } from '@/components/system/degraded-banner'
+import { ReportIssue } from '@/components/system/report-issue'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' })
@@ -42,6 +43,7 @@ export default function RootLayout({
         <Providers>
           <DegradedBanner />
           {children}
+          <ReportIssue />
           <Toaster />
         </Providers>
       </body>
