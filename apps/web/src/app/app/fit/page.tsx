@@ -1219,7 +1219,7 @@ function FitAnalysisStep({ resume, job, onComplete }: {
         ...missingSkills.slice(0, 2).map(skill => `Missing ${skill} experience`),
         experienceYears < 3 ? 'Limited years of experience' : null,
         !hasRelevantEducation ? 'Consider relevant education/certifications' : null
-      ].filter(Boolean).slice(0, 3),
+      ].filter((x): x is string => Boolean(x)).slice(0, 3),
       recommendations: [
         ...matchedSkills.slice(0, 2).map(skill => `Highlight your ${skill} experience prominently`),
         ...niceToHaveSkills.slice(0, 1).map(skill => `Emphasize your ${skill} skills as a differentiator`),
