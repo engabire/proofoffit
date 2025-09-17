@@ -31,6 +31,7 @@ import {
   Mail,
   Shield,
   Sparkles,
+  User,
 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
