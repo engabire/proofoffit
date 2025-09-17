@@ -15,6 +15,8 @@ import {
   Check,
   Copy,
   ExternalLink,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import {
   Button,
