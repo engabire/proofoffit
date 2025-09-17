@@ -1225,7 +1225,7 @@ function FitAnalysisStep({ resume, job, onComplete }: {
         ...niceToHaveSkills.slice(0, 1).map(skill => `Emphasize your ${skill} skills as a differentiator`),
         missingSkills.length > 0 ? `Consider learning ${missingSkills[0]} to improve your fit` : null,
         'Showcase your problem-solving and collaboration abilities'
-      ].filter(Boolean).slice(0, 4),
+      ].filter((x): x is string => Boolean(x)).slice(0, 4),
       biasIndicators: {
         detected: false,
         factors: [],
