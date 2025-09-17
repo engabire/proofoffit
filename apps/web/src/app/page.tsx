@@ -24,6 +24,11 @@ import {
   BookOpen,
   DollarSign,
   Gift,
+  BarChart3,
+  BrainCircuit,
+  Layers,
+  Compass,
+  Palette,
 } from "lucide-react";
 import {
   Button,
@@ -31,6 +36,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
   Badge,
   Input,
   Sheet,
@@ -57,27 +63,27 @@ import LivingProofHero from "@/components/landing/living-proof-hero";
 
 // ---------- Shared theme helpers ----------
 const laneAccent = {
-  seeker: "from-sky-600 via-indigo-600 to-violet-600",
-  employer: "from-emerald-600 via-teal-600 to-cyan-600",
+  seeker: "from-primary/90 via-sky-500 to-indigo-500",
+  employer: "from-emerald-500 via-teal-500 to-sky-500",
 };
 
-const warmBody = "text-stone-900 dark:text-stone-100";
-const subtle = "text-stone-600 dark:text-stone-400";
+const warmBody = "text-slate-900 dark:text-slate-100";
+const subtle = "text-slate-600 dark:text-slate-400";
 const receiptMono = "font-mono text-sm";
 
 // Subtle hero gradient blobs (lane-aware)
 const blobGradients = {
   seeker: [
-    "from-sky-400/30 via-indigo-400/20 to-violet-400/10",
-    "from-indigo-400/20 via-violet-400/20 to-fuchsia-400/10",
+    "from-sky-300/60 via-indigo-300/30 to-violet-300/20",
+    "from-indigo-400/25 via-fuchsia-400/25 to-sky-300/30",
   ],
   employer: [
-    "from-emerald-400/30 via-teal-400/20 to-cyan-400/10",
-    "from-teal-400/20 via-cyan-400/20 to-sky-400/10",
+    "from-emerald-300/55 via-teal-300/35 to-cyan-200/25",
+    "from-cyan-400/20 via-sky-400/25 to-indigo-300/30",
   ],
   neutral: [
-    "from-sky-300/20 via-indigo-300/15 to-violet-300/10",
-    "from-emerald-300/20 via-teal-300/15 to-cyan-300/10",
+    "from-sky-200/45 via-indigo-200/30 to-purple-200/20",
+    "from-teal-200/35 via-cyan-200/25 to-blue-200/20",
   ],
 } as const;
 
@@ -137,6 +143,60 @@ const laneCopy = {
     ] as { text: string }[],
   },
 } as const;
+
+const heroHighlights = [
+  {
+    label: 'Average interview lift',
+    value: '3.2×',
+    caption: 'After 30 days on ProofOfFit',
+    icon: <BarChart3 className="h-4 w-4" aria-hidden />,
+  },
+  {
+    label: 'Time to tailored resume',
+    value: '90s',
+    caption: 'AI-assisted, human controlled',
+    icon: <Timer className="h-4 w-4" aria-hidden />,
+  },
+  {
+    label: 'Audit-ready trails',
+    value: '100%',
+    caption: 'Cryptographically chained decisions',
+    icon: <Layers className="h-4 w-4" aria-hidden />,
+  },
+] as const;
+
+const trustedPartners = ['USAJobs Analysts', 'McKinsey Fellows', 'UN Talent Programme', 'Inclusive Hiring Network', 'GovTech Catalysts'];
+
+const aiHighlights = [
+  {
+    title: 'Explainable Fit Reports',
+    description: 'Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams.',
+    icon: <BrainCircuit className="h-5 w-5" aria-hidden />,
+  },
+  {
+    title: 'Adaptive Autopilot',
+    description: 'Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away.',
+    icon: <Compass className="h-5 w-5" aria-hidden />,
+  },
+  {
+    title: 'Bias-aware Scoring',
+    description: 'We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story.',
+    icon: <ShieldCheck className="h-5 w-5" aria-hidden />,
+  },
+  {
+    title: 'Design-grade outputs',
+    description: 'From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it.',
+    icon: <Palette className="h-5 w-5" aria-hidden />,
+  },
+];
+
+const inspirationBrands = [
+  { name: 'Google', note: 'Clarity and calming whitespace' },
+  { name: 'AWS', note: 'Enterprise-grade guardrails' },
+  { name: 'LinkedIn', note: 'Human, professional warmth' },
+  { name: 'Indeed', note: 'Approachable AI guidance' },
+  { name: 'Stripe', note: 'Product storytelling polish' },
+];
 
 const universalWhy = [
   {
@@ -517,16 +577,80 @@ function ReceiptCard() {
   );
 }
 
+function TrustedStrip() {
+  return (
+    <section className="py-16">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="rounded-[1.75rem] border border-white/70 bg-white/80 p-8 shadow-lg shadow-slate-200/40 backdrop-blur dark:border-white/10 dark:bg-slate-950/50">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Inspired by the teams who set the bar</p>
+              <h2 className="mt-2 font-serif text-2xl text-slate-900 dark:text-white">Beauty, utility, and approachability in one operating system.</h2>
+            </div>
+            <p className="max-w-sm text-sm text-slate-500 dark:text-slate-300">We study the calm authority of Google, the trust scaffolding of AWS, the warmth of LinkedIn, and the approachability of Indeed—and render it in ProofOfFit.</p>
+          </div>
+          <div className="mt-6 grid gap-3 text-sm font-medium text-slate-600 dark:text-slate-300 sm:grid-cols-5">
+            {inspirationBrands.map((brand) => (
+              <div key={brand.name} className="rounded-xl border border-white/70 bg-slate-50/70 px-4 py-3 text-center shadow-sm shadow-slate-200/40 dark:border-white/10 dark:bg-slate-900/60">
+                <div className="text-base font-semibold text-slate-700 dark:text-slate-100">{brand.name}</div>
+                <p className="mt-1 text-xs font-normal text-slate-500 dark:text-slate-400">{brand.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function AIShowcase() {
+  return (
+    <section className="py-16" id="design">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5 space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Crafted AI workflows</p>
+            <h2 className="font-serif text-3xl text-slate-900 dark:text-white">AI that feels like a senior designer, not a noisy assistant.</h2>
+            <p className="text-slate-600 dark:text-slate-300">We pair approachability with governance—mirroring the calm clarity of the products you love, while proving every recommendation.</p>
+          </div>
+          <div className="lg:col-span-7 grid gap-4 sm:grid-cols-2">
+            {aiHighlights.map((item) => (
+              <Card key={item.title} className="group h-full border border-white/70 bg-white/85 shadow-sm shadow-slate-200/40 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/50 dark:border-white/10 dark:bg-slate-950/60 dark:hover:shadow-none">
+                <CardContent className="space-y-3 p-5">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-slate-100/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:bg-slate-900/60 dark:text-slate-300">
+                    {item.icon}
+                    Signal
+                  </div>
+                  <h3 className="font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function WhyChoose() {
   return (
-    <section id="why" className="py-12 sm:py-20">
+    <section id="why" className="py-16">
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">Why choose ProofOfFit?</h2>
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Why ProofOfFit</p>
+            <h2 className="mt-2 font-serif text-3xl text-slate-900 dark:text-white">Because hiring deserves evidence—and delightful software.</h2>
+          </div>
+          <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">Evidence-first matching, bias-aware automation, and audit-ready transparency, wrapped in a product experience that teams love to live in.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
           {universalWhy.map((w, i) => (
-            <Card key={i} className="shadow-sm">
-              <CardHeader className="pb-2"><div className="flex items-center gap-2">{w.icon}<CardTitle className="text-base">{w.title}</CardTitle></div></CardHeader>
-              <CardContent className={subtle}>{w.body}</CardContent>
+            <Card key={i} className="h-full border border-white/70 bg-white/85 shadow-sm shadow-slate-200/30 backdrop-blur transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/40 dark:border-white/10 dark:bg-slate-950/60">
+              <CardHeader className="pb-0">
+                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">{w.icon}<CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">{w.title}</CardTitle></div>
+              </CardHeader>
+              <CardContent className="pt-3 text-sm text-slate-600 dark:text-slate-300">{w.body}</CardContent>
             </Card>
           ))}
         </div>
@@ -537,85 +661,96 @@ function WhyChoose() {
 
 function HowItWorks({ items, lane }: { items: { step: number; title: string; body: string }[]; lane: Lane }) {
   return (
-    <section id="how" className="py-12 sm:py-20 bg-zinc-50 dark:bg-zinc-900">
-      <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">How it works</h2>
-        <ol className="grid md:grid-cols-4 gap-4">
+    <section id="how" className="relative overflow-hidden py-16">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-24 mx-auto h-64 max-w-4xl rounded-full bg-gradient-to-r from-sky-200/40 via-indigo-200/30 to-emerald-200/30 blur-3xl dark:from-sky-500/20 dark:via-indigo-500/20 dark:to-emerald-500/20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Workflow</p>
+            <h2 className="mt-2 font-serif text-3xl text-slate-900 dark:text-white">A guided autopilot that keeps you in control.</h2>
+          </div>
+          <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">Every lane follows the same calming rhythm: gather proof, map to criteria, generate the Fit Report, and share with confidence.</p>
+        </div>
+        <ol className="grid gap-4 md:grid-cols-4">
           {items.map((s) => (
-            <li key={s.step} className="relative">
-              <Card className="h-full">
-                <CardHeader className="pb-1"><CardTitle className="text-base">{s.step}. {s.title}</CardTitle></CardHeader>
-                <CardContent className={subtle}>{s.body}</CardContent>
+            <li key={s.step}>
+              <Card className="h-full border border-white/70 bg-white/85 shadow-sm shadow-slate-200/30 backdrop-blur transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/40 dark:border-white/10 dark:bg-slate-950/60">
+                <CardHeader className="pb-0">
+                  <CardTitle className="font-semibold text-slate-900 dark:text-slate-100">
+                    <span className="mr-2 inline-flex size-7 items-center justify-center rounded-full bg-sky-100 text-xs font-semibold text-sky-600 dark:bg-sky-900/40 dark:text-sky-200">{s.step}</span>
+                    {s.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-3 text-sm text-slate-600 dark:text-slate-300">{s.body}</CardContent>
               </Card>
             </li>
           ))}
         </ol>
-        <div className="mt-6">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           {lane === "seeker" ? (
             <Button size="lg" asChild data-evt="cta_how">
-              <a 
-                href="/app/fit"
-                aria-label="Get your personalized fit report - start your application process"
-                rel="noopener"
-              >
+              <a href="/app/fit" aria-label="Get your personalized fit report" rel="noopener">
                 Get My Fit Report
               </a>
             </Button>
           ) : (
             <Button size="lg" asChild data-evt="cta_how">
-              <a 
-                href="/app/slate"
-                aria-label="Generate a candidate slate - start your hiring process"
-                rel="noopener"
-              >
+              <a href="/app/slate" aria-label="Generate a candidate slate" rel="noopener">
                 Generate a Candidate Slate
               </a>
             </Button>
           )}
+          <span className="text-sm text-slate-500 dark:text-slate-400">SOC2-ready • Accessible • Bias-aware by design</span>
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function Pricing({ lane }: { lane: Lane }) {
-  const plans = lane === "seeker" ? pricing.seeker : pricing.employer;
+  const plans = lane === "seeker" ? pricing.seeker : pricing.employer
   return (
-    <section id="pricing" className="py-12 sm:py-20">
+    <section id="pricing" className="py-16">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-end justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-semibold">Pricing</h2>
-          <p className={`text-sm ${subtle}`}>Cancel anytime. Upgrade or downgrade as needs change.</p>
+        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Pricing</p>
+            <h2 className="mt-2 font-serif text-3xl text-slate-900 dark:text-white">Simple tiers for individuals and teams.</h2>
+          </div>
+          <p className={`max-w-md text-sm ${subtle}`}>Cancel anytime. Crafted with PPP affordability and sponsor pools so no candidate is left behind.</p>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-6 md:grid-cols-2">
           {plans.map((p, i) => (
-            <Card key={i} className={`relative transition shadow-md hover:shadow-xl hover:-translate-y-0.5 ${
-              (p as any).highlight ? "ring-1 ring-sky-300/60" : ""
-            }`}>
+            <Card
+              key={i}
+              className={`relative h-full border border-white/70 bg-white/85 shadow-md shadow-slate-200/40 backdrop-blur transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/50 dark:border-white/10 dark:bg-slate-950/60 ${
+                (p as any).highlight ? 'ring-1 ring-sky-300/70 dark:ring-sky-500/40' : ''
+              }`}
+            >
               {(p as any).highlight && (
-                <Badge className="absolute -top-2 right-3" variant="default">Popular</Badge>
+                <Badge className="absolute -top-3 right-4 rounded-full bg-sky-500 text-xs text-white shadow" variant="default">Most loved</Badge>
               )}
               <CardHeader>
-                <CardTitle className="text-xl">{p.name}</CardTitle>
-                <div className="text-2xl font-bold">{p.price} <span className="text-base font-normal text-zinc-500">/ mo</span></div>
-                <div className={subtle}>{p.blurb}</div>
+                <CardTitle className="font-serif text-2xl text-slate-900 dark:text-white">{p.name}</CardTitle>
+                <div className="text-3xl font-semibold text-slate-900 dark:text-slate-100">{p.price} <span className="text-base font-normal text-slate-500">/ mo</span></div>
+                <div className={`text-sm ${subtle}`}>{p.blurb}</div>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
+                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                   {p.features.map((f, idx) => (
-                    <li key={idx} className="flex items-start gap-2"><Check className="h-4 w-4 mt-0.5"/> {f}</li>
+                    <li key={idx} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-sky-500" />{f}</li>
                   ))}
                 </ul>
                 {(p as any).footnote && <p className={`mt-3 text-xs ${subtle}`}>{(p as any).footnote}</p>}
-                <div className="mt-4">
-                  <Button 
-                    size="lg" 
-                    className="w-full" 
-                    data-evt="cta_pricing" 
+                <div className="mt-6">
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    data-evt="cta_pricing"
                     data-plan={p.name}
                     asChild
                   >
-                    <a 
+                    <a
                       href={lane === 'seeker' ? `/auth/signup?plan=${p.name.toLowerCase()}` : `/auth/signup?plan=${p.name.toLowerCase().replace(' ', '_')}`}
                       aria-label={`${p.cta} - ${p.name} plan for ${p.price} per month`}
                       rel="noopener"
@@ -629,154 +764,156 @@ function Pricing({ lane }: { lane: Lane }) {
           ))}
         </div>
         {lane === "seeker" && (
-          <div className="mt-6">
+          <div className="mt-8">
             <GiftSponsorPanel />
           </div>
         )}
       </div>
     </section>
-  );
+  )
 }
 
 function DMTestimonials({ lane }: { lane: Lane }) {
-  const items = testimonials[lane];
+  const items = testimonials[lane]
   return (
-    <section className="py-12 sm:py-20 bg-zinc-50 dark:bg-zinc-900">
-      <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">What people say</h2>
-        <div className="grid md:grid-cols-2 gap-4">
-          {items.map((t, i) => (
-            <Card key={i} className="shadow-sm">
-              <CardContent className="pt-6">
-                <div className="rounded-2xl bg-white dark:bg-zinc-950 border p-4">
-                  <p className="text-base">“{t.quote}”</p>
-                  <p className={`mt-3 text-sm ${subtle}`}>— {t.name}, {t.role}</p>
+    <section className="relative overflow-hidden py-16" id="stories">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-1/2 h-64 -translate-y-1/2 bg-gradient-to-r from-sky-200/35 via-indigo-200/25 to-emerald-200/25 blur-3xl dark:from-sky-500/20 dark:via-indigo-500/20 dark:to-emerald-500/20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Testimonials</p>
+            <h2 className="mt-2 font-serif text-3xl text-slate-900 dark:text-white">Loved by candidates, trusted by hiring teams.</h2>
+          </div>
+          <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">ProofOfFit makes interviews calmer for candidates and gives stakeholders receipts they can stand behind.</p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {items.map((t, index) => (
+            <Card key={index} className="border border-white/70 bg-white/85 shadow-md shadow-slate-200/40 backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-200/50 dark:border-white/10 dark:bg-slate-950/60">
+              <CardContent className="space-y-4 p-6">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-sky-500">
+                  <Check className="h-4 w-4" /> Proof in practice
                 </div>
+                <p className="text-lg leading-relaxed text-slate-800 dark:text-slate-100">“{t.quote}”</p>
+                <p className="text-sm text-slate-500 dark:text-slate-300">— {t.name}, {t.role}</p>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function GiftSponsorPanel() {
-  const [code, setCode] = useState("");
-  const [redeeming, setRedeeming] = useState(false);
-  const [redeemStatus, setRedeemStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [redeemMessage, setRedeemMessage] = useState<string | null>(null);
+  const [code, setCode] = useState('')
+  const [redeeming, setRedeeming] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState<string | null>(null)
 
   const handleRedeem = async () => {
-    if (!code.trim()) return;
-    setRedeeming(true);
-    setRedeemStatus('idle');
-    setRedeemMessage(null);
+    if (!code.trim()) return
+    setRedeeming(true)
+    setStatus('idle')
+    setMessage(null)
 
     try {
       const response = await fetch('/api/gift/redeem', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
-      });
+      })
 
-      const payload = await response.json().catch(() => ({ error: 'Unexpected response' }));
+      const payload = await response.json().catch(() => ({ error: 'Unexpected response' }))
 
       if (!response.ok) {
-        setRedeemStatus('error');
-        setRedeemMessage(payload?.error || 'Unable to redeem gift code');
-        return;
+        setStatus('error')
+        setMessage(payload?.error || 'Unable to redeem gift code')
+        return
       }
 
-      const until = payload?.currentPeriodEnd ? new Date(payload.currentPeriodEnd) : null;
-      setRedeemStatus('success');
-      setRedeemMessage(until
-        ? `Gift applied! Your sponsored access runs through ${until.toLocaleDateString()}.`
-        : 'Gift applied! Enjoy your sponsored months.');
-      setCode('');
+      const until = payload?.currentPeriodEnd ? new Date(payload.currentPeriodEnd) : null
+      setStatus('success')
+      setMessage(until ? `Gift applied. Access runs through ${until.toLocaleDateString()}.` : 'Gift applied! Enjoy your sponsored months.')
+      setCode('')
     } catch (error) {
-      console.error('Gift redeem failed', error);
-      setRedeemStatus('error');
-      setRedeemMessage('Something went wrong while redeeming. Please try again.');
+      console.error('Gift redeem failed', error)
+      setStatus('error')
+      setMessage('Something went wrong redeeming this code. Please try again or contact support.')
     } finally {
-      setRedeeming(false);
+      setRedeeming(false)
     }
-  };
+  }
+
   return (
-    <Card className="mt-2 max-w-2xl">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base">Gift & Sponsor</CardTitle>
+    <Card className="border border-white/70 bg-gradient-to-br from-white/90 via-white/85 to-sky-50/80 shadow-md shadow-slate-200/40 backdrop-blur dark:border-white/10 dark:from-slate-950/70 dark:via-slate-950/60 dark:to-slate-900/60">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-base text-slate-900 dark:text-slate-100"><Gift className="h-4 w-4" /> Gift &amp; Sponsor</CardTitle>
+        <CardDescription className="text-sm text-slate-500 dark:text-slate-300">Redeem a community pass or sponsor someone else’s search.</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-3 gap-3 items-center">
-          <div className="md:col-span-2">
-            <label htmlFor="gift-code" className={`block text-sm mb-1 ${subtle}`}>Redeem a gift code</label>
-            <div className="flex gap-2">
-              <Input
-                id="gift-code"
-                placeholder="e.g. PF-9X2M-ABCD"
-                value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
-                aria-label="Gift code"
-              />
-              <Button data-evt="redeem_gift" onClick={handleRedeem} disabled={redeeming || !code.trim()}>
-                {redeeming ? 'Redeeming…' : 'Redeem'}
-              </Button>
-            </div>
-            <p className={`mt-2 text-xs ${subtle}`}>Codes typically cover 1–3 months of Pro. No card required.</p>
-            {redeemMessage ? (
-              <p className={`mt-2 text-sm ${redeemStatus === 'success' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
-                {redeemMessage}
-              </p>
-            ) : null}
-          </div>
-          <div className="md:col-span-1">
-            <label className={`block text-sm mb-1 ${subtle}`}>Sponsor a candidate</label>
-            <Button className="w-full" asChild data-evt="sponsor_click">
-              <a 
-                href="/gift"
-                aria-label="Sponsor a candidate - Give a month of Pro access for $12"
-                rel="noopener"
-              >
-                Give a month ($12)
-              </a>
+      <CardContent className="grid gap-4 md:grid-cols-[minmax(0,1fr),220px]">
+        <div className="space-y-2">
+          <Label htmlFor="gift-code" className="text-sm font-medium text-slate-700 dark:text-slate-200">Redeem code</Label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Input
+              id="gift-code"
+              placeholder="PF-9X2M-ABCD"
+              value={code}
+              onChange={(event) => setCode(event.target.value.toUpperCase())}
+              aria-label="Gift code"
+            />
+            <Button data-evt="redeem_gift" onClick={handleRedeem} disabled={redeeming || !code.trim()}>
+              {redeeming ? 'Redeeming…' : 'Redeem'}
             </Button>
-            <p className={`mt-2 text-xs ${subtle}`}>You’ll receive a shareable code. Tax treatment may vary.</p>
           </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Codes typically cover 1–3 months of ProofOfFit Pro. No card required.</p>
+          {message && (
+            <p className={`text-sm ${status === 'success' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>{message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 rounded-2xl border border-white/60 bg-white/85 p-4 shadow-sm shadow-slate-200/40 dark:border-white/10 dark:bg-slate-950/60">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Sponsor a candidate</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Gift-proof someone’s search for $12/month. We handle delivery and receipts.</p>
+          <Button className="w-full" asChild data-evt="sponsor_click">
+            <a href="/gift" aria-label="Sponsor a candidate - Give a month of Pro access" rel="noopener">
+              Give a month ($12)
+            </a>
+          </Button>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 function FooterTrustBar() {
   return (
-    <footer className="mt-12 border-t bg-white/60 dark:bg-zinc-950/50 backdrop-blur">
+    <footer className="mt-16 border-t border-white/70 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
       <div className="mx-auto max-w-7xl px-6 py-14">
-        <div className="grid md:grid-cols-5 gap-8">
-          <div className="md:col-span-2">
-            <a href="/" className="text-lg font-semibold">ProofOfFit</a>
-            <p className={`mt-3 text-sm ${subtle}`}>Receipts, not black boxes. Bias‑reducing and explainable matching for fairer, faster hiring.</p>
-            <div className="mt-4 flex gap-3">
-              <a aria-label="Twitter" href="https://x.com/proofoffit" className="p-2 rounded-lg border hover:bg-white/60 dark:hover:bg-zinc-900/60"><Twitter className="h-4 w-4"/></a>
-              <a aria-label="LinkedIn" href="https://www.linkedin.com/company/proofoffit" className="p-2 rounded-lg border hover:bg-white/60 dark:hover:bg-zinc-900/60"><Linkedin className="h-4 w-4"/></a>
-              <a aria-label="GitHub" href="https://github.com/proofoffit" className="p-2 rounded-lg border hover:bg-white/60 dark:hover:bg-zinc-900/60"><Github className="h-4 w-4"/></a>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.6fr),repeat(3,minmax(0,1fr))]">
+          <div className="space-y-4">
+            <a href="/" className="text-lg font-semibold text-slate-900 dark:text-white">ProofOfFit</a>
+            <p className={`text-sm ${subtle}`}>Receipts, not black boxes. We blend the calming polish of Google, the guardrails of AWS, the warmth of LinkedIn, and the approachability of Indeed’s AI to keep hiring both beautiful and accountable.</p>
+            <div className="flex gap-3">
+              <a aria-label="Twitter" href="https://x.com/proofoffit" className="rounded-xl border border-white/70 p-2 text-slate-500 transition hover:bg-white/60 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-900/60"><Twitter className="h-4 w-4" /></a>
+              <a aria-label="LinkedIn" href="https://www.linkedin.com/company/proofoffit" className="rounded-xl border border-white/70 p-2 text-slate-500 transition hover:bg-white/60 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-900/60"><Linkedin className="h-4 w-4" /></a>
+              <a aria-label="GitHub" href="https://github.com/proofoffit" className="rounded-xl border border-white/70 p-2 text-slate-500 transition hover:bg-white/60 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-900/60"><Github className="h-4 w-4" /></a>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold mb-3">Product</h3>
-            <ul className={`space-y-2 text-sm ${subtle}`}>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Product</h3>
+            <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
               <li><a href="#why">Features</a></li>
-              <li><a href="#how">How It Works</a></li>
+              <li><a href="#design">AI workflows</a></li>
               <li><a href="#pricing">Pricing</a></li>
-              <li><a href="/audit-sample">Sample Audit</a></li>
+              <li><a href="/audit-sample">Sample audit</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold mb-3">Company</h3>
-            <ul className={`space-y-2 text-sm ${subtle}`}>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Company</h3>
+            <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
               <li><a href="/about">About</a></li>
               <li><a href="/contact">Contact</a></li>
               <li><a href="/careers">Careers</a></li>
@@ -785,27 +922,20 @@ function FooterTrustBar() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold mb-3">Trust & Legal</h3>
-            <ul className={`space-y-2 text-sm ${subtle}`}>
-              <li><a href="/fairness">Fairness & Explainability</a></li>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Trust & Legal</h3>
+            <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
+              <li><a href="/fairness">Fairness & explainability</a></li>
               <li><a href="/security">Security</a></li>
               <li><a href="/privacy">Privacy</a></li>
               <li><a href="/terms">Terms</a></li>
               <li><a href="/status">Status</a></li>
             </ul>
-            <form className="mt-4">
-              <label htmlFor="newsletter" className={`text-sm ${subtle}`}>Newsletter</label>
-              <div className="mt-2 flex gap-2">
-                <Input id="newsletter" placeholder="you@email.com" />
-                <Button type="submit">Subscribe</Button>
-              </div>
-            </form>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className={`text-sm ${subtle}`}>© {new Date().getFullYear()} ProofOfFit, Inc.</div>
-          <div className="flex items-center gap-6 text-sm">
+        <div className="mt-10 flex flex-col gap-4 border-t border-white/60 pt-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400 md:flex-row md:items-center md:justify-between">
+          <span>© {new Date().getFullYear()} ProofOfFit, Inc. Crafted with transparency in Kigali, Kigali, and the cloud.</span>
+          <div className="flex flex-wrap items-center gap-4">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
             <a href="/security">Security</a>
@@ -829,8 +959,9 @@ export default function ProofOfFitLanding() {
     <div className={warmBody}>
       <Header lane={lane} setLane={setLane} />
       {/* HERO */}
-      <LivingProofHero />
+      <LivingProofHero highlights={heroHighlights} trusted={trustedPartners} />
 
+      <AIShowcase />
       <WhyChoose />
       <HowItWorks items={lane === "seeker" ? howSeeker : howEmployer} lane={lane} />
       <Pricing lane={lane} />
