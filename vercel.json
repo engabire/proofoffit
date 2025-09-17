@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "turbo run build --filter=web",
+  "buildCommand": "npm run build:ui && cd apps/web && npm run build",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci"
 }
