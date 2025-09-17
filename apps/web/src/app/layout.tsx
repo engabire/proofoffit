@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
+import { DegradedBanner } from '@/components/system/degraded-banner'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -36,8 +38,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <Providers>
+          <DegradedBanner />
           {children}
           <Toaster />
         </Providers>
