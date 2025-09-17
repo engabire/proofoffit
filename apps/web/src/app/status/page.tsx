@@ -3,7 +3,11 @@ export const dynamic = 'force-dynamic'
 async function fetchHealth() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/health`, { cache: 'no-store' })
-    return res.json()
+    const ct = res.headers.get('content-type') || ''
+    if (!res.ok || !ct.includes('application/json')) {
+      return { status: 'error' }
+    }
+    return await res.json()
   } catch {
     return { status: 'error' }
   }
