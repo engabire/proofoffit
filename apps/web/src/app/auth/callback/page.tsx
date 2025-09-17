@@ -56,11 +56,13 @@ export default function AuthCallbackPage() {
             
             setStatus('success')
             setMessage('Authentication successful!')
+
+            try { await import('../../../lib/analytics').then(m => m.track({ name: 'auth_success' })) } catch {}
             
             // Log successful authentication
             try {
-              await supabase
-                .from('action_log')
+                      await supabase
+                        .from('action_log')
                 .insert({
                   tenantId: data.user.id,
                   actorType: 'user',
