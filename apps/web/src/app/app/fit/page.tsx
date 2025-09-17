@@ -1820,6 +1820,7 @@ export default function FitReportPage() {
 
   const handleResumeComplete = (resumeData: ResumeData) => {
     setResume(resumeData)
+    try { import('../../lib/analytics').then(m => m.track({ name: 'resume_import_complete' })) } catch {}
     setCurrentStep(2)
   }
 
@@ -1830,6 +1831,7 @@ export default function FitReportPage() {
 
   const handleAnalysisComplete = (analysisData: FitAnalysis) => {
     setAnalysis(analysisData)
+    try { import('../../lib/analytics').then(m => m.track({ name: 'fit_analysis_complete' })) } catch {}
     setCurrentStep(4)
   }
 
