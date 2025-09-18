@@ -3,16 +3,16 @@ import { Scale, FileText, AlertTriangle, Shield, Users, Zap } from 'lucide-react
 
 export const metadata: Metadata = {
   title: 'Terms of Service - ProofOfFit',
-  description: 'ProofOfFit Terms of Service - Legal terms and conditions for using our hiring intelligence platform.',
+  description: 'ProofOfFit Terms of Service - Professional terms for enterprise hiring intelligence with audit trails and compliance.',
 }
 
 export default function TermsPage() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
-      <div className="mb-8">
+        <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Terms of Service</h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Last updated: {new Date().toLocaleDateString()}
+          Professional terms for enterprise hiring intelligence • Last updated: {new Date().toLocaleDateString()}
         </p>
       </div>
 
@@ -24,8 +24,9 @@ export default function TermsPage() {
               <h2 className="text-xl font-semibold">Agreement to Terms</h2>
             </div>
             <p className="text-slate-600 dark:text-slate-400">
-              By accessing or using ProofOfFit ("the Service"), you agree to be bound by these Terms of Service 
-              ("Terms"). If you disagree with any part of these terms, you may not access the Service.
+              Welcome to ProofOfFit, the enterprise-grade hiring intelligence platform that delivers explainable AI 
+              with cryptographic audit trails. By accessing or using our Service, you agree to these professional 
+              terms designed to support your business objectives while maintaining the highest standards of compliance and security.
             </p>
           </section>
 
@@ -36,13 +37,14 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <p className="text-slate-600 dark:text-slate-400">
-                ProofOfFit provides AI-powered hiring intelligence services including:
+                ProofOfFit delivers enterprise-grade hiring intelligence that transforms how organizations make talent decisions:
               </p>
               <ul className="text-slate-600 dark:text-slate-400 space-y-1 ml-4">
-                <li>• Personalized Fit Reports for job seekers</li>
-                <li>• Ranked candidate slates for employers</li>
-                <li>• Explainable AI recommendations with audit trails</li>
-                <li>• Bias-reducing hiring insights and analytics</li>
+                <li>• <strong>Fit Reports:</strong> Personalized, evidence-based candidate assessments with transparent scoring</li>
+                <li>• <strong>Candidate Slates:</strong> Ranked, explainable recommendations with bias-reducing algorithms</li>
+                <li>• <strong>Audit Trails:</strong> Cryptographic proof of every hiring decision for compliance and transparency</li>
+                <li>• <strong>Enterprise Analytics:</strong> Advanced insights to optimize hiring processes and reduce time-to-hire</li>
+                <li>• <strong>Compliance Tools:</strong> Built-in governance features for SOC 2, GDPR, and equal opportunity compliance</li>
               </ul>
             </div>
           </section>
@@ -54,20 +56,22 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Account Security</h3>
+                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Enterprise Account Management</h3>
                 <ul className="text-slate-600 dark:text-slate-400 space-y-1 ml-4">
-                  <li>• Maintain the confidentiality of your account credentials</li>
-                  <li>• Provide accurate and up-to-date information</li>
-                  <li>• Notify us immediately of any unauthorized access</li>
+                  <li>• Maintain secure access controls and user management protocols</li>
+                  <li>• Provide accurate organizational and contact information</li>
+                  <li>• Implement appropriate data governance and retention policies</li>
+                  <li>• Notify us immediately of any security incidents or unauthorized access</li>
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Acceptable Use</h3>
+                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Professional Use Standards</h3>
                 <ul className="text-slate-600 dark:text-slate-400 space-y-1 ml-4">
-                  <li>• Use the Service only for lawful purposes</li>
-                  <li>• Respect intellectual property rights</li>
-                  <li>• Do not attempt to reverse engineer or compromise the Service</li>
-                  <li>• Do not use the Service to discriminate or violate equal opportunity laws</li>
+                  <li>• Use the Service for legitimate business hiring purposes only</li>
+                  <li>• Comply with all applicable employment and equal opportunity laws</li>
+                  <li>• Respect intellectual property rights and confidential information</li>
+                  <li>• Maintain professional standards in all hiring decisions and communications</li>
+                  <li>• Do not attempt to reverse engineer, compromise, or misuse our AI systems</li>
                 </ul>
               </div>
             </div>
@@ -80,17 +84,19 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Our Rights</h3>
+                <h3 className="font-medium text-slate-900 dark:text-white mb-2">ProofOfFit Intellectual Property</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  ProofOfFit and its original content, features, and functionality are owned by ProofOfFit Inc. 
-                  and are protected by international copyright, trademark, and other intellectual property laws.
+                  ProofOfFit's proprietary AI algorithms, platform features, and intellectual property are protected 
+                  by international copyright, trademark, and patent laws. Our explainable AI technology and audit trail 
+                  systems represent significant innovation in the hiring intelligence space.
                 </p>
               </div>
               <div>
-                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Your Content</h3>
+                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Your Data & Content Rights</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  You retain ownership of your professional data and content. By using the Service, you grant us 
-                  a limited license to process your data to provide our services and improve our algorithms.
+                  You maintain full ownership and control of your professional data, candidate information, and 
+                  organizational content. We process your data solely to deliver our services and continuously 
+                  improve our AI algorithms while maintaining strict confidentiality and security standards.
                 </p>
               </div>
             </div>
@@ -103,12 +109,15 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <p className="text-slate-600 dark:text-slate-400">
-                ProofOfFit provides hiring intelligence and recommendations, but does not guarantee employment outcomes. 
-                Users are responsible for their own hiring decisions and should use our insights as one factor among many.
+                ProofOfFit provides advanced hiring intelligence and AI-powered recommendations to support your talent 
+                acquisition decisions. While our platform delivers industry-leading accuracy and transparency, final 
+                hiring decisions remain your responsibility. Our insights should be considered alongside your professional 
+                judgment and organizational requirements.
               </p>
               <p className="text-slate-600 dark:text-slate-400">
-                To the maximum extent permitted by law, ProofOfFit shall not be liable for any indirect, incidental, 
-                special, consequential, or punitive damages resulting from your use of the Service.
+                We maintain enterprise-grade service levels and continuously improve our AI accuracy. However, to the 
+                maximum extent permitted by law, ProofOfFit's liability is limited to the fees paid for the Service 
+                in the 12 months preceding any claim.
               </p>
             </div>
           </section>
@@ -120,11 +129,14 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <p className="text-slate-600 dark:text-slate-400">
-                We strive to maintain high service availability but cannot guarantee uninterrupted access. 
-                We may temporarily suspend the Service for maintenance, updates, or security reasons.
+                ProofOfFit maintains enterprise-grade service availability with 99.9% uptime targets. We provide 
+                advance notice for scheduled maintenance and implement redundant systems to minimize service disruptions. 
+                Emergency maintenance may be performed with immediate notification to affected users.
               </p>
               <p className="text-slate-600 dark:text-slate-400">
-                We reserve the right to modify or discontinue the Service with reasonable notice to users.
+                We continuously enhance our platform with new features and capabilities. Significant changes to core 
+                functionality will be communicated with 30 days advance notice, and we provide migration support 
+                to ensure smooth transitions.
               </p>
             </div>
           </section>
@@ -136,14 +148,15 @@ export default function TermsPage() {
             </div>
             <div className="space-y-4">
               <p className="text-slate-600 dark:text-slate-400">
-                We may update these Terms from time to time. We will notify users of material changes via email 
-                or through the platform. Continued use of the Service constitutes acceptance of the updated Terms.
+                We may update these Terms to reflect new features, legal requirements, or business practices. 
+                Material changes will be communicated via email with 30 days advance notice. Continued use of 
+                the Service after the effective date constitutes acceptance of the updated Terms.
               </p>
               <div>
-                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Contact Information</h3>
+                <h3 className="font-medium text-slate-900 dark:text-white mb-2">Enterprise Support & Legal Inquiries</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Questions about these Terms? Contact us at{' '}
-                  <a href="mailto:legal@proofoffit.com" className="text-sky-600 hover:underline">legal@proofoffit.com</a>
+                  For enterprise customers, dedicated support is available through your account manager. 
+                  General legal inquiries: <a href="mailto:legal@proofoffit.com" className="text-sky-600 hover:underline">legal@proofoffit.com</a>
                 </p>
               </div>
             </div>
