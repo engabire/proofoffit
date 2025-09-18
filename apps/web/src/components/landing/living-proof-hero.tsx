@@ -1,7 +1,7 @@
 import React from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { Card, CardContent, ReusableButton } from "@proof-of-fit/ui"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Check, Copy } from "lucide-react"
 import { isEnabled } from "@/lib/flags"
 
 type HeroMetric = {
@@ -100,70 +100,66 @@ function LivingProofCanvas({ lane = "seeker" }: { lane?: Lane }) {
       <div className={`absolute -top-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-br ${theme.background[0]} blur-[100px]`} />
       <div className={`absolute -bottom-32 -right-40 h-72 w-72 rounded-full bg-gradient-to-tr ${theme.background[1]} blur-[120px]`} />
       
-      {/* Data network visualization - symmetrically arranged */}
+      {/* Data network visualization - repositioned to avoid text interference */}
       <svg className="absolute inset-0 size-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        {/* Candidate Network Cluster - Left Side */}
-        <g className={lane === "seeker" ? "text-sky-500/50 dark:text-sky-400/40" : "text-emerald-500/50 dark:text-emerald-400/40"} opacity="0.7">
-          <circle cx="20" cy="30" r="1.2" fill="currentColor" />
-          <circle cx="25" cy="25" r="0.9" fill="currentColor" />
-          <circle cx="25" cy="35" r="1.0" fill="currentColor" />
-          <circle cx="15" cy="35" r="0.8" fill="currentColor" />
-          <circle cx="30" cy="30" r="0.8" fill="currentColor" />
+        {/* Candidate Network Cluster - Top Left (avoiding main content area) */}
+        <g className={lane === "seeker" ? "text-sky-500/30 dark:text-sky-400/25" : "text-emerald-500/30 dark:text-emerald-400/25"} opacity="0.6">
+          <circle cx="15" cy="20" r="0.8" fill="currentColor" />
+          <circle cx="20" cy="15" r="0.6" fill="currentColor" />
+          <circle cx="20" cy="25" r="0.7" fill="currentColor" />
+          <circle cx="10" cy="25" r="0.5" fill="currentColor" />
+          <circle cx="25" cy="20" r="0.5" fill="currentColor" />
           
-          {/* Thin connections showing candidate relationships */}
-          <line x1="20" y1="30" x2="25" y2="25" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
-          <line x1="20" y1="30" x2="25" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
-          <line x1="20" y1="30" x2="15" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
-          <line x1="25" y1="25" x2="30" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
-          <line x1="25" y1="35" x2="30" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          {/* Ultra-thin connections showing candidate relationships */}
+          <line x1="15" y1="20" x2="20" y2="15" stroke="currentColor" strokeWidth="0.15" opacity="0.4" />
+          <line x1="15" y1="20" x2="20" y2="25" stroke="currentColor" strokeWidth="0.15" opacity="0.4" />
+          <line x1="15" y1="20" x2="10" y2="25" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
+          <line x1="20" y1="15" x2="25" y2="20" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
+          <line x1="20" y1="25" x2="25" y2="20" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
         </g>
 
-        {/* Job Requirements Network - Right Side (mirrored) */}
-        <g className={lane === "seeker" ? "text-indigo-500/50 dark:text-indigo-400/40" : "text-teal-500/50 dark:text-teal-400/40"} opacity="0.7">
-          <circle cx="80" cy="30" r="1.2" fill="currentColor" />
-          <circle cx="75" cy="25" r="0.9" fill="currentColor" />
-          <circle cx="75" cy="35" r="1.0" fill="currentColor" />
-          <circle cx="85" cy="35" r="0.8" fill="currentColor" />
-          <circle cx="70" cy="30" r="0.8" fill="currentColor" />
+        {/* Job Requirements Network - Top Right (mirrored, avoiding content) */}
+        <g className={lane === "seeker" ? "text-indigo-500/30 dark:text-indigo-400/25" : "text-teal-500/30 dark:text-teal-400/25"} opacity="0.6">
+          <circle cx="85" cy="20" r="0.8" fill="currentColor" />
+          <circle cx="80" cy="15" r="0.6" fill="currentColor" />
+          <circle cx="80" cy="25" r="0.7" fill="currentColor" />
+          <circle cx="90" cy="25" r="0.5" fill="currentColor" />
+          <circle cx="75" cy="20" r="0.5" fill="currentColor" />
           
-          {/* Mirrored job requirement connections */}
-          <line x1="80" y1="30" x2="75" y2="25" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
-          <line x1="80" y1="30" x2="75" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
-          <line x1="80" y1="30" x2="85" y2="35" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
-          <line x1="75" y1="25" x2="70" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
-          <line x1="75" y1="35" x2="70" y2="30" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+          {/* Mirrored job requirement connections - ultra-thin */}
+          <line x1="85" y1="20" x2="80" y2="15" stroke="currentColor" strokeWidth="0.15" opacity="0.4" />
+          <line x1="85" y1="20" x2="80" y2="25" stroke="currentColor" strokeWidth="0.15" opacity="0.4" />
+          <line x1="85" y1="20" x2="90" y2="25" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
+          <line x1="80" y1="15" x2="75" y2="20" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
+          <line x1="80" y1="25" x2="75" y2="20" stroke="currentColor" strokeWidth="0.15" opacity="0.3" />
         </g>
 
-        {/* Matching Network - Bottom Center */}
-        <g className={lane === "seeker" ? "text-purple-500/50 dark:text-purple-400/40" : "text-cyan-500/50 dark:text-cyan-400/40"} opacity="0.7">
-          <circle cx="50" cy="70" r="1.4" fill="currentColor" />
-          <circle cx="45" cy="65" r="1.0" fill="currentColor" />
-          <circle cx="55" cy="65" r="1.0" fill="currentColor" />
-          <circle cx="45" cy="75" r="0.9" fill="currentColor" />
-          <circle cx="55" cy="75" r="0.9" fill="currentColor" />
+        {/* Matching Network - Bottom Right (avoiding main content) */}
+        <g className={lane === "seeker" ? "text-purple-500/30 dark:text-purple-400/25" : "text-cyan-500/30 dark:text-cyan-400/25"} opacity="0.6">
+          <circle cx="75" cy="80" r="1.0" fill="currentColor" />
+          <circle cx="70" cy="75" r="0.7" fill="currentColor" />
+          <circle cx="80" cy="75" r="0.7" fill="currentColor" />
+          <circle cx="70" cy="85" r="0.6" fill="currentColor" />
+          <circle cx="80" cy="85" r="0.6" fill="currentColor" />
           
-          {/* Symmetrical matching hub connections */}
-          <line x1="50" y1="70" x2="45" y2="65" stroke="currentColor" strokeWidth="0.4" opacity="0.6" />
-          <line x1="50" y1="70" x2="55" y2="65" stroke="currentColor" strokeWidth="0.4" opacity="0.6" />
-          <line x1="50" y1="70" x2="45" y2="75" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
-          <line x1="50" y1="70" x2="55" y2="75" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
+          {/* Symmetrical matching hub connections - ultra-thin */}
+          <line x1="75" y1="80" x2="70" y2="75" stroke="currentColor" strokeWidth="0.2" opacity="0.5" />
+          <line x1="75" y1="80" x2="80" y2="75" stroke="currentColor" strokeWidth="0.2" opacity="0.5" />
+          <line x1="75" y1="80" x2="70" y2="85" stroke="currentColor" strokeWidth="0.2" opacity="0.4" />
+          <line x1="75" y1="80" x2="80" y2="85" stroke="currentColor" strokeWidth="0.2" opacity="0.4" />
         </g>
 
-        {/* Symmetrical cross-network connections */}
-        <g className="text-slate-400/30 dark:text-slate-500/25" opacity="0.5">
-          {/* Left to center connections */}
-          <line x1="25" y1="35" x2="45" y2="65" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
-          <line x1="30" y1="30" x2="50" y2="70" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
-          
-          {/* Right to center connections (symmetrical) */}
-          <line x1="75" y1="35" x2="55" y2="65" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
-          <line x1="70" y1="30" x2="50" y2="70" stroke="currentColor" strokeWidth="0.2" opacity="0.3" strokeDasharray="1,2" />
+        {/* Minimal cross-network connections - very subtle */}
+        <g className="text-slate-400/20 dark:text-slate-500/15" opacity="0.3">
+          {/* Top to bottom connections - avoiding center content */}
+          <line x1="20" y1="25" x2="70" y2="75" stroke="currentColor" strokeWidth="0.1" opacity="0.2" strokeDasharray="2,3" />
+          <line x1="80" y1="25" x2="80" y2="75" stroke="currentColor" strokeWidth="0.1" opacity="0.2" strokeDasharray="2,3" />
         </g>
 
-        {/* Minimal symmetrical grid structure */}
-        <g opacity="0.02" className="text-slate-500">
-          <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.3" />
-          <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.3" />
+        {/* Minimal grid structure - very subtle */}
+        <g opacity="0.01" className="text-slate-500">
+          <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.2" />
+          <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.2" />
         </g>
       </svg>
     </div>
@@ -255,14 +251,29 @@ function FitReportCard({ lane = "seeker" }: { lane?: Lane }) {
         <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "purple-400" : "cyan-400"}`} />Bias guardrails: experience-first, no alma mater</li>
       </ul>
 
-      <div className="flex items-center justify-between gap-2 rounded-2xl bg-gradient-to-r from-slate-50 to-white/90 p-2 text-xs text-slate-500 shadow-inner dark:from-slate-900 dark:to-slate-950">
-        <span className="truncate">https://proofoffit.co/audit/9C2X‑A7Q</span>
-        <ReusableButton
-          label={copied ? "Copied!" : "Copy"}
+      <div className="flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-slate-50 to-white/90 p-3 text-xs text-slate-500 shadow-inner dark:from-slate-900 dark:to-slate-950">
+        <span className="truncate flex-1">https://proofoffit.co/audit/9C2X‑A7Q</span>
+        <button
           onClick={handleCopy}
-          variant="secondary"
-          id="copy-audit-url"
-        />
+          className={`inline-flex items-center justify-center px-4 py-2 text-xs font-medium rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-${theme.accent} focus-visible:ring-offset-2 ${
+            copied 
+              ? `bg-${theme.accent} text-white border-${theme.accent}` 
+              : `bg-white/80 text-slate-700 border-slate-200 hover:bg-${theme.accentLight} hover:border-${theme.accent} hover:text-${theme.accent} dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-${theme.accentDark}/20 dark:hover:border-${theme.accent} dark:hover:text-${theme.accent}`
+          } shadow-sm hover:shadow-md`}
+          aria-label={copied ? "URL copied to clipboard" : "Copy audit URL to clipboard"}
+        >
+          {copied ? (
+            <>
+              <Check className="w-3 h-3 mr-1.5" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Copy className="w-3 h-3 mr-1.5" />
+              Copy
+            </>
+          )}
+        </button>
       </div>
 
       <div aria-hidden className="absolute -left-3 top-16 h-6 w-6 rounded-full border border-white/70 bg-white shadow-md shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-900" />
@@ -294,19 +305,26 @@ export default function LivingProofHero({ highlights = [], trusted = [], lane = 
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <ReusableButton 
-              id="cta-start" 
-              label={lane === "seeker" ? "Get my Fit Report" : "Generate a slate"} 
-              href={lane === "seeker" ? "/app/fit" : "/app/slate"} 
-            />
-            <ReusableButton 
-              id="cta-demo" 
-              label={lane === "seeker" ? "Try interactive demo" : "See how it works"} 
-              href="/demo" 
-              variant="secondary" 
-            />
-            <span className={`text-sm ${theme.mutedText}`}>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href={lane === "seeker" ? "/app/fit" : "/app/slate"}
+              className={`inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-${theme.accent} focus-visible:ring-offset-2 bg-gradient-to-r ${lane === "seeker" ? "from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700" : "from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"}`}
+              aria-label={`Get started with ProofOfFit - ${lane === 'seeker' ? 'Create your fit report' : 'Generate candidate slates'}`}
+            >
+              {lane === "seeker" ? "Get my Fit Report" : "Generate a slate"}
+            </a>
+            <a
+              href="/demo"
+              className={`inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-${theme.accent} focus-visible:ring-offset-2 ${
+                lane === "seeker" 
+                  ? "border-sky-200 text-sky-700 hover:bg-sky-50 hover:border-sky-300 dark:border-sky-800 dark:text-sky-300 dark:hover:bg-sky-950/30 dark:hover:border-sky-700"
+                  : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-950/30 dark:hover:border-emerald-700"
+              }`}
+              aria-label="Try interactive demo"
+            >
+              {lane === "seeker" ? "Try interactive demo" : "See how it works"}
+            </a>
+            <span className={`text-sm ${theme.mutedText} ml-2`}>
               {lane === "seeker" ? "No card • 2 minutes to first Fit Report" : "No setup • 5 minutes to first slate"}
             </span>
           </div>

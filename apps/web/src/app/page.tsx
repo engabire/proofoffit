@@ -380,34 +380,36 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] bg-black text-white px-3 py-2 rounded">Skip to content</a>
-      <header className={`sticky top-0 z-50 bg-white/70 dark:bg-zinc-950/60 backdrop-blur supports-[backdrop-filter]:bg-white/60 ${scrolled ? "shadow-md ring-1 ring-black/5 dark:ring-white/10" : ""}`}>
+      <header className={`sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70 ${scrolled ? "shadow-lg ring-1 ring-black/5 dark:ring-white/10" : ""}`}>
         <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <a href="/" className="text-lg font-semibold tracking-tight">ProofOfFit</a>
+          <a href="/" className="text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition-opacity">
+            ProofOfFit
+          </a>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#why" className="hover:underline inline-flex items-center gap-1">
-              <FileText className={`h-4 w-4 ${lanePrimary}`} /> Features
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#why" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <FileText className="h-4 w-4" /> Features
             </a>
-            <a href="#how" className="hover:underline inline-flex items-center gap-1">
-              <Sparkles className={`h-4 w-4 ${lanePrimary}`} /> How It Works
+            <a href="#how" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <Sparkles className="h-4 w-4" /> How It Works
             </a>
-            <a href="#pricing" className="hover:underline inline-flex items-center gap-1">
-              <DollarSign className={`h-4 w-4 ${lanePrimary}`} /> Pricing
+            <a href="#pricing" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <DollarSign className="h-4 w-4" /> Pricing
             </a>
-            <a href="/gift" className="hover:underline inline-flex items-center gap-1">
-              <Gift className={`h-4 w-4 ${lanePrimary}`} /> Sponsor
+            <a href="/gift" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <Gift className="h-4 w-4" /> Sponsor
             </a>
-            <a href="/fairness" className="hover:underline inline-flex items-center gap-1">
-              <ShieldCheck className={`h-4 w-4 ${lanePrimary}`} /> Fairness
+            <a href="/fairness" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <ShieldCheck className="h-4 w-4" /> Fairness
             </a>
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
             {/* Language */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="inline-flex items-center gap-2">
-                  <Globe2 className={`h-4 w-4 ${lanePrimary}`} /> EN
+                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+                  <Globe2 className="h-4 w-4" /> EN
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
@@ -422,8 +424,8 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
             {/* Help */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="inline-flex items-center gap-2">
-                  <HelpCircle className={`h-4 w-4 ${lanePrimary}`} /> Help
+                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+                  <HelpCircle className="h-4 w-4" /> Help
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
@@ -438,13 +440,13 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
             <LaneToggle lane={lane} setLane={setLane} />
 
             {/* Theme */}
-            <Button variant="ghost" size="icon" aria-label="Toggle theme" onClick={toggleTheme}>
-              <Sun className={`h-4 w-4 hidden dark:block ${lanePrimary}`} />
-              <Moon className={`h-4 w-4 block dark:hidden ${lanePrimary}`} />
+            <Button variant="ghost" size="sm" aria-label="Toggle theme" onClick={toggleTheme} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+              <Sun className="h-4 w-4 hidden dark:block" />
+              <Moon className="h-4 w-4 block dark:hidden" />
             </Button>
 
             {/* Auth */}
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="sm" asChild className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">
               <a 
                 href="/auth/signin"
                 aria-label="Sign in to your ProofOfFit account"
@@ -453,7 +455,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                 Sign in
               </a>
             </Button>
-            <Button asChild className={`bg-gradient-to-r text-white shadow-md ${lane === "seeker" ? "from-sky-600 to-indigo-600" : "from-emerald-600 to-teal-600"}`}>
+            <Button asChild size="sm" className={`bg-gradient-to-r text-white shadow-lg hover:shadow-xl transition-all duration-200 ${lane === "seeker" ? "from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700" : "from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"}`}>
               <a 
                 href={lane === "seeker" ? "/app/fit" : "/app/slate"}
                 aria-label={`Get started with ProofOfFit - ${lane === 'seeker' ? 'Create your fit report' : 'Generate candidate slates'}`}

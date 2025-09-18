@@ -391,8 +391,8 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
   }
 
   const skillSuggestions = {
-    'technology': ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker', 'Kubernetes', 'SQL', 'Git', 'Agile', 'TypeScript', 'GraphQL', 'Microservices', 'DevOps', 'AI/ML', 'Terraform'],
-    'marketing': ['Google Analytics', 'SEO/SEM', 'Content Marketing', 'Social Media', 'Email Marketing', 'A/B Testing', 'CRM', 'Marketing Automation', 'Customer Data Platforms', 'Programmatic Advertising', 'Influencer Marketing', 'Voice Marketing'],
+    'technology': ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud Platforms', 'Docker', 'Kubernetes', 'SQL', 'Git', 'Agile', 'TypeScript', 'GraphQL', 'Microservices', 'DevOps', 'Machine Learning', 'Infrastructure as Code'],
+    'marketing': ['Web Analytics', 'SEO/SEM', 'Content Marketing', 'Social Media', 'Email Marketing', 'A/B Testing', 'CRM', 'Marketing Automation', 'Customer Data Platforms', 'Programmatic Advertising', 'Influencer Marketing', 'Voice Marketing'],
     'sales': ['CRM Software', 'Lead Generation', 'Sales Analytics', 'Negotiation', 'Account Management', 'Pipeline Management', 'Customer Success', 'Social Selling', 'Sales Enablement', 'Predictive Analytics', 'Account-Based Marketing'],
     'design': ['Figma', 'Adobe Creative Suite', 'UI/UX Design', 'Prototyping', 'User Research', 'Design Systems', 'Accessibility', 'Responsive Design', 'Motion Design', 'Design Thinking', 'Information Architecture'],
     'finance': ['Financial Modeling', 'Excel/Google Sheets', 'SQL', 'Tableau/Power BI', 'Risk Analysis', 'Budgeting', 'Forecasting', 'Compliance', 'ESG', 'Digital Transformation', 'Blockchain', 'Fintech', 'Regulatory Technology'],
@@ -824,19 +824,19 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
               </RadioGroup>
             </div>
 
-            {/* AI Enhancement Suggestion */}
+            {/* Expert Enhancement Suggestion */}
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
               <div className="flex items-start gap-3">
                 <Sparkles className="w-5 h-5 text-purple-600 mt-0.5" />
                 <div className="flex-1">
-                  <h4 className="font-medium text-purple-900 mb-1">AI Enhancement Available</h4>
+                  <h4 className="font-medium text-purple-900 mb-1">Expert Enhancement Available</h4>
                   <p className="text-sm text-purple-700 mb-3">
-                    Our AI can optimize your job description for better candidate matching and bias reduction.
+                    Our proven methodology can optimize your job description for better candidate matching and bias reduction.
                   </p>
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" className="border-purple-300 text-purple-700">
                       <Sparkles className="w-3 h-3 mr-1" />
-                      Enhance with AI
+                      Enhance with Expertise
                     </Button>
                     <Button size="sm" variant="ghost" className="text-purple-600">
                       Learn More

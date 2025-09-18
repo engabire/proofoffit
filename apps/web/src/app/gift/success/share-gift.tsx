@@ -41,7 +41,7 @@ Use gift code: ${code}
 Redeem at: https://proofoffit.com/gift/redeem
 
 ✨ What you'll get:
-• AI-powered resume optimization
+• Expert-driven resume optimization
 • Industry-specific templates  
 • ATS compatibility scoring
 • Bias-free job matching
@@ -56,7 +56,7 @@ No credit card required - just pure career acceleration! 🚀`
   const trackEvent = (action: string, medium: string) => {
     // Track gift sharing events for analytics
     if (typeof window !== 'undefined') {
-      // Google Analytics 4 event tracking
+      // Analytics event tracking
       window.gtag?.('event', 'share_gift', {
         event_category: 'gift',
         event_label: `${months}_month_gift`,
@@ -111,7 +111,7 @@ No credit card required - just pure career acceleration! 🚀`
   }
 
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
-    const socialMessage = `🎁 Just got a ${months}-month ProofOfFit Premium gift! AI-powered career acceleration tools - no credit card needed!`
+    const socialMessage = `🎁 Just got a ${months}-month ProofOfFit Premium gift! Expert-driven career acceleration tools - no credit card needed!`
     
     const urls = {
       twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(socialMessage)}&url=${encodedUrl}`,

@@ -114,7 +114,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-purple-700">
                   <CheckCircle className="h-4 w-4" />
-                  AI-powered resume optimization
+                  Expert-driven resume optimization
                 </div>
                 <div className="flex items-center gap-2 text-sm text-purple-700">
                   <CheckCircle className="h-4 w-4" />
