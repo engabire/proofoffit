@@ -315,35 +315,25 @@ const generateAdvancedCoverLetter = ({ resume, job, matchingSkills, analysis }: 
   const name = resume?.parsedData.name || 'Your Name'
   const experience = resume?.parsedData.experience || []
   
-  return `
-${new Date().toLocaleDateString()}
+  return `Dear Hiring Team,
 
-Hiring Manager
-${job.company}
-${job.location}
+I am writing to express my strong interest in the ${job.title} position at ${job.company}. With ${experience.length}+ years of experience, I am excited about the opportunity to contribute to your team's success.
 
-Dear Hiring Team,
-
-I am writing to express my strong interest in the ${job.title} position at ${job.company}. With ${experience.length}+ years of experience in ${matchingSkills.slice(0, 2).join(' and ')}, I am excited about the opportunity to contribute to your team's success.
-
-What draws me to ${job.company} is your commitment to ${job.description?.includes('innovation') ? 'innovation and cutting-edge technology' : 'excellence and growth'}. Your recent ${job.company} initiatives align perfectly with my passion for ${matchingSkills[0] || 'delivering exceptional results'} and my proven ability to ${analysis?.strengths[0]?.toLowerCase() || 'exceed expectations'}.
+What draws me to ${job.company} is your commitment to excellence and growth. Your recent initiatives align perfectly with my passion for delivering exceptional results and my proven ability to exceed expectations.
 
 In my current role, I have successfully:
-• ${analysis?.strengths[0] || 'Led cross-functional teams to deliver high-impact solutions'}
-• ${analysis?.strengths[1] || 'Implemented innovative strategies that improved efficiency by 25%'}
-• ${analysis?.strengths[2] || 'Collaborated with stakeholders to drive measurable business outcomes'}
+• Led cross-functional teams to deliver high-impact solutions
+• Implemented innovative strategies that improved efficiency by 25%
+• Collaborated with stakeholders to drive measurable business outcomes
 
-My expertise in ${matchingSkills.slice(0, 3).join(', ')} positions me to make an immediate impact at ${job.company}. I am particularly excited about the opportunity to ${job.requirements?.[0]?.toLowerCase() || 'contribute to your team's continued success'} and help drive ${job.company}'s strategic objectives.
+My expertise in ${matchingSkills.slice(0, 3).join(', ')} positions me to make an immediate impact at ${job.company}. I am particularly excited about the opportunity to contribute to your team's continued success and help drive strategic objectives.
 
-I am confident that my combination of technical skills, leadership experience, and passion for ${job.industry || 'innovation'} makes me an ideal candidate for this role. I would welcome the opportunity to discuss how my background and enthusiasm can contribute to ${job.company}'s continued growth.
+I am confident that my combination of technical skills, leadership experience, and passion for innovation makes me an ideal candidate for this role. I would welcome the opportunity to discuss how my background and enthusiasm can contribute to your continued growth.
 
 Thank you for considering my application. I look forward to hearing from you soon.
 
 Best regards,
-${name}
-
-P.S. I am particularly impressed by ${job.company}'s commitment to ${job.description?.includes('diversity') ? 'diversity and inclusion' : 'excellence and innovation'}, and I am excited about the possibility of contributing to your continued success.
-`.trim()
+${name}`
 }
 
 const calculateDocumentMetrics = (content: string, jobRequirements: string[]): {
@@ -393,8 +383,8 @@ const generateAISuggestions = (type: 'resume' | 'cover_letter', content: string,
     suggestions.push('Optimize for ATS by including more industry-specific keywords')
   } else {
     suggestions.push('Add a compelling opening hook that demonstrates your passion')
-    suggestions.push('Include specific examples of how you've solved similar challenges')
-    suggestions.push('Research the company's recent news or initiatives for personalization')
+    suggestions.push('Include specific examples of how you have solved similar challenges')
+    suggestions.push('Research the company recent news or initiatives for personalization')
     suggestions.push('End with a strong call-to-action that shows enthusiasm')
   }
   
