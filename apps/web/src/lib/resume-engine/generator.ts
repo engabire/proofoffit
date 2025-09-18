@@ -305,7 +305,7 @@ function extractSkills(jobDescription: string, type: 'required' | 'preferred'): 
     }
   })
   
-  return [...new Set(skills.filter(skill => skill.length > 2))]
+  return Array.from(new Set(skills.filter(skill => skill.length > 2)))
 }
 
 function extractKeywords(jobDescription: string): string[] {

@@ -1411,7 +1411,6 @@ DIVERSITY METRICS:
           className="bg-gradient-to-r from-blue-600 to-indigo-600"
           onClick={() => {
             // Reset to step 1 for new slate
-            setCurrentStep(1)
             window.scrollTo({ top: 0, behavior: 'smooth' })
           }}
         >

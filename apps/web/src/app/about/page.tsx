@@ -34,7 +34,7 @@ import {
   Quote,
   Brain,
   Rocket,
-  Handshake,
+  // Handshake, // Not available in this version of lucide-react
   DollarSign,
   BarChart3,
   Clock,

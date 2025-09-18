@@ -270,7 +270,7 @@ function getOptimalWordCount(sectionId: string): [number, number] {
     skills: [50, 100],
     education: [30, 80]
   }
-  return ranges[sectionId as keyof typeof ranges] || [50, 200]
+  return (ranges[sectionId as keyof typeof ranges] || [50, 200]) as [number, number]
 }
 
 function calculateATSScore(resumeText: string, jobKeywords: string[]): number {
