@@ -39,7 +39,21 @@ export default function ProfileAuthPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout
+    
     async function handleProfileAuth() {
+      // Add a small delay to ensure the component is fully mounted
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      // Set a timeout to prevent hanging
+      timeoutId = setTimeout(() => {
+        if (status === 'loading' || status === 'connecting') {
+          setStatus('error')
+          setError('Connection timeout. Please try again.')
+          setMessage('Profile connection timed out')
+        }
+      }, 30000) // 30 second timeout
+      
       if (!supabase) {
         setStatus('error')
         setMessage('Authentication service not available')
@@ -136,13 +150,13 @@ export default function ProfileAuthPage() {
           setMessage('Redirecting to professional profile service...')
           
           // In a real implementation, this would redirect to the actual OAuth provider
-          // For now, we'll simulate the OAuth flow
+          // For now, we'll simulate the OAuth flow with a more realistic delay
           setTimeout(() => {
-            // Simulate OAuth redirect
+            // Simulate OAuth redirect with realistic parameters
             const mockCode = 'mock_oauth_code_' + Date.now()
             const mockState = 'mock_state_' + Date.now()
             router.replace(`/auth/profile?code=${mockCode}&state=${mockState}`)
-          }, 2000)
+          }, 1500)
         }
       } catch (err: any) {
         console.error('Profile auth error:', err)
@@ -171,12 +185,19 @@ export default function ProfileAuthPage() {
         
         setTimeout(() => {
           router.replace('/app/fit')
-        }, 3000)
+        }, 5000)
       }
     }
     
     handleProfileAuth()
-  }, [router, searchParams, supabase])
+    
+    // Cleanup timeout on unmount
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [router, searchParams, supabase, status])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
@@ -265,10 +286,15 @@ export default function ProfileAuthPage() {
           )}
           
           {status === 'loading' && (
-            <div className="text-center">
+            <div className="text-center space-y-3">
               <p className="text-xs text-gray-500">
                 Please wait while we initialize the connection...
               </p>
+              <div className="flex justify-center">
+                <div className="animate-pulse bg-blue-100 rounded-lg p-3">
+                  <p className="text-xs text-blue-600">Initializing secure connection...</p>
+                </div>
+              </div>
             </div>
           )}
           
@@ -289,10 +315,34 @@ export default function ProfileAuthPage() {
           )}
           
           {status === 'error' && (
-            <div className="text-center">
+            <div className="text-center space-y-3">
               <p className="text-xs text-gray-500">
                 You will be redirected to the Fit Report page shortly.
               </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => {
+                    setStatus('loading')
+                    setError(null)
+                    setMessage('Retrying profile connection...')
+                    // Retry the connection
+                    setTimeout(() => {
+                      const mockCode = 'mock_oauth_code_' + Date.now()
+                      const mockState = 'mock_state_' + Date.now()
+                      router.replace(`/auth/profile?code=${mockCode}&state=${mockState}`)
+                    }, 1000)
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  Try Again
+                </button>
+                <button
+                  onClick={() => router.replace('/app/fit')}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                >
+                  Skip & Continue
+                </button>
+              </div>
             </div>
           )}
         </CardContent>
