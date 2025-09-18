@@ -225,7 +225,7 @@ export async function generateTailoredResume(request: ResumeGenerationRequest): 
   // Step 3: Generate tailored content for each section
   const sections = await generateSections(request.candidateData, jobAnalysis, template, request.customizations)
   
-  // Step 4: Apply AI enhancements and optimizations
+  // Step 4: Apply expert-led enhancements and optimizations
   const enhancedSections = await enhanceSections(sections, jobAnalysis, request.industry)
   
   // Step 5: Generate multiple versions
@@ -286,7 +286,7 @@ function analyzeJobDescription(jobDescription: string, industry: string) {
 }
 
 function extractSkills(jobDescription: string, type: 'required' | 'preferred'): string[] {
-  // AI-powered skill extraction
+  // Expert-guided skill extraction
   const skillPatterns = [
     /(?:proficien(?:cy|t)|experience|knowledge|familiar(?:ity)?)\s+(?:with|in|of)\s+([^,.;]+)/gi,
     /(?:must have|required|essential):\s*([^.]+)/gi,
@@ -327,7 +327,7 @@ function extractKeywords(jobDescription: string): string[] {
     .map(([word]) => word)
 }
 
-// Section generation with AI enhancement
+// Section generation with expert enhancement
 async function generateSections(
   candidateData: CandidateProfile, 
   jobAnalysis: any, 
@@ -412,9 +412,9 @@ function generateContactSection(personalInfo: PersonalInfo): string {
   contact += `${personalInfo.email} | ${personalInfo.phone}\n`
   contact += `${personalInfo.location}\n`
   
-  if (personalInfo.linkedinUrl) contact += `LinkedIn: ${personalInfo.linkedinUrl}\n`
+  if (personalInfo.linkedinUrl) contact += `Professional Profile: ${personalInfo.linkedinUrl}\n`
   if (personalInfo.portfolioUrl) contact += `Portfolio: ${personalInfo.portfolioUrl}\n`
-  if (personalInfo.githubUrl) contact += `GitHub: ${personalInfo.githubUrl}\n`
+  if (personalInfo.githubUrl) contact += `Source Control: ${personalInfo.githubUrl}\n`
   
   return contact.trim()
 }

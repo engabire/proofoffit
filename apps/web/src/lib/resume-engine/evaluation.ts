@@ -67,7 +67,7 @@ export const industryEvaluationCriteria = {
     skillsWeight: 0.25,
     requiredSections: ['technical-skills', 'projects', 'experience'],
     criticalKeywords: ['agile', 'ci/cd', 'cloud', 'scalability', 'security'],
-    trendingSkills2024: ['AI/ML', 'kubernetes', 'terraform', 'rust', 'go', 'microservices', 'DevOps', 'React', 'TypeScript', 'GraphQL']
+    trendingSkills2024: ['Machine Learning', 'kubernetes', 'infrastructure-as-code', 'rust', 'go', 'microservices', 'DevOps', 'React', 'TypeScript', 'GraphQL']
   },
   finance: {
     keywordWeight: 0.25,
@@ -94,7 +94,7 @@ export const industryEvaluationCriteria = {
     portfolioWeight: 0.2,
     requiredSections: ['portfolio-projects', 'creative-skills'],
     criticalKeywords: ['ROI', 'conversion', 'brand awareness', 'customer acquisition', 'digital marketing'],
-    trendingSkills2024: ['AI marketing', 'customer data platforms', 'programmatic advertising', 'influencer marketing', 'voice marketing']
+    trendingSkills2024: ['Automated marketing', 'customer data platforms', 'programmatic advertising', 'influencer marketing', 'voice marketing']
   },
   sales: {
     keywordWeight: 0.2,

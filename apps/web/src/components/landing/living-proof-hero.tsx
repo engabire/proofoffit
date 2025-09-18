@@ -246,8 +246,8 @@ function FitReportCard({ lane = "seeker" }: { lane?: Lane }) {
       </div>
 
       <ul className={`mb-6 space-y-2 text-sm ${theme.mutedText}`}>
-        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${theme.accent}`} />Signals verified via GitHub + SOC2 logs</li>
-        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "indigo-400" : "teal-400"}`} />Stretch surfaced: Terraform (coachable)</li>
+        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${theme.accent}`} />Signals verified via source-control activity + compliance logs</li>
+        <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "indigo-400" : "teal-400"}`} />Stretch surfaced: infrastructure-as-code (coachable)</li>
         <li className="flex items-center gap-2"><span className={`size-1.5 rounded-full bg-${lane === "seeker" ? "purple-400" : "cyan-400"}`} />Bias guardrails: experience-first, no alma mater</li>
       </ul>
 
@@ -299,7 +299,7 @@ export default function LivingProofHero({ highlights = [], trusted = [], lane = 
             </h1>
             <p className={`max-w-xl text-lg ${theme.mutedText}`}>
               {lane === "seeker" 
-                ? "ProofOfFit analyzes each job, tailors your application, and explains exactly why you match—so you apply with confidence, not hope."
+                ? "Our evidence engine reviews each role, tailors your application, and explains exactly why you match—so you apply with confidence, not hope."
                 : "ProofOfFit delivers ranked slates with transparent rationales and audit trails—faster hiring, fewer debates, better compliance."
               }
             </p>

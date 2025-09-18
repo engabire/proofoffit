@@ -193,7 +193,7 @@ const mockCandidates: Candidate[] = [
     currentCompany: 'StartupXYZ',
     experience: 4,
     education: 'BS Computer Science, UT Austin',
-    skills: ['JavaScript', 'Node.js', 'React', 'MongoDB', 'GraphQL', 'AWS', 'DevOps'],
+    skills: ['JavaScript', 'Node.js', 'React', 'MongoDB', 'GraphQL', 'Cloud Platforms', 'DevOps'],
     certifications: ['Cloud Professional', 'Agile Certified Practitioner'],
     linkedin: 'https://linkedin.com/in/marcusjohnson',
     github: 'https://github.com/marcusj',
@@ -224,7 +224,7 @@ const mockCandidates: Candidate[] = [
     experience: 5,
     education: 'MBA Marketing, Northwestern Kellogg',
     skills: ['Digital Marketing', 'Product Strategy', 'Growth Hacking', 'Analytics', 'A/B Testing', 'Customer Data Platforms'],
-    certifications: ['Google Analytics Certified', 'HubSpot Certified'],
+    certifications: ['Web Analytics Certified', 'Marketing Automation Certified'],
     portfolio: 'https://elenamarketing.com',
     linkedin: 'https://linkedin.com/in/elenarodriguez',
     fitScore: 91,
@@ -283,7 +283,7 @@ const mockCandidates: Candidate[] = [
     experience: 8,
     education: 'MFA Interaction Design, Parsons',
     skills: ['UI/UX Design', 'Figma', 'User Research', 'Design Systems', 'Accessibility', 'Prototyping', 'Design Thinking'],
-    certifications: ['Google UX Design Certified', 'Accessibility Specialist'],
+    certifications: ['UX Design Certified', 'Accessibility Specialist'],
     portfolio: 'https://jessicawilliams.design',
     linkedin: 'https://linkedin.com/in/jessicawilliams-ux',
     fitScore: 93,
@@ -363,7 +363,7 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     'software-engineer': {
       title: 'Senior Software Engineer',
       description: 'We are seeking a talented Senior Software Engineer to join our dynamic team. You will be responsible for designing, developing, and maintaining scalable software solutions that serve millions of users.',
-      requirements: ['5+ years of software development experience', 'Proficiency in Python or Java', 'Experience with cloud platforms (AWS/GCP/Azure)', 'Strong understanding of databases and APIs', 'Experience with version control (Git)'],
+      requirements: ['5+ years of software development experience', 'Proficiency in Python or Java', 'Experience with major cloud platforms', 'Strong understanding of databases and APIs', 'Experience with version control systems'],
       niceToHave: ['Experience with microservices architecture', 'Knowledge of DevOps practices', 'Experience with React or Vue.js', 'Understanding of machine learning concepts'],
       department: 'Engineering'
     },
@@ -377,7 +377,7 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     'marketing-manager': {
       title: 'Digital Marketing Manager',
       description: 'Join our marketing team to drive growth through digital channels. You will develop and execute marketing campaigns, analyze performance metrics, and optimize our digital presence.',
-      requirements: ['3+ years of digital marketing experience', 'Experience with Google Analytics and marketing automation', 'Strong understanding of SEO/SEM', 'Content creation and copywriting skills', 'Data-driven approach to marketing'],
+      requirements: ['3+ years of digital marketing experience', 'Experience with web analytics and marketing automation', 'Strong understanding of SEO/SEM', 'Content creation and copywriting skills', 'Data-driven approach to marketing'],
       niceToHave: ['Experience with marketing attribution models', 'Knowledge of A/B testing platforms', 'Social media marketing expertise', 'Graphic design skills'],
       department: 'Marketing'
     },
@@ -395,7 +395,7 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     'marketing': ['Web Analytics', 'SEO/SEM', 'Content Marketing', 'Social Media', 'Email Marketing', 'A/B Testing', 'CRM', 'Marketing Automation', 'Customer Data Platforms', 'Programmatic Advertising', 'Influencer Marketing', 'Voice Marketing'],
     'sales': ['CRM Software', 'Lead Generation', 'Sales Analytics', 'Negotiation', 'Account Management', 'Pipeline Management', 'Customer Success', 'Social Selling', 'Sales Enablement', 'Predictive Analytics', 'Account-Based Marketing'],
     'design': ['Figma', 'Adobe Creative Suite', 'UI/UX Design', 'Prototyping', 'User Research', 'Design Systems', 'Accessibility', 'Responsive Design', 'Motion Design', 'Design Thinking', 'Information Architecture'],
-    'finance': ['Financial Modeling', 'Excel/Google Sheets', 'SQL', 'Tableau/Power BI', 'Risk Analysis', 'Budgeting', 'Forecasting', 'Compliance', 'ESG', 'Digital Transformation', 'Blockchain', 'Fintech', 'Regulatory Technology'],
+    'finance': ['Financial Modeling', 'Spreadsheet Analysis', 'SQL', 'Business Intelligence Tools', 'Risk Analysis', 'Budgeting', 'Forecasting', 'Compliance', 'ESG', 'Digital Transformation', 'Blockchain', 'Fintech', 'Regulatory Technology'],
     'healthcare': ['Patient Care', 'Electronic Health Records', 'Clinical Documentation', 'Quality Improvement', 'Evidence-Based Practice', 'Telehealth', 'Population Health', 'Value-Based Care', 'Clinical Informatics', 'Healthcare Analytics'],
     'operations': ['Process Optimization', 'Supply Chain Management', 'Lean Six Sigma', 'Project Management', 'Vendor Management', 'Quality Assurance', 'Risk Management', 'Business Intelligence', 'Workflow Automation'],
     'hr': ['Talent Acquisition', 'Performance Management', 'Employee Relations', 'HRIS Systems', 'Compensation Analysis', 'Learning & Development', 'Diversity & Inclusion', 'Change Management', 'Employment Law']

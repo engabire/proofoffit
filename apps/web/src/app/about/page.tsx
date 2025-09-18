@@ -82,15 +82,15 @@ export default function AboutPage() {
       bio: "Former VP of Engineering at Palantir, where she led the development of bias-detection algorithms for government applications. PhD in Computer Science from Stanford.",
       image: "/team/sarah-chen.jpg",
       linkedin: "https://linkedin.com/in/sarahchen",
-      background: ["Stanford PhD CS", "Ex-Palantir VP", "AI Ethics Researcher", "Y Combinator Alumna"]
+      background: ["Stanford PhD CS", "Ex-Palantir VP", "Ethics Researcher", "Y Combinator Alumna"]
     },
     {
       name: "Marcus Rodriguez",
       role: "CTO & Co-Founder",
-      bio: "Former Staff Engineer at Google, specializing in large-scale ML systems. Led the team that built Google's diversity analytics platform for internal hiring.",
+      bio: "Former Staff Engineer at major tech companies, specializing in large-scale ML systems. Led teams that built diversity analytics platforms for internal hiring.",
       image: "/team/marcus-rodriguez.jpg",
       linkedin: "https://linkedin.com/in/marcusrodriguez",
-      background: ["Ex-Google Staff", "ML Systems Expert", "MIT Graduate", "Open Source Contributor"]
+      background: ["Ex-Major Tech Staff", "ML Systems Expert", "MIT Graduate", "Open Source Contributor"]
     },
     {
       name: "Dr. Amara Okafor",
@@ -119,10 +119,10 @@ export default function AboutPage() {
     {
       name: "Jordan Taylor",
       role: "Head of Compliance",
-      bio: "Former Legal Counsel at LinkedIn, specializing in employment law and privacy regulations. JD from Harvard Law, expert in GDPR and EEOC compliance.",
+      bio: "Former Legal Counsel at major professional networks, specializing in employment law and privacy regulations. JD from Harvard Law, expert in GDPR and EEOC compliance.",
       image: "/team/jordan-taylor.jpg",
       linkedin: "https://linkedin.com/in/jordantaylor",
-      background: ["Ex-LinkedIn Legal", "Harvard Law JD", "GDPR Expert", "Employment Law Specialist"]
+      background: ["Ex-Major Network Legal", "Harvard Law JD", "GDPR Expert", "Employment Law Specialist"]
     }
   ]
 
@@ -131,7 +131,7 @@ export default function AboutPage() {
       name: "Andreessen Horowitz",
       type: "fund",
       logo: "/investors/a16z.png",
-      description: "Leading the Series A with deep expertise in AI and future of work"
+      description: "Leading the Series A with deep expertise in advanced analytics and future of work"
     },
     {
       name: "First Round Capital",
@@ -143,7 +143,7 @@ export default function AboutPage() {
       name: "Reid Hoffman",
       type: "angel",
       logo: "/investors/reid-hoffman.png",
-      description: "LinkedIn Co-founder and Partner at Greylock, advisor on scaling professional networks"
+      description: "Professional network Co-founder and Partner at Greylock, advisor on scaling professional networks"
     },
     {
       name: "Melinda French Gates",
@@ -169,7 +169,7 @@ export default function AboutPage() {
     {
       year: "2021",
       title: "Company Founded",
-      description: "Started by AI researchers from Stanford and Google to solve bias in hiring",
+      description: "Started by expert researchers from Stanford and major tech companies to solve bias in hiring",
       icon: <Rocket className="h-6 w-6" />
     },
     {
@@ -215,8 +215,8 @@ export default function AboutPage() {
     },
     {
       icon: <Users className="h-8 w-8" />,
-      title: "Human-Centric AI",
-      description: "AI should augment human judgment, not replace it. We build tools that empower recruiters and candidates while maintaining human dignity."
+      title: "Human-Centered Automation",
+      description: "Advanced analytics should augment human judgment, not replace it. We build tools that empower recruiters and candidates while maintaining human dignity."
     },
     {
       icon: <Compass className="h-8 w-8" />,
@@ -246,7 +246,7 @@ export default function AboutPage() {
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Fair Hiring</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              ProofOfFit is on a mission to eliminate bias from hiring decisions through transparent AI, 
+              ProofOfFit is on a mission to eliminate bias from hiring decisions through transparent evidence engines, 
               rigorous auditing, and enterprise-grade security. We believe every candidate deserves 
               a fair chance to prove their fit.
             </p>
@@ -302,7 +302,7 @@ export default function AboutPage() {
                 <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Eliminate Bias</h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Use advanced AI to detect and prevent bias across all protected characteristics, 
+                  Use advanced analytics to detect and prevent bias across all protected characteristics, 
                   ensuring fair evaluation for every candidate.
                 </p>
               </CardContent>
@@ -344,12 +344,12 @@ export default function AboutPage() {
                   gut feelings and pattern matching that perpetuated inequality.
                 </p>
                 <p>
-                  Our founders, Sarah and Marcus, experienced this firsthand while building AI systems at Palantir and Google. 
-                  They saw how the same algorithms that could detect bias in criminal justice and lending 
+                  Our founders, Sarah and Marcus, experienced this firsthand while building advanced analytics systems at major tech companies. 
+                  They saw how the same evidence-based methods that could detect bias in criminal justice and lending 
                   could be applied to make hiring more fair and transparent.
                 </p>
                 <p>
-                  Starting with Stanford's AI lab, we spent two years developing the mathematical foundations 
+                  Starting with Stanford's advanced analytics lab, we spent two years developing the mathematical foundations 
                   for bias-free evaluation. Our breakthrough came when we realized that fairness wasn't just 
                   about removing bias—it was about creating provable, auditable processes that could 
                   earn the trust of candidates, employers, and regulators alike.
@@ -433,7 +433,7 @@ export default function AboutPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Leadership Team</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              World-class experts in AI, fairness, enterprise software, and compliance.
+              World-class experts in advanced analytics, fairness, enterprise software, and compliance.
             </p>
           </div>
 
@@ -474,7 +474,7 @@ export default function AboutPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Backed by Industry Leaders</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              Supported by investors who believe in the future of fair hiring and enterprise AI.
+              Supported by investors who believe in the future of fair hiring and enterprise automation.
             </p>
           </div>
 

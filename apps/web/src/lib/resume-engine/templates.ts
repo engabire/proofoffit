@@ -64,7 +64,7 @@ export const resumeTemplates: ResumeTemplate[] = [
           emphasis: 'keywords'
         },
         aiSuggestions: [
-          'Include LinkedIn profile and GitHub',
+          'Include professional profile and source control activity',
           'Use professional email address',
           'Consider adding portfolio URL'
         ]
@@ -510,7 +510,7 @@ export const resumeTemplates: ResumeTemplate[] = [
         aiSuggestions: [
           'Include phone number prominently',
           'Add location and territory coverage',
-          'Consider adding LinkedIn Sales Navigator'
+          'Consider adding professional sales tools'
         ]
       },
       {

@@ -176,9 +176,9 @@ const laneCopy = {
   seeker: {
     id: "seeker",
     label: "I'm a Job Seeker",
-    headline: "Land interviews with a Fit Report that proves your case.",
+    headline: "Land interviews with proof. Grow with confidence.",
     subhead:
-      "We analyze each job, tailor your resume and cover letter, and explain exactly why you match—so you apply with confidence, not hope.",
+      "Our evidence engine reviews each role, tailors your application, and explains exactly why you match—so you apply with confidence, not hope.",
     primaryCta: { label: "Get My Fit Report", href: "/app/fit" },
     secondaryCta: { label: "Try Interactive Demo", href: "/demo" },
     ribbons: [
@@ -214,7 +214,7 @@ const heroHighlights = [
   {
     label: 'Time to tailored resume',
     value: '90s',
-    caption: 'AI-assisted, human controlled',
+    caption: 'Expert-guided, human controlled',
     icon: <Timer className="h-4 w-4" aria-hidden />,
   },
   {
