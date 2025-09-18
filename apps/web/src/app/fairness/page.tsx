@@ -3,7 +3,7 @@ import { Scale, Eye, Shield, Users, Target, CheckCircle, TrendingUp, Award, BarC
 
 export const metadata: Metadata = {
   title: 'Fairness & Explainability - ProofOfFit',
-  description: 'ProofOfFit Fairness - Enterprise-grade bias-free AI with transparent audit trails for compliant, equitable hiring decisions.',
+  description: 'ProofOfFit Fairness - Enterprise-grade bias-free evidence engine with transparent audit trails for compliant, equitable hiring decisions.',
 }
 
 export default function FairnessPage() {
@@ -12,7 +12,7 @@ export default function FairnessPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Fairness & Explainability</h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Enterprise-grade bias-free AI with transparent audit trails for compliant, equitable hiring decisions
+          Enterprise-grade bias-free evidence engine with transparent audit trails for compliant, equitable hiring decisions
         </p>
         <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
           Last updated: {new Date().toLocaleDateString()}
@@ -27,7 +27,7 @@ export default function FairnessPage() {
               <h2 className="text-xl font-semibold">Our Commitment to Fairness</h2>
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-4">
-              At ProofOfFit, we've built the industry's most advanced bias-free AI system that delivers 
+              At ProofOfFit, we've built the industry's most advanced bias-free evidence engine that delivers 
               transparent, auditable hiring decisions. Our enterprise-grade platform reduces human bias by up to 85% 
               while providing cryptographic proof of every decision, ensuring compliance with EEOC, GDPR, and 
               international equal opportunity regulations.
@@ -61,7 +61,7 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Reduced Legal Risk</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Our bias-free AI reduces discrimination lawsuits by 90% and provides cryptographic proof 
+                  Our bias-free evidence engine reduces discrimination lawsuits by 90% and provides cryptographic proof 
                   of fair hiring practices, protecting your organization from costly legal challenges and 
                   reputational damage.
                 </p>
@@ -102,13 +102,13 @@ export default function FairnessPage() {
           <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 dark:border-slate-800 dark:bg-slate-950/60">
             <div className="flex items-center gap-3 mb-4">
               <Eye className="h-6 w-6 text-sky-600" />
-              <h2 className="text-xl font-semibold">Transparent AI Decisions</h2>
+              <h2 className="text-xl font-semibold">Transparent Evidence-Based Decisions</h2>
             </div>
             <div className="space-y-4">
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Cryptographic Audit Trails</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Every AI decision generates an immutable cryptographic hash that provides tamper-proof 
+                  Every evidence-based decision generates an immutable cryptographic hash that provides tamper-proof 
                   evidence of fair hiring practices. This blockchain-level transparency ensures complete 
                   accountability and legal defensibility for compliance audits.
                 </p>
@@ -116,7 +116,7 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Real-Time Bias Detection</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Our AI continuously monitors for bias patterns across demographic groups, providing 
+                  Our evidence engine continuously monitors for bias patterns across demographic groups, providing 
                   instant alerts and automatic corrections. This proactive approach prevents discrimination 
                   before it occurs, protecting your organization from legal and reputational risks.
                 </p>
@@ -124,8 +124,8 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Enterprise Governance</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Built-in governance controls allow HR leaders to set bias thresholds, review AI decisions, 
-                  and maintain human oversight while leveraging AI efficiency. This ensures compliance 
+                  Built-in governance controls allow HR leaders to set bias thresholds, review evidence-based decisions, 
+                  and maintain human oversight while leveraging automation efficiency. This ensures compliance 
                   with corporate policies and regulatory requirements.
                 </p>
               </div>
@@ -149,14 +149,14 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Diverse Training Data</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Our AI models are trained on diverse datasets that represent a wide range of backgrounds, 
+                  Our evidence models are trained on diverse datasets that represent a wide range of backgrounds, 
                   experiences, and perspectives to minimize bias and ensure fair representation.
                 </p>
               </div>
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Continuous Monitoring</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  We continuously monitor our AI outputs for potential bias and regularly audit our 
+                  We continuously monitor our evidence engine outputs for potential bias and regularly audit our 
                   algorithms to ensure they maintain fairness across different demographic groups.
                 </p>
               </div>
@@ -180,7 +180,7 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">EEOC Compliance</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Our AI systems are designed to comply with Equal Employment Opportunity Commission 
+                  Our evidence systems are designed to comply with Equal Employment Opportunity Commission 
                   guidelines, ensuring fair treatment of all candidates regardless of race, color, 
                   religion, sex, national origin, age, disability, or genetic information.
                 </p>
@@ -230,7 +230,7 @@ export default function FairnessPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Cultural Sensitivity</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  We recognize that hiring practices vary across cultures and regions. Our AI is designed 
+                  We recognize that hiring practices vary across cultures and regions. Our evidence engine is designed 
                   to be culturally sensitive and adaptable to different hiring contexts and requirements.
                 </p>
               </div>
@@ -254,13 +254,13 @@ export default function FairnessPage() {
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Statistical Parity</h3>
                 <p className="text-slate-600 dark:text-slate-400">
                   We monitor statistical parity across different demographic groups to ensure that 
-                  our AI recommendations are not systematically biased against any particular group.
+                  our evidence-based recommendations are not systematically biased against any particular group.
                 </p>
               </div>
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Equalized Odds</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  We measure equalized odds to ensure that our AI has similar true positive and 
+                  We measure equalized odds to ensure that our evidence engine has similar true positive and 
                   false positive rates across different groups, promoting fair treatment for all candidates.
                 </p>
               </div>
@@ -268,7 +268,7 @@ export default function FairnessPage() {
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">Regular Audits</h3>
                 <p className="text-slate-600 dark:text-slate-400">
                   We conduct regular fairness audits using both internal teams and external experts 
-                  to identify and address any potential bias in our AI systems.
+                  to identify and address any potential bias in our evidence systems.
                 </p>
               </div>
             </div>
@@ -287,7 +287,7 @@ export default function FairnessPage() {
                   <li>• Achieve 37% faster time-to-hire with automated candidate screening</li>
                   <li>• Save 15+ hours weekly on compliance reporting and audit preparation</li>
                   <li>• Reduce legal risk by 90% with cryptographic proof of fair practices</li>
-                  <li>• Increase candidate diversity by 40% through bias-free AI recommendations</li>
+                  <li>• Increase candidate diversity by 40% through bias-free evidence-based recommendations</li>
                 </ul>
               </div>
               <div>
@@ -306,7 +306,7 @@ export default function FairnessPage() {
                   <li>• Fair, unbiased evaluation based solely on skills and qualifications</li>
                   <li>• Transparent feedback on how to improve your application</li>
                   <li>• Equal opportunity regardless of background or demographics</li>
-                  <li>• AI-powered resume optimization for better job matching</li>
+                  <li>• Expert-guided resume optimization for better job matching</li>
                   <li>• Cryptographic proof of fair treatment in hiring processes</li>
                 </ul>
               </div>
@@ -314,7 +314,7 @@ export default function FairnessPage() {
                 <h3 className="font-medium text-slate-900 dark:text-white mb-3">Ready to Transform Your Hiring Process?</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-4">
                   Join leading organizations that have reduced bias, improved diversity, and accelerated hiring 
-                  with ProofOfFit's enterprise-grade AI platform. Contact our enterprise team for a personalized demo.
+                  with ProofOfFit's enterprise-grade evidence engine platform. Contact our enterprise team for a personalized demo.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a 
