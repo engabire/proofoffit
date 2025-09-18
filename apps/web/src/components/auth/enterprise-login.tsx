@@ -60,6 +60,10 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
   const [formErrors, setFormErrors] = useState<{email?: string; password?: string}>({})
   const [emailValid, setEmailValid] = useState<boolean | null>(null)
   const [passwordStrength, setPasswordStrength] = useState<{score: number; feedback: string[]}>({score: 0, feedback: []})
+  const [oauthAvailable, setOauthAvailable] = useState({
+    google: true,
+    github: true
+  })
 
   // Email validation function
   const validateEmail = useCallback((email: string) => {
@@ -228,9 +232,23 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
           queryParams: { access_type: 'offline', prompt: 'consent' },
         },
       })
-      if (error) throw error
+      if (error) {
+        // Handle specific OAuth provider errors
+        if (error.message?.includes('provider is not enabled') || error.message?.includes('Unsupported provider')) {
+          setOauthAvailable(prev => ({ ...prev, [provider]: false }))
+          toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not currently available. Please use email authentication instead.`)
+        } else {
+          throw error
+        }
+      }
     } catch (error: any) {
-      toast.error(error?.message ?? 'SSO authentication failed')
+      console.error('SSO Error:', error)
+      if (error?.message?.includes('provider is not enabled') || error?.message?.includes('Unsupported provider')) {
+        setOauthAvailable(prev => ({ ...prev, [provider]: false }))
+        toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not currently available. Please use email authentication instead.`)
+      } else {
+        toast.error(error?.message ?? 'SSO authentication failed')
+      }
       setLoading(false)
     }
   }
@@ -331,7 +349,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
             {/* Enhanced Testimonials */}
             <div className="space-y-4">
               <div className="rounded-2xl border border-white/70 bg-white/90 p-4 text-sm text-slate-500 shadow shadow-slate-200/40 backdrop-blur dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-300">
-                "ProofOfFit combines intuitive design with enterprise-grade security—the most elegant automated workflow in our stack, and the only one with complete audit trails."
+                &quot;ProofOfFit combines intuitive design with enterprise-grade security—the most elegant automated workflow in our stack, and the only one with complete audit trails.&quot;
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -343,7 +361,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
               </div>
               
               <div className="rounded-2xl border border-white/70 bg-white/90 p-4 text-sm text-slate-500 shadow shadow-slate-200/40 backdrop-blur dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-300">
-                "Reduced our time-to-hire by 40% while maintaining the highest diversity standards in our industry."
+                &quot;Reduced our time-to-hire by 40% while maintaining the highest diversity standards in our industry.&quot;
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -635,8 +653,8 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                   <Button 
                     type="button" 
                     variant="outline" 
-                    className="w-full hover:bg-slate-50 dark:hover:bg-slate-900" 
-                    disabled={loading} 
+                    className={`w-full ${oauthAvailable.google ? 'hover:bg-slate-50 dark:hover:bg-slate-900' : 'opacity-60 cursor-not-allowed'}`}
+                    disabled={loading || !oauthAvailable.google} 
                     onClick={() => handleSSO('google')}
                     aria-label="Continue with Enterprise Workspace"
                   >
@@ -647,14 +665,14 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                         className="h-4 w-4" 
                         aria-hidden="true"
                       />
-                      Enterprise Workspace
+                      Enterprise Workspace {!oauthAvailable.google && '(Unavailable)'}
                     </span>
                   </Button>
                   <Button 
                     type="button" 
                     variant="outline" 
-                    className="w-full hover:bg-slate-50 dark:hover:bg-slate-900" 
-                    disabled={loading} 
+                    className={`w-full ${oauthAvailable.github ? 'hover:bg-slate-50 dark:hover:bg-slate-900' : 'opacity-60 cursor-not-allowed'}`}
+                    disabled={loading || !oauthAvailable.github} 
                     onClick={() => handleSSO('github')}
                     aria-label="Continue with Code Repository Platform"
                   >
@@ -665,7 +683,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                         className="h-4 w-4" 
                         aria-hidden="true"
                       />
-                      Code Repository Platform
+                      Code Repository Platform {!oauthAvailable.github && '(Unavailable)'}
                     </span>
                   </Button>
                 </div>

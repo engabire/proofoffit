@@ -33,9 +33,24 @@ export default function AuthCallbackPage() {
         
         const code = searchParams.get('code')
         const error = searchParams.get('error')
+        const errorDescription = searchParams.get('error_description')
         
         if (error) {
-          throw new Error(`Authentication error: ${error}`)
+          // Handle specific OAuth errors with user-friendly messages
+          if (error === 'access_denied') {
+            setStatus('error')
+            setMessage('Authentication was cancelled. You can try signing in again or use email authentication instead.')
+            setTimeout(() => router.replace('/auth/signin'), 4000)
+            return
+          } else if (error === 'invalid_request') {
+            setStatus('error')
+            setMessage('Authentication request was invalid. Please try again.')
+            setTimeout(() => router.replace('/auth/signin'), 4000)
+            return
+          } else {
+            const friendlyMessage = errorDescription || error
+            throw new Error(`Authentication error: ${friendlyMessage}`)
+          }
         }
         
         if (code) {
@@ -59,10 +74,10 @@ export default function AuthCallbackPage() {
 
             try { await import('../../../lib/analytics').then(m => m.track({ name: 'auth_success' })) } catch {}
             
-            // Log successful authentication
+            // Log successful authentication (optional, fail silently if table doesn't exist)
             try {
-                      await supabase
-                        .from('action_log')
+              await supabase
+                .from('action_log')
                 .insert({
                   tenantId: data.user.id,
                   actorType: 'user',
@@ -72,8 +87,9 @@ export default function AuthCallbackPage() {
                   objId: data.user.id,
                   payloadHash: 'auth_success'
                 })
-            } catch (error) {
-              console.error('Failed to log successful authentication:', error)
+            } catch (logError) {
+              // Silently handle logging errors - don't break authentication flow
+              console.warn('Authentication logging unavailable:', logError)
             }
             
             setTimeout(() => {
@@ -90,7 +106,7 @@ export default function AuthCallbackPage() {
         setStatus('error')
         setMessage(err.message || 'Authentication failed')
         
-        // Log failed authentication
+        // Log failed authentication (optional, fail silently if table doesn't exist)
         if (supabase) {
           try {
             await supabase
@@ -104,8 +120,9 @@ export default function AuthCallbackPage() {
                 objId: 'unknown',
                 payloadHash: 'auth_failed'
               })
-          } catch (error) {
-            console.error('Failed to log failed authentication:', error)
+          } catch (logError) {
+            // Silently handle logging errors - don't break error handling flow
+            console.warn('Authentication error logging unavailable:', logError)
           }
         }
         
@@ -176,10 +193,15 @@ export default function AuthCallbackPage() {
           )}
           
           {status === 'error' && (
-            <div className="text-center">
+            <div className="text-center space-y-2">
               <p className="text-xs text-gray-500">
                 You will be redirected to the sign-in page shortly.
               </p>
+              {message.includes('cancelled') && (
+                <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded">
+                  <strong>Tip:</strong> You can use email authentication instead of OAuth providers.
+                </div>
+              )}
             </div>
           )}
         </CardContent>
