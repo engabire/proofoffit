@@ -238,23 +238,29 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
     
-    // Validate form before submission
-    const emailIsValid = validateEmail(email)
-    let passwordIsValid = true
-    
-    if (authMethod === 'password') {
-      calculatePasswordStrength(password)
-      passwordIsValid = passwordStrength.score >= 3 && password.length >= 8
-    }
-    
-    // Don't submit if validation fails
-    if (!emailIsValid || (authMethod === 'password' && !passwordIsValid)) {
-      toast.error('Please fix the form errors before continuing')
+    // Basic validation - less strict
+    if (!email || !email.includes('@')) {
+      toast.error('Please enter a valid email address')
       return
     }
     
-    if (authMethod === 'magic') handleMagicLink()
-    if (authMethod === 'password') handlePasswordAuth()
+    if (authMethod === 'password') {
+      if (!password) {
+        toast.error('Please enter a password')
+        return
+      }
+      if (mode === 'signup' && password.length < 6) {
+        toast.error('Password must be at least 6 characters')
+        return
+      }
+    }
+    
+    // Execute authentication
+    if (authMethod === 'magic') {
+      handleMagicLink()
+    } else if (authMethod === 'password') {
+      handlePasswordAuth()
+    }
   }
 
   // Handle email input changes with validation
@@ -595,7 +601,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={loading || (authMethod === 'password' && mode === 'signup' && passwordStrength.score < 3)}
+                    disabled={loading}
                     aria-describedby="submit-button-help"
                   >
                     {loading ? (
