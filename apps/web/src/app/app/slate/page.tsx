@@ -151,7 +151,7 @@ interface CandidateSlate {
   }
 }
 
-// Mock data
+// Mock data - Enhanced candidate pool
 const mockCandidates: Candidate[] = [
   {
     id: '1',
@@ -163,25 +163,25 @@ const mockCandidates: Candidate[] = [
     currentCompany: 'TechCorp',
     experience: 6,
     education: 'MS Computer Science, Stanford',
-    skills: ['Python', 'React', 'Cloud', 'Docker', 'Kubernetes'],
-    certifications: ['Cloud Certified Solutions Architect'],
+    skills: ['Python', 'React', 'Cloud', 'Docker', 'Kubernetes', 'TypeScript', 'GraphQL', 'Microservices'],
+    certifications: ['Cloud Certified Solutions Architect', 'Kubernetes Certified Developer'],
     portfolio: 'https://sarahchen.dev',
     linkedin: 'https://linkedin.com/in/sarahchen',
     github: 'https://github.com/sarahchen',
-    fitScore: 92,
-    strengths: ['Strong technical skills', 'Leadership experience', 'Cultural fit'],
-    concerns: ['Salary expectations may be high'],
+    fitScore: 95,
+    strengths: ['Strong technical skills', 'Leadership experience', 'Cultural fit', 'AI/ML expertise', 'Open source contributor'],
+    concerns: ['Salary expectations may be high', 'May be overqualified for some roles'],
     interviewReadiness: 'ready',
     diversityFactors: {
       gender: 'female',
       ethnicity: 'asian',
       firstGeneration: true
     },
-    salaryExpectation: 160000,
+    salaryExpectation: 175000,
     availability: '2-weeks',
     relocation: false,
     remote: true,
-    lastActive: new Date('2024-01-10'),
+    lastActive: new Date('2024-01-15'),
     source: 'database'
   },
   {
@@ -193,25 +193,114 @@ const mockCandidates: Candidate[] = [
     currentCompany: 'StartupXYZ',
     experience: 4,
     education: 'BS Computer Science, UT Austin',
-    skills: ['JavaScript', 'Node.js', 'React', 'MongoDB', 'GraphQL'],
-    certifications: ['Cloud Professional'],
+    skills: ['JavaScript', 'Node.js', 'React', 'MongoDB', 'GraphQL', 'AWS', 'DevOps'],
+    certifications: ['Cloud Professional', 'Agile Certified Practitioner'],
     linkedin: 'https://linkedin.com/in/marcusjohnson',
     github: 'https://github.com/marcusj',
-    fitScore: 85,
-    strengths: ['Fast learner', 'Startup experience', 'Strong communication'],
-    concerns: ['Less senior experience'],
+    fitScore: 88,
+    strengths: ['Fast learner', 'Startup experience', 'Strong communication', 'Full-stack versatility'],
+    concerns: ['Less senior experience', 'Limited enterprise experience'],
     interviewReadiness: 'ready',
     diversityFactors: {
       gender: 'male',
       ethnicity: 'african-american',
       veteran: true
     },
-    salaryExpectation: 120000,
+    salaryExpectation: 125000,
     availability: 'immediate',
     relocation: true,
     remote: true,
-    lastActive: new Date('2024-01-12'),
+    lastActive: new Date('2024-01-14'),
     source: 'application'
+  },
+  {
+    id: '3',
+    name: 'Elena Rodriguez',
+    email: 'elena.rodriguez@email.com',
+    phone: '+1 (555) 987-6543',
+    location: 'Remote (Miami, FL)',
+    currentRole: 'Product Marketing Manager',
+    currentCompany: 'GrowthCo',
+    experience: 5,
+    education: 'MBA Marketing, Northwestern Kellogg',
+    skills: ['Digital Marketing', 'Product Strategy', 'Growth Hacking', 'Analytics', 'A/B Testing', 'Customer Data Platforms'],
+    certifications: ['Google Analytics Certified', 'HubSpot Certified'],
+    portfolio: 'https://elenamarketing.com',
+    linkedin: 'https://linkedin.com/in/elenarodriguez',
+    fitScore: 91,
+    strengths: ['Data-driven approach', 'Cross-functional leadership', 'B2B SaaS expertise', 'Growth mindset'],
+    concerns: ['No direct enterprise sales experience'],
+    interviewReadiness: 'ready',
+    diversityFactors: {
+      gender: 'female',
+      ethnicity: 'hispanic',
+      firstGeneration: false
+    },
+    salaryExpectation: 140000,
+    availability: '1-month',
+    relocation: false,
+    remote: true,
+    lastActive: new Date('2024-01-13'),
+    source: 'referral'
+  },
+  {
+    id: '4',
+    name: 'David Kim',
+    email: 'david.kim@email.com',
+    location: 'Seattle, WA',
+    currentRole: 'Senior Data Scientist',
+    currentCompany: 'DataFlow Inc',
+    experience: 7,
+    education: 'PhD Statistics, University of Washington',
+    skills: ['Python', 'Machine Learning', 'SQL', 'Tableau', 'TensorFlow', 'Statistical Modeling', 'A/B Testing'],
+    certifications: ['TensorFlow Certified', 'Tableau Desktop Certified'],
+    linkedin: 'https://linkedin.com/in/davidkim-data',
+    github: 'https://github.com/davidkim-ml',
+    fitScore: 89,
+    strengths: ['Advanced statistical knowledge', 'Model deployment experience', 'Research background', 'Team collaboration'],
+    concerns: ['Limited business stakeholder interaction'],
+    interviewReadiness: 'needs-prep',
+    diversityFactors: {
+      gender: 'male',
+      ethnicity: 'asian',
+      firstGeneration: true
+    },
+    salaryExpectation: 165000,
+    availability: '2-weeks',
+    relocation: true,
+    remote: true,
+    lastActive: new Date('2024-01-11'),
+    source: 'sourcing'
+  },
+  {
+    id: '5',
+    name: 'Jessica Williams',
+    email: 'jessica.williams@email.com',
+    phone: '+1 (555) 456-7890',
+    location: 'New York, NY',
+    currentRole: 'UX Design Lead',
+    currentCompany: 'DesignStudio',
+    experience: 8,
+    education: 'MFA Interaction Design, Parsons',
+    skills: ['UI/UX Design', 'Figma', 'User Research', 'Design Systems', 'Accessibility', 'Prototyping', 'Design Thinking'],
+    certifications: ['Google UX Design Certified', 'Accessibility Specialist'],
+    portfolio: 'https://jessicawilliams.design',
+    linkedin: 'https://linkedin.com/in/jessicawilliams-ux',
+    fitScore: 93,
+    strengths: ['User-centered design', 'Accessibility expertise', 'Team leadership', 'Client presentation skills'],
+    concerns: ['Limited technical implementation knowledge'],
+    interviewReadiness: 'ready',
+    diversityFactors: {
+      gender: 'female',
+      ethnicity: 'african-american',
+      firstGeneration: false
+    },
+    salaryExpectation: 155000,
+    availability: 'negotiable',
+    relocation: false,
+    remote: true,
+    lastActive: new Date('2024-01-16'),
+    source: 'database'
   }
 ]
 
@@ -266,6 +355,51 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
 
   const [currentRequirement, setCurrentRequirement] = useState('')
   const [currentNiceToHave, setCurrentNiceToHave] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
+
+  // Job description templates and suggestions
+  const jobTemplates = {
+    'software-engineer': {
+      title: 'Senior Software Engineer',
+      description: 'We are seeking a talented Senior Software Engineer to join our dynamic team. You will be responsible for designing, developing, and maintaining scalable software solutions that serve millions of users.',
+      requirements: ['5+ years of software development experience', 'Proficiency in Python or Java', 'Experience with cloud platforms (AWS/GCP/Azure)', 'Strong understanding of databases and APIs', 'Experience with version control (Git)'],
+      niceToHave: ['Experience with microservices architecture', 'Knowledge of DevOps practices', 'Experience with React or Vue.js', 'Understanding of machine learning concepts'],
+      department: 'Engineering'
+    },
+    'product-manager': {
+      title: 'Senior Product Manager',
+      description: 'We are looking for an experienced Product Manager to drive product strategy and execution. You will work closely with engineering, design, and business teams to deliver exceptional user experiences.',
+      requirements: ['3+ years of product management experience', 'Strong analytical and problem-solving skills', 'Experience with product analytics tools', 'Excellent communication and leadership skills', 'Experience with agile development methodologies'],
+      niceToHave: ['Technical background or CS degree', 'Experience with B2B SaaS products', 'Data analysis skills (SQL, Python)', 'Experience with user research and design'],
+      department: 'Product'
+    },
+    'marketing-manager': {
+      title: 'Digital Marketing Manager',
+      description: 'Join our marketing team to drive growth through digital channels. You will develop and execute marketing campaigns, analyze performance metrics, and optimize our digital presence.',
+      requirements: ['3+ years of digital marketing experience', 'Experience with Google Analytics and marketing automation', 'Strong understanding of SEO/SEM', 'Content creation and copywriting skills', 'Data-driven approach to marketing'],
+      niceToHave: ['Experience with marketing attribution models', 'Knowledge of A/B testing platforms', 'Social media marketing expertise', 'Graphic design skills'],
+      department: 'Marketing'
+    },
+    'data-scientist': {
+      title: 'Senior Data Scientist',
+      description: 'We are seeking a Senior Data Scientist to extract insights from large datasets and build predictive models. You will work on challenging problems that directly impact business decisions.',
+      requirements: ['PhD or MS in Data Science, Statistics, or related field', 'Strong programming skills in Python or R', 'Experience with machine learning frameworks', 'Statistical analysis and modeling expertise', 'Experience with big data technologies'],
+      niceToHave: ['Experience with deep learning frameworks', 'Knowledge of cloud ML platforms', 'Experience with real-time data processing', 'Business intelligence and visualization skills'],
+      department: 'Data & Analytics'
+    }
+  }
+
+  const skillSuggestions = {
+    'technology': ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker', 'Kubernetes', 'SQL', 'Git', 'Agile', 'TypeScript', 'GraphQL', 'Microservices', 'DevOps', 'AI/ML', 'Terraform'],
+    'marketing': ['Google Analytics', 'SEO/SEM', 'Content Marketing', 'Social Media', 'Email Marketing', 'A/B Testing', 'CRM', 'Marketing Automation', 'Customer Data Platforms', 'Programmatic Advertising', 'Influencer Marketing', 'Voice Marketing'],
+    'sales': ['CRM Software', 'Lead Generation', 'Sales Analytics', 'Negotiation', 'Account Management', 'Pipeline Management', 'Customer Success', 'Social Selling', 'Sales Enablement', 'Predictive Analytics', 'Account-Based Marketing'],
+    'design': ['Figma', 'Adobe Creative Suite', 'UI/UX Design', 'Prototyping', 'User Research', 'Design Systems', 'Accessibility', 'Responsive Design', 'Motion Design', 'Design Thinking', 'Information Architecture'],
+    'finance': ['Financial Modeling', 'Excel/Google Sheets', 'SQL', 'Tableau/Power BI', 'Risk Analysis', 'Budgeting', 'Forecasting', 'Compliance', 'ESG', 'Digital Transformation', 'Blockchain', 'Fintech', 'Regulatory Technology'],
+    'healthcare': ['Patient Care', 'Electronic Health Records', 'Clinical Documentation', 'Quality Improvement', 'Evidence-Based Practice', 'Telehealth', 'Population Health', 'Value-Based Care', 'Clinical Informatics', 'Healthcare Analytics'],
+    'operations': ['Process Optimization', 'Supply Chain Management', 'Lean Six Sigma', 'Project Management', 'Vendor Management', 'Quality Assurance', 'Risk Management', 'Business Intelligence', 'Workflow Automation'],
+    'hr': ['Talent Acquisition', 'Performance Management', 'Employee Relations', 'HRIS Systems', 'Compensation Analysis', 'Learning & Development', 'Diversity & Inclusion', 'Change Management', 'Employment Law']
+  }
 
   const addRequirement = () => {
     if (currentRequirement.trim()) {
@@ -301,9 +435,68 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     }))
   }
 
+  const applyTemplate = (templateKey: string) => {
+    const template = jobTemplates[templateKey as keyof typeof jobTemplates]
+    if (template) {
+      setJob(prev => ({
+        ...prev,
+        title: template.title,
+        description: template.description,
+        requirements: template.requirements,
+        niceToHave: template.niceToHave,
+        department: template.department
+      }))
+      setSelectedTemplate(templateKey)
+      setShowSuggestions(false)
+    }
+  }
+
+  const getRelevantSkills = () => {
+    const title = job.title?.toLowerCase() || ''
+    const description = job.description?.toLowerCase() || ''
+    
+    if (title.includes('engineer') || title.includes('developer') || title.includes('technical') || description.includes('code') || description.includes('software')) {
+      return skillSuggestions.technology
+    } else if (title.includes('marketing') || title.includes('growth') || description.includes('marketing') || description.includes('campaign')) {
+      return skillSuggestions.marketing
+    } else if (title.includes('sales') || title.includes('account') || description.includes('sales') || description.includes('revenue')) {
+      return skillSuggestions.sales
+    } else if (title.includes('design') || title.includes('ux') || title.includes('ui') || description.includes('design')) {
+      return skillSuggestions.design
+    } else if (title.includes('finance') || title.includes('analyst') || description.includes('financial') || description.includes('budget')) {
+      return skillSuggestions.finance
+    } else if (title.includes('health') || title.includes('medical') || title.includes('clinical') || description.includes('patient')) {
+      return skillSuggestions.healthcare
+    } else if (title.includes('operations') || title.includes('manager') || description.includes('process') || description.includes('operations')) {
+      return skillSuggestions.operations
+    } else if (title.includes('hr') || title.includes('people') || title.includes('talent') || description.includes('recruitment')) {
+      return skillSuggestions.hr
+    }
+    
+    return skillSuggestions.technology // Default fallback
+  }
+
+  const addSkillSuggestion = (skill: string, isRequired: boolean = true) => {
+    if (isRequired) {
+      if (!job.requirements?.includes(skill)) {
+        setJob(prev => ({
+          ...prev,
+          requirements: [...(prev.requirements || []), skill]
+        }))
+      }
+    } else {
+      if (!job.niceToHave?.includes(skill)) {
+        setJob(prev => ({
+          ...prev,
+          niceToHave: [...(prev.niceToHave || []), skill]
+        }))
+      }
+    }
+  }
+
   const handleSubmit = () => {
     const completeJob: JobDescription = {
-      id: '1',
+      id: Date.now().toString(),
       title: job.title || '',
       company: job.company || '',
       location: job.location || '',
@@ -338,6 +531,39 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
           Tell us about the position you're hiring for
         </p>
       </div>
+
+      {/* Quick Templates */}
+      <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-blue-900">Quick Start Templates</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSuggestions(!showSuggestions)}
+            >
+              {showSuggestions ? 'Hide' : 'Show'} Templates
+            </Button>
+          </div>
+          {showSuggestions && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {Object.entries(jobTemplates).map(([key, template]) => (
+                <Button
+                  key={key}
+                  variant={selectedTemplate === key ? "default" : "outline"}
+                  className="h-auto p-3 justify-start"
+                  onClick={() => applyTemplate(key)}
+                >
+                  <div className="text-left">
+                    <div className="font-medium text-sm">{template.title}</div>
+                    <div className="text-xs opacity-75">{template.department}</div>
+                  </div>
+                </Button>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="p-8">
@@ -418,8 +644,19 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
 
             {/* Requirements */}
             <div>
-              <Label>Required Skills & Qualifications *</Label>
-              <div className="space-y-2">
+              <div className="flex items-center justify-between mb-2">
+                <Label>Required Skills & Qualifications *</Label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowSuggestions(!showSuggestions)}
+                  className="text-blue-600"
+                >
+                  <Sparkles className="w-4 h-4 mr-1" />
+                  Suggestions
+                </Button>
+              </div>
+              <div className="space-y-3">
                 <div className="flex gap-2">
                   <Input
                     value={currentRequirement}
@@ -431,6 +668,58 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
                     <Plus className="w-4 h-4" />
                   </Button>
                 </div>
+                
+                {/* Skill Suggestions */}
+                {showSuggestions && (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h4 className="text-sm font-medium text-blue-900 mb-2">
+                      Smart Skill Suggestions {job.title && `for ${job.title}`}:
+                    </h4>
+                    <div className="space-y-3">
+                      {/* Context-aware suggestions */}
+                      <div>
+                        <div className="text-xs font-medium text-blue-700 mb-2">Recommended for this role:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {getRelevantSkills().slice(0, 8).map(skill => (
+                            <Button
+                              key={skill}
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 text-xs p-1 text-blue-600 bg-white border border-blue-200 hover:bg-blue-100"
+                              onClick={() => addSkillSuggestion(skill, true)}
+                            >
+                              + {skill}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* All categories */}
+                      <div>
+                        <div className="text-xs font-medium text-blue-700 mb-2">Browse by category:</div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {Object.entries(skillSuggestions).map(([category, skills]) => (
+                            <div key={category} className="space-y-1">
+                              <div className="text-xs font-medium text-gray-600 capitalize">{category.replace('-', ' ')}</div>
+                              {skills.slice(0, 3).map(skill => (
+                                <Button
+                                  key={skill}
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 text-xs justify-start p-1 text-gray-600 hover:text-blue-600"
+                                  onClick={() => addSkillSuggestion(skill, true)}
+                                >
+                                  + {skill}
+                                </Button>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex flex-wrap gap-2">
                   {job.requirements?.map((req, index) => (
                     <Badge key={index} variant="default" className="flex items-center gap-1">
@@ -447,8 +736,11 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
 
             {/* Nice to Have */}
             <div>
-              <Label>Nice to Have</Label>
-              <div className="space-y-2">
+              <div className="flex items-center justify-between mb-2">
+                <Label>Nice to Have</Label>
+                <div className="text-xs text-gray-500">Optional but preferred qualifications</div>
+              </div>
+              <div className="space-y-3">
                 <div className="flex gap-2">
                   <Input
                     value={currentNiceToHave}
@@ -460,6 +752,22 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
                     <Plus className="w-4 h-4" />
                   </Button>
                 </div>
+                
+                {/* Quick Add Suggestions */}
+                <div className="flex flex-wrap gap-2">
+                  {['Leadership experience', 'Open source contributions', 'Mentoring skills', 'Industry certifications', 'Cross-functional collaboration', 'Public speaking', 'Technical writing', 'Startup experience'].map(suggestion => (
+                    <Button
+                      key={suggestion}
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 text-xs text-gray-600"
+                      onClick={() => addSkillSuggestion(suggestion, false)}
+                    >
+                      + {suggestion}
+                    </Button>
+                  ))}
+                </div>
+                
                 <div className="flex flex-wrap gap-2">
                   {job.niceToHave?.map((item, index) => (
                     <Badge key={index} variant="secondary" className="flex items-center gap-1">
@@ -503,11 +811,40 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
               </RadioGroup>
             </div>
 
-            <div className="flex justify-end">
+            {/* AI Enhancement Suggestion */}
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
+              <div className="flex items-start gap-3">
+                <Sparkles className="w-5 h-5 text-purple-600 mt-0.5" />
+                <div className="flex-1">
+                  <h4 className="font-medium text-purple-900 mb-1">AI Enhancement Available</h4>
+                  <p className="text-sm text-purple-700 mb-3">
+                    Our AI can optimize your job description for better candidate matching and bias reduction.
+                  </p>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" className="border-purple-300 text-purple-700">
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      Enhance with AI
+                    </Button>
+                    <Button size="sm" variant="ghost" className="text-purple-600">
+                      Learn More
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-gray-500">
+                {job.title && job.company && job.location && job.description && (job.requirements?.length || 0) > 0 
+                  ? '✓ Ready to generate slate' 
+                  : 'Please fill in required fields to continue'
+                }
+              </div>
               <Button
                 onClick={handleSubmit}
                 disabled={!job.title || !job.company || !job.location || !job.description || (job.requirements?.length || 0) === 0}
-                className="bg-gradient-to-r from-emerald-600 to-teal-600"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 min-w-[200px]"
+                size="lg"
               >
                 Generate Candidate Slate
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -527,39 +864,126 @@ function SlateGenerationStep({ job, onComplete }: {
   const [generating, setGenerating] = useState(false)
   const [slate, setSlate] = useState<CandidateSlate | null>(null)
 
+  const calculateMatchScore = (candidate: Candidate, job: JobDescription): number => {
+    let score = 0
+    let maxScore = 0
+    
+    // Skills matching (40% weight)
+    const jobSkills = [...(job.requirements || []), ...(job.niceToHave || [])].map(s => s.toLowerCase())
+    const candidateSkills = candidate.skills.map(s => s.toLowerCase())
+    const skillMatches = jobSkills.filter(skill => candidateSkills.some(cs => cs.includes(skill) || skill.includes(cs)))
+    const skillScore = jobSkills.length > 0 ? (skillMatches.length / jobSkills.length) * 40 : 0
+    score += skillScore
+    maxScore += 40
+    
+    // Experience level matching (25% weight)
+    const expRequirement = job.experienceLevel
+    let expScore = 0
+    if (expRequirement === 'entry' && candidate.experience >= 0) expScore = 25
+    else if (expRequirement === 'mid' && candidate.experience >= 2) expScore = 25
+    else if (expRequirement === 'senior' && candidate.experience >= 5) expScore = 25
+    else if (expRequirement === 'executive' && candidate.experience >= 8) expScore = 25
+    else expScore = Math.max(0, 25 - Math.abs(candidate.experience - 3) * 3) // Penalty for mismatch
+    score += expScore
+    maxScore += 25
+    
+    // Location/Remote compatibility (15% weight)
+    let locationScore = 15
+    if (!job.remote && !candidate.relocation && candidate.location !== job.location) {
+      locationScore = 5 // Penalty for location mismatch
+    }
+    score += locationScore
+    maxScore += 15
+    
+    // Availability matching (10% weight)
+    let availabilityScore = 10
+    if (job.urgency === 'high' && candidate.availability !== 'immediate') {
+      availabilityScore = 5
+    }
+    score += availabilityScore
+    maxScore += 10
+    
+    // Interview readiness (10% weight)
+    const readinessScore = candidate.interviewReadiness === 'ready' ? 10 : 
+                          candidate.interviewReadiness === 'needs-prep' ? 7 : 3
+    score += readinessScore
+    maxScore += 10
+    
+    return Math.round((score / maxScore) * 100)
+  }
+
+  const getFilteredCandidates = (job: JobDescription): Candidate[] => {
+    // Calculate match scores for all candidates
+    const candidatesWithScores = mockCandidates.map(candidate => ({
+      ...candidate,
+      fitScore: calculateMatchScore(candidate, job)
+    }))
+    
+    // Filter based on minimum requirements and sort by fit score
+    return candidatesWithScores
+      .filter(candidate => candidate.fitScore >= 60) // Minimum 60% match
+      .sort((a, b) => b.fitScore - a.fitScore)
+      .slice(0, 10) // Top 10 candidates
+  }
+
   const generateSlate = async () => {
     setGenerating(true)
     
     // Simulate slate generation
     await new Promise(resolve => setTimeout(resolve, 3000))
     
+    // Get intelligently filtered and ranked candidates
+    const filteredCandidates = getFilteredCandidates(job)
+    
+    // Calculate diversity metrics
+    const diversityMetrics = {
+      genderBalance: filteredCandidates.filter(c => c.diversityFactors.gender === 'female').length / filteredCandidates.length * 100,
+      ethnicDiversity: new Set(filteredCandidates.map(c => c.diversityFactors.ethnicity).filter(Boolean)).size,
+      veteranRepresentation: filteredCandidates.filter(c => c.diversityFactors.veteran).length,
+      firstGenRepresentation: filteredCandidates.filter(c => c.diversityFactors.firstGeneration).length
+    }
+    
+    const overallDiversityScore = Math.round(
+      (diversityMetrics.genderBalance + diversityMetrics.ethnicDiversity * 10 + 
+       diversityMetrics.veteranRepresentation * 5 + diversityMetrics.firstGenRepresentation * 5) / 4
+    )
+    
     const mockSlate: CandidateSlate = {
-      id: 'slate_123',
+      id: 'slate_' + Date.now(),
       jobId: job.id,
-      candidates: mockCandidates,
+      candidates: filteredCandidates,
       generatedAt: new Date(),
       auditTrail: {
-        id: 'audit_slate_123',
-        hash: 'def456ghi789',
+        id: 'audit_slate_' + Date.now(),
+        hash: 'sha256_' + Math.random().toString(36),
         immutable: true,
-        version: '1.0'
+        version: '2.0'
       },
       biasAnalysis: {
-        detected: false,
-        factors: [],
-        mitigation: ['Blind resume review', 'Skills-based assessment', 'Diverse interview panel'],
-        diversityScore: 85
+        detected: overallDiversityScore < 70,
+        factors: overallDiversityScore < 70 ? ['Low diversity score', 'Potential unconscious bias'] : [],
+        mitigation: ['Skills-based initial screening', 'Diverse interview panel', 'Structured interview process', 'Bias training for hiring team'],
+        diversityScore: overallDiversityScore
       },
       recommendations: {
-        topCandidate: '1',
-        interviewOrder: ['1', '2'],
-        focusAreas: ['Technical skills', 'Cultural fit', 'Leadership potential'],
-        redFlags: []
+        topCandidate: filteredCandidates[0]?.id || '1',
+        interviewOrder: filteredCandidates.slice(0, 5).map(c => c.id),
+        focusAreas: job.title?.toLowerCase().includes('engineer') 
+          ? ['Technical assessment', 'System design', 'Cultural fit', 'Communication skills']
+          : job.title?.toLowerCase().includes('marketing')
+          ? ['Campaign strategy', 'Analytics proficiency', 'Creative thinking', 'Growth mindset']
+          : ['Role-specific expertise', 'Cultural alignment', 'Growth potential', 'Team collaboration'],
+        redFlags: filteredCandidates.flatMap(c => 
+          c.concerns.filter(concern => 
+            concern.toLowerCase().includes('salary') || 
+            concern.toLowerCase().includes('overqualified')
+          )
+        ).slice(0, 3)
       },
       compliance: {
         eeocCompliant: true,
         auditReady: true,
-        documentation: ['Selection criteria', 'Scoring methodology', 'Bias analysis']
+        documentation: ['Scoring methodology', 'Bias analysis report', 'Diversity metrics', 'Interview process guidelines']
       }
     }
     
@@ -730,23 +1154,72 @@ function SlateGenerationStep({ job, onComplete }: {
                 </div>
 
                 <div className="ml-6 flex flex-col space-y-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.open(candidate.linkedin, '_blank')}
+                  >
                     <Eye className="w-4 h-4 mr-2" />
                     View Profile
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => alert('Resume download feature coming soon!')}
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     View Resume
                   </Button>
-                  <Button size="sm" className="bg-gradient-to-r from-emerald-600 to-teal-600">
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-emerald-600 to-teal-600"
+                    onClick={() => window.location.href = `mailto:${candidate.email}?subject=Interview Opportunity - ${job.title}`}
+                  >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Contact
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-blue-600"
+                    onClick={() => alert('Scheduling feature coming soon!')}
+                  >
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Schedule
                   </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-center gap-4 mt-8">
+        <Button 
+          variant="outline" 
+          size="lg"
+          onClick={() => alert('Export feature coming soon!')}
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Export Slate
+        </Button>
+        <Button 
+          variant="outline" 
+          size="lg"
+          onClick={() => alert('Share feature coming soon!')}
+        >
+          <Share2 className="w-4 h-4 mr-2" />
+          Share with Team
+        </Button>
+        <Button 
+          size="lg" 
+          className="bg-gradient-to-r from-blue-600 to-indigo-600"
+          onClick={() => setCurrentStep(1)}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Create New Slate
+        </Button>
       </div>
 
       {/* Compliance Notice */}
@@ -756,10 +1229,20 @@ function SlateGenerationStep({ job, onComplete }: {
             <Shield className="w-6 h-6 text-emerald-600 mr-3 mt-0.5" />
             <div>
               <h4 className="font-semibold text-emerald-900 mb-2">Compliance & Fairness</h4>
-              <p className="text-emerald-800 text-sm">
+              <p className="text-emerald-800 text-sm mb-3">
                 This slate was generated using bias-reducing algorithms and maintains an immutable audit trail. 
                 All selection decisions are explainable and verifiable through our audit system.
               </p>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-700">
+                  <ExternalLink className="w-3 h-3 mr-1" />
+                  View Audit Trail
+                </Button>
+                <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-700">
+                  <Download className="w-3 h-3 mr-1" />
+                  Download Report
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
