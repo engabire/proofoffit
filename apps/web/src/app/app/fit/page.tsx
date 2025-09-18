@@ -1,9 +1,11 @@
 "use client"
 
-import React, { useState, useEffect, useCallback, useRef } from "react"
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { startTimer, stopTimer } from "../../../lib/analytics"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { isSupabaseConfigured } from "@/lib/env"
 import {
   Upload,
   FileText,
@@ -17,6 +19,7 @@ import {
   Shield,
   Star,
   TrendingUp,
+  User,
   Building2,
   MapPin,
   Calendar,
@@ -43,7 +46,7 @@ import {
   AlertTriangle,
   FileCheck,
   FileX,
-  Image,
+  Image as ImageIcon,
   File,
   Globe,
   QrCode,
@@ -58,6 +61,7 @@ import {
   BarChart3,
   Brain,
   Lightbulb,
+  Trash2,
 } from "lucide-react"
 import {
   Button,
@@ -227,6 +231,7 @@ interface TailoredDocument {
     actionVerbCount: number
     quantifiedAchievements: number
   }
+  allowSubmission?: boolean
 }
 
 // Advanced document generation helpers
@@ -273,13 +278,86 @@ const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills,
   const experience = resume?.parsedData.experience || []
   const education = resume?.parsedData.education || []
   const certifications = resume?.parsedData.certifications || []
+  const allSkills = resume?.parsedData.skills || []
   
-  return `
-JOHN DOE
-${email} | ${phone} | Professional Profile: profile.example.com
+  // Calculate more accurate years of experience
+  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 0
+  
+  // Create highly tailored professional summary
+  const summary = resume?.parsedData.summary || ''
+  const industryContext = job.industry || 'technology'
+  const companySize = job.company.length > 20 ? 'enterprise' : 'growing'
+  
+  const tailoredSummary = summary || 
+    `Results-driven ${job.title} with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'delivering measurable results'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving operational excellence'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${job.company}'s ${companySize} ${industryContext} initiatives and drive strategic growth.`
+  
+  // Enhanced experience descriptions with job-specific achievements
+  const tailoredExperience = experience.slice(0, 4).map((exp, i) => {
+    const relevantSkills = matchingSkills.filter(skill => 
+      exp.description.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.title.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.skills.some(expSkill => expSkill.toLowerCase().includes(skill.toLowerCase()))
+    )
+    
+    const jobRelevantRequirements = job.requirements.filter(req => 
+      exp.description.toLowerCase().includes(req.toLowerCase()) ||
+      exp.title.toLowerCase().includes(req.toLowerCase())
+    )
+    
+    // Create achievement-focused bullet points
+    const achievements = [
+      relevantSkills.length > 0 
+        ? `Applied ${relevantSkills.slice(0, 2).join(' and ')} to ${exp.description.includes('improved') ? 'enhance' : 'deliver'} measurable business outcomes`
+        : exp.description,
+      jobRelevantRequirements.length > 0
+        ? `Addressed ${jobRelevantRequirements[0].toLowerCase()} challenges through strategic implementation`
+        : 'Collaborated with cross-functional teams to achieve strategic objectives',
+      `Contributed to ${exp.company}'s growth through innovative solutions and process optimization`
+    ]
+    
+    return `${exp.title.toUpperCase()} | ${exp.company} | ${exp.duration}
+• ${achievements[0]}
+• ${achievements[1]}
+• ${achievements[2]}`
+  }).join('\n\n')
+  
+  // Prioritize skills based on job requirements and analysis
+  const prioritizedSkills = [
+    ...matchingSkills,
+    ...niceToHaveSkills,
+    ...allSkills.filter(skill => 
+      !matchingSkills.includes(skill) && 
+      !niceToHaveSkills.includes(skill) &&
+      job.requirements.some(req => req.toLowerCase().includes(skill.toLowerCase()))
+    ),
+    ...allSkills.filter(skill => 
+      !matchingSkills.includes(skill) && 
+      !niceToHaveSkills.includes(skill) &&
+      !job.requirements.some(req => req.toLowerCase().includes(skill.toLowerCase()))
+    )
+  ].slice(0, 15)
+  
+  // Create job-specific achievements based on analysis
+  const jobSpecificAchievements = [
+    analysis?.strengths[0] || `Delivered measurable results in ${matchingSkills[0] || 'key areas'} through strategic implementation`,
+    analysis?.strengths[1] || `Led cross-functional initiatives that improved operational efficiency by 25%+`,
+    analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent performance excellence`
+  ]
+  
+  // Add relevant qualifications section based on job requirements
+  const relevantQualifications = job.requirements.slice(0, 5).map(req => {
+    const matchingSkill = matchingSkills.find(skill => 
+      req.toLowerCase().includes(skill.toLowerCase()) || 
+      skill.toLowerCase().includes(req.toLowerCase())
+    )
+    return matchingSkill ? `• ${req} (${matchingSkill} expertise)` : `• ${req}`
+  })
+  
+  return `${name.toUpperCase()}
+${email} | ${phone}
 
 PROFESSIONAL SUMMARY
-Results-driven ${job.title} with ${experience.length}+ years of experience delivering ${matchingSkills.slice(0, 2).join(' and ')} solutions. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'exceeding expectations'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving innovation'}. Seeking to leverage expertise in ${matchingSkills.slice(0, 3).join(', ')} to contribute to ${job.company}'s mission.
+${tailoredSummary}
 
 CORE COMPETENCIES
 • ${matchingSkills.slice(0, 6).join(' • ')}
@@ -287,27 +365,26 @@ ${niceToHaveSkills.length > 0 ? `• ${niceToHaveSkills.slice(0, 3).join(' • '
 
 PROFESSIONAL EXPERIENCE
 
-    ${experience.slice(0, 3).map((exp, i) => `
-    ${exp.title.toUpperCase()} | ${exp.company} | ${exp.duration}
-    • ${exp.description}
-    • Achieved measurable results through strategic implementation
-    • Collaborated with cross-functional teams to deliver solutions
-    `).join('')}
+${tailoredExperience}
 
 EDUCATION
-    ${education.map(edu => `${edu.degree} | ${edu.institution} | ${edu.year}`).join('\n')}
+${education.map(edu => `${edu.degree} | ${edu.institution} | ${edu.year}`).join('\n')}
 
 ${certifications.length > 0 ? `CERTIFICATIONS
-${certifications.map(cert => `• ${cert}`).join('\n')}` : ''}
+${certifications.map(cert => `• ${cert}`).join('\n')}
 
-TECHNICAL SKILLS
-${matchingSkills.slice(0, 8).map(skill => `• ${skill}`).join('\n')}
+` : ''}TECHNICAL SKILLS
+${prioritizedSkills.slice(0, 12).map(skill => `• ${skill}`).join('\n')}
 
-ACHIEVEMENTS
-• ${analysis?.strengths[0] || 'Consistently exceeded performance targets'}
-• ${analysis?.strengths[1] || 'Led successful project implementations'}
-• ${analysis?.strengths[2] || 'Recognized for innovation and problem-solving'}
-`.trim()
+KEY ACHIEVEMENTS
+• ${jobSpecificAchievements[0]}
+• ${jobSpecificAchievements[1]}
+• ${jobSpecificAchievements[2]}
+
+${relevantQualifications.length > 0 ? `RELEVANT QUALIFICATIONS FOR ${job.title.toUpperCase()}
+${relevantQualifications.join('\n')}
+
+` : ''}`
 }
 
 const generateAdvancedCoverLetter = ({ resume, job, matchingSkills, analysis }: {
@@ -317,27 +394,276 @@ const generateAdvancedCoverLetter = ({ resume, job, matchingSkills, analysis }: 
   analysis: FitAnalysis | null
 }): string => {
   const name = resume?.parsedData.name || 'Your Name'
+  const email = resume?.parsedData.email || 'your.email@example.com'
+  const phone = resume?.parsedData.phone || '(555) 123-4567'
   const experience = resume?.parsedData.experience || []
+  const education = resume?.parsedData.education || []
+  const summary = resume?.parsedData.summary || ''
   
-  return `Dear Hiring Team,
+  // Calculate more accurate years of experience
+  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 0
+  
+  // Get most relevant experience with better matching
+  const relevantExperience = experience.find(exp => 
+    matchingSkills.some(skill => 
+      exp.description.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.title.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.skills.some(expSkill => expSkill.toLowerCase().includes(skill.toLowerCase()))
+    )
+  ) || experience[0]
+  
+  // Find experience that matches job requirements
+  const jobRelevantExperience = experience.find(exp => 
+    job.requirements.some(req => 
+      exp.description.toLowerCase().includes(req.toLowerCase()) ||
+      exp.title.toLowerCase().includes(req.toLowerCase())
+    )
+  ) || relevantExperience
+  
+  // Create highly tailored opening with company research
+  const companyContext = job.company.length > 20 ? 'enterprise' : 'innovative'
+  const industryFocus = job.industry || 'technology'
+  
+  const tailoredOpening = summary 
+    ? `I am writing to express my strong interest in the ${job.title} position at ${job.company}. ${summary} My ${totalYears}+ years of experience in ${matchingSkills.slice(0, 2).join(' and ')} directly aligns with your requirements for this role.`
+    : `I am writing to express my strong interest in the ${job.title} position at ${job.company}. With ${totalYears}+ years of experience in ${matchingSkills.slice(0, 2).join(' and ')}, I am excited about the opportunity to contribute to your ${companyContext} ${industryFocus} initiatives and drive measurable results.`
+  
+  // Create specific, quantified achievements based on actual experience
+  const specificAchievements = jobRelevantExperience ? [
+    `Led ${jobRelevantExperience.title} initiatives at ${jobRelevantExperience.company}, applying ${matchingSkills.slice(0, 2).join(' and ')} to deliver measurable business outcomes`,
+    `Collaborated with cross-functional teams to achieve strategic objectives, resulting in improved operational efficiency and stakeholder satisfaction`,
+    `Demonstrated expertise in ${matchingSkills.slice(0, 3).join(', ')} through successful project delivery and process optimization`
+  ] : [
+    `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} through successful project implementation and stakeholder collaboration`,
+    `Delivered measurable results through strategic implementation of ${matchingSkills[0] || 'key technologies'} and process improvements`,
+    `Collaborated with stakeholders to drive business outcomes and exceed performance expectations`
+  ]
+  
+  // Create job-specific value proposition
+  const valueProposition = job.requirements.length > 0
+    ? `My expertise in ${matchingSkills.slice(0, 3).join(', ')} directly addresses your requirements for ${job.requirements.slice(0, 2).join(' and ')}. I am particularly excited about the opportunity to contribute to ${job.company}'s mission and help drive your strategic objectives in the ${industryFocus} space.`
+    : `My expertise in ${matchingSkills.slice(0, 3).join(', ')} positions me to make an immediate impact at ${job.company}. I am particularly excited about the opportunity to contribute to your team's continued success and help drive strategic objectives in the ${industryFocus} industry.`
+  
+  // Add specific examples based on analysis strengths
+  const strengthExamples = analysis?.strengths.slice(0, 2).map(strength => 
+    `• ${strength}: I have consistently demonstrated this through successful project delivery and measurable business impact`
+  ) || [
+    `• Technical Excellence: I have consistently delivered high-quality solutions that exceed stakeholder expectations`,
+    `• Strategic Thinking: I have successfully led initiatives that align with business objectives and drive growth`
+  ]
+  
+  return `${name}
+${email} | ${phone}
 
-I am writing to express my strong interest in the ${job.title} position at ${job.company}. With ${experience.length}+ years of experience, I am excited about the opportunity to contribute to your team's success.
+${new Date().toLocaleDateString()}
 
-What draws me to ${job.company} is your commitment to excellence and growth. Your recent initiatives align perfectly with my passion for delivering exceptional results and my proven ability to exceed expectations.
+Hiring Team
+${job.company}
 
-In my current role, I have successfully:
-• Led cross-functional teams to deliver high-impact solutions
-• Implemented innovative strategies that improved efficiency by 25%
-• Collaborated with stakeholders to drive measurable business outcomes
+Dear Hiring Team,
 
-My expertise in ${matchingSkills.slice(0, 3).join(', ')} positions me to make an immediate impact at ${job.company}. I am particularly excited about the opportunity to contribute to your team's continued success and help drive strategic objectives.
+${tailoredOpening}
 
-I am confident that my combination of technical skills, leadership experience, and passion for innovation makes me an ideal candidate for this role. I would welcome the opportunity to discuss how my background and enthusiasm can contribute to your continued growth.
+What draws me to ${job.company} is your commitment to excellence and innovation in the ${industryFocus} space. Your focus on ${job.industry || 'growth and development'} aligns perfectly with my passion for delivering exceptional results and my proven ability to exceed expectations through strategic implementation.
+
+In my experience, I have successfully:
+• ${specificAchievements[0]}
+• ${specificAchievements[1]}
+• ${specificAchievements[2]}
+
+${strengthExamples.join('\n')}
+
+${valueProposition}
+
+I am confident that my combination of technical skills, ${totalYears}+ years of experience, and passion for innovation makes me an ideal candidate for this role. I would welcome the opportunity to discuss how my background and enthusiasm can contribute to your continued growth and success.
 
 Thank you for considering my application. I look forward to hearing from you soon.
 
 Best regards,
 ${name}`
+}
+
+const generateStatementOfPurpose = ({ resume, job, matchingSkills, analysis }: {
+  resume: ResumeData | null
+  job: JobPosting
+  matchingSkills: string[]
+  analysis: FitAnalysis | null
+}): string => {
+  const name = resume?.parsedData.name || 'Your Name'
+  const experience = resume?.parsedData.experience || []
+  const education = resume?.parsedData.education || []
+  const summary = resume?.parsedData.summary || ''
+  
+  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 0
+  
+  // Find most relevant experience with better matching
+  const relevantExperience = experience.find(exp => 
+    matchingSkills.some(skill => 
+      exp.description.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.title.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.skills.some(expSkill => expSkill.toLowerCase().includes(skill.toLowerCase()))
+    )
+  ) || experience[0]
+  
+  // Find experience that directly relates to job requirements
+  const jobRelevantExperience = experience.find(exp => 
+    job.requirements.some(req => 
+      exp.description.toLowerCase().includes(req.toLowerCase()) ||
+      exp.title.toLowerCase().includes(req.toLowerCase())
+    )
+  ) || relevantExperience
+  
+  // Create industry and company context
+  const industryContext = job.industry || 'technology'
+  const companySize = job.company.length > 20 ? 'enterprise' : 'innovative'
+  
+  // Enhanced personal background with career narrative
+  const personalBackground = summary || 
+    `I am a dedicated professional with ${totalYears}+ years of experience in ${matchingSkills.slice(0, 2).join(' and ')}. My journey in this field has been driven by a passion for innovation, a commitment to delivering exceptional results, and a desire to make meaningful contributions to the ${industryContext} industry. Throughout my career, I have consistently sought opportunities to apply my technical expertise to solve complex challenges and drive business value.`
+  
+  // Enhanced professional experience section
+  const professionalExperience = jobRelevantExperience ? 
+    `In my role as ${jobRelevantExperience.title} at ${jobRelevantExperience.company}, I have developed deep expertise in ${matchingSkills.slice(0, 3).join(', ')}. This experience has equipped me with the skills and knowledge necessary to excel in the ${job.title} position at ${job.company}. I have successfully applied these skills to deliver measurable results and drive strategic initiatives that align with business objectives.` :
+    `My professional experience has focused on ${matchingSkills.slice(0, 2).join(' and ')}, providing me with a strong foundation for the ${job.title} position at ${job.company}. I have consistently demonstrated my ability to apply technical expertise to solve complex problems and deliver value to stakeholders.`
+  
+  // Enhanced career objectives with specific goals
+  const careerObjectives = `My primary objective is to leverage my expertise in ${matchingSkills.slice(0, 3).join(', ')} to contribute meaningfully to ${job.company}'s mission and strategic goals. I am particularly drawn to this opportunity because it aligns with my career goals of ${analysis?.strengths[0]?.toLowerCase() || 'delivering impactful solutions'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving innovation'}. I am committed to continuous learning and growth, and I see this role as an opportunity to expand my impact while contributing to ${job.company}'s continued success.`
+  
+  // Enhanced role-specific section
+  const whyThisRole = `The ${job.title} position at ${job.company} represents the perfect opportunity to apply my skills in ${matchingSkills.slice(0, 2).join(' and ')} while contributing to your organization's success in the ${industryContext} space. I am excited about the prospect of working with a ${companySize} team that values ${job.industry || 'excellence and innovation'}. This role aligns with my professional development goals and provides an opportunity to make a significant impact on your strategic initiatives.`
+  
+  // Enhanced future contributions with specific value
+  const futureContributions = `I am committed to bringing my expertise in ${matchingSkills.slice(0, 3).join(', ')} to ${job.company} and contributing to your continued growth and success. I look forward to the opportunity to collaborate with your team, share my knowledge and experience, and help drive innovative solutions that address your business challenges. I am excited about the prospect of growing with ${job.company} and contributing to your long-term strategic objectives.`
+  
+  return `STATEMENT OF PURPOSE
+${name} - ${job.title} Position at ${job.company}
+
+PERSONAL BACKGROUND
+${personalBackground}
+
+PROFESSIONAL EXPERIENCE
+${professionalExperience}
+
+CAREER OBJECTIVES
+${careerObjectives}
+
+WHY THIS ROLE
+${whyThisRole}
+
+FUTURE CONTRIBUTIONS
+${futureContributions}
+`
+}
+
+const generateInterviewPrep = ({ resume, job, matchingSkills, analysis }: {
+  resume: ResumeData | null
+  job: JobPosting
+  matchingSkills: string[]
+  analysis: FitAnalysis | null
+}): string => {
+  const name = resume?.parsedData.name || 'Your Name'
+  const experience = resume?.parsedData.experience || []
+  const summary = resume?.parsedData.summary || ''
+  
+  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 0
+  
+  // Find most relevant experience for examples
+  const relevantExperience = experience.find(exp => 
+    matchingSkills.some(skill => 
+      exp.description.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.title.toLowerCase().includes(skill.toLowerCase()) ||
+      exp.skills.some(expSkill => expSkill.toLowerCase().includes(skill.toLowerCase()))
+    )
+  ) || experience[0]
+  
+  // Generate job-specific technical questions
+  const technicalQuestions = job.requirements.slice(0, 4).map((req, i) => {
+    const skill = matchingSkills[i] || matchingSkills[0] || 'relevant skills'
+    return `• How would you approach ${req.toLowerCase()} in this role? (Prepare examples using ${skill})`
+  })
+  
+  // Generate behavioral questions based on candidate's experience
+  const behavioralQuestions = [
+    `• Tell me about a time when you successfully applied ${matchingSkills[0] || 'your technical skills'} to solve a complex problem. (Use example from ${relevantExperience?.company || 'your experience'})`,
+    `• Describe a situation where you had to collaborate with cross-functional teams to achieve a goal. (Highlight your communication and leadership skills)`,
+    `• Give me an example of how you've contributed to process improvement or innovation. (Quantify the impact if possible)`,
+    `• Tell me about a time you had to learn a new technology or skill quickly. (Demonstrate your adaptability)`
+  ]
+  
+  // Generate detailed talking points based on candidate's strengths and experience
+  const talkingPoints = analysis?.strengths.slice(0, 4).map((strength, i) => {
+    const example = relevantExperience ? ` (Example: ${relevantExperience.title} at ${relevantExperience.company})` : ''
+    return `• ${strength}: Prepare specific examples that demonstrate this strength${example}`
+  }) || [
+    `• Technical Expertise: Highlight your experience with ${matchingSkills.slice(0, 2).join(' and ')} (Example: ${relevantExperience?.title || 'your role'} at ${relevantExperience?.company || 'your company'})`,
+    `• Problem-Solving: Share examples of complex challenges you've overcome (Quantify results when possible)`,
+    `• Leadership: Discuss times you've led initiatives or mentored others (Show impact on team/company)`,
+    `• Adaptability: Demonstrate your ability to learn quickly and handle change (Use specific examples)`
+  ]
+  
+  // Create industry-specific research points
+  const industryContext = job.industry || 'technology'
+  const companySize = job.company.length > 20 ? 'enterprise' : 'innovative'
+  
+  // Generate specific questions based on job requirements
+  const jobSpecificQuestions = job.requirements.slice(0, 3).map(req => 
+    `• How do you stay current with developments in ${req.toLowerCase()}?`
+  )
+  
+  return `INTERVIEW PREPARATION GUIDE
+${name} - ${job.title} Position at ${job.company}
+
+CANDIDATE SUMMARY
+${summary || `Experienced professional with ${totalYears}+ years in ${matchingSkills.slice(0, 2).join(' and ')}. Strong background in ${analysis?.strengths[0] || 'delivering results'} and ${analysis?.strengths[1] || 'driving innovation'}. Proven track record of applying technical expertise to solve complex business challenges.`}
+
+KEY TALKING POINTS
+${talkingPoints.join('\n')}
+
+TECHNICAL QUESTIONS TO PREPARE FOR
+${technicalQuestions.join('\n')}
+
+BEHAVIORAL QUESTIONS TO PREPARE FOR
+${behavioralQuestions.join('\n')}
+
+JOB-SPECIFIC QUESTIONS TO PREPARE FOR
+${jobSpecificQuestions.join('\n')}
+
+COMPANY RESEARCH POINTS
+• Research ${job.company}'s recent initiatives and company culture in the ${industryContext} space
+• Understand their mission and how this ${job.title} role contributes to it
+• Learn about their ${companySize} approach and competitive advantages
+• Prepare questions about team dynamics, growth opportunities, and strategic direction
+• Study their recent news, product launches, or industry recognition
+
+QUESTIONS TO ASK THE INTERVIEWER
+• What does success look like in this role during the first 90 days?
+• How does this position contribute to ${job.company}'s strategic objectives in ${industryContext}?
+• What opportunities are there for professional development and growth?
+• What are the biggest challenges facing the team right now?
+• How does the team collaborate with other departments?
+• What technologies or tools does the team use most frequently?
+
+STRENGTHS TO HIGHLIGHT
+• ${matchingSkills.slice(0, 3).join(', ')} expertise with ${totalYears}+ years of experience
+• Proven track record of ${analysis?.strengths[0] || 'delivering measurable results'}
+• Strong collaboration and communication skills
+• ${analysis?.strengths[1] || 'Strategic thinking'} and problem-solving abilities
+• Experience with ${relevantExperience?.title || 'relevant roles'} and ${relevantExperience?.company || 'similar companies'}
+
+POTENTIAL CONCERNS TO ADDRESS
+• Be prepared to discuss any gaps in experience with ${job.requirements.filter(req => !matchingSkills.some(skill => req.toLowerCase().includes(skill.toLowerCase()))).slice(0, 2).join(' or ')}
+• Have examples ready that demonstrate your ability to learn quickly and adapt
+• Prepare to explain your specific interest in this role and ${job.company}
+• Be ready to discuss how your background translates to this ${industryContext} position
+
+INTERVIEW TIPS
+• Use the STAR method (Situation, Task, Action, Result) for behavioral questions
+• Quantify your achievements with specific numbers and metrics when possible
+• Show enthusiasm for the role and company while remaining professional
+• Prepare 2-3 thoughtful questions that demonstrate your interest and research
+• Practice explaining technical concepts in simple terms for non-technical interviewers
+
+`
 }
 
 const calculateDocumentMetrics = (content: string, jobRequirements: string[]): {
@@ -375,7 +701,7 @@ const calculateDocumentMetrics = (content: string, jobRequirements: string[]): {
   }
 }
 
-const generateAISuggestions = (type: 'resume' | 'cover_letter', content: string, job: JobPosting, analysis: FitAnalysis | null): string[] => {
+const generateAISuggestions = (type: 'resume' | 'cover_letter' | 'statement' | 'interview', content: string, job: JobPosting, analysis: FitAnalysis | null): string[] => {
   const suggestions: string[] = []
   
   if (type === 'resume') {
@@ -385,11 +711,21 @@ const generateAISuggestions = (type: 'resume' | 'cover_letter', content: string,
       suggestions.push(`Address ${analysis.weaknesses[0]} through additional training or projects`)
     }
     suggestions.push('Optimize for ATS by including more industry-specific keywords')
-  } else {
+  } else if (type === 'cover_letter') {
     suggestions.push('Add a compelling opening hook that demonstrates your passion')
     suggestions.push('Include specific examples of how you have solved similar challenges')
     suggestions.push('Research the company recent news or initiatives for personalization')
     suggestions.push('End with a strong call-to-action that shows enthusiasm')
+  } else if (type === 'statement') {
+    suggestions.push('Strengthen the connection between your background and the role')
+    suggestions.push('Include specific examples of how you can contribute to the company')
+    suggestions.push('Demonstrate understanding of the company culture and values')
+    suggestions.push('Show clear career progression and future goals')
+  } else if (type === 'interview') {
+    suggestions.push('Prepare specific examples using the STAR method')
+    suggestions.push('Research the company culture and recent news')
+    suggestions.push('Practice explaining technical concepts in simple terms')
+    suggestions.push('Prepare thoughtful questions about the role and team')
   }
   
   return suggestions.slice(0, 3)
@@ -499,15 +835,92 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
   const [securityResult, setSecurityResult] = useState<SecurityScanResult | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  const handleFile = useCallback(async (file: File, source: ResumeData['source']) => {
+    setUploading(true)
+    
+    // Security scan simulation
+    setScanning(true)
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    
+    const mockSecurityResult: SecurityScanResult = {
+      safe: true,
+      threats: [],
+      scanId: `scan_${Date.now()}`,
+      timestamp: new Date(),
+      details: {
+        fileType: file.type,
+        size: file.size,
+        checksum: `sha256_${Math.random().toString(36).substr(2, 9)}`,
+        virusScan: true,
+        malwareScan: true,
+        contentAnalysis: true
+      }
+    }
+    
+    setSecurityResult(mockSecurityResult)
+    setScanning(false)
+    
+    // Simulate file processing
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    const mockResume: ResumeData = {
+      id: '1',
+      fileName: file.name,
+      content: 'Mock resume content...',
+      parsedData: {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '+1 (555) 123-4567',
+        summary: 'Experienced software engineer with 5+ years in full-stack development...',
+        experience: [
+          {
+            title: 'Senior Software Engineer',
+            company: 'Previous Company',
+            duration: '2020-2024',
+            description: 'Led development of web applications...',
+            skills: ['Python', 'React', 'Cloud', 'Docker']
+          }
+        ],
+        education: [
+          {
+            degree: 'Bachelor of Computer Science',
+            institution: 'University of Technology',
+            year: '2019'
+          }
+        ],
+        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
+        certifications: ['Cloud Certified Developer', 'Cloud Professional']
+      },
+      uploadedAt: new Date(),
+      source,
+      securityStatus: {
+        scanned: true,
+        safe: mockSecurityResult.safe,
+        threats: mockSecurityResult.threats,
+        scanTimestamp: mockSecurityResult.timestamp
+      },
+      fileInfo: {
+        size: file.size,
+        type: file.type,
+        lastModified: new Date(file.lastModified),
+        checksum: mockSecurityResult.details.checksum
+      }
+    }
+    
+    setResume(mockResume)
+    setUploading(false)
+    onComplete(mockResume)
+  }, [onComplete])
+
   const openFilePicker = () => fileInputRef.current?.click()
-  const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       handleFile(file, 'upload')
       // reset value so selecting the same file twice still triggers onChange
       e.currentTarget.value = ''
     }
-  }
+  }, [handleFile])
 
   const importSources: ImportSource[] = [
     {
@@ -584,84 +997,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFile(e.dataTransfer.files[0], 'upload')
     }
-  }, [])
-
-  const handleFile = async (file: File, source: ResumeData['source']) => {
-    setUploading(true)
-    
-    // Security scan simulation
-    setScanning(true)
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    const mockSecurityResult: SecurityScanResult = {
-      safe: true,
-      threats: [],
-      scanId: `scan_${Date.now()}`,
-      timestamp: new Date(),
-      details: {
-        fileType: file.type,
-        size: file.size,
-        checksum: `sha256_${Math.random().toString(36).substr(2, 9)}`,
-        virusScan: true,
-        malwareScan: true,
-        contentAnalysis: true
-      }
-    }
-    
-    setSecurityResult(mockSecurityResult)
-    setScanning(false)
-    
-    // Simulate file processing
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    const mockResume: ResumeData = {
-      id: '1',
-      fileName: file.name,
-      content: 'Mock resume content...',
-      parsedData: {
-        name: 'John Doe',
-        email: 'john@example.com',
-        phone: '+1 (555) 123-4567',
-        summary: 'Experienced software engineer with 5+ years in full-stack development...',
-        experience: [
-          {
-            title: 'Senior Software Engineer',
-            company: 'Previous Company',
-            duration: '2020-2024',
-            description: 'Led development of web applications...',
-            skills: ['Python', 'React', 'Cloud', 'Docker']
-          }
-        ],
-        education: [
-          {
-            degree: 'Bachelor of Computer Science',
-            institution: 'University of Technology',
-            year: '2019'
-          }
-        ],
-        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
-        certifications: ['Cloud Certified Developer', 'Cloud Professional']
-      },
-      uploadedAt: new Date(),
-      source,
-      securityStatus: {
-        scanned: true,
-        safe: mockSecurityResult.safe,
-        threats: mockSecurityResult.threats,
-        scanTimestamp: mockSecurityResult.timestamp
-      },
-      fileInfo: {
-        size: file.size,
-        type: file.type,
-        lastModified: new Date(file.lastModified),
-        checksum: mockSecurityResult.details.checksum
-      }
-    }
-    
-    setResume(mockResume)
-    setUploading(false)
-    onComplete(mockResume)
-  }
+  }, [handleFile])
 
   const handleLinkImport = async () => {
     if (!linkUrl.trim()) return
@@ -972,23 +1308,22 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
               <div className="text-center space-y-4">
                 <Linkedin className="w-12 h-12 mx-auto text-blue-600" />
                 <div>
-                  <h3 className="text-lg font-medium">Import Professional Profile</h3>
-                  <p className="text-sm text-gray-600">Securely import your professional profile data</p>
+                  <h3 className="text-lg font-medium">Create Professional Profile</h3>
+                  <p className="text-sm text-gray-600">Build your professional profile with your experience and skills</p>
                 </div>
                 <Button 
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   onClick={() => {
-                    // TODO: Implement professional profile OAuth integration
                     window.location.href = '/auth/profile';
                   }}
-                  aria-label="Connect your professional profile to import data"
+                  aria-label="Create your professional profile"
                 >
-                  <Linkedin className="w-4 h-4 mr-2" aria-hidden="true" />
-                  Connect Professional Profile
+                  <User className="w-4 h-4 mr-2" aria-hidden="true" />
+                  Create Professional Profile
                 </Button>
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                   <ShieldCheck className="w-4 h-4" />
-                  <span>OAuth 2.0 secure connection</span>
+                  <span>Secure form-based profile creation</span>
                 </div>
               </div>
             </CardContent>
@@ -1051,7 +1386,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                   Open Scanner
                 </Button>
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                  <Image className="w-4 h-4" />
+                  <ImageIcon className="w-4 h-4" aria-hidden="true" />
                   <span>High-quality document scanning</span>
                 </div>
               </div>
@@ -1302,7 +1637,7 @@ function FitAnalysisStep({ resume, job, onComplete }: {
   const [analyzing, setAnalyzing] = useState(false)
   const [analysis, setAnalysis] = useState<FitAnalysis | null>(null)
 
-  const runAnalysis = async () => {
+  const runAnalysis = useCallback(async () => {
     setAnalyzing(true)
     
     // Simulate analysis
@@ -1424,11 +1759,11 @@ function FitAnalysisStep({ resume, job, onComplete }: {
     setAnalysis(mockAnalysis)
     setAnalyzing(false)
     onComplete(mockAnalysis)
-  }
+  }, [job, onComplete, resume])
 
   useEffect(() => {
     runAnalysis()
-  }, [])
+  }, [runAnalysis])
 
   if (analyzing) {
     return (
@@ -1476,7 +1811,7 @@ function FitAnalysisStep({ resume, job, onComplete }: {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Your Fit Analysis</h2>
         <p className="text-gray-600">
-          Here's how well you match the {job.title} position at {job.company}
+          Here&apos;s how well you match the {job.title} position at {job.company}
         </p>
       </div>
 
@@ -1653,6 +1988,59 @@ function ResultsStep({
 }) {
   const [documents, setDocuments] = useState<TailoredDocument[]>([])
   const [generating, setGenerating] = useState(false)
+  const [coverLetterDraft, setCoverLetterDraft] = useState('')
+  const [originalCoverLetter, setOriginalCoverLetter] = useState('')
+  const [coverLetterSignature, setCoverLetterSignature] = useState(resume?.parsedData.name || '')
+  const [allowSuggestionIntegration, setAllowSuggestionIntegration] = useState(false)
+  const [appliedSuggestions, setAppliedSuggestions] = useState<string[]>([])
+  const [submissionState, setSubmissionState] = useState<{ status: 'idle' | 'submitting' | 'success' | 'error'; message?: string }>({ status: 'idle' })
+  const supabase = useMemo(() => (isSupabaseConfigured() ? createClientComponentClient() : null), [])
+
+  const escapeRegExp = useCallback((value: string) => value.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'), [])
+  const formatSuggestionParagraph = useCallback((suggestion: string) => `\n\n${suggestion.trim()}`, [])
+
+  const ensureSignature = useCallback((content: string) => {
+    const trimmedSignature = coverLetterSignature.trim()
+    if (!trimmedSignature) return content
+
+    const normalizedSignature = trimmedSignature.toLowerCase()
+    const hasSignature = content
+      .split('\n')
+      .map(line => line.trim().toLowerCase())
+      .includes(normalizedSignature)
+
+    if (hasSignature) {
+      return content
+    }
+
+    return `${content.trim()}\n\n${trimmedSignature}`
+  }, [coverLetterSignature])
+
+  useEffect(() => {
+    if (coverLetterSignature || !resume?.parsedData.name) return
+    setCoverLetterSignature(resume.parsedData.name)
+  }, [coverLetterSignature, resume?.parsedData.name])
+
+  useEffect(() => {
+    if (!coverLetterDraft) return
+
+    setDocuments(prev => {
+      if (prev.length === 0) return prev
+      let changed = false
+      const updated = prev.map(doc => {
+        if (doc.type !== 'cover_letter') {
+          return doc
+        }
+        if (doc.content === coverLetterDraft) {
+          return doc
+        }
+        changed = true
+        return { ...doc, content: coverLetterDraft }
+      })
+
+      return changed ? updated : prev
+    })
+  }, [coverLetterDraft])
 
   const generateDocuments = async () => {
     setGenerating(true)
@@ -1703,13 +2091,32 @@ function ResultsStep({
       analysis
     })
     
+    // Generate additional tailored documents
+    const statementOfPurposeContent = generateStatementOfPurpose({
+      resume,
+      job,
+      matchingSkills,
+      analysis
+    })
+    
+    const interviewPrepContent = generateInterviewPrep({
+      resume,
+      job,
+      matchingSkills,
+      analysis
+    })
+    
     // Calculate advanced metrics
     const resumeMetrics = calculateDocumentMetrics(resumeContent, jobRequirements)
     const coverLetterMetrics = calculateDocumentMetrics(coverLetterContent, jobRequirements)
+    const statementMetrics = calculateDocumentMetrics(statementOfPurposeContent, jobRequirements)
+    const interviewMetrics = calculateDocumentMetrics(interviewPrepContent, jobRequirements)
     
     // Generate expert suggestions
     const resumeSuggestions = generateAISuggestions('resume', resumeContent, job, analysis)
     const coverLetterSuggestions = generateAISuggestions('cover_letter', coverLetterContent, job, analysis)
+    const statementSuggestions = generateAISuggestions('statement', statementOfPurposeContent, job, analysis)
+    const interviewSuggestions = generateAISuggestions('interview', interviewPrepContent, job, analysis)
     
     const advancedDocuments: TailoredDocument[] = [
       {
@@ -1748,59 +2155,251 @@ function ResultsStep({
         template: 'modern_professional',
         industryOptimized: true,
         aiSuggestions: coverLetterSuggestions,
-        metrics: coverLetterMetrics
+        metrics: coverLetterMetrics,
+        allowSubmission: true
+      },
+      {
+        id: '3',
+        type: 'resume', // Using resume type for statement of purpose
+        content: statementOfPurposeContent,
+        highlights: [
+          'Career objectives clearly defined',
+          'Professional experience highlighted',
+          'Company alignment demonstrated',
+          'Future contributions outlined'
+        ],
+        keywords: ['Career Goals', 'Professional Growth', 'Company Mission', 'Strategic Objectives', 'Innovation', 'Leadership'],
+        atsScore: Math.min(92, 75 + (matchingSkills.length * 2) + (resumeExperience.length * 2)),
+        generatedAt: new Date(),
+        format: 'pdf',
+        template: 'academic_professional',
+        industryOptimized: true,
+        aiSuggestions: statementSuggestions,
+        metrics: statementMetrics
+      },
+      {
+        id: '4',
+        type: 'resume', // Using resume type for interview prep
+        content: interviewPrepContent,
+        highlights: [
+          'Technical questions prepared',
+          'Behavioral examples ready',
+          'Company research completed',
+          'Strengths strategically highlighted'
+        ],
+        keywords: ['Interview Preparation', 'Technical Skills', 'Behavioral Examples', 'Company Research', 'Strategic Questions'],
+        atsScore: Math.min(90, 70 + (matchingSkills.length * 2) + (resumeExperience.length * 2)),
+        generatedAt: new Date(),
+        format: 'pdf',
+        template: 'interview_guide',
+        industryOptimized: true,
+        aiSuggestions: interviewSuggestions,
+        metrics: interviewMetrics
       }
     ]
     
+    setOriginalCoverLetter(coverLetterContent)
+    setCoverLetterDraft(coverLetterContent)
+    setAppliedSuggestions([])
+    setAllowSuggestionIntegration(false)
+    setSubmissionState({ status: 'idle' })
+
     setDocuments(advancedDocuments)
     setGenerating(false)
     onGenerateDocuments()
   }
 
+  const applySuggestionToDraft = useCallback((suggestion: string) => {
+    if (!allowSuggestionIntegration) {
+      setSubmissionState({ status: 'error', message: 'Enable expert suggestions before adding them to your draft.' })
+      return
+    }
+
+    if (appliedSuggestions.includes(suggestion)) {
+      return
+    }
+
+    setCoverLetterDraft(prev => {
+      const base = prev.trimEnd()
+      const addition = formatSuggestionParagraph(suggestion)
+      return base ? `${base}${addition}` : suggestion.trim()
+    })
+    setAppliedSuggestions(prev => [...prev, suggestion])
+    setSubmissionState({ status: 'idle' })
+  }, [allowSuggestionIntegration, appliedSuggestions, formatSuggestionParagraph])
+
+  const removeSuggestionFromDraft = useCallback((suggestion: string) => {
+    const normalized = suggestion.trim()
+    const patternWithBreaks = new RegExp(`\\n\\n${escapeRegExp(normalized)}`, 'g')
+    const patternStandalone = new RegExp(`^${escapeRegExp(normalized)}(\\s*)?`, 'g')
+    setCoverLetterDraft(prev => {
+      const withoutBreaks = prev.replace(patternWithBreaks, '')
+      const cleaned = withoutBreaks.replace(patternStandalone, '').trimEnd()
+      return cleaned
+    })
+    setAppliedSuggestions(prev => prev.filter(item => item !== suggestion))
+    if (submissionState.status !== 'idle') {
+      setSubmissionState({ status: 'idle' })
+    }
+  }, [escapeRegExp, submissionState.status])
+
+  const addAllSuggestions = useCallback((suggestions: string[]) => {
+    if (!allowSuggestionIntegration) {
+      setSubmissionState({ status: 'error', message: 'Enable expert suggestions before adding them to your draft.' })
+      return
+    }
+
+    const pending = suggestions.filter(s => !appliedSuggestions.includes(s))
+    if (pending.length === 0) return
+
+    setCoverLetterDraft(prev => {
+      const base = prev.trimEnd()
+      const additions = pending.map(formatSuggestionParagraph).join('')
+      const combined = base ? `${base}${additions}` : pending.map(s => s.trim()).join('\n\n')
+      return combined
+    })
+    setAppliedSuggestions(prev => [...prev, ...pending])
+    setSubmissionState({ status: 'idle' })
+  }, [allowSuggestionIntegration, appliedSuggestions, formatSuggestionParagraph])
+
+  const clearAllSuggestions = useCallback(() => {
+    if (!appliedSuggestions.length) return
+
+    setCoverLetterDraft(prev => {
+      const updated = appliedSuggestions.reduce((acc, suggestion) => {
+        const normalized = suggestion.trim()
+        const patternWithBreaks = new RegExp(`\\n\\n${escapeRegExp(normalized)}`, 'g')
+        const patternStandalone = new RegExp(`^${escapeRegExp(normalized)}(\\s*)?`, 'g')
+        return acc.replace(patternWithBreaks, '').replace(patternStandalone, '')
+      }, prev)
+      return updated.trimEnd()
+    })
+    setAppliedSuggestions([])
+    if (submissionState.status !== 'idle') {
+      setSubmissionState({ status: 'idle' })
+    }
+  }, [appliedSuggestions, escapeRegExp, submissionState.status])
+
+  const resetCoverLetterDraft = useCallback(() => {
+    setCoverLetterDraft(originalCoverLetter)
+    setAppliedSuggestions([])
+    setSubmissionState({ status: 'idle' })
+  }, [originalCoverLetter])
+
+  const handleDraftChange = useCallback((value: string) => {
+    setCoverLetterDraft(value)
+    if (submissionState.status !== 'idle') {
+      setSubmissionState({ status: 'idle' })
+    }
+  }, [submissionState.status])
+
+  const handleSignatureChange = useCallback((value: string) => {
+    setCoverLetterSignature(value)
+    if (submissionState.status !== 'idle') {
+      setSubmissionState({ status: 'idle' })
+    }
+  }, [submissionState.status])
+
+  const handleSuggestionPermission = useCallback((value: boolean) => {
+    setAllowSuggestionIntegration(value)
+    if (!value) {
+      clearAllSuggestions()
+    }
+    if (submissionState.status !== 'idle') {
+      setSubmissionState({ status: 'idle' })
+    }
+  }, [clearAllSuggestions, submissionState.status])
+
+  const submitCoverLetter = useCallback(async (doc: TailoredDocument) => {
+    if (!coverLetterDraft.trim()) {
+      setSubmissionState({ status: 'error', message: 'Cover letter cannot be empty.' })
+      return
+    }
+
+    if (!coverLetterSignature.trim()) {
+      setSubmissionState({ status: 'error', message: 'Please provide your signature before submitting.' })
+      return
+    }
+
+    setSubmissionState({ status: 'submitting' })
+
+    try {
+      const signedContent = ensureSignature(coverLetterDraft)
+      const signatureValue = coverLetterSignature.trim()
+      const suggestionsIntegrated = doc.aiSuggestions.filter(suggestion => signedContent.includes(suggestion))
+
+      if (supabase) {
+        const { data: { user } } = await supabase.auth.getUser()
+        await supabase
+          .from('action_log')
+          .insert({
+            tenantId: user?.id ?? null,
+            actorType: user ? 'user' : 'guest',
+            actorId: user?.id ?? 'guest',
+            action: 'cover_letter_submitted',
+            objType: 'document',
+            objId: doc.id,
+            payloadHash: JSON.stringify({
+              jobId: job.id,
+              jobTitle: job.title,
+              company: job.company,
+              content: signedContent,
+              signature: signatureValue,
+              allowSuggestionIntegration,
+              suggestionsIntegrated
+            })
+          })
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 400))
+      }
+
+      setSubmissionState({ status: 'success', message: 'Cover letter submitted successfully.' })
+    } catch (error: any) {
+      console.error('Cover letter submission failed:', error)
+      setSubmissionState({
+        status: 'error',
+        message: error?.message || 'Unable to submit the cover letter right now. Please try again.'
+      })
+    }
+  }, [allowSuggestionIntegration, coverLetterDraft, coverLetterSignature, ensureSignature, job.company, job.id, job.title, supabase])
+
   const downloadDocument = async (doc: TailoredDocument, format: 'pdf' | 'docx' | 'txt' = 'pdf') => {
     try {
-      // Create a properly formatted document based on the format
-      let fileContent = doc.content
       let fileName = `${doc.type}_${job.title.replace(/\s+/g, '_')}_${job.company.replace(/\s+/g, '_')}`
-      let mimeType = 'text/plain'
-      
+      let blob: Blob
+      let mimeType: string
+      const baseContent = doc.type === 'cover_letter' ? coverLetterDraft : doc.content
+      const content = doc.type === 'cover_letter' ? ensureSignature(baseContent) : baseContent
+      const suggestionsBlock = doc.aiSuggestions.length > 0
+        ? `\n\nExpert Suggestions:\n${doc.aiSuggestions.map(s => `• ${s}`).join('\n')}`
+        : ''
+      const metricsBlock = `\n\nMetrics:\n• Readability Score: ${doc.metrics.readabilityScore}/100\n• Keyword Density: ${doc.metrics.keywordDensity}%\n• Action Verbs: ${doc.metrics.actionVerbCount}\n• Quantified Achievements: ${doc.metrics.quantifiedAchievements}`
+      const documentBody = `${content}${suggestionsBlock}${metricsBlock}`
+      const documentHeader = `${getDocumentTitle(doc)}\nGenerated: ${doc.generatedAt.toLocaleDateString()}\nTemplate: ${doc.template}\nATS Score: ${doc.atsScore}%\nIndustry Optimized: ${doc.industryOptimized ? 'Yes' : 'No'}\n`
+
       if (format === 'pdf') {
-        // For PDF, we'll create a simple text representation
-        fileContent = `PROOFOFFIT GENERATED DOCUMENT
-Generated: ${doc.generatedAt.toLocaleDateString()}
-Template: ${doc.template}
-ATS Score: ${doc.atsScore}%
-Industry Optimized: ${doc.industryOptimized ? 'Yes' : 'No'}
-
-${doc.content}
-
-EXPERT SUGGESTIONS:
-${doc.aiSuggestions.map(s => `• ${s}`).join('\n')}
-
-METRICS:
-• Readability Score: ${doc.metrics.readabilityScore}/100
-• Keyword Density: ${doc.metrics.keywordDensity}%
-• Action Verbs: ${doc.metrics.actionVerbCount}
-• Quantified Achievements: ${doc.metrics.quantifiedAchievements}
-
-Generated by ProofOfFit - Hiring Intelligence Platform
-`
-        fileName += '.pdf'
-        mimeType = 'application/pdf'
-      } else if (format === 'docx') {
-        fileName += '.docx'
-        mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      } else {
+        const fileContent = `${documentHeader}\n${documentBody}`
         fileName += '.txt'
+        blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' })
+        mimeType = 'text/plain'
+      } else if (format === 'docx') {
+        const fileContent = `${documentHeader}\n${documentBody}`
+        fileName += '.txt'
+        blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' })
+        mimeType = 'text/plain'
+      } else {
+        const fileContent = `${documentHeader}\n${documentBody}`
+        fileName += '.txt'
+        blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' })
         mimeType = 'text/plain'
       }
       
       // Create and download the file
-      const blob = new Blob([fileContent], { type: mimeType })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = fileName
+      a.style.display = 'none'
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -1810,18 +2409,22 @@ Generated by ProofOfFit - Hiring Intelligence Platform
       try { import('../../../lib/analytics').then(m => m.track({ name: 'document_download' })) } catch {}
     } catch (error) {
       console.error('Download failed:', error)
+      // Show user-friendly error message
+      alert('Download failed. Please try again or contact support if the issue persists.')
     }
   }
 
   const previewDocument = (doc: TailoredDocument) => {
-    // Create a sophisticated preview modal
     const previewWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')
     if (previewWindow) {
+      const baseContent = doc.type === 'cover_letter' ? coverLetterDraft : doc.content
+      const displayContent = doc.type === 'cover_letter' ? ensureSignature(baseContent) : baseContent
+
       previewWindow.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
-          <title>${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'} Preview</title>
+          <title>${getDocumentTitle(doc)} Preview</title>
           <style>
             body { 
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
@@ -1897,7 +2500,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
         </head>
         <body>
           <div class="header">
-            <h1>${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'}</h1>
+            <h1>${getDocumentTitle(doc)}</h1>
             <p>Generated for ${job.title} at ${job.company}</p>
             <p>Template: ${doc.template} | Industry Optimized: ${doc.industryOptimized ? 'Yes' : 'No'}</p>
           </div>
@@ -1926,7 +2529,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
             ${doc.highlights.map(h => `<span class="badge">${h}</span>`).join('')}
           </div>
           
-          <div class="content">${doc.content}</div>
+          <div class="content">${displayContent}</div>
           
           <div class="suggestions">
             <h3>Expert Suggestions</h3>
@@ -1936,8 +2539,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
           </div>
           
           <div class="footer">
-            Generated by ProofOfFit - Hiring Intelligence Platform<br>
-            Generated on ${doc.generatedAt.toLocaleDateString()}
+            Prepared on ${doc.generatedAt.toLocaleDateString()}
           </div>
         </body>
         </html>
@@ -1946,12 +2548,27 @@ Generated by ProofOfFit - Hiring Intelligence Platform
     }
   }
 
+  const getDocumentTitle = (doc: TailoredDocument) => {
+    switch (doc.id) {
+      case '1':
+        return 'Tailored Resume'
+      case '2':
+        return 'Tailored Cover Letter'
+      case '3':
+        return 'Statement of Purpose'
+      case '4':
+        return 'Interview Preparation Guide'
+      default:
+        return doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'
+    }
+  }
+
   const shareDocument = async (doc: TailoredDocument) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${doc.type === 'resume' ? 'Tailored Resume' : 'Tailored Cover Letter'}`,
-          text: `Check out my tailored ${doc.type === 'resume' ? 'resume' : 'cover letter'} for ${job.title} at ${job.company}`,
+          title: getDocumentTitle(doc),
+          text: `Check out my ${getDocumentTitle(doc).toLowerCase()} for ${job.title} at ${job.company}`,
           url: window.location.href
         })
       } catch (error) {
@@ -1959,7 +2576,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
       }
     } else {
       // Fallback: copy to clipboard
-      const shareText = `Check out my tailored ${doc.type === 'resume' ? 'resume' : 'cover letter'} for ${job.title} at ${job.company}. Generated by ProofOfFit: ${window.location.href}`
+      const shareText = `Check out my ${getDocumentTitle(doc).toLowerCase()} for ${job.title} at ${job.company}: ${window.location.href}`
       try {
         await navigator.clipboard.writeText(shareText)
         alert('Share link copied to clipboard!')
@@ -1975,7 +2592,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Your Tailored Application</h2>
         <p className="text-gray-600">
-          Download your personalized resume and cover letter
+          Download your personalized application documents
         </p>
       </div>
 
@@ -2022,13 +2639,13 @@ Generated by ProofOfFit - Hiring Intelligence Platform
                 <Sparkles className="w-12 h-12 mx-auto text-blue-500" />
                 <h3 className="text-xl font-semibold">Ready to Generate Your Application</h3>
                 <p className="text-gray-600">
-                  We'll create a tailored resume and cover letter optimized for this position
+                  We&apos;ll create tailored application documents optimized for this position
                 </p>
                 <Button
                   size="lg"
                   onClick={generateDocuments}
                   className="bg-gradient-to-r from-blue-600 to-indigo-600"
-                  aria-label="Generate tailored resume and cover letter documents"
+                  aria-label="Generate tailored application documents"
                 >
                   Generate Documents
                   <Sparkles className="w-4 h-4 ml-2" aria-hidden="true" />
@@ -2039,13 +2656,17 @@ Generated by ProofOfFit - Hiring Intelligence Platform
         </Card>
       ) : (
         <div className="grid md:grid-cols-2 gap-6">
-          {documents.map((doc) => (
+          {documents.map((doc) => {
+            const allSuggestionsApplied = doc.aiSuggestions.every(suggestion => appliedSuggestions.includes(suggestion))
+            const suggestionSwitchId = `allow-suggestions-${doc.id}`
+
+            return (
             <Card key={doc.id} className="border-2 border-slate-200 dark:border-slate-700">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="capitalize text-lg font-semibold">
-                      {doc.type.replace('_', ' ')} Document
+                      {getDocumentTitle(doc)}
                     </span>
                     {doc.industryOptimized && (
                       <Badge variant="default" className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
@@ -2127,15 +2748,143 @@ Generated by ProofOfFit - Hiring Intelligence Platform
                     <Brain className="w-4 h-4 text-indigo-500" />
                     Expert Suggestions
                   </h4>
+                  {doc.allowSubmission && (
+                    <div className="flex items-center gap-3 mb-3 p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg border border-indigo-100 dark:border-indigo-900">
+                      <Switch
+                        id={suggestionSwitchId}
+                        checked={allowSuggestionIntegration}
+                        onCheckedChange={handleSuggestionPermission}
+                        aria-label="Allow expert suggestions to be integrated"
+                      />
+                      <div className="text-sm text-indigo-800 dark:text-indigo-200">
+                        <Label htmlFor={suggestionSwitchId} className="text-sm font-medium text-indigo-900 dark:text-indigo-100">Allow expert suggestions</Label>
+                        <p className="text-xs text-indigo-700 dark:text-indigo-300">Toggle on to insert selected suggestions directly into your draft.</p>
+                      </div>
+                    </div>
+                  )}
+                  {doc.allowSubmission && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addAllSuggestions(doc.aiSuggestions)}
+                        disabled={!allowSuggestionIntegration || allSuggestionsApplied}
+                      >
+                        <Plus className="w-3 h-3 mr-1" />
+                        Add all
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearAllSuggestions}
+                        disabled={appliedSuggestions.length === 0}
+                      >
+                        <Trash2 className="w-3 h-3 mr-1" />
+                        Remove all
+                      </Button>
+                      {appliedSuggestions.length > 0 && (
+                        <span className="text-xs text-indigo-700 dark:text-indigo-300">
+                          {appliedSuggestions.length} suggestion{appliedSuggestions.length === 1 ? '' : 's'} added
+                        </span>
+                      )}
+                    </div>
+                  )}
                   <div className="space-y-2">
                     {doc.aiSuggestions.map((suggestion, index) => (
-                      <div key={index} className="flex items-start gap-2 p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-start gap-3 p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg border border-indigo-100 dark:border-indigo-900"
+                      >
                         <Lightbulb className="w-4 h-4 text-indigo-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-indigo-700 dark:text-indigo-300">{suggestion}</span>
+                        <span className="text-sm text-indigo-700 dark:text-indigo-300 flex-1">{suggestion}</span>
+                        {doc.allowSubmission && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="ml-auto text-indigo-600 border-indigo-200 hover:bg-indigo-100 dark:text-indigo-200 dark:border-indigo-700"
+                            onClick={() => appliedSuggestions.includes(suggestion) ? removeSuggestionFromDraft(suggestion) : applySuggestionToDraft(suggestion)}
+                            disabled={!allowSuggestionIntegration && !appliedSuggestions.includes(suggestion)}
+                          >
+                            {appliedSuggestions.includes(suggestion) ? 'Remove' : 'Add'}
+                          </Button>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
+
+                {doc.allowSubmission && (
+                  <div className="space-y-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/40">
+                    <div className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-slate-500" />
+                      <h4 className="font-semibold text-slate-800 dark:text-slate-200">Edit & Submit Cover Letter</h4>
+                    </div>
+                    <Textarea
+                      value={coverLetterDraft}
+                      onChange={(event) => handleDraftChange(event.target.value)}
+                      rows={14}
+                      className="bg-white dark:bg-slate-900"
+                      aria-label="Cover letter content"
+                    />
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div>
+                        <Label htmlFor="cover-letter-signature" className="text-sm font-medium text-slate-700 dark:text-slate-200">Signature</Label>
+                        <Input
+                          id="cover-letter-signature"
+                          value={coverLetterSignature}
+                          onChange={(event) => handleSignatureChange(event.target.value)}
+                          placeholder="Type your full name"
+                          aria-describedby="cover-letter-signature-help"
+                        />
+                        <p id="cover-letter-signature-help" className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          This signature will be appended to the submitted letter.
+                        </p>
+                      </div>
+                      <div className="text-sm text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md p-3">
+                        <p><span className="font-medium">Word count:</span> {coverLetterDraft.trim() ? coverLetterDraft.trim().split(/\s+/).length : 0}</p>
+                        <p><span className="font-medium">Suggestions added:</span> {appliedSuggestions.length}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={resetCoverLetterDraft}
+                        disabled={submissionState.status === 'submitting'}
+                      >
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        Reset to original
+                      </Button>
+                      <Button
+                        onClick={() => submitCoverLetter(doc)}
+                        disabled={submissionState.status === 'submitting' || !coverLetterDraft.trim() || !coverLetterSignature.trim()}
+                      >
+                        {submissionState.status === 'submitting' ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            <Check className="w-4 h-4 mr-2" />
+                            Submit cover letter
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                    {submissionState.status === 'error' && submissionState.message && (
+                      <Alert variant="destructive">
+                        <AlertCircle className="w-4 h-4" />
+                        <AlertDescription>{submissionState.message}</AlertDescription>
+                      </Alert>
+                    )}
+                    {submissionState.status === 'success' && submissionState.message && (
+                      <Alert>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <AlertDescription>{submissionState.message}</AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                )}
                 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -2143,40 +2892,40 @@ Generated by ProofOfFit - Hiring Intelligence Platform
                     <Button 
                       className="flex-1"
                       onClick={() => downloadDocument(doc, 'pdf')}
-                      aria-label={`Download ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'} PDF`}
+                      aria-label={`Download ${getDocumentTitle(doc).toLowerCase()} as text file`}
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      PDF
+                      Download
                     </Button>
                     <Button 
                       variant="outline"
                       onClick={() => downloadDocument(doc, 'docx')}
-                      aria-label={`Download ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'} DOCX`}
+                      aria-label={`Download ${getDocumentTitle(doc).toLowerCase()} as text file`}
                     >
                       <FileText className="w-4 h-4 mr-2" />
-                      DOCX
+                      Text
                     </Button>
                     <Button 
                       variant="outline"
                       onClick={() => downloadDocument(doc, 'txt')}
-                      aria-label={`Download ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'} TXT`}
+                      aria-label={`Download ${getDocumentTitle(doc).toLowerCase()} as text file`}
                     >
                       <File className="w-4 h-4 mr-2" />
-                      TXT
+                      Plain Text
                     </Button>
                   </div>
                   <div className="flex gap-2">
                     <Button 
                       variant="outline"
                       onClick={() => previewDocument(doc)}
-                      aria-label={`Preview ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'}`}
+                      aria-label={`Preview ${getDocumentTitle(doc).toLowerCase()}`}
                     >
                       <Eye className="w-4 h-4" />
                     </Button>
                     <Button 
                       variant="outline"
                       onClick={() => shareDocument(doc)}
-                      aria-label={`Share ${doc.type === 'resume' ? 'tailored resume' : 'tailored cover letter'}`}
+                      aria-label={`Share ${getDocumentTitle(doc).toLowerCase()}`}
                     >
                       <Share2 className="w-4 h-4" />
                     </Button>
@@ -2184,7 +2933,7 @@ Generated by ProofOfFit - Hiring Intelligence Platform
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )})}
         </div>
       )}
 
@@ -2277,7 +3026,7 @@ export default function FitReportPage() {
           <Breadcrumb items={getBreadcrumbItems()} />
         </div>
         
-        {/* Profile Import Success Banner */}
+        {/* Profile Created Success Banner */}
         {profileImported && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -2288,9 +3037,9 @@ export default function FitReportPage() {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
               <div className="flex-1">
-                <h3 className="font-medium text-green-800">Professional Profile Imported Successfully!</h3>
+                <h3 className="font-medium text-green-800">Professional Profile Created Successfully!</h3>
                 <p className="text-sm text-green-700">
-                  Your professional profile data has been imported and is ready to use for your Fit Report.
+                  Your professional profile has been saved and is ready to use for your Fit Report.
                 </p>
               </div>
               <button
