@@ -156,7 +156,7 @@ export default function DemoPage() {
                           <div>
                             <h5 className="font-medium mb-2">Required Skills:</h5>
                             <div className="flex flex-wrap gap-2">
-                              {['Python', 'React', 'AWS', 'Docker', '5+ years'].map((skill) => (
+                              {['Python', 'React', 'Cloud', 'Docker', '5+ years'].map((skill) => (
                                 <Badge key={skill} variant="default">{skill}</Badge>
                               ))}
                             </div>
@@ -221,7 +221,7 @@ export default function DemoPage() {
                           <div>
                             <h5 className="font-medium mb-2 text-green-700">Strengths:</h5>
                             <ul className="space-y-1">
-                              {['Strong Python skills', 'AWS certification', 'Team leadership experience'].map((strength) => (
+                              {['Strong Python skills', 'Cloud certification', 'Team leadership experience'].map((strength) => (
                                 <li key={strength} className="flex items-center text-sm">
                                   <Check className="w-3 h-3 mr-2 text-green-600" />
                                   {strength}
@@ -328,7 +328,7 @@ export default function DemoPage() {
                                 <div className="flex items-center justify-between p-3 bg-white rounded border">
                                   <div>
                                     <div className="font-medium">Timestamp</div>
-                                    <div className="text-sm text-gray-600">{new Date().toISOString()}</div>
+                                    <div className="text-sm text-gray-600">2024-01-15T10:30:00.000Z</div>
                                   </div>
                                   <Button variant="outline" size="sm">
                                     <ExternalLink className="w-4 h-4" />
@@ -410,7 +410,7 @@ export default function DemoPage() {
                             <div>
                               <h5 className="font-medium mb-2">Required Skills:</h5>
                               <div className="flex flex-wrap gap-2">
-                                {['Python', 'React', 'AWS', 'Docker', '5+ years'].map((skill) => (
+                                {['Python', 'React', 'Cloud', 'Docker', '5+ years'].map((skill) => (
                                   <Badge key={skill} variant="default">{skill}</Badge>
                                 ))}
                               </div>

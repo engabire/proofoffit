@@ -178,7 +178,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                 Sign in to the hiring OS that proves every recommendation.
               </h1>
               <p className="max-w-xl text-slate-600 dark:text-slate-300">
-                Calm, beautiful software with the rigor of AWS, the approachability of Indeed, and the governance demanded by enterprise talent teams.
+                Calm, beautiful software with enterprise rigor, intuitive approachability, and the governance demanded by talent teams.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -190,7 +190,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
               ))}
             </div>
             <div className="rounded-2xl border border-white/70 bg-white/90 p-4 text-sm text-slate-500 shadow shadow-slate-200/40 backdrop-blur dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-300">
-              “ProofOfFit feels like if Google’s calm design met AWS’s guardrails—the most beautiful AI workflow in our stack, and the only one with receipts.”
+              "ProofOfFit combines calm design with enterprise guardrails—the most beautiful AI workflow in our stack, and the only one with receipts."
               <p className="mt-2 text-xs font-medium text-slate-400">Head of Talent, Inclusive Hiring Network</p>
             </div>
           </aside>
@@ -347,8 +347,8 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                 <div className="grid gap-2">
                   <Button type="button" variant="outline" className="w-full" disabled={loading} onClick={() => handleSSO('google')}>
                     <span className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-200">
-                      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-4 w-4" />
-                      Google Workspace
+                      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Workspace" className="h-4 w-4" />
+                      Workspace
                     </span>
                   </Button>
                   <Button type="button" variant="outline" className="w-full" disabled={loading} onClick={() => handleSSO('github')}>

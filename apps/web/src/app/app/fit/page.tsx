@@ -226,7 +226,7 @@ const mockJobs: JobPosting[] = [
     remote: true,
     salary: { min: 120000, max: 180000, currency: 'USD' },
     description: 'We are looking for a senior software engineer to join our team...',
-    requirements: ['Python', 'React', 'AWS', '5+ years experience'],
+    requirements: ['Python', 'React', 'Cloud', '5+ years experience'],
     benefits: ['Health insurance', '401k', 'Flexible hours'],
     postedAt: new Date('2024-01-15'),
     companyLogo: '/logos/techcorp.png',
@@ -341,12 +341,12 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
     },
     {
       id: "linkedin",
-      name: "LinkedIn Import",
-      description: "Import your LinkedIn profile data",
+      name: "Profile Import",
+      description: "Import your professional profile data",
       icon: <Linkedin className="w-5 h-5" />,
       available: true,
       securityLevel: "high",
-      supportedFormats: ["LinkedIn Profile"]
+      supportedFormats: ["Professional Profile"]
     },
     {
       id: "camera",
@@ -369,7 +369,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
     {
       id: "link",
       name: "Secure Link",
-      description: "Import from a secure URL (Google Drive, Dropbox, etc.)",
+      description: "Import from a secure URL (cloud storage, etc.)",
       icon: <LinkIcon className="w-5 h-5" />,
       available: true,
       securityLevel: "high",
@@ -449,7 +449,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             company: 'Previous Company',
             duration: '2020-2024',
             description: 'Led development of web applications...',
-            skills: ['Python', 'React', 'AWS', 'Docker']
+            skills: ['Python', 'React', 'Cloud', 'Docker']
           }
         ],
         education: [
@@ -459,8 +459,8 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             year: '2019'
           }
         ],
-        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker'],
-        certifications: ['AWS Certified Developer', 'Google Cloud Professional']
+        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
+        certifications: ['Cloud Certified Developer', 'Cloud Professional']
       },
       uploadedAt: new Date(),
       source,
@@ -528,7 +528,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             company: 'Previous Company',
             duration: '2020-2024',
             description: 'Led development of web applications...',
-            skills: ['Python', 'React', 'AWS', 'Docker']
+            skills: ['Python', 'React', 'Cloud', 'Docker']
           }
         ],
         education: [
@@ -538,8 +538,8 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             year: '2019'
           }
         ],
-        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker'],
-        certifications: ['AWS Certified Developer', 'Google Cloud Professional']
+        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
+        certifications: ['Cloud Certified Developer', 'Cloud Professional']
       },
       uploadedAt: new Date(),
       source: 'link',
@@ -584,7 +584,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             company: 'Previous Company',
             duration: '2020-2024',
             description: 'Led development of web applications...',
-            skills: ['Python', 'React', 'AWS', 'Docker']
+            skills: ['Python', 'React', 'Cloud', 'Docker']
           }
         ],
         education: [
@@ -594,8 +594,8 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             year: '2019'
           }
         ],
-        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker'],
-        certifications: ['AWS Certified Developer', 'Google Cloud Professional']
+        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
+        certifications: ['Cloud Certified Developer', 'Cloud Professional']
       },
       uploadedAt: new Date(),
       source: 'camera',
@@ -643,7 +643,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             company: 'Previous Company',
             duration: '2020-2024',
             description: 'Led development of web applications...',
-            skills: ['Python', 'React', 'AWS', 'Docker']
+            skills: ['Python', 'React', 'Cloud', 'Docker']
           }
         ],
         education: [
@@ -653,8 +653,8 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
             year: '2019'
           }
         ],
-        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'AWS', 'Docker'],
-        certifications: ['AWS Certified Developer', 'Google Cloud Professional']
+        skills: ['Python', 'JavaScript', 'React', 'Node.js', 'Cloud', 'Docker'],
+        certifications: ['Cloud Certified Developer', 'Cloud Professional']
       },
       uploadedAt: new Date(),
       source: 'qr',
@@ -792,8 +792,8 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
               <div className="text-center space-y-4">
                 <Linkedin className="w-12 h-12 mx-auto text-blue-600" />
                 <div>
-                  <h3 className="text-lg font-medium">Import from LinkedIn</h3>
-                  <p className="text-sm text-gray-600">Securely import your LinkedIn profile data</p>
+                  <h3 className="text-lg font-medium">Import Professional Profile</h3>
+                  <p className="text-sm text-gray-600">Securely import your professional profile data</p>
                 </div>
                 <Button 
                   className="w-full bg-blue-600 hover:bg-blue-700"
@@ -801,10 +801,10 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                     // TODO: Implement LinkedIn OAuth integration
                     window.location.href = '/auth/linkedin';
                   }}
-                  aria-label="Connect your LinkedIn account to import profile data"
+                  aria-label="Connect your professional profile to import data"
                 >
                   <Linkedin className="w-4 h-4 mr-2" aria-hidden="true" />
-                  Connect LinkedIn Account
+                  Connect Professional Profile
                 </Button>
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                   <ShieldCheck className="w-4 h-4" />
@@ -886,7 +886,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                 <div className="text-center">
                   <LinkIcon className="w-12 h-12 mx-auto text-green-600 mb-4" />
                   <h3 className="text-lg font-medium">Secure Link Import</h3>
-                  <p className="text-sm text-gray-600">Import from Google Drive, Dropbox, or other secure URLs</p>
+                  <p className="text-sm text-gray-600">Import from cloud storage or other secure URLs</p>
                 </div>
                 <div className="space-y-3">
                   <Label htmlFor="link-url">Resume URL</Label>

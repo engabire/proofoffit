@@ -233,7 +233,7 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                     <Shield className="h-5 w-5" />
                     <div className="text-left">
                       <div className="font-medium">Authenticator App</div>
-                      <div className="text-sm text-gray-500">Use Google Authenticator or similar</div>
+                      <div className="text-sm text-gray-500">Use authenticator app or similar</div>
                     </div>
                   </div>
                 </Button>

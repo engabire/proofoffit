@@ -225,7 +225,7 @@ const heroHighlights = [
   },
 ] as const;
 
-const trustedPartners = ['USAJobs Analysts', 'McKinsey Fellows', 'UN Talent Programme', 'Inclusive Hiring Network', 'GovTech Catalysts'];
+const trustedPartners = ['Government Analysts', 'Consulting Fellows', 'UN Talent Programme', 'Inclusive Hiring Network', 'GovTech Catalysts'];
 
 const aiHighlights = [
   {
@@ -251,11 +251,11 @@ const aiHighlights = [
 ];
 
 const inspirationBrands = [
-  { name: 'Google', note: 'Clarity and calming whitespace' },
-  { name: 'AWS', note: 'Enterprise-grade guardrails' },
-  { name: 'LinkedIn', note: 'Human, professional warmth' },
-  { name: 'Indeed', note: 'Approachable AI guidance' },
-  { name: 'Stripe', note: 'Product storytelling polish' },
+  { name: 'Clean Design', note: 'Clarity and calming whitespace' },
+  { name: 'Enterprise Security', note: 'Robust guardrails and compliance' },
+  { name: 'Professional Warmth', note: 'Human-centered interactions' },
+  { name: 'Intuitive AI', note: 'Approachable and helpful guidance' },
+  { name: 'Product Storytelling', note: 'Clear and compelling narratives' },
 ];
 
 const universalWhy = [
@@ -282,7 +282,7 @@ const universalWhy = [
 ] as const;
 
 const howSeeker = [
-  { step: 1, title: "Build your proof", body: "Import resume/LinkedIn, add projects, link evidence." },
+  { step: 1, title: "Build your proof", body: "Import resume, add projects, link evidence." },
   { step: 2, title: "Pick a role", body: "We parse the JD and map it to your proof." },
   { step: 3, title: "Get your Fit Report", body: "A 1‑pager you can attach, plus tailored resume/cover." },
   { step: 4, title: "Apply with confidence", body: "Know your story before the recruiter call." },
@@ -652,7 +652,7 @@ function TrustedStrip() {
               <p className="text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">Inspired by the teams who set the bar</p>
               <h2 className="mt-2 font-serif text-2xl text-slate-900 dark:text-white">Beauty, utility, and approachability in one operating system.</h2>
             </div>
-            <p className="max-w-sm text-sm text-slate-500 dark:text-slate-300">We study the calm authority of Google, the trust scaffolding of AWS, the warmth of LinkedIn, and the approachability of Indeed—and render it in ProofOfFit.</p>
+            <p className="max-w-sm text-sm text-slate-500 dark:text-slate-300">We blend calm authority, robust trust scaffolding, professional warmth, and intuitive approachability into every interaction.</p>
           </div>
           <div className="mt-6 grid gap-3 text-sm font-medium text-slate-600 dark:text-slate-300 sm:grid-cols-5">
             {inspirationBrands.map((brand) => (
@@ -958,7 +958,7 @@ function FooterTrustBar() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.6fr),repeat(3,minmax(0,1fr))]">
           <div className="space-y-4">
             <a href="/" className="text-lg font-semibold text-slate-900 dark:text-white">ProofOfFit</a>
-            <p className={`text-sm ${subtle}`}>Receipts, not black boxes. We blend the calming polish of Google, the guardrails of AWS, the warmth of LinkedIn, and the approachability of Indeed’s AI to keep hiring both beautiful and accountable.</p>
+            <p className={`text-sm ${subtle}`}>Receipts, not black boxes. We blend calming polish, robust guardrails, professional warmth, and intuitive AI to keep hiring both beautiful and accountable.</p>
             <div className="flex gap-3">
               <a aria-label="Twitter" href="https://x.com/proofoffit" className="rounded-xl border border-white/70 p-2 text-slate-500 transition hover:bg-white/60 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-900/60"><Twitter className="h-4 w-4" /></a>
               <a aria-label="LinkedIn" href="https://www.linkedin.com/company/proofoffit" className="rounded-xl border border-white/70 p-2 text-slate-500 transition hover:bg-white/60 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-900/60"><Linkedin className="h-4 w-4" /></a>
@@ -999,7 +999,7 @@ function FooterTrustBar() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-white/60 pt-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400 md:flex-row md:items-center md:justify-between">
-          <span>© {new Date().getFullYear()} ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart.</span>
+          <span>© 2024 ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart.</span>
           <div className="flex flex-wrap items-center gap-4">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>

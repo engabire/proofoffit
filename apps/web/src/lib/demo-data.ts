@@ -81,7 +81,7 @@ export const demoJobs = [
     description: 'Join our team to build innovative healthcare solutions using modern web technologies. We need someone with strong frontend skills and experience in healthcare applications.',
     requirements: {
       must_have: ['React', 'Node.js', 'Healthcare experience'],
-      preferred: ['TypeScript', 'AWS', 'Team collaboration']
+      preferred: ['TypeScript', 'Cloud', 'Team collaboration']
     },
     source: 'linkedin.com',
     createdAt: new Date('2024-01-20')
