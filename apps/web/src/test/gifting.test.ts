@@ -1,3 +1,5 @@
+export {}
+
 const mockStripe = {
   coupons: {
     create: jest.fn(),

@@ -8,6 +8,7 @@ const mockSupabase = {
     update: jest.fn().mockReturnThis(),
     delete: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
+    order: jest.fn(),
     single: jest.fn(),
   })),
 }

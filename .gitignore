@@ -148,3 +148,4 @@ build/
 # Temporary files
 tmp/
 temp/
+.env*.local

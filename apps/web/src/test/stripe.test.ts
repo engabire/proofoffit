@@ -1,3 +1,5 @@
+export {}
+
 var mockStripe: any = {}
 
 jest.mock('stripe', () => {
