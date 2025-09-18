@@ -6,12 +6,25 @@ export type AnalyticsEvent = {
 
 export async function track(event: AnalyticsEvent) {
   try {
+    // Use modern fetch with proper error handling
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000) // 5s timeout
+    
     await fetch('/api/analytics', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...event, ts: event.ts ?? Date.now() })
+      body: JSON.stringify({ ...event, ts: event.ts ?? Date.now() }),
+      signal: controller.signal,
+      keepalive: true // Optimize for analytics
     })
-  } catch {}
+    
+    clearTimeout(timeoutId)
+  } catch (error) {
+    // Silently fail for analytics - don't log to avoid console spam
+    if (process.env.NODE_ENV === 'development') {
+      console.debug('Analytics tracking failed:', error)
+    }
+  }
 }
 
 // Simple client-side timers for OMM and other durations

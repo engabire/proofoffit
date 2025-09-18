@@ -10,6 +10,12 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@supabase/supabase-js']
   },
+  // Optimize resource loading to reduce preload warnings
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn']
+    } : false,
+  },
   images: {
     domains: ['localhost'],
     remotePatterns: [
