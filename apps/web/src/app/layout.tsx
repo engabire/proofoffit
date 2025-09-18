@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { DegradedBanner } from '@/components/system/degraded-banner'
 import { ReportIssue } from '@/components/system/report-issue'
+import '@/lib/suppress-warnings'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' })
@@ -39,6 +40,42 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Suppress Vercel analytics warnings
+              if (typeof window !== 'undefined') {
+                const originalWarn = console.warn;
+                const originalError = console.error;
+                
+                console.warn = function(...args) {
+                  const message = args[0]?.toString() || '';
+                  if (
+                    message.includes('Deprecated API for given entry type') ||
+                    message.includes('was preloaded using link preload but not used') ||
+                    message.includes('instrumentations.iv.flushErrorBuffer')
+                  ) {
+                    return;
+                  }
+                  originalWarn.apply(console, args);
+                };
+                
+                console.error = function(...args) {
+                  const message = args[0]?.toString() || '';
+                  if (
+                    message.includes('Deprecated API for given entry type') ||
+                    message.includes('instrumentations.iv.flushErrorBuffer')
+                  ) {
+                    return;
+                  }
+                  originalError.apply(console, args);
+                };
+              }
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:rounded-lg focus:bg-sky-600 focus:px-3 focus:py-2 focus:text-white">Skip to content</a>
         <Providers>

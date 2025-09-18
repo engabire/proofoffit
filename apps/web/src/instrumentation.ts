@@ -5,11 +5,14 @@ export async function register() {
     try {
       // Only register if we're in a Vercel environment
       if (process.env.VERCEL) {
-        // This is a no-op but prevents the warning
-        console.debug('Instrumentation registered for Vercel environment')
+        // Suppress the deprecated API warnings by providing a proper entry point
+        const { register: registerVercel } = await import('@vercel/analytics')
+        if (registerVercel) {
+          registerVercel()
+        }
       }
     } catch (error) {
-      // Silently fail
+      // Silently fail - this is expected if @vercel/analytics is not available
     }
   }
 }
