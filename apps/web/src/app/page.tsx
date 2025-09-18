@@ -380,59 +380,91 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] bg-black text-white px-3 py-2 rounded">Skip to content</a>
-      <header className={`sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70 ${scrolled ? "shadow-lg ring-1 ring-black/5 dark:ring-white/10" : ""}`}>
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <a href="/" className="text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition-opacity">
-            ProofOfFit
+      <header className={`sticky top-0 z-50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl supports-[backdrop-filter]:bg-white/85 border-b border-slate-200/50 dark:border-slate-800/50 ${scrolled ? "shadow-xl ring-1 ring-black/5 dark:ring-white/10" : "shadow-sm"}`}>
+        <div className="mx-auto max-w-7xl px-6 h-18 flex items-center justify-between">
+          {/* Logo Section */}
+          <a href="/" className="group flex items-center gap-3 text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-90 transition-all duration-200">
+            <div className="relative">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-200">
+                <span className="text-white font-bold text-sm">PF</span>
+              </div>
+              <div className="absolute -inset-1 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-200 blur-sm"></div>
+            </div>
+            <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+              ProofOfFit
+            </span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#why" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-              <FileText className="h-4 w-4" /> Features
+          {/* Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            <a href="#why" className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+              <FileText className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              <span>Features</span>
             </a>
-            <a href="#how" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-              <Sparkles className="h-4 w-4" /> How It Works
+            <a href="#how" className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+              <Sparkles className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              <span>How It Works</span>
             </a>
-            <a href="#pricing" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-              <DollarSign className="h-4 w-4" /> Pricing
+            <a href="#pricing" className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+              <DollarSign className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              <span>Pricing</span>
             </a>
-            <a href="/gift" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-              <Gift className="h-4 w-4" /> Sponsor
+            <a href="/gift" className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+              <Gift className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              <span>Sponsor</span>
             </a>
-            <a href="/fairness" className="hover:underline inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-              <ShieldCheck className="h-4 w-4" /> Fairness
+            <a href="/fairness" className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+              <ShieldCheck className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              <span>Fairness</span>
             </a>
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Section */}
+          <div className="hidden md:flex items-center gap-3">
             {/* Language */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
-                  <Globe2 className="h-4 w-4" /> EN
+                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+                  <Globe2 className="h-4 w-4" /> 
+                  <span className="hidden sm:inline">EN</span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>English</DropdownMenuItem>
-                <DropdownMenuItem>Français</DropdownMenuItem>
-                <DropdownMenuItem>Kinyarwanda</DropdownMenuItem>
-                <DropdownMenuItem>Kiswahili</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <Globe2 className="h-4 w-4"/> English
+                </DropdownMenuItem>
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <Globe2 className="h-4 w-4"/> Français
+                </DropdownMenuItem>
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <Globe2 className="h-4 w-4"/> Kinyarwanda
+                </DropdownMenuItem>
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <Globe2 className="h-4 w-4"/> Kiswahili
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Help */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
-                  <HelpCircle className="h-4 w-4" /> Help
+                <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+                  <HelpCircle className="h-4 w-4" /> 
+                  <span className="hidden sm:inline">Help</span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4"/> Docs</DropdownMenuItem>
-                <DropdownMenuItem className="inline-flex items-center gap-2"><ExternalLink className="h-4 w-4"/> Support</DropdownMenuItem>
-                <DropdownMenuItem className="inline-flex items-center gap-2"><Sparkles className="h-4 w-4"/> Changelog</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <BookOpen className="h-4 w-4"/> Documentation
+                </DropdownMenuItem>
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4"/> Support
+                </DropdownMenuItem>
+                <DropdownMenuItem className="inline-flex items-center gap-2">
+                  <Sparkles className="h-4 w-4"/> Changelog
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -440,41 +472,71 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
             <LaneToggle lane={lane} setLane={setLane} />
 
             {/* Theme */}
-            <Button variant="ghost" size="sm" aria-label="Toggle theme" onClick={toggleTheme} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              aria-label="Toggle theme" 
+              onClick={toggleTheme} 
+              className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200"
+            >
               <Sun className="h-4 w-4 hidden dark:block" />
               <Moon className="h-4 w-4 block dark:hidden" />
             </Button>
 
-            {/* Auth */}
-            <Button variant="outline" size="sm" asChild className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">
-              <a 
-                href="/auth/signin"
-                aria-label="Sign in to your ProofOfFit account"
-                rel="noopener"
+            {/* Auth Buttons */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-700">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200"
               >
-                Sign in
-              </a>
-            </Button>
-            <Button asChild size="sm" className={`bg-gradient-to-r text-white shadow-lg hover:shadow-xl transition-all duration-200 ${lane === "seeker" ? "from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700" : "from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"}`}>
-              <a 
-                href={lane === "seeker" ? "/app/fit" : "/app/slate"}
-                aria-label={`Get started with ProofOfFit - ${lane === 'seeker' ? 'Create your fit report' : 'Generate candidate slates'}`}
-                rel="noopener"
+                <a 
+                  href="/auth/signin"
+                  aria-label="Sign in to your ProofOfFit account"
+                  rel="noopener"
+                >
+                  Sign in
+                </a>
+              </Button>
+              <Button 
+                asChild 
+                size="sm" 
+                className={`bg-gradient-to-r text-white shadow-lg hover:shadow-xl transition-all duration-200 font-medium px-6 ${lane === "seeker" ? "from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700" : "from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"}`}
               >
-                Get Started
-              </a>
-            </Button>
+                <a 
+                  href={lane === "seeker" ? "/app/fit" : "/app/slate"}
+                  aria-label={`Get started with ProofOfFit - ${lane === 'seeker' ? 'Create your fit report' : 'Generate candidate slates'}`}
+                  rel="noopener"
+                >
+                  Get Started
+                </a>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile */}
           <div className="md:hidden flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Toggle theme" onClick={toggleTheme}>
-              <Sun className={`h-5 w-5 hidden dark:block ${lanePrimary}`} />
-              <Moon className={`h-5 w-5 block dark:hidden ${lanePrimary}`} />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              aria-label="Toggle theme" 
+              onClick={toggleTheme}
+              className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200"
+            >
+              <Sun className="h-5 w-5 hidden dark:block" />
+              <Moon className="h-5 w-5 block dark:hidden" />
             </Button>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" aria-label="Open menu"><Menu className="h-5 w-5" /></Button>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  aria-label="Open menu"
+                  className="border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
@@ -557,7 +619,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
 
 function LaneToggle({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
   return (
-    <div className="inline-flex rounded-2xl border bg-white/70 dark:bg-zinc-900/70 backdrop-blur shadow-sm" role="tablist" aria-label="Audience">
+    <div className="inline-flex rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm shadow-sm p-1" role="tablist" aria-label="Audience">
       {(["seeker", "employer"] as Lane[]).map((l) => {
         const theme = laneThemes[l];
         const isActive = lane === l;
@@ -567,16 +629,19 @@ function LaneToggle({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void 
             role="tab"
             aria-selected={isActive}
             aria-controls={`panel-${l}`}
-            className={`px-4 py-2 text-sm font-medium ${theme.buttonStyle} focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ${
+            className={`relative px-4 py-2 text-sm font-medium rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ${
               isActive
-                ? `bg-gradient-to-r text-white shadow-md ${theme.primary} ${theme.shadowStyle}`
-                : `text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:scale-105`
+                ? `bg-gradient-to-r text-white shadow-md ${theme.primary} ${theme.shadowStyle} transform scale-[1.02]`
+                : `text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white hover:scale-105`
             }`}
             onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', props: { lane: l } })) } catch {} }}
             data-evt="toggle_lane"
             data-lane={l}
           >
-            {laneCopy[l].label}
+            <span className="relative z-10">{laneCopy[l].label}</span>
+            {isActive && (
+              <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 to-indigo-600/20 rounded-lg blur-sm"></div>
+            )}
           </button>
         );
       })}
@@ -929,7 +994,13 @@ function GiftSponsorPanel() {
               onChange={(event) => setCode(event.target.value.toUpperCase())}
               aria-label="Gift code"
             />
-            <Button data-evt="redeem_gift" onClick={handleRedeem} disabled={redeeming || !code.trim()}>
+            <Button 
+              size="sm" 
+              data-evt="redeem_gift" 
+              onClick={handleRedeem} 
+              disabled={redeeming || !code.trim()}
+              className="bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-200 font-medium"
+            >
               {redeeming ? 'Redeeming…' : 'Redeem'}
             </Button>
           </div>
@@ -942,7 +1013,12 @@ function GiftSponsorPanel() {
         <div className="space-y-2 rounded-2xl border border-white/60 bg-white/85 p-4 shadow-sm shadow-slate-200/40 dark:border-white/10 dark:bg-slate-950/60">
           <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Sponsor a candidate</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">Gift-proof someone’s search for $12/month. We handle delivery and receipts.</p>
-          <Button className="w-full" asChild data-evt="sponsor_click">
+          <Button 
+            size="sm" 
+            className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-200 font-medium" 
+            asChild 
+            data-evt="sponsor_click"
+          >
             <a href="/gift" aria-label="Sponsor a candidate - Give a month of Pro access" rel="noopener">
               Give a month ($12)
             </a>
