@@ -1157,7 +1157,7 @@ function SlateGenerationStep({ job, onComplete }: {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => window.open(candidate.linkedin, '_blank')}
+                    onClick={() => window.open(candidate.linkedin || `https://linkedin.com/search/results/people/?keywords=${encodeURIComponent(candidate.name)}`, '_blank')}
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     View Profile
@@ -1165,28 +1165,134 @@ function SlateGenerationStep({ job, onComplete }: {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => alert('Resume download feature coming soon!')}
+                    onClick={() => {
+                      // Simulate resume download/view
+                      const resumeContent = `
+=== RESUME ===
+${candidate.name}
+${candidate.email} | ${candidate.phone || 'N/A'} | ${candidate.location}
+
+CURRENT ROLE
+${candidate.currentRole} at ${candidate.currentCompany}
+
+EXPERIENCE
+${candidate.experience} years in the field
+
+EDUCATION
+${candidate.education}
+
+SKILLS
+${candidate.skills.join(', ')}
+
+CERTIFICATIONS
+${candidate.certifications.join(', ')}
+
+STRENGTHS
+${candidate.strengths.join(', ')}
+                      `
+                      const blob = new Blob([resumeContent], { type: 'text/plain' })
+                      const url = URL.createObjectURL(blob)
+                      const a = document.createElement('a')
+                      a.href = url
+                      a.download = `${candidate.name.replace(' ', '_')}_Resume.txt`
+                      a.click()
+                      URL.revokeObjectURL(url)
+                    }}
                   >
                     <FileText className="w-4 h-4 mr-2" />
-                    View Resume
+                    Download Resume
                   </Button>
                   <Button 
                     size="sm" 
                     className="bg-gradient-to-r from-emerald-600 to-teal-600"
-                    onClick={() => window.location.href = `mailto:${candidate.email}?subject=Interview Opportunity - ${job.title}`}
+                    onClick={() => {
+                      const subject = encodeURIComponent(`Interview Opportunity - ${job.title}`)
+                      const body = encodeURIComponent(`Hi ${candidate.name.split(' ')[0]},
+
+I hope this email finds you well. We came across your profile and are impressed with your background in ${candidate.currentRole} at ${candidate.currentCompany}.
+
+We have an exciting opportunity for a ${job.title} position at ${job.company} that aligns well with your skills in ${candidate.skills.slice(0, 3).join(', ')}.
+
+Key highlights of the role:
+• ${job.description?.substring(0, 100)}...
+• Location: ${job.location}${job.remote ? ' (Remote available)' : ''}
+• Experience: ${job.experienceLevel} level
+
+Would you be interested in learning more about this opportunity? I'd love to schedule a brief conversation to discuss how your experience could be a great fit.
+
+Best regards,
+[Your Name]
+[Your Title]
+${job.company}`)
+                      window.location.href = `mailto:${candidate.email}?subject=${subject}&body=${body}`
+                    }}
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
-                    Contact
+                    Send Email
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="sm"
                     className="text-blue-600"
-                    onClick={() => alert('Scheduling feature coming soon!')}
+                    onClick={() => {
+                      // Simulate calendar scheduling
+                      const eventDetails = {
+                        title: `Interview: ${candidate.name} - ${job.title}`,
+                        start: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
+                        end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000), // 1 hour duration
+                        description: `Interview with ${candidate.name} for ${job.title} position at ${job.company}`
+                      }
+                      
+                      // Create Google Calendar URL
+                      const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.start.toISOString().replace(/[-:]/g, '').split('.')[0]}Z/${eventDetails.end.toISOString().replace(/[-:]/g, '').split('.')[0]}Z&details=${encodeURIComponent(eventDetails.description)}`
+                      
+                      window.open(googleCalendarUrl, '_blank')
+                    }}
                   >
                     <Calendar className="w-4 h-4 mr-2" />
-                    Schedule
+                    Schedule Interview
                   </Button>
+                  
+                  {/* Quick Actions */}
+                  <div className="pt-2 border-t border-gray-200">
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex-1 text-xs text-green-600 hover:bg-green-50"
+                        onClick={() => {
+                          // Add to shortlist
+                          localStorage.setItem(`shortlist_${candidate.id}`, JSON.stringify(candidate))
+                          alert(`${candidate.name} added to shortlist!`)
+                        }}
+                      >
+                        <Star className="w-3 h-3 mr-1" />
+                        Shortlist
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex-1 text-xs text-blue-600 hover:bg-blue-50"
+                        onClick={() => {
+                          // Share candidate
+                          const shareText = `Check out this candidate: ${candidate.name} - ${candidate.currentRole} at ${candidate.currentCompany}. Fit Score: ${candidate.fitScore}%`
+                          if (navigator.share) {
+                            navigator.share({
+                              title: 'Candidate Recommendation',
+                              text: shareText,
+                              url: window.location.href
+                            })
+                          } else {
+                            navigator.clipboard.writeText(shareText)
+                            alert('Candidate info copied to clipboard!')
+                          }
+                        }}
+                      >
+                        <Share2 className="w-3 h-3 mr-1" />
+                        Share
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>

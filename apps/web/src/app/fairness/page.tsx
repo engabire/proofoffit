@@ -14,6 +14,9 @@ export default function FairnessPage() {
         <p className="text-slate-600 dark:text-slate-400">
           Enterprise-grade bias-free AI with transparent audit trails for compliant, equitable hiring decisions
         </p>
+        <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+          Last updated: {new Date().toLocaleDateString()}
+        </p>
       </div>
 
       <div className="prose prose-slate dark:prose-invert max-w-none">
