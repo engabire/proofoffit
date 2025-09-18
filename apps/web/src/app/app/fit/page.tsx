@@ -2359,11 +2359,18 @@ export default function FitReportPage() {
                 variant="outline"
                 onClick={() => {
                   // Reset the form to start over
+                  console.log('Starting over - resetting all state');
                   setCurrentStep(1);
                   setResume(null);
                   setSelectedJob(null);
                   setAnalysis(null);
                   setDocumentsGenerated(false);
+                  
+                  // Scroll to top to show the first step
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  
+                  // Track the start over action
+                  try { import('../../../lib/analytics').then(m => m.track({ name: 'fit_report_start_over' })) } catch {}
                 }}
                 className="flex items-center gap-2"
               >

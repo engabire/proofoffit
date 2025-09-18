@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import type { Provider } from '@supabase/supabase-js'
 import {
@@ -24,6 +24,7 @@ import {
   ArrowRight,
   Building2,
   Check,
+  CheckCircle2,
   Eye,
   EyeOff,
   Loader2,
@@ -32,6 +33,9 @@ import {
   Shield,
   Sparkles,
   User,
+  X,
+  AlertTriangle,
+  Info,
 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -53,6 +57,86 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [enterpriseProvider, setEnterpriseProvider] = useState<string | null>(null)
+  const [formErrors, setFormErrors] = useState<{email?: string; password?: string}>({})
+  const [emailValid, setEmailValid] = useState<boolean | null>(null)
+  const [passwordStrength, setPasswordStrength] = useState<{score: number; feedback: string[]}>({score: 0, feedback: []})
+
+  // Email validation function
+  const validateEmail = useCallback((email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const isValid = emailRegex.test(email)
+    setEmailValid(email.length > 0 ? isValid : null)
+    
+    if (email.length > 0 && !isValid) {
+      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }))
+    } else {
+      setFormErrors(prev => ({ ...prev, email: undefined }))
+    }
+    
+    return isValid
+  }, [])
+
+  // Password strength checker
+  const calculatePasswordStrength = useCallback((password: string) => {
+    const feedback: string[] = []
+    let score = 0
+
+    if (password.length === 0) {
+      setPasswordStrength({ score: 0, feedback: [] })
+      return
+    }
+
+    // Length check
+    if (password.length >= 8) {
+      score += 1
+    } else {
+      feedback.push('Use at least 8 characters')
+    }
+
+    // Uppercase check
+    if (/[A-Z]/.test(password)) {
+      score += 1
+    } else {
+      feedback.push('Include uppercase letters')
+    }
+
+    // Lowercase check
+    if (/[a-z]/.test(password)) {
+      score += 1
+    } else {
+      feedback.push('Include lowercase letters')
+    }
+
+    // Number check
+    if (/\d/.test(password)) {
+      score += 1
+    } else {
+      feedback.push('Include numbers')
+    }
+
+    // Special character check
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      score += 1
+    } else {
+      feedback.push('Include special characters')
+    }
+
+    // Common password patterns
+    const commonPatterns = ['password', '123456', 'qwerty', 'abc123']
+    if (commonPatterns.some(pattern => password.toLowerCase().includes(pattern))) {
+      score = Math.max(0, score - 2)
+      feedback.push('Avoid common password patterns')
+    }
+
+    setPasswordStrength({ score, feedback })
+    
+    // Set validation error if password is too weak
+    if (password.length > 0 && score < 3) {
+      setFormErrors(prev => ({ ...prev, password: 'Password is too weak' }))
+    } else {
+      setFormErrors(prev => ({ ...prev, password: undefined }))
+    }
+  }, [])
 
   useEffect(() => {
     if (!email) {
@@ -153,8 +237,39 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
+    
+    // Validate form before submission
+    const emailIsValid = validateEmail(email)
+    let passwordIsValid = true
+    
+    if (authMethod === 'password') {
+      calculatePasswordStrength(password)
+      passwordIsValid = passwordStrength.score >= 3 && password.length >= 8
+    }
+    
+    // Don't submit if validation fails
+    if (!emailIsValid || (authMethod === 'password' && !passwordIsValid)) {
+      toast.error('Please fix the form errors before continuing')
+      return
+    }
+    
     if (authMethod === 'magic') handleMagicLink()
     if (authMethod === 'password') handlePasswordAuth()
+  }
+
+  // Handle email input changes with validation
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = event.target.value
+    setEmail(newEmail)
+    // Debounce validation to avoid excessive checking
+    setTimeout(() => validateEmail(newEmail), 500)
+  }
+
+  // Handle password input changes with strength checking
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = event.target.value
+    setPassword(newPassword)
+    calculatePasswordStrength(newPassword)
   }
 
   const features = [
@@ -280,30 +395,71 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                 </Button>
               </div>
 
-              <form className="space-y-4" onSubmit={handleSubmit}>
+              <form className="space-y-4" onSubmit={handleSubmit} noValidate>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-200">Email address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@organization.com"
-                    required
-                  />
+                  <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                    Email address
+                    {emailValid === true && (
+                      <CheckCircle2 className="inline ml-2 h-4 w-4 text-green-600" aria-label="Valid email" />
+                    )}
+                    {emailValid === false && (
+                      <X className="inline ml-2 h-4 w-4 text-red-600" aria-label="Invalid email" />
+                    )}
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder="you@organization.com"
+                      required
+                      aria-invalid={formErrors.email ? 'true' : 'false'}
+                      aria-describedby={formErrors.email ? 'email-error' : undefined}
+                      className={`${
+                        emailValid === false ? 'border-red-300 focus:border-red-500 focus:ring-red-500' :
+                        emailValid === true ? 'border-green-300 focus:border-green-500 focus:ring-green-500' :
+                        ''
+                      }`}
+                    />
+                    {emailValid === true && (
+                      <CheckCircle2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-600" />
+                    )}
+                    {emailValid === false && (
+                      <X className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-red-600" />
+                    )}
+                  </div>
+                  {formErrors.email && (
+                    <p id="email-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
+                      <AlertTriangle className="h-3 w-3" />
+                      {formErrors.email}
+                    </p>
+                  )}
                 </div>
 
                 {authMethod === 'password' && (
-                  <div className="space-y-2">
-                    <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-200">Password</Label>
+                  <div className="space-y-3">
+                    <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                      Password
+                      {mode === 'signup' && (
+                        <span className="ml-1 text-xs text-slate-500">(minimum 8 characters)</span>
+                      )}
+                    </Label>
                     <div className="relative">
                       <Input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        placeholder="Create a strong password"
+                        onChange={handlePasswordChange}
+                        placeholder={mode === 'signup' ? 'Create a strong password' : 'Enter your password'}
                         required
+                        aria-invalid={formErrors.password ? 'true' : 'false'}
+                        aria-describedby={`${formErrors.password ? 'password-error' : ''} ${mode === 'signup' ? 'password-strength' : ''}`.trim()}
+                        className={`pr-10 ${
+                          formErrors.password ? 'border-red-300 focus:border-red-500 focus:ring-red-500' :
+                          mode === 'signup' && passwordStrength.score >= 4 ? 'border-green-300 focus:border-green-500 focus:ring-green-500' :
+                          ''
+                        }`}
                       />
                       <button
                         type="button"
@@ -314,6 +470,60 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
+                    
+                    {/* Password Strength Indicator */}
+                    {mode === 'signup' && password.length > 0 && (
+                      <div id="password-strength" className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-slate-600 dark:text-slate-400">Password strength:</span>
+                          <span className={`text-xs font-medium ${
+                            passwordStrength.score === 0 ? 'text-red-600' :
+                            passwordStrength.score <= 2 ? 'text-orange-600' :
+                            passwordStrength.score <= 3 ? 'text-yellow-600' :
+                            passwordStrength.score === 4 ? 'text-green-600' :
+                            'text-emerald-600'
+                          }`}>
+                            {passwordStrength.score === 0 ? 'Very Weak' :
+                             passwordStrength.score <= 2 ? 'Weak' :
+                             passwordStrength.score <= 3 ? 'Fair' :
+                             passwordStrength.score === 4 ? 'Good' :
+                             'Excellent'}
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((level) => (
+                            <div
+                              key={level}
+                              className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                                level <= passwordStrength.score
+                                  ? level <= 2 ? 'bg-red-500' :
+                                    level <= 3 ? 'bg-yellow-500' :
+                                    level === 4 ? 'bg-green-500' :
+                                    'bg-emerald-500'
+                                  : 'bg-slate-200 dark:bg-slate-700'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {passwordStrength.feedback.length > 0 && (
+                          <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                            {passwordStrength.feedback.slice(0, 3).map((feedback, index) => (
+                              <li key={index} className="flex items-center gap-1">
+                                <Info className="h-3 w-3 text-blue-500" />
+                                {feedback}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
+                    
+                    {formErrors.password && (
+                      <p id="password-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
+                        <AlertTriangle className="h-3 w-3" />
+                        {formErrors.password}
+                      </p>
+                    )}
                   </div>
                 )}
 
