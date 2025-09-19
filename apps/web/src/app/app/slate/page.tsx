@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   FileText,
@@ -49,6 +49,14 @@ import {
   RadioGroup,
   RadioGroupItem,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Alert,
+  AlertDescription,
 } from "@proof-of-fit/ui"
 
 // Types
@@ -357,6 +365,19 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
   const [currentNiceToHave, setCurrentNiceToHave] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
+  const [showEnhancementDialog, setShowEnhancementDialog] = useState(false)
+  const [showLearnMoreDialog, setShowLearnMoreDialog] = useState(false)
+  const [enhancementApplying, setEnhancementApplying] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const [ctaMessage, setCtaMessage] = useState<string | null>(null)
+  const [submittingSlate, setSubmittingSlate] = useState(false)
+
+  useEffect(() => {
+    if (validationErrors.length) {
+      setValidationErrors([])
+      setCtaMessage(null)
+    }
+  }, [job.title, job.company, job.location, job.description, job.requirements, job.niceToHave, validationErrors])
 
   // Job description templates and suggestions
   const jobTemplates = {
@@ -476,6 +497,29 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     return skillSuggestions.technology // Default fallback
   }
 
+  const relevantSkills = getRelevantSkills()
+
+  const recommendedEnhancements = useMemo(() => {
+    const currentRequirements = (job.requirements || []).map(req => req.toLowerCase())
+    const currentNiceToHave = (job.niceToHave || []).map(skill => skill.toLowerCase())
+
+    const missingRequired = relevantSkills
+      .filter(skill => !currentRequirements.includes(skill.toLowerCase()))
+      .slice(0, 5)
+
+    const missingNice = relevantSkills
+      .filter(skill =>
+        !currentNiceToHave.includes(skill.toLowerCase()) &&
+        !missingRequired.some(req => req.toLowerCase() === skill.toLowerCase())
+      )
+      .slice(0, 5)
+
+    return {
+      missingRequired,
+      missingNice
+    }
+  }, [job.niceToHave, job.requirements, relevantSkills])
+
   const addSkillSuggestion = (skill: string, isRequired: boolean = true) => {
     if (isRequired) {
       if (!job.requirements?.includes(skill)) {
@@ -494,16 +538,80 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
     }
   }
 
+  const formatList = (items: string[]) => {
+    if (items.length === 1) return items[0]
+    if (items.length === 2) return `${items[0]} and ${items[1]}`
+    return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`
+  }
+
+  const handleEnhancementApply = useCallback(() => {
+    if (!recommendedEnhancements.missingRequired.length && !recommendedEnhancements.missingNice.length) {
+      setCtaMessage('Your job profile already includes our recommended expertise highlights.')
+      setShowEnhancementDialog(false)
+      return
+    }
+
+    setEnhancementApplying(true)
+    setJob(prev => {
+      const currentRequirements = [...(prev.requirements || [])]
+      const currentNiceToHave = [...(prev.niceToHave || [])]
+
+      recommendedEnhancements.missingRequired.forEach(skill => {
+        if (!currentRequirements.some(item => item.toLowerCase() === skill.toLowerCase())) {
+          currentRequirements.push(skill)
+        }
+      })
+
+      recommendedEnhancements.missingNice.forEach(skill => {
+        if (
+          !currentNiceToHave.some(item => item.toLowerCase() === skill.toLowerCase()) &&
+          !currentRequirements.some(item => item.toLowerCase() === skill.toLowerCase())
+        ) {
+          currentNiceToHave.push(skill)
+        }
+      })
+
+      return {
+        ...prev,
+        requirements: currentRequirements,
+        niceToHave: currentNiceToHave
+      }
+    })
+
+    setEnhancementApplying(false)
+    setShowEnhancementDialog(false)
+    setCtaMessage('We added expert-recommended skills to your requirements and nice-to-have lists. Review them before proceeding.')
+    setValidationErrors([])
+  }, [recommendedEnhancements])
+
   const handleSubmit = () => {
+    const errors: string[] = []
+
+    if (!job.title?.trim()) errors.push('a job title')
+    if (!job.company?.trim()) errors.push('a company name')
+    if (!job.location?.trim()) errors.push('a primary location')
+    if (!job.description?.trim()) errors.push('a job description')
+    if ((job.requirements?.length || 0) === 0) errors.push('at least one required qualification')
+
+    if (errors.length > 0) {
+      setValidationErrors(errors)
+      setCtaMessage(`Add ${formatList(errors)} before generating a candidate slate.`)
+      return
+    }
+
+    setValidationErrors([])
+    setCtaMessage(null)
+    setSubmittingSlate(true)
+
     const completeJob: JobDescription = {
       id: Date.now().toString(),
-      title: job.title || '',
-      company: job.company || '',
-      location: job.location || '',
+      title: job.title?.trim() || '',
+      company: job.company?.trim() || '',
+      location: job.location?.trim() || '',
       type: job.type || 'full-time',
       remote: job.remote || false,
       salary: job.salary,
-      description: job.description || '',
+      description: job.description?.trim() || '',
       requirements: job.requirements || [],
       niceToHave: job.niceToHave || [],
       benefits: job.benefits || [],
@@ -520,7 +628,12 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
       createdAt: new Date(),
       updatedAt: new Date()
     }
-    onComplete(completeJob)
+
+    try {
+      onComplete(completeJob)
+    } finally {
+      setSubmittingSlate(false)
+    }
   }
 
   return (
@@ -834,11 +947,24 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
                     Our proven methodology can optimize your job description for better candidate matching and bias reduction.
                   </p>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="border-purple-300 text-purple-700">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="border-purple-300 text-purple-700"
+                      onClick={() => {
+                        setShowEnhancementDialog(true)
+                        setCtaMessage(null)
+                      }}
+                    >
                       <Sparkles className="w-3 h-3 mr-1" />
                       Enhance with Expertise
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-purple-600">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-purple-600"
+                      onClick={() => setShowLearnMoreDialog(true)}
+                    >
                       Learn More
                     </Button>
                   </div>
@@ -847,25 +973,177 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
             </div>
 
             <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-500">
-                {job.title && job.company && job.location && job.description && (job.requirements?.length || 0) > 0 
-                  ? '✓ Ready to generate slate' 
-                  : 'Please fill in required fields to continue'
-                }
+              <div
+                className={`text-sm ${
+                  validationErrors.length
+                    ? 'text-red-600'
+                    : job.title && job.company && job.location && job.description && (job.requirements?.length || 0) > 0
+                    ? 'text-emerald-600'
+                    : 'text-gray-500'
+                }`}
+              >
+                {validationErrors.length
+                  ? `Add ${formatList(validationErrors)} to continue.`
+                  : job.title && job.company && job.location && job.description && (job.requirements?.length || 0) > 0
+                  ? '✓ Ready to generate slate'
+                  : 'Please fill in required fields to continue'}
               </div>
               <Button
                 onClick={handleSubmit}
-                disabled={!job.title || !job.company || !job.location || !job.description || (job.requirements?.length || 0) === 0}
+                disabled={submittingSlate}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 min-w-[200px]"
                 size="lg"
               >
-                Generate Candidate Slate
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {submittingSlate ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    Generate Candidate Slate
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
               </Button>
             </div>
+
+            {ctaMessage && (
+              <Alert
+                className="mt-4"
+                variant={validationErrors.length ? 'destructive' : 'default'}
+                role="status"
+              >
+                {validationErrors.length ? (
+                  <AlertCircle className="w-4 h-4" />
+                ) : (
+                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                )}
+                <AlertDescription>{ctaMessage}</AlertDescription>
+              </Alert>
+            )}
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={showEnhancementDialog} onOpenChange={setShowEnhancementDialog}>
+        <DialogContent aria-describedby="enhancement-dialog-description">
+          <DialogHeader>
+            <DialogTitle>Enhance with Expert Recommendations</DialogTitle>
+            <DialogDescription id="enhancement-dialog-description">
+              We analyzed your job details and identified high-impact skills to strengthen your requirements and optional qualifications.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-medium text-gray-900">Add to Required Qualifications</h4>
+              {recommendedEnhancements.missingRequired.length > 0 ? (
+                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+                  {recommendedEnhancements.missingRequired.map(skill => (
+                    <li key={skill} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-emerald-600" />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-sm text-gray-600">Your required qualifications already align with our expert guidance.</p>
+              )}
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-900">Add to Nice-to-Have Skills</h4>
+              {recommendedEnhancements.missingNice.length > 0 ? (
+                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+                  {recommendedEnhancements.missingNice.map(skill => (
+                    <li key={skill} className="flex items-center gap-2">
+                      <Plus className="w-4 h-4 text-purple-600" />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-sm text-gray-600">Nice-to-have skills already reflect our recommended coverage.</p>
+              )}
+            </div>
+            <p className="text-xs text-gray-500">
+              We never overwrite existing content. Enhancements only append skills missing from your current profile.
+            </p>
+          </div>
+          <DialogFooter className="flex justify-between">
+            <Button variant="ghost" onClick={() => setShowEnhancementDialog(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleEnhancementApply}
+              disabled={
+                enhancementApplying ||
+                (!recommendedEnhancements.missingRequired.length && !recommendedEnhancements.missingNice.length)
+              }
+              className="bg-gradient-to-r from-purple-600 to-indigo-600"
+            >
+              {enhancementApplying ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Applying
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Apply Enhancements
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showLearnMoreDialog} onOpenChange={setShowLearnMoreDialog}>
+        <DialogContent aria-describedby="learn-more-description">
+          <DialogHeader>
+            <DialogTitle>What does Expert Enhancement do?</DialogTitle>
+            <DialogDescription id="learn-more-description">
+              We benchmark your role against thousands of successful placements to surface the skills, capabilities, and signals that improve match quality.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 text-sm text-gray-700">
+            <div>
+              <h4 className="font-medium text-gray-900">What you&apos;ll get</h4>
+              <ul className="mt-2 space-y-2">
+                <li className="flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-purple-500 mt-0.5" />
+                  AI-curated skill coverage tuned for your job family and seniority level.
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="w-4 h-4 text-purple-500 mt-0.5" />
+                  Bias-aware wording suggestions to expand qualified talent pools.
+                </li>
+                <li className="flex items-start gap-2">
+                  <TrendingUp className="w-4 h-4 text-purple-500 mt-0.5" />
+                  Market-aligned signals that improve slate conversion and interview quality.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900">Need a human review?</h4>
+              <p className="mt-2">
+                Our talent strategists can audit complex roles in under 24 hours. Email{' '}
+                <a
+                  href="mailto:experts@proofoffit.com"
+                  className="text-purple-600 hover:underline focus:underline"
+                >
+                  experts@proofoffit.com
+                </a>{' '}
+                with your job ID and we&apos;ll follow up with tailored recommendations.
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="flex justify-end">
+            <Button onClick={() => setShowLearnMoreDialog(false)} className="bg-purple-600 hover:bg-purple-700">
+              Got it
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
