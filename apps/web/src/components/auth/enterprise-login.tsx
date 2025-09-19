@@ -61,8 +61,8 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
   const [emailValid, setEmailValid] = useState<boolean | null>(null)
   const [passwordStrength, setPasswordStrength] = useState<{score: number; feedback: string[]}>({score: 0, feedback: []})
   const [oauthAvailable, setOauthAvailable] = useState({
-    google: true,
-    github: true
+    google: true, // Google OAuth is now configured
+    github: false // GitHub OAuth not configured yet
   })
 
   // Email validation function
