@@ -16,9 +16,13 @@
     "type-check": "turbo run type-check"
   },
   "devDependencies": {
-    "turbo": "^1.10.12",
     "@types/node": "^20.8.0",
+    "turbo": "^1.10.12",
     "typescript": "^5.2.2"
   },
-  "packageManager": "npm@9.6.7"
+  "packageManager": "npm@9.6.7",
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "prisma": "^6.16.2"
+  }
 }

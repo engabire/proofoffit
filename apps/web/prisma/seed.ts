@@ -5,29 +5,14 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding database...')
 
-  // Create a demo tenant
-  const tenant = await prisma.tenant.upsert({
-    where: { id: 'demo-tenant' },
-    update: {},
-    create: {
-      id: 'demo-tenant',
-      name: 'Demo Organization',
-      plan: 'pro',
-    },
-  })
-
-  console.log('✅ Created tenant:', tenant.name)
-
   // Create demo users
   const candidateUser = await prisma.user.upsert({
     where: { email: 'candidate@demo.com' },
     update: {},
     create: {
       id: 'demo-candidate-user',
-      tenantId: tenant.id,
       email: 'candidate@demo.com',
-      role: 'candidate',
-      locale: 'en',
+      plan: 'PRO',
     },
   })
 
@@ -36,221 +21,132 @@ async function main() {
     update: {},
     create: {
       id: 'demo-employer-user',
-      tenantId: tenant.id,
       email: 'employer@demo.com',
-      role: 'employer',
-      locale: 'en',
+      plan: 'PREMIUM',
     },
   })
 
   console.log('✅ Created users:', candidateUser.email, employerUser.email)
 
-  // Create candidate profile
-  const candidateProfile = await prisma.candidateProfile.upsert({
-    where: { userId: candidateUser.id },
-    update: {},
-    create: {
-      id: 'demo-candidate-profile',
-      tenantId: tenant.id,
+  // Create sample proofs
+  const proofs = [
+    {
       userId: candidateUser.id,
-      preferences: {
-        workType: ['remote', 'hybrid'],
-        location: ['San Francisco', 'New York', 'Remote'],
-        salaryRange: { min: 80000, max: 150000 },
-        industries: ['Technology', 'Healthcare', 'Finance'],
-      },
-      contactPolicy: {
-        allowDirectContact: true,
-        preferredMethod: 'email',
-        availability: 'business_hours',
+      title: 'React Dashboard Project',
+      kind: 'project' as const,
+      url: 'https://github.com/demo/react-dashboard',
+      summary: 'Led development of React-based dashboard serving 10,000+ daily active users',
+    },
+    {
+      userId: candidateUser.id,
+      title: 'TypeScript Migration',
+      kind: 'metric' as const,
+      url: 'https://github.com/demo/typescript-migration',
+      summary: 'Implemented TypeScript across 5 microservices, reducing runtime errors by 40%',
+    },
+    {
+      userId: candidateUser.id,
+      title: 'Team Leadership Experience',
+      kind: 'project' as const,
+      summary: 'Managed team of 8 engineers using Agile methodologies and CI/CD pipelines',
+    },
+    {
+      userId: candidateUser.id,
+      title: 'Published Research Paper',
+      kind: 'publication' as const,
+      url: 'https://doi.org/10.1000/182',
+      summary: 'Co-authored research paper on software engineering best practices',
+    },
+  ]
+
+  for (const proof of proofs) {
+    await prisma.proof.create({
+      data: proof,
+    })
+  }
+
+  console.log('✅ Created sample proofs')
+
+  // Create sample targets
+  const target = await prisma.target.create({
+    data: {
+      userId: candidateUser.id,
+      title: 'Senior Frontend Developer',
+      role: 'Frontend Engineer',
+      companyHint: 'TechCorp Inc.',
+      layout: 'REPORT',
+      rubricJson: {
+        requirements: [
+          'React experience',
+          'TypeScript proficiency',
+          'Team leadership',
+          '5+ years experience',
+        ],
       },
     },
   })
 
-  console.log('✅ Created candidate profile')
+  console.log('✅ Created sample target')
 
-  // Create sample bullets
-  const bullets = [
-    {
-      candidateId: candidateProfile.id,
-      text: 'Led development of React-based dashboard serving 10,000+ daily active users',
-      tags: {
-        criterion: 'frontend_development',
-        evidence_type: 'result',
-        metric: 10000,
-        scope: 'daily_active_users',
-        tool: 'React',
-      },
-    },
-    {
-      candidateId: candidateProfile.id,
-      text: 'Implemented TypeScript across 5 microservices, reducing runtime errors by 40%',
-      tags: {
-        criterion: 'typescript',
-        evidence_type: 'result',
-        metric: 40,
-        scope: 'error_reduction',
-        tool: 'TypeScript',
-      },
-    },
-    {
-      candidateId: candidateProfile.id,
-      text: 'Managed team of 8 engineers using Agile methodologies and CI/CD pipelines',
-      tags: {
-        criterion: 'team_leadership',
-        evidence_type: 'method',
-        metric: 8,
-        scope: 'team_size',
-        tool: 'Agile',
-      },
-    },
-  ]
+  // Create target-proof weights
+  const allProofs = await prisma.proof.findMany({
+    where: { userId: candidateUser.id },
+  })
 
-  for (const bullet of bullets) {
-    await prisma.bullet.create({
-      data: bullet,
+  for (const proof of allProofs) {
+    await prisma.targetProofWeight.create({
+      data: {
+        targetId: target.id,
+        proofId: proof.id,
+        weight: Math.floor(Math.random() * 5) + 1, // Random weight 1-5
+      },
     })
   }
 
-  console.log('✅ Created candidate bullets')
+  console.log('✅ Created target-proof weights')
 
-  // Create sample jobs
-  const jobs = [
+  // Create sample audit link
+  const auditLink = await prisma.auditLink.create({
+    data: {
+      userId: candidateUser.id,
+      targetId: target.id,
+      token: 'demo-token-123456789',
+      expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
+      maxViews: 100,
+      watermark: true,
+    },
+  })
+
+  console.log('✅ Created sample audit link')
+
+  // Create sample analytics events
+  const events = [
     {
-      id: 'demo-job-1',
-      source: 'usajobs',
-      org: 'TechCorp Inc.',
-      title: 'Senior Frontend Developer',
-      location: 'San Francisco, CA',
-      workType: 'hybrid',
-      pay: { min: 120000, max: 160000, currency: 'USD' },
-      description: 'We are looking for a senior frontend developer to join our growing team...',
-      requirements: {
-        must_have: ['React', 'TypeScript', '5+ years experience'],
-        preferred: ['Next.js', 'GraphQL', 'Team leadership'],
-      },
-      constraints: {
-        work_auth: 'US_citizen_or_green_card',
-        clearance: null,
-        language: ['English'],
-      },
-      tos: {
-        allowed: true,
-        captcha: false,
-        notes: 'Standard application process',
-      },
+      userId: candidateUser.id,
+      targetId: target.id,
+      eventType: 'target_created',
+      metadata: { targetTitle: target.title },
     },
     {
-      id: 'demo-job-2',
-      source: 'reliefweb',
-      org: 'Global Health Foundation',
-      title: 'Software Engineer - Healthcare',
-      location: 'Remote',
-      workType: 'remote',
-      pay: { min: 90000, max: 130000, currency: 'USD' },
-      description: 'Join our mission to improve healthcare access worldwide...',
-      requirements: {
-        must_have: ['JavaScript', 'Healthcare experience', '3+ years experience'],
-        preferred: ['React', 'Node.js', 'International experience'],
-      },
-      constraints: {
-        work_auth: 'any',
-        clearance: null,
-        language: ['English', 'French'],
-      },
-      tos: {
-        allowed: true,
-        captcha: false,
-        notes: 'Non-profit organization',
-      },
+      userId: candidateUser.id,
+      targetId: target.id,
+      eventType: 'audit_link_created',
+      metadata: { linkId: auditLink.id },
+    },
+    {
+      targetId: target.id,
+      eventType: 'audit_view',
+      metadata: { viewerHash: 'demo-viewer-hash' },
     },
   ]
 
-  for (const job of jobs) {
-    await prisma.job.upsert({
-      where: { id: job.id },
-      update: {},
-      create: job,
+  for (const event of events) {
+    await prisma.analyticsEvent.create({
+      data: event,
     })
   }
 
-  console.log('✅ Created sample jobs')
-
-  // Create criteria nodes
-  const criteriaNodes = [
-    {
-      id: 'frontend_development',
-      key: 'frontend_development',
-      label: 'Frontend Development',
-      parentId: null,
-      synonyms: ['frontend', 'client-side', 'UI development'],
-      meta: { category: 'technical', weight: 1.0 },
-    },
-    {
-      id: 'typescript',
-      key: 'typescript',
-      label: 'TypeScript',
-      parentId: 'frontend_development',
-      synonyms: ['TS', 'type safety'],
-      meta: { category: 'technical', weight: 0.8 },
-    },
-    {
-      id: 'team_leadership',
-      key: 'team_leadership',
-      label: 'Team Leadership',
-      parentId: null,
-      synonyms: ['management', 'leadership', 'team lead'],
-      meta: { category: 'soft_skills', weight: 0.9 },
-    },
-  ]
-
-  for (const node of criteriaNodes) {
-    await prisma.criteriaNode.upsert({
-      where: { key: node.key },
-      update: {},
-      create: node,
-    })
-  }
-
-  console.log('✅ Created criteria nodes')
-
-  // Create policy sources
-  const policySources = [
-    {
-      id: 'usajobs-policy',
-      domain: 'usajobs.gov',
-      allowed: true,
-      captcha: false,
-      notes: 'Government job board - standard application process',
-      version: '1.0',
-    },
-    {
-      id: 'reliefweb-policy',
-      domain: 'reliefweb.int',
-      allowed: true,
-      captcha: false,
-      notes: 'UN humanitarian job board - direct applications allowed',
-      version: '1.0',
-    },
-    {
-      id: 'restricted-site-policy',
-      domain: 'restricted-careers.com',
-      allowed: false,
-      captcha: true,
-      notes: 'Site requires CAPTCHA and manual application only',
-      version: '1.0',
-    },
-  ]
-
-  for (const policy of policySources) {
-    await prisma.policySource.upsert({
-      where: { domain: policy.domain },
-      update: {},
-      create: policy,
-    })
-  }
-
-  console.log('✅ Created policy sources')
+  console.log('✅ Created sample analytics events')
 
   console.log('🎉 Database seeding completed!')
 }

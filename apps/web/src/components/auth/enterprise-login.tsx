@@ -64,6 +64,8 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
     google: true, // Google OAuth is now configured
     github: false // GitHub OAuth not configured yet
   })
+  const [emailSent, setEmailSent] = useState(false)
+  const [emailSentType, setEmailSentType] = useState<'magic' | 'verification' | null>(null)
 
   // Email validation function
   const validateEmail = useCallback((email: string) => {
@@ -178,7 +180,32 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
         },
       })
       if (error) throw error
-      toast.success('Check your email for a magic link')
+      
+      // Set email sent state
+      setEmailSent(true)
+      setEmailSentType('magic')
+      
+      // Enhanced success message with detailed instructions
+      toast.success(
+        '📧 Verification email sent! Check your inbox and click the link to continue.',
+        { duration: 8000 }
+      )
+      
+      // Show additional guidance after a delay
+      setTimeout(() => {
+        toast.info(
+          '📋 Next steps: 1) Check your email 2) Click the verification link 3) You\'ll be redirected to your dashboard',
+          { duration: 10000 }
+        )
+      }, 2000)
+      
+      // Reminder about spam folder
+      setTimeout(() => {
+        toast.info(
+          '📁 Email not arrived? Check your spam/junk folder or try again in 60 seconds.',
+          { duration: 8000 }
+        )
+      }, 5000)
     } catch (error: any) {
       toast.error(error?.message ?? 'Failed to send magic link')
     } finally {
@@ -203,7 +230,32 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
           },
         })
         if (error) throw error
-        toast.success('Account created! Check your inbox to verify.')
+        
+        // Set email sent state
+        setEmailSent(true)
+        setEmailSentType('verification')
+        
+        // Enhanced verification message for account creation
+        toast.success(
+          '🎉 Account created! Please check your email to verify your account.',
+          { duration: 8000 }
+        )
+        
+        // Show verification instructions
+        setTimeout(() => {
+          toast.info(
+            '📧 Verification required: Click the link in your email to activate your account and sign in.',
+            { duration: 10000 }
+          )
+        }, 2000)
+        
+        // Reminder about spam folder
+        setTimeout(() => {
+          toast.info(
+            '📁 Can\'t find the email? Check your spam/junk folder or contact support if needed.',
+            { duration: 8000 }
+          )
+        }, 6000)
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
@@ -646,6 +698,64 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                   </p>
                 )}
               </form>
+
+              {/* Email Verification Status */}
+              {emailSent && (
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 space-y-3 dark:border-blue-800 dark:bg-blue-900/30">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-full bg-blue-500 p-1">
+                      <Mail className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                        {emailSentType === 'magic' ? 'Magic Link Sent!' : 'Verification Email Sent!'}
+                      </h4>
+                      <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">
+                        We've sent {emailSentType === 'magic' ? 'a magic link' : 'a verification link'} to <strong>{email}</strong>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm text-blue-700 dark:text-blue-200">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-500">1.</span>
+                      Check your email inbox (and spam/junk folder)
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-500">2.</span>
+                      Click the {emailSentType === 'magic' ? 'magic link' : 'verification link'} in the email
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-500">3.</span>
+                      You'll be automatically redirected to your dashboard
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2 border-t border-blue-200 dark:border-blue-700 space-y-2">
+                    <p className="text-xs text-blue-600 dark:text-blue-300">
+                      <strong>Tip:</strong> Email delivery can take 1-2 minutes. 
+                      If you don't receive it, check your spam folder or try again.
+                    </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        if (emailSentType === 'magic') {
+                          handleMagicLink()
+                        } else {
+                          handlePasswordAuth()
+                        }
+                      }}
+                      disabled={loading}
+                      className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-600 dark:text-blue-300"
+                    >
+                      <Mail className="h-3 w-3 mr-2" />
+                      Resend Email
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-3">
                 <Separator>or continue with</Separator>

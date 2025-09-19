@@ -634,7 +634,7 @@ function LaneToggle({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void 
                 ? `bg-gradient-to-r text-white shadow-md ${theme.primary} ${theme.shadowStyle} transform scale-[1.02]`
                 : `text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white hover:scale-105`
             }`}
-            onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', props: { lane: l } })) } catch {} }}
+             onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', properties: { lane: l } })) } catch {} }}
             data-evt="toggle_lane"
             data-lane={l}
           >
