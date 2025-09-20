@@ -151,3 +151,5 @@ model AnalyticsEvent {
   @@index([userId, createdAt])
   @@map("analytics_events")
 }
+
+

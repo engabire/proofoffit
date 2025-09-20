@@ -854,9 +854,13 @@ export default function ProfileAuthPage() {
                       placeholder="Institution"
                     />
                     <Input
+                      type="number"
+                      inputMode="numeric"
+                      min="1950"
+                      max="2100"
                       value={newEducation.year}
                       onChange={(e) => setNewEducation(prev => ({ ...prev, year: e.target.value }))}
-                      placeholder="Year"
+                      placeholder="Year (e.g., 2024)"
                     />
                   </div>
                   <Button onClick={addEducation} disabled={!newEducation.degree.trim() || !newEducation.institution.trim()}>

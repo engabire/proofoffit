@@ -92,3 +92,5 @@ CREATE INDEX IF NOT EXISTS idx_audit_views_audit_link_id ON audit_views(audit_li
 CREATE INDEX IF NOT EXISTS idx_analytics_events_user_id ON analytics_events(user_id);
 CREATE INDEX IF NOT EXISTS idx_analytics_events_event_type ON analytics_events(event_type);
 CREATE INDEX IF NOT EXISTS idx_claim_logs_user_id ON claim_logs(user_id);
+
+

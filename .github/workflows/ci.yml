@@ -1,45 +1,22 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  TURBO_FORCE_LOCAL: 'true'
+  CI: 'true'
 
 jobs:
-  web:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - name: Build web
-        working-directory: apps/web
-        run: npm run build
-        env:
-          NEXT_PUBLIC_SITE_URL: https://www.proofoffit.com
-      - name: Install Playwright
-        working-directory: apps/web
-        run: npx playwright install --with-deps
-      - name: Start web server
-        working-directory: apps/web
-        run: npm run start -- -p 3000 &
-      - name: Run e2e tests
-        working-directory: apps/web
-        run: BASE_URL=http://localhost:3000 npm run test:e2e
-
-name: CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  lint-and-typecheck:
+  quality-checks:
+    name: Lint and Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,22 +25,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Run lint
         run: npm run lint
-        continue-on-error: true
 
-      - name: Type check
+      - name: Run type check
         run: npm run type-check
-        continue-on-error: true
 
-  test:
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
+    needs: quality-checks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,19 +49,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run tests
         run: npm run test
-        continue-on-error: true
 
   build:
+    name: Build
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, test]
+    needs:
+      - quality-checks
+      - unit-tests
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,27 +72,61 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build project
         run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.proofoffit.com
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-files
+          if-no-files-found: error
           path: |
-            apps/web/.next/
-            packages/ui/dist/
+            apps/web/.next
+            packages/ui/dist
 
-  deploy-preview:
+  e2e-tests:
+    name: Playwright E2E
     runs-on: ubuntu-latest
     needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: apps/web
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        working-directory: apps/web
+        env:
+          CI: true
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        run: npm run test:e2e
+
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,7 +136,7 @@ jobs:
         with:
           name: build-files
 
-      - name: Check Vercel Configuration
+      - name: Check Vercel configuration
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
             echo "⚠️ Vercel deployment skipped - secrets not configured"
@@ -142,9 +157,10 @@ jobs:
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
   deploy-production:
+    name: Deploy Production
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -154,7 +170,7 @@ jobs:
         with:
           name: build-files
 
-      - name: Check Vercel Configuration
+      - name: Check Vercel configuration
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
             echo "⚠️ Vercel deployment skipped - secrets not configured"
@@ -175,16 +191,16 @@ jobs:
           working-directory: apps/web
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
-      - name: Wait for Deployment
+      - name: Wait for deployment
         run: sleep 30
 
-      - name: Verify Deployment
+      - name: Verify deployment
         run: |
           echo "🔍 Verifying deployment..."
           node scripts/verify-deployment.js
         continue-on-error: true
 
-      - name: Notify on Failure
+      - name: Notify on failure
         if: failure()
         run: |
           echo "❌ Deployment verification failed!"

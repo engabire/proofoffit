@@ -84,3 +84,5 @@ export function PortfolioLayout({ target, proofs }: PortfolioLayoutProps) {
     </div>
   );
 }
+
+
