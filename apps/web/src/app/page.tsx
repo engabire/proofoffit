@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   Check,
   ExternalLink,
@@ -1097,6 +1098,21 @@ type Lane = "seeker" | "employer";
 export default function ProofOfFitLanding() {
   const [lane, setLane] = useState<Lane>("seeker");
   const c = useMemo(() => laneCopy[lane], [lane]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Handle OAuth callback codes that might come to root instead of /auth/callback
+  useEffect(() => {
+    const code = searchParams.get('code');
+    const error = searchParams.get('error');
+    
+    if (code || error) {
+      // Redirect to the proper auth callback page with the query parameters
+      const currentUrl = new URL(window.location.href);
+      const callbackUrl = `/auth/callback${currentUrl.search}`;
+      router.replace(callbackUrl);
+    }
+  }, [searchParams, router]);
 
   return (
     <div className={warmBody}>

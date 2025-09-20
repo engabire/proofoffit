@@ -1161,7 +1161,7 @@ function SlateGenerationStep({ job, onComplete }: {
   const [generating, setGenerating] = useState(false)
   const [slate, setSlate] = useState<CandidateSlate | null>(null)
 
-  const calculateMatchScore = (candidate: Candidate, job: JobDescription): number => {
+  const calculateMatchScore = useCallback((candidate: Candidate, job: JobDescription): number => {
     let score = 0
     let maxScore = 0
     
@@ -1208,8 +1208,9 @@ function SlateGenerationStep({ job, onComplete }: {
     
     return Math.round((score / maxScore) * 100)
   }
+  }, [])
 
-  const getFilteredCandidates = (job: JobDescription): Candidate[] => {
+  const getFilteredCandidates = useCallback((job: JobDescription): Candidate[] => {
     // Calculate match scores for all candidates
     const candidatesWithScores = mockCandidates.map(candidate => ({
       ...candidate,
@@ -1223,7 +1224,7 @@ function SlateGenerationStep({ job, onComplete }: {
       .slice(0, 10) // Top 10 candidates
   }
 
-  const generateSlate = async () => {
+  const generateSlate = useCallback(async () => {
     setGenerating(true)
     
     // Simulate slate generation
@@ -1287,11 +1288,11 @@ function SlateGenerationStep({ job, onComplete }: {
     setSlate(mockSlate)
     setGenerating(false)
     onComplete(mockSlate)
-  }
+  }, [getFilteredCandidates, job, onComplete])
 
   useEffect(() => {
-    generateSlate()
-  }, [])
+    void generateSlate()
+  }, [generateSlate])
 
   if (generating) {
     return (
