@@ -94,3 +94,5 @@ CREATE INDEX IF NOT EXISTS idx_analytics_events_event_type ON analytics_events(e
 CREATE INDEX IF NOT EXISTS idx_claim_logs_user_id ON claim_logs(user_id);
 
 
+
+

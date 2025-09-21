@@ -38,6 +38,7 @@ import {
   Info,
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { toast } from 'sonner'
 import { detectEnterpriseDomain, getEnterpriseBranding } from '@/lib/enterprise-domains'
 import { isSupabaseConfigured } from '@/lib/env'
@@ -159,7 +160,7 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
       setEnterpriseProvider(null)
       if (authMethod === 'sso') setAuthMethod('magic')
     }
-  }, [email])
+  }, [email, authMethod])
 
   const branding = useMemo(() => (enterpriseProvider ? getEnterpriseBranding(enterpriseProvider) : null), [enterpriseProvider])
 
@@ -769,11 +770,12 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                     aria-label="Continue with Enterprise Workspace"
                   >
                     <span className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-200">
-                      <img 
+                      <Image 
                         src="https://www.svgrepo.com/show/475656/google-color.svg" 
-                        alt="" 
-                        className="h-4 w-4" 
-                        aria-hidden="true"
+                        alt="Google logo" 
+                        width={16}
+                        height={16}
+                        className="h-4 w-4"
                       />
                       Enterprise Workspace {!oauthAvailable.google && '(Unavailable)'}
                     </span>
@@ -787,11 +789,12 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
                     aria-label="Continue with Code Repository Platform"
                   >
                     <span className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-200">
-                      <img 
+                      <Image 
                         src="https://www.svgrepo.com/show/512317/github-142.svg" 
-                        alt="" 
-                        className="h-4 w-4" 
-                        aria-hidden="true"
+                        alt="GitHub logo" 
+                        width={16}
+                        height={16}
+                        className="h-4 w-4"
                       />
                       Code Repository Platform {!oauthAvailable.github && '(Unavailable)'}
                     </span>

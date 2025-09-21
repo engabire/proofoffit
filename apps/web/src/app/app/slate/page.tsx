@@ -1207,7 +1207,6 @@ function SlateGenerationStep({ job, onComplete }: {
     maxScore += 10
     
     return Math.round((score / maxScore) * 100)
-  }
   }, [])
 
   const getFilteredCandidates = useCallback((job: JobDescription): Candidate[] => {
@@ -1222,7 +1221,7 @@ function SlateGenerationStep({ job, onComplete }: {
       .filter(candidate => candidate.fitScore >= 60) // Minimum 60% match
       .sort((a, b) => b.fitScore - a.fitScore)
       .slice(0, 10) // Top 10 candidates
-  }
+  }, [calculateMatchScore])
 
   const generateSlate = useCallback(async () => {
     setGenerating(true)
