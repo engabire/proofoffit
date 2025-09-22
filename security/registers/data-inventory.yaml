@@ -1,0 +1,308 @@
+# Data Inventory Register
+# ProofOfFit Data Classification and Inventory
+
+metadata:
+  document_id: "REG-001"
+  version: "1.0"
+  effective_date: "2024-09-21"
+  review_date: "2024-12-21"
+  owner: "Data Protection Officer"
+  approved_by: "CTO"
+
+data_categories:
+  personal_identifiable_information:
+    description: "Information that can identify an individual"
+    classification: "Confidential"
+    retention_period: "7 years after account closure"
+    legal_basis: "Contract, Legitimate Interest"
+    
+    data_types:
+      - name: "User Authentication Data"
+        description: "Login credentials, passwords, MFA tokens"
+        storage_location: "Supabase Auth"
+        encryption: "AES-256"
+        access_controls: "Multi-factor authentication required"
+        data_subjects: "All users"
+        
+      - name: "Profile Information"
+        description: "Name, email, phone, address, professional details"
+        storage_location: "Supabase Database"
+        encryption: "AES-256"
+        access_controls: "Role-based access control"
+        data_subjects: "All users"
+        
+      - name: "Identity Documents"
+        description: "Government IDs, passports, driver's licenses"
+        storage_location: "Supabase Storage (encrypted)"
+        encryption: "AES-256"
+        access_controls: "Strict access controls, audit logging"
+        data_subjects: "Verified users"
+
+  professional_information:
+    description: "Professional and career-related information"
+    classification: "Confidential"
+    retention_period: "3 years after last activity"
+    legal_basis: "Contract, Legitimate Interest"
+    
+    data_types:
+      - name: "Resume and CV Data"
+        description: "Work experience, education, skills, achievements"
+        storage_location: "Supabase Storage (encrypted)"
+        encryption: "AES-256"
+        access_controls: "User access only, employer access with consent"
+        data_subjects: "Job seekers"
+        
+      - name: "Cover Letters"
+        description: "Personalized cover letters for job applications"
+        storage_location: "Supabase Storage (encrypted)"
+        encryption: "AES-256"
+        access_controls: "User access only"
+        data_subjects: "Job seekers"
+        
+      - name: "Portfolio Materials"
+        description: "Work samples, projects, certifications"
+        storage_location: "Supabase Storage (encrypted)"
+        encryption: "AES-256"
+        access_controls: "User access only, employer access with consent"
+        data_subjects: "Job seekers"
+        
+      - name: "Application History"
+        description: "Job applications, interview records, outcomes"
+        storage_location: "Supabase Database"
+        encryption: "AES-256"
+        access_controls: "User access only, employer access for their jobs"
+        data_subjects: "Job seekers"
+
+  job_market_data:
+    description: "Job postings and market information"
+    classification: "Internal"
+    retention_period: "1 year after job expiration"
+    legal_basis: "Legitimate Interest, Public Information"
+    
+    data_types:
+      - name: "Job Postings"
+        description: "Job titles, descriptions, requirements, locations"
+        storage_location: "Supabase Database"
+        encryption: "AES-256 in transit"
+        access_controls: "Public read access, employer write access"
+        data_subjects: "Employers, job seekers"
+        
+      - name: "Company Information"
+        description: "Company profiles, descriptions, locations"
+        storage_location: "Supabase Database"
+        encryption: "AES-256 in transit"
+        access_controls: "Public read access, employer write access"
+        data_subjects: "Employers"
+        
+      - name: "Market Analytics"
+        description: "Job market trends, salary data, demand patterns"
+        storage_location: "Supabase Database"
+        encryption: "AES-256 in transit"
+        access_controls: "Aggregated data, no personal identifiers"
+        data_subjects: "Aggregated from all users"
+
+  system_operational_data:
+    description: "System logs, monitoring, and operational data"
+    classification: "Internal"
+    retention_period: "1 year"
+    legal_basis: "Legitimate Interest"
+    
+    data_types:
+      - name: "Application Logs"
+        description: "System logs, error logs, performance logs"
+        storage_location: "CloudWatch, Supabase Logs"
+        encryption: "AES-256"
+        access_controls: "IT operations team only"
+        data_subjects: "System generated"
+        
+      - name: "Audit Logs"
+        description: "User actions, system access, security events"
+        storage_location: "Supabase Audit Logs"
+        encryption: "AES-256"
+        access_controls: "Security team, audit team"
+        data_subjects: "All users"
+        
+      - name: "Performance Metrics"
+        description: "System performance, usage statistics"
+        storage_location: "Analytics Database"
+        encryption: "AES-256"
+        access_controls: "IT operations team"
+        data_subjects: "Aggregated data"
+
+  financial_data:
+    description: "Payment and billing information"
+    classification: "Confidential"
+    retention_period: "7 years (tax requirements)"
+    legal_basis: "Contract, Legal Obligation"
+    
+    data_types:
+      - name: "Payment Information"
+        description: "Credit card details, billing addresses"
+        storage_location: "Stripe (PCI DSS compliant)"
+        encryption: "PCI DSS compliant encryption"
+        access_controls: "Stripe handles, limited internal access"
+        data_subjects: "Paying customers"
+        
+      - name: "Billing History"
+        description: "Transaction records, invoices, receipts"
+        storage_location: "Supabase Database"
+        encryption: "AES-256"
+        access_controls: "Finance team, customer access"
+        data_subjects: "Paying customers"
+        
+      - name: "Subscription Data"
+        description: "Subscription plans, usage limits, renewals"
+        storage_location: "Supabase Database"
+        encryption: "AES-256"
+        access_controls: "Customer access, support team"
+        data_subjects: "Subscribers"
+
+data_flows:
+  internal_flows:
+    - name: "User Registration"
+      source: "User input"
+      destination: "Supabase Auth + Database"
+      data_types: ["Profile Information", "Authentication Data"]
+      encryption: "TLS 1.3 in transit, AES-256 at rest"
+      
+    - name: "Job Application"
+      source: "User input"
+      destination: "Supabase Database + Storage"
+      data_types: ["Application History", "Resume and CV Data"]
+      encryption: "TLS 1.3 in transit, AES-256 at rest"
+      
+    - name: "Job Search"
+      source: "Supabase Database"
+      destination: "User interface"
+      data_types: ["Job Postings", "Company Information"]
+      encryption: "TLS 1.3 in transit, AES-256 at rest"
+
+  external_flows:
+    - name: "Job Feed Integration"
+      source: "USAJOBS, LinkedIn, Indeed APIs"
+      destination: "Supabase Database"
+      data_types: ["Job Postings", "Company Information"]
+      encryption: "TLS 1.3 in transit, AES-256 at rest"
+      
+    - name: "Payment Processing"
+      source: "User input"
+      destination: "Stripe API"
+      data_types: ["Payment Information"]
+      encryption: "TLS 1.3 in transit, PCI DSS compliant"
+      
+    - name: "Email Notifications"
+      source: "Supabase Database"
+      destination: "Resend API"
+      data_types: ["Profile Information", "Application History"]
+      encryption: "TLS 1.3 in transit"
+
+data_retention:
+  user_data:
+    active_users: "Retained while account is active"
+    inactive_users: "7 years after last activity"
+    deleted_users: "30 days grace period, then permanent deletion"
+    
+  job_data:
+    active_jobs: "Retained while job is active"
+    expired_jobs: "1 year after expiration"
+    deleted_jobs: "30 days grace period, then permanent deletion"
+    
+  system_data:
+    logs: "1 year retention"
+    backups: "3 years retention"
+    audit_trails: "7 years retention"
+
+data_subjects:
+  job_seekers:
+    description: "Individuals looking for employment"
+    data_types: ["All personal and professional data"]
+    rights: ["Access", "Rectification", "Erasure", "Portability", "Objection"]
+    
+  employers:
+    description: "Companies posting jobs and hiring"
+    data_types: ["Company information", "Job postings", "Application data"]
+    rights: ["Access", "Rectification", "Erasure"]
+    
+  system_users:
+    description: "Internal users and administrators"
+    data_types: ["Authentication data", "Audit logs"]
+    rights: ["Access", "Rectification"]
+
+legal_basis:
+  contract:
+    description: "Processing necessary for contract performance"
+    applies_to: ["User registration", "Job applications", "Payment processing"]
+    
+  legitimate_interest:
+    description: "Processing necessary for legitimate business interests"
+    applies_to: ["Job matching", "Analytics", "System improvement"]
+    
+  consent:
+    description: "Processing based on explicit consent"
+    applies_to: ["Marketing communications", "Data sharing with partners"]
+    
+  legal_obligation:
+    description: "Processing required by law"
+    applies_to: ["Tax records", "Audit trails", "Regulatory reporting"]
+
+security_measures:
+  technical_measures:
+    - "AES-256 encryption at rest"
+    - "TLS 1.3 encryption in transit"
+    - "Multi-factor authentication"
+    - "Role-based access control"
+    - "Regular security audits"
+    - "Automated vulnerability scanning"
+    
+  organizational_measures:
+    - "Data protection training"
+    - "Access control policies"
+    - "Incident response procedures"
+    - "Regular access reviews"
+    - "Vendor security assessments"
+    
+  physical_measures:
+    - "Secure data centers"
+    - "Access control systems"
+    - "Environmental monitoring"
+    - "Secure disposal procedures"
+
+data_breach_procedures:
+  detection:
+    - "Automated monitoring systems"
+    - "Security team alerts"
+    - "User reports"
+    - "External notifications"
+    
+  response:
+    - "Immediate containment"
+    - "Impact assessment"
+    - "Regulatory notification (72 hours)"
+    - "Data subject notification"
+    - "Investigation and remediation"
+    
+  documentation:
+    - "Incident reports"
+    - "Timeline documentation"
+    - "Impact assessment"
+    - "Remediation actions"
+    - "Lessons learned"
+
+review_schedule:
+  quarterly:
+    - "Data inventory review"
+    - "Access control review"
+    - "Retention policy review"
+    
+  annually:
+    - "Comprehensive data audit"
+    - "Legal basis review"
+    - "Security measures review"
+    - "Vendor assessments"
+    
+  ad_hoc:
+    - "After security incidents"
+    - "After system changes"
+    - "After regulatory changes"
+    - "After vendor changes"
+

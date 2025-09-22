@@ -5,8 +5,8 @@ import { prisma } from '@/lib/db'
 export async function POST(req: NextRequest) {
   try {
     // This could be protected with admin authentication
-    const { authorization } = req.headers
-    
+    const authorization = req.headers.get('authorization')
+
     // Simple API key check (in production, use proper authentication)
     if (authorization !== `Bearer ${process.env.ADMIN_API_KEY}`) {
       return NextResponse.json(
@@ -50,8 +50,11 @@ export async function GET(req: NextRequest) {
         }
       }
     })
-    
-    const totalJobs = jobCounts.reduce((sum, group) => sum + group._count.id, 0)
+
+    const totalJobs = jobCounts.reduce(
+      (sum: number, { _count }: { _count: { id: number } }) => sum + _count.id,
+      0
+    )
     
     return NextResponse.json({
       totalJobs,

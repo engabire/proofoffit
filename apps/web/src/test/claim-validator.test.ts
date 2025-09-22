@@ -1,4 +1,4 @@
-import { CitationViolationError } from "@/lib/server/claimFromProof";
+import { CitationViolationError } from "@/lib/claimFromProof";
 
 // Mock the validateClaimCitations function for testing
 function validateClaimCitations(claim: string, allowedProofIds: Set<string>): void {

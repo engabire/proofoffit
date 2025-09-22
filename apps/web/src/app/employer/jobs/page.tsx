@@ -24,6 +24,22 @@ import {
 import Link from 'next/link'
 import { isSupabaseConfigured } from '@/lib/env'
 
+type JobRecord = {
+  id: string
+  source: string
+  org: string
+  title: string
+  location: string
+  workType: string
+  pay: { min?: number; max?: number; currency?: string } | null
+  description: string
+  requirements: { must_have?: string[]; preferred?: string[] } | null
+  constraints: Record<string, unknown> | null
+  tos: { allowed?: boolean; captcha?: boolean } | null
+  createdAt: string
+  fetchedAt?: string | null
+}
+
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
 
@@ -47,17 +63,19 @@ export default async function JobsPage() {
     console.error('Error fetching jobs:', error)
   }
 
+  const jobList: JobRecord[] = (jobs as JobRecord[] | null) ?? []
+
   // Group jobs by source for filtering
-  const jobsBySource = jobs?.reduce((acc, job) => {
+  const jobsBySource = jobList.reduce((acc, job) => {
     if (!acc[job.source]) {
       acc[job.source] = []
     }
     acc[job.source].push(job)
     return acc
-  }, {} as Record<string, any[]>) || {}
+  }, {} as Record<string, JobRecord[]>)
 
-  const totalJobs = jobs?.length || 0
-  const autoApplyJobs = jobs?.filter(job => job.tos?.allowed).length || 0
+  const totalJobs = jobList.length
+  const autoApplyJobs = jobList.filter(job => job.tos?.allowed).length
   const manualJobs = totalJobs - autoApplyJobs
 
   return (
@@ -265,4 +283,3 @@ export default async function JobsPage() {
     </div>
   )
 }
-

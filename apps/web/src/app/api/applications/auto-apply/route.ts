@@ -27,7 +27,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if auto-apply is allowed for this job
-    if (!job.tos?.allowed) {
+    const jobTos = (job.tos ?? {}) as { allowed?: boolean; [key: string]: unknown }
+
+    if (!jobTos.allowed) {
       return NextResponse.json(
         { error: 'Auto-apply not allowed for this job' },
         { status: 403 }
@@ -87,7 +89,7 @@ export async function POST(req: NextRequest) {
         status: submissionResult.success ? 'submitted' : 'failed',
         externalId: submissionResult.externalId,
         metadata: {
-          ...application.metadata,
+          ...((application.metadata ?? {}) as Record<string, unknown>),
           submissionResult
         }
       }
@@ -168,6 +170,16 @@ async function submitApplicationToExternalSystem(
   documents: { resume: string; coverLetter: string }
 ): Promise<{ success: boolean; externalId?: string; error?: string }> {
   try {
+    const jobTos = (job.tos ?? {}) as { allowed?: boolean; [key: string]: unknown }
+
+    // Check if auto-apply is allowed for this job
+    if (!jobTos.allowed) {
+      return {
+        success: false,
+        error: 'Auto-apply not allowed for this job source'
+      }
+    }
+
     // This would integrate with different job boards based on job.source
     switch (job.source) {
       case 'usajobs':
@@ -225,4 +237,3 @@ async function submitToIndeed(
     error: 'Indeed auto-apply not yet implemented'
   }
 }
-

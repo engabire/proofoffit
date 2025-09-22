@@ -1,0 +1,218 @@
+# Gitleaks configuration for ProofOfFit
+# This configuration helps detect potential secrets and sensitive information
+
+title = "ProofOfFit Gitleaks Config"
+version = "8.18.0"
+
+# Global settings
+[gitleaks]
+    # Path to the git repository
+    path = "."
+    
+    # Report format (json, sarif, csv)
+    format = "json"
+    
+    # Output file
+    output = "gitleaks-report.json"
+    
+    # Verbose output
+    verbose = true
+    
+    # Redact secrets in output
+    redact = true
+    
+    # Exit code when secrets are found
+    exit-code = 1
+    
+    # Include staged files
+    staged = true
+    
+    # Include untracked files
+    untracked = true
+    
+    # Include commit history
+    log-opts = "--all"
+
+# Rules for detecting secrets
+[[rules]]
+    description = "Generic API Key"
+    regex = '''(?i)(api[_-]?key|apikey|api_key|api-key)\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
+    tags = ["key", "api"]
+    entropy = 3.5
+
+[[rules]]
+    description = "Generic Secret"
+    regex = '''(?i)(secret|secrets|secret_key|secret-key)\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
+    tags = ["key", "secret"]
+    entropy = 3.5
+
+[[rules]]
+    description = "JWT Token"
+    regex = '''eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+'''
+    tags = ["jwt", "token"]
+
+[[rules]]
+    description = "AWS Access Key"
+    regex = '''AKIA[0-9A-Z]{16}'''
+    tags = ["aws", "key"]
+
+[[rules]]
+    description = "AWS Secret Key"
+    regex = '''(?i)aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*['"]?([a-zA-Z0-9/+=]{40})['"]?'''
+    tags = ["aws", "key"]
+    entropy = 4.0
+
+[[rules]]
+    description = "GitHub Token"
+    regex = '''ghp_[a-zA-Z0-9]{36}'''
+    tags = ["github", "token"]
+
+[[rules]]
+    description = "GitHub App Token"
+    regex = '''ghu_[a-zA-Z0-9]{36}'''
+    tags = ["github", "token"]
+
+[[rules]]
+    description = "GitHub Refresh Token"
+    regex = '''ghr_[a-zA-Z0-9]{76}'''
+    tags = ["github", "token"]
+
+[[rules]]
+    description = "GitHub App Installation Token"
+    regex = '''ghs_[a-zA-Z0-9]{36}'''
+    tags = ["github", "token"]
+
+[[rules]]
+    description = "Stripe API Key"
+    regex = '''sk_live_[a-zA-Z0-9]{24}'''
+    tags = ["stripe", "key"]
+
+[[rules]]
+    description = "Stripe Test API Key"
+    regex = '''sk_test_[a-zA-Z0-9]{24}'''
+    tags = ["stripe", "key"]
+
+[[rules]]
+    description = "Stripe Publishable Key"
+    regex = '''pk_live_[a-zA-Z0-9]{24}'''
+    tags = ["stripe", "key"]
+
+[[rules]]
+    description = "Stripe Test Publishable Key"
+    regex = '''pk_test_[a-zA-Z0-9]{24}'''
+    tags = ["stripe", "key"]
+
+[[rules]]
+    description = "Supabase URL"
+    regex = '''https://[a-zA-Z0-9\-]+\.supabase\.co'''
+    tags = ["supabase", "url"]
+
+[[rules]]
+    description = "Supabase Anon Key"
+    regex = '''eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+'''
+    tags = ["supabase", "key"]
+
+[[rules]]
+    description = "Database URL"
+    regex = '''(postgresql|postgres|mysql|mongodb)://[^:\s]+:[^@\s]+@[^/\s]+/[^\s]+'''
+    tags = ["database", "url"]
+
+[[rules]]
+    description = "Email API Key"
+    regex = '''(?i)(email|mail|smtp)[_-]?api[_-]?key\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
+    tags = ["email", "key"]
+    entropy = 3.5
+
+[[rules]]
+    description = "Resend API Key"
+    regex = '''re_[a-zA-Z0-9_\-]{40}'''
+    tags = ["resend", "key"]
+
+[[rules]]
+    description = "OpenAI API Key"
+    regex = '''sk-[a-zA-Z0-9]{48}'''
+    tags = ["openai", "key"]
+
+[[rules]]
+    description = "Anthropic API Key"
+    regex = '''sk-ant-[a-zA-Z0-9_\-]{40}'''
+    tags = ["anthropic", "key"]
+
+[[rules]]
+    description = "Private Key"
+    regex = '''-----BEGIN [A-Z ]+ PRIVATE KEY-----'''
+    tags = ["private", "key"]
+
+[[rules]]
+    description = "Certificate"
+    regex = '''-----BEGIN CERTIFICATE-----'''
+    tags = ["certificate"]
+
+[[rules]]
+    description = "Password in config"
+    regex = '''(?i)password\s*[:=]\s*['"]?([^'"]{8,})['"]?'''
+    tags = ["password"]
+    entropy = 3.0
+
+[[rules]]
+    description = "Token in config"
+    regex = '''(?i)token\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
+    tags = ["token"]
+    entropy = 3.5
+
+# Allowlist patterns (false positives to ignore)
+[[allowlist]]
+    description = "Allowlist common false positives"
+    regexes = [
+        '''example\.com''',
+        '''localhost''',
+        '''127\.0\.0\.1''',
+        '''test.*key''',
+        '''demo.*key''',
+        '''sample.*key''',
+        '''placeholder.*key''',
+        '''your.*key.*here''',
+        '''replace.*with.*your.*key''',
+        '''TODO.*key''',
+        '''FIXME.*key''',
+        '''XXX.*key''',
+        '''\.env\.example''',
+        '''\.env\.local\.example''',
+        '''README\.md''',
+        '''\.md$''',
+        '''\.txt$''',
+        '''\.json$''',
+        '''package\.json''',
+        '''package-lock\.json''',
+        '''yarn\.lock''',
+        '''\.gitignore''',
+        '''\.dockerignore''',
+        '''Dockerfile''',
+        '''docker-compose\.yml''',
+        '''\.github/workflows/''',
+        '''security/''',
+        '''docs/''',
+        '''documentation/'''
+    ]
+
+# File patterns to scan
+[[rules]]
+    description = "Scan common config files"
+    regex = '''.*'''
+    tags = ["config"]
+    paths = [
+        '''\.env$''',
+        '''\.env\.local$''',
+        '''\.env\.production$''',
+        '''\.env\.staging$''',
+        '''config\.json$''',
+        '''config\.js$''',
+        '''config\.ts$''',
+        '''settings\.json$''',
+        '''secrets\.json$''',
+        '''credentials\.json$''',
+        '''\.aws/credentials$''',
+        '''\.ssh/id_rsa$''',
+        '''\.ssh/id_ed25519$'''
+    ]
+

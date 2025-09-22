@@ -217,10 +217,12 @@ export class JobFeedManager {
     
     for (const job of allJobs) {
       try {
+        const jobId = `${job.source}-${job.title}-${job.org}`.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase()
+
         await prisma.job.upsert({
           where: {
             // Use a combination of source, title, and org as unique identifier
-            id: `${job.source}-${job.title}-${job.org}`.replace(/[^a-zA-Z0-9-]/g, '-')
+            id: jobId,
           },
           update: {
             description: job.description,
@@ -230,6 +232,7 @@ export class JobFeedManager {
             fetchedAt: new Date()
           },
           create: {
+            id: jobId,
             source: job.source,
             org: job.org,
             title: job.title,
@@ -275,4 +278,3 @@ export class JobFeedManager {
 }
 
 export const jobFeedManager = new JobFeedManager()
-

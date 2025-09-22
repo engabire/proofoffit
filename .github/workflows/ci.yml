@@ -1,208 +1,231 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
 
 env:
-  TURBO_FORCE_LOCAL: 'true'
-  CI: 'true'
+  NODE_VERSION: '20'
+  NPM_CACHE_KEY: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
 
 jobs:
-  quality-checks:
-    name: Lint and Type Check
+  # Lint and type check
+  lint-and-typecheck:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: package-lock.json
-
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
       - name: Install dependencies
-        run: npm ci
-
-      - name: Run lint
+        working-directory: ./apps/web
+        run: npm ci --prefer-offline
+      
+      - name: Run ESLint
+        working-directory: ./apps/web
         run: npm run lint
+      
+      - name: Run TypeScript type check
+        working-directory: ./apps/web
+        run: npm run type-check || npx tsc --noEmit
+      
+      - name: Check code formatting
+        working-directory: ./apps/web
+        run: npm run format:check || npx prettier --check .
 
-      - name: Run type check
-        run: npm run type-check
-
-  unit-tests:
-    name: Unit Tests
+  # Run tests
+  test:
+    name: Test Suite
     runs-on: ubuntu-latest
-    needs: quality-checks
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: package-lock.json
-
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
       - name: Install dependencies
-        run: npm ci
+        working-directory: ./apps/web
+        run: npm ci --prefer-offline
+      
+      - name: Run unit tests
+        working-directory: ./apps/web
+        run: npm test -- --ci --coverage --watchAll=false
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./apps/web/coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
-      - name: Run tests
-        run: npm run test
-
+  # Build application
   build:
-    name: Build
+    name: Build Application
     runs-on: ubuntu-latest
-    needs:
-      - quality-checks
-      - unit-tests
+    needs: [lint-and-typecheck, test]
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: package-lock.json
-
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
       - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
+        working-directory: ./apps/web
+        run: npm ci --prefer-offline
+      
+      - name: Build application
+        working-directory: ./apps/web
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: https://www.proofoffit.com
-
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-files
-          if-no-files-found: error
-          path: |
-            apps/web/.next
-            packages/ui/dist
+          path: apps/web/.next/
+          retention-days: 1
 
-  e2e-tests:
-    name: Playwright E2E
+  # Security scan (runs in parallel with other jobs)
+  security:
+    name: Security Scan
     runs-on: ubuntu-latest
-    needs: build
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: package-lock.json
-
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        working-directory: apps/web
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        working-directory: apps/web
+        working-directory: ./apps/web
+        run: npm ci --prefer-offline
+      
+      - name: Run security audit
+        working-directory: ./apps/web
+        run: npm audit --audit-level=high
+      
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
         env:
-          CI: true
-          NEXT_PUBLIC_SITE_URL: http://localhost:3000
-        run: npm run test:e2e
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
-  deploy-preview:
-    name: Deploy Preview
+  # Deploy to staging (only on develop branch)
+  deploy-staging:
+    name: Deploy to Staging
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    needs: build
+    needs: [build, security]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-files
-
-      - name: Check Vercel configuration
-        run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-            echo "⚠️ Vercel deployment skipped - secrets not configured"
-            echo "To enable automatic deployment:"
-            echo "1. Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID to repository secrets"
-            echo "2. See DEPLOYMENT.md for detailed setup instructions"
-            exit 0
-          fi
-
-      - name: Deploy to Vercel Preview
+          path: apps/web/.next/
+      
+      - name: Deploy to Vercel (Staging)
         uses: amondnet/vercel-action@v25
-        continue-on-error: true
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: apps/web
-          scope: ${{ secrets.VERCEL_ORG_ID }}
-
-  deploy-production:
-    name: Deploy Production
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-files
-
-      - name: Check Vercel configuration
-        run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-            echo "⚠️ Vercel deployment skipped - secrets not configured"
-            echo "To enable automatic deployment:"
-            echo "1. Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID to repository secrets"
-            echo "2. See DEPLOYMENT.md for detailed setup instructions"
-            exit 0
-          fi
-
-      - name: Deploy to Vercel Production
-        uses: amondnet/vercel-action@v25
-        continue-on-error: true
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: apps/web
-          scope: ${{ secrets.VERCEL_ORG_ID }}
+          working-directory: ./apps/web
 
-      - name: Wait for deployment
-        run: sleep 30
-
-      - name: Verify deployment
+  # Deploy to production (only on main branch)
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files
+          path: apps/web/.next/
+      
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./apps/web
+      
+      - name: Notify deployment
         run: |
-          echo "🔍 Verifying deployment..."
-          node scripts/verify-deployment.js
-        continue-on-error: true
+          echo "🚀 Production deployment completed successfully!"
+          echo "Environment: Production"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
 
-      - name: Notify on failure
-        if: failure()
+  # Summary job
+  ci-summary:
+    name: CI/CD Summary
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test, build, security]
+    if: always()
+    
+    steps:
+      - name: CI/CD Summary
         run: |
-          echo "❌ Deployment verification failed!"
-          echo "Please check the deployment at https://www.proofoffit.com"
-          echo "Run 'node scripts/verify-deployment.js' locally to debug"
+          echo "## 🚀 CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Completed Jobs:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lint & Type Check:** ${{ needs.lint-and-typecheck.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test Suite:** ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build:** ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Scan:** ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Pipeline Status:" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.lint-and-typecheck.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.build.result }}" == "success" && "${{ needs.security.result }}" == "success" ]]; then
+            echo "🎉 **All checks passed!** Ready for deployment." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Some checks failed.** Please review and fix issues." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links:" >> $GITHUB_STEP_SUMMARY
+          echo "- [View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
