@@ -41,7 +41,7 @@ export function ReportIssue() {
       type="button"
       onClick={submit}
       disabled={submitting}
-      className="fixed bottom-4 right-4 z-50 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+      className="fixed bottom-4 left-4 z-50 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 md:left-auto md:right-4"
       aria-label="Report an issue"
     >
       {ok ? 'Thanks! Sent.' : submitting ? 'Sending…' : 'Report issue'}

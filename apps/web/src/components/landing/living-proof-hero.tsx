@@ -175,11 +175,11 @@ function AnnouncementBand() {
           <span aria-hidden>→</span>
         </a>
         <span className="hidden h-4 w-px bg-slate-200/70 dark:bg-slate-800/60 sm:inline-block" />
-        <a className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-slate-700 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-200 dark:hover:bg-slate-900" href="#webinar">
+        <a className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-slate-700 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-200 dark:hover:bg-slate-900 font-medium" href="#webinar">
           Webinar: Proof vs. prompt—governance for talent AI
         </a>
         <span className="hidden h-4 w-px bg-slate-200/70 dark:bg-slate-800/60 sm:inline-block" />
-        <a className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-slate-700 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-200 dark:hover:bg-slate-900" href="#case">
+        <a className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-slate-700 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-200 dark:hover:bg-slate-900 font-medium" href="#case">
           Case study: 37% faster interviews
         </a>
       </div>

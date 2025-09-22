@@ -1,0 +1,254 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.Uuid
+  email      String   @unique
+  plan       Plan     @default(FREE)
+  proofs     Proof[]
+  targets    Target[]
+  auditLinks AuditLink[]
+  candidateProfile CandidateProfile?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Plan { 
+  FREE 
+  PRO 
+  PREMIUM 
+}
+
+model Proof {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  kind       ProofKind
+  url        String?
+  summary    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  weights    TargetProofWeight[]
+
+  @@index([userId])
+  @@map("proofs")
+}
+
+enum ProofKind { 
+  project 
+  metric 
+  repo 
+  doi 
+  publication 
+  design 
+  other 
+}
+
+model Target {
+  id           String         @id @default(uuid()) @db.Uuid
+  userId       String         @db.Uuid
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  role         String
+  companyHint  String?
+  layout       BriefingLayout @default(REPORT)
+  rubricJson   Json
+  lastJdJson   Json?
+  isDeleted    Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  weights      TargetProofWeight[]
+  auditLinks   AuditLink[]
+
+  @@unique([userId, title], map: "uniq_user_target_title")
+  @@index([userId, isDeleted])
+  @@map("targets")
+}
+
+enum BriefingLayout { 
+  REPORT 
+  ONE_PAGER 
+  PORTFOLIO 
+}
+
+model TargetProofWeight {
+  id        String @id @default(uuid()) @db.Uuid
+  targetId  String @db.Uuid
+  proofId   String @db.Uuid
+  weight    Int    @default(1)
+  target    Target @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  proof     Proof  @relation(fields: [proofId], references: [id], onDelete: Cascade)
+
+  @@unique([targetId, proofId])
+  @@map("target_proof_weights")
+}
+
+model AuditLink {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  targetId     String   @db.Uuid
+  token        String   @unique
+  expiresAt    DateTime?
+  maxViews     Int?
+  viewsCount   Int      @default(0)
+  isRevoked    Boolean  @default(false)
+  watermark    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  target       Target   @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  views        AuditView[]
+
+  @@index([targetId, createdAt])
+  @@map("audit_links")
+}
+
+model AuditView {
+  id           String   @id @default(uuid()) @db.Uuid
+  auditLinkId  String   @db.Uuid
+  viewerHash   String?
+  ipHash       String?
+  uaHash       String?
+  createdAt    DateTime @default(now())
+  auditLink    AuditLink @relation(fields: [auditLinkId], references: [id], onDelete: Cascade)
+
+  @@index([auditLinkId, createdAt])
+  @@map("audit_views")
+}
+
+model ClaimLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  targetId     String   @db.Uuid
+  prompt       String
+  allowedProofIds Json
+  outputHash   String
+  createdAt    DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("claim_logs")
+}
+
+model AnalyticsEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String?  @db.Uuid
+  targetId     String?  @db.Uuid
+  eventType    String
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([eventType, createdAt])
+  @@index([userId, createdAt])
+  @@map("analytics_events")
+}
+
+model CandidateProfile {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @unique @db.Uuid
+  preferences   Json     @default("{}")
+  contactPolicy Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentials  Credential[]
+  bullets      Bullet[]
+  artifacts    Artifact[]
+  applications Application[]
+
+  @@map("candidate_profiles")
+}
+
+model Credential {
+  id          String   @id @default(uuid()) @db.Uuid
+  candidateId String   @db.Uuid
+  type        String
+  issuer      String
+  issuedOn    DateTime?
+  verified    Boolean  @default(false)
+  docUrl      String?
+
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("credentials")
+}
+
+model Bullet {
+  id          String   @id @default(uuid()) @db.Uuid
+  candidateId String   @db.Uuid
+  text        String
+  tags        Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("bullets")
+}
+
+model Artifact {
+  id          String   @id @default(uuid()) @db.Uuid
+  candidateId String   @db.Uuid
+  title       String
+  url         String
+  type        String
+  createdAt   DateTime @default(now())
+
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("artifacts")
+}
+
+model Job {
+  id           String   @id
+  source       String
+  org          String
+  title        String
+  location     String
+  workType     String
+  pay          Json?    @default("{}")
+  description  String
+  requirements Json     @default("{}")
+  constraints  Json     @default("{}")
+  tos          Json     @default("{}")
+  fetchedAt    DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  applications Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id          String   @id @default(uuid()) @db.Uuid
+  candidateId String   @db.Uuid
+  jobId       String
+  status      String   @default("pending")
+  documents   Json     @default("{}")
+  source      String   @default("manual")
+  metadata    Json     @default("{}")
+  appliedAt   DateTime?
+  externalId  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job       Job              @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("applications")
+}
+
+
+

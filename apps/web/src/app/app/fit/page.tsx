@@ -146,6 +146,7 @@ interface ImportSource {
   available: boolean
   securityLevel: 'high' | 'medium' | 'low'
   supportedFormats: string[]
+  comingSoon?: boolean
 }
 
 interface SecurityScanResult {
@@ -765,6 +766,70 @@ const mockJobs: JobPosting[] = [
     companySize: '10-50',
     industry: 'Technology',
     experienceLevel: 'mid'
+  },
+  {
+    id: '3',
+    title: 'Data Analyst',
+    company: 'Metropolitan Council',
+    location: 'Minneapolis, MN',
+    type: 'full-time',
+    remote: false,
+    salary: { min: 65000, max: 85000, currency: 'USD' },
+    description: 'The Metropolitan Council is seeking a Data Analyst to support regional planning and policy development...',
+    requirements: ['SQL', 'Excel', 'Data visualization', 'Statistics'],
+    benefits: ['Pension', 'Health insurance', 'Professional development'],
+    postedAt: new Date('2024-01-20'),
+    companySize: '500+',
+    industry: 'Government',
+    experienceLevel: 'mid'
+  },
+  {
+    id: '4',
+    title: 'Project Manager',
+    company: 'Metropolitan Council',
+    location: 'St. Paul, MN',
+    type: 'full-time',
+    remote: true,
+    salary: { min: 75000, max: 95000, currency: 'USD' },
+    description: 'Lead transportation and infrastructure projects for the Metropolitan Council...',
+    requirements: ['Project management', 'Communication', 'Budget management', 'PMP certification preferred'],
+    benefits: ['Pension', 'Health insurance', 'Flexible schedule'],
+    postedAt: new Date('2024-01-18'),
+    companySize: '500+',
+    industry: 'Government',
+    experienceLevel: 'senior'
+  },
+  {
+    id: '5',
+    title: 'Frontend Developer',
+    company: 'InnovateTech',
+    location: 'Austin, TX',
+    type: 'full-time',
+    remote: true,
+    salary: { min: 90000, max: 130000, currency: 'USD' },
+    description: 'Build amazing user experiences with modern web technologies...',
+    requirements: ['React', 'TypeScript', 'CSS', '3+ years experience'],
+    benefits: ['Health insurance', '401k', 'Stock options'],
+    postedAt: new Date('2024-01-12'),
+    companySize: '50-200',
+    industry: 'Technology',
+    experienceLevel: 'mid'
+  },
+  {
+    id: '6',
+    title: 'Marketing Manager',
+    company: 'GrowthCorp',
+    location: 'New York, NY',
+    type: 'full-time',
+    remote: false,
+    salary: { min: 70000, max: 100000, currency: 'USD' },
+    description: 'Drive marketing strategy and campaigns for our growing company...',
+    requirements: ['Digital marketing', 'Analytics', 'Content creation', 'Team leadership'],
+    benefits: ['Health insurance', '401k', 'Unlimited PTO'],
+    postedAt: new Date('2024-01-08'),
+    companySize: '100-500',
+    industry: 'Marketing',
+    experienceLevel: 'senior'
   }
 ]
 
@@ -783,14 +848,14 @@ function StepIndicator({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-center space-x-2 mb-4">
-        {Array.from({ length: totalSteps }, (_, i) => (
-          <div key={i} className="flex items-center">
+      {Array.from({ length: totalSteps }, (_, i) => (
+        <div key={i} className="flex items-center">
             <button
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                i < currentStep
+              i < currentStep
                   ? 'bg-green-500 text-white hover:bg-green-600'
-                  : i === currentStep
-                  ? 'bg-blue-500 text-white'
+                : i === currentStep
+                ? 'bg-blue-500 text-white'
                   : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
               } ${onStepChange && i < currentStep ? 'cursor-pointer' : i === currentStep ? 'cursor-default' : 'cursor-not-allowed'}`}
               onClick={() => {
@@ -801,18 +866,18 @@ function StepIndicator({
               disabled={i > currentStep}
               aria-label={`Step ${i + 1}: ${stepNames[i]}`}
               title={stepNames[i]}
-            >
-              {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
+          >
+            {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
             </button>
-            {i < totalSteps - 1 && (
-              <div
-                className={`w-12 h-1 mx-2 ${
-                  i < currentStep ? 'bg-green-500' : 'bg-gray-200'
-                }`}
-              />
-            )}
-          </div>
-        ))}
+          {i < totalSteps - 1 && (
+            <div
+              className={`w-12 h-1 mx-2 ${
+                i < currentStep ? 'bg-green-500' : 'bg-gray-200'
+              }`}
+            />
+          )}
+        </div>
+      ))}
       </div>
       <div className="text-center">
         <h3 className="text-lg font-semibold text-gray-900">
@@ -956,6 +1021,7 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
       description: "Scan physical documents with your device",
       icon: <Scan className="w-5 h-5" />,
       available: true,
+      comingSoon: true,
       securityLevel: "medium",
       supportedFormats: ["JPG", "PNG", "PDF"]
     },
@@ -1212,54 +1278,75 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => {
+          const selectedSource = importSources.find((source) => source.id === value)
+          if (selectedSource?.available) {
+            setActiveTab(value)
+          }
+        }}
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
           {importSources.map((source) => (
-            <TabsTrigger key={source.id} value={source.id} className="flex flex-col items-center gap-1 p-2">
+            <TabsTrigger
+              key={source.id}
+              value={source.id}
+              className="flex flex-col items-center gap-1 p-2"
+              disabled={!source.available}
+              aria-disabled={source.available ? undefined : true}
+              title={!source.available ? 'This import option is currently unavailable' : source.comingSoon ? 'Coming soon' : undefined}
+            >
               {source.icon}
-              <span className="text-xs hidden lg:block">{source.name}</span>
+              <span className="text-xs hidden lg:block font-medium">{source.name}</span>
+              {source.comingSoon && (
+                <span className="hidden text-[10px] uppercase tracking-wide text-amber-600 lg:block">
+                  Coming soon
+                </span>
+              )}
             </TabsTrigger>
           ))}
         </TabsList>
 
         <TabsContent value="device" className="space-y-4">
-          <Card className="border-2 border-dashed border-gray-300 hover:border-blue-500 transition-colors">
-            <CardContent className="p-8">
-              <div
-                className={`text-center ${dragActive ? 'bg-blue-50' : ''}`}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-              >
-                {uploading ? (
-                  <div className="space-y-4">
-                    <Loader2 className="w-12 h-12 mx-auto animate-spin text-blue-500" />
-                    <p className="text-lg font-medium">Processing your resume...</p>
-                    <Progress value={75} className="w-full max-w-xs mx-auto" />
+      <Card className="border-2 border-dashed border-gray-300 hover:border-blue-500 transition-colors">
+        <CardContent className="p-8">
+          <div
+            className={`text-center ${dragActive ? 'bg-blue-50' : ''}`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            {uploading ? (
+              <div className="space-y-4">
+                <Loader2 className="w-12 h-12 mx-auto animate-spin text-blue-500" />
+                <p className="text-lg font-medium">Processing your resume...</p>
+                <Progress value={75} className="w-full max-w-xs mx-auto" />
                     {scanning && (
                       <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                         <ShieldCheck className="w-4 h-4" />
                         <span>Security scanning...</span>
                       </div>
                     )}
-                  </div>
-                ) : resume ? (
-                  <div className="space-y-4">
-                    <CheckCircle className="w-12 h-12 mx-auto text-green-500" />
-                    <div>
+              </div>
+            ) : resume ? (
+              <div className="space-y-4">
+                <CheckCircle className="w-12 h-12 mx-auto text-green-500" />
+                <div>
                       <h3 className="text-lg font-medium text-green-700">Resume Imported Successfully!</h3>
-                      <p className="text-sm text-gray-600 mt-1">{resume.fileName}</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg text-left">
-                      <h4 className="font-medium mb-2">Parsed Information:</h4>
-                      <ul className="text-sm space-y-1">
-                        <li><strong>Name:</strong> {resume.parsedData.name}</li>
-                        <li><strong>Email:</strong> {resume.parsedData.email}</li>
-                        <li><strong>Skills:</strong> {resume.parsedData.skills.join(', ')}</li>
-                        <li><strong>Experience:</strong> {resume.parsedData.experience.length} positions</li>
-                      </ul>
-                    </div>
+                  <p className="text-sm text-gray-600 mt-1">{resume.fileName}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg text-left">
+                  <h4 className="font-medium mb-2">Parsed Information:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li><strong>Name:</strong> {resume.parsedData.name}</li>
+                    <li><strong>Email:</strong> {resume.parsedData.email}</li>
+                    <li><strong>Skills:</strong> {resume.parsedData.skills.join(', ')}</li>
+                    <li><strong>Experience:</strong> {resume.parsedData.experience.length} positions</li>
+                  </ul>
+                </div>
                     {securityResult && (
                       <div className="bg-green-50 p-4 rounded-lg text-left">
                         <h4 className="font-medium mb-2 text-green-700">Security Status:</h4>
@@ -1272,14 +1359,14 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                         </p>
                       </div>
                     )}
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <Upload className="w-12 h-12 mx-auto text-gray-400" />
-                    <div>
-                      <p className="text-lg font-medium">Drag & drop your resume here</p>
-                      <p className="text-sm text-gray-500">or click to browse files</p>
-                    </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Upload className="w-12 h-12 mx-auto text-gray-400" />
+                <div>
+                  <p className="text-lg font-medium">Drag & drop your resume here</p>
+                  <p className="text-sm text-gray-500">or click to browse files</p>
+                </div>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -1288,13 +1375,13 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                       onChange={onFileInputChange}
                     />
                     <Button variant="outline" className="mt-4" onClick={openFilePicker} disabled={uploading}>
-                      Choose File
-                    </Button>
+                  Choose File
+                </Button>
                     <div className="text-center">
                       <p className="text-xs text-gray-500">
                         Supported: PDF, DOC, DOCX, TXT, RTF (max 10MB)
                       </p>
-                    </div>
+                </div>
                   </div>
                 )}
               </div>
@@ -1354,15 +1441,15 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Capturing and processing image...</span>
                     </div>
-                  </div>
-                )}
+              </div>
+            )}
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                   <ScanLine className="w-4 h-4" />
                   <span>OCR text extraction included</span>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
+        </CardContent>
+      </Card>
         </TabsContent>
 
         <TabsContent value="scanner" className="space-y-4">
@@ -1372,22 +1459,26 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
                 <Scan className="w-12 h-12 mx-auto text-indigo-600" />
                 <div>
                   <h3 className="text-lg font-medium">Document Scanner</h3>
-                  <p className="text-sm text-gray-600">Scan physical documents with your device</p>
+                  <p className="text-sm text-gray-600">
+                    Secure in-app scanning is almost ready. For now, use device upload or camera capture to import
+                    your resume.
+                  </p>
                 </div>
                 <Button 
-                  className="w-full bg-indigo-600 hover:bg-indigo-700"
-                  onClick={() => {
-                    // TODO: Implement document scanner functionality
-                    alert('Document scanner will be available soon!');
-                  }}
-                  aria-label="Open document scanner to scan physical documents"
+                  className="w-full"
+                  variant="outline"
+                  disabled
+                  aria-label="Document scanner is coming soon"
                 >
                   <Scan className="w-4 h-4 mr-2" aria-hidden="true" />
-                  Open Scanner
+                  Coming Soon
                 </Button>
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                   <ImageIcon className="w-4 h-4" aria-hidden="true" />
                   <span>High-quality document scanning</span>
+                </div>
+                <div className="flex items-center justify-center text-xs text-amber-600 lg:hidden">
+                  Coming soon
                 </div>
               </div>
             </CardContent>
@@ -1506,21 +1597,74 @@ function ResumeUploadStep({ onComplete }: { onComplete: (resume: ResumeData) => 
 function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null)
-  const [filteredJobs, setFilteredJobs] = useState(mockJobs)
+  const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
+  // Load initial jobs
   useEffect(() => {
-    if (searchTerm) {
+    loadJobs()
+  }, [])
+
+  // Search jobs when search term changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm.trim()) {
+        searchJobs(searchTerm.trim())
+      } else {
+        loadJobs()
+      }
+    }, 300) // Debounce search
+
+    return () => clearTimeout(timeoutId)
+  }, [searchTerm])
+
+  const loadJobs = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch('/api/jobs/search?limit=20')
+      if (!response.ok) throw new Error('Failed to load jobs')
+      
+      const data = await response.json()
+      setFilteredJobs(data.jobs || [])
+    } catch (err) {
+      console.error('Error loading jobs:', err)
+      setError('Failed to load jobs. Using sample data.')
+      // Fallback to mock data
+      setFilteredJobs(mockJobs)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const searchJobs = async (query: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/jobs/search?q=${encodeURIComponent(query)}&limit=20`)
+      if (!response.ok) throw new Error('Failed to search jobs')
+      
+      const data = await response.json()
+      setFilteredJobs(data.jobs || [])
+    } catch (err) {
+      console.error('Error searching jobs:', err)
+      setError('Search failed. Using sample data.')
+      // Fallback to mock data with local filtering
+      const searchLower = query.toLowerCase()
       setFilteredJobs(
         mockJobs.filter(job =>
-          job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          job.location.toLowerCase().includes(searchTerm.toLowerCase())
+          job.title.toLowerCase().includes(searchLower) ||
+          job.company.toLowerCase().includes(searchLower) ||
+          job.location.toLowerCase().includes(searchLower) ||
+          job.description.toLowerCase().includes(searchLower) ||
+          job.requirements.some(req => req.toLowerCase().includes(searchLower))
         )
       )
-    } else {
-      setFilteredJobs(mockJobs)
+    } finally {
+      setLoading(false)
     }
-  }, [searchTerm])
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -1539,64 +1683,98 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
+            disabled={loading}
           />
+          {loading && (
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+            </div>
+          )}
         </div>
+        {error && (
+          <div className="mt-2 text-sm text-amber-600 bg-amber-50 p-2 rounded">
+            {error}
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4">
-        {filteredJobs.map((job) => (
-          <Card
-            key={job.id}
-            className={`cursor-pointer transition-all hover:shadow-md ${
-              selectedJob?.id === job.id ? 'ring-2 ring-blue-500' : ''
-            }`}
-            onClick={() => setSelectedJob(job)}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-semibold">{job.title}</h3>
-                    <Badge variant="outline">{job.type}</Badge>
-                    {job.remote && <Badge variant="secondary">Remote</Badge>}
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map((job) => (
+            <Card
+              key={job.id}
+              className={`cursor-pointer transition-all hover:shadow-md ${
+                selectedJob?.id === job.id ? 'ring-2 ring-blue-500' : ''
+              }`}
+              onClick={() => {
+                console.log('Job selected:', job.title, job.company)
+                setSelectedJob(job)
+              }}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="text-xl font-semibold">{job.title}</h3>
+                      <Badge variant="outline">{job.type}</Badge>
+                      {job.remote && <Badge variant="secondary">Remote</Badge>}
+                    </div>
+                    <div className="flex items-center space-x-4 text-gray-600 mb-3">
+                      <div className="flex items-center">
+                        <Building2 className="w-4 h-4 mr-1" />
+                        {job.company}
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        {job.location}
+                      </div>
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {job.postedAt.toLocaleDateString()}
+                      </div>
+                    </div>
+                    {job.salary && (
+                      <div className="flex items-center text-green-600 font-medium mb-3">
+                        <DollarSign className="w-4 h-4 mr-1" />
+                        ${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}
+                      </div>
+                    )}
+                    <p className="text-gray-700 line-clamp-2">{job.description}</p>
                   </div>
-                  <div className="flex items-center space-x-4 text-gray-600 mb-3">
-                    <div className="flex items-center">
-                      <Building2 className="w-4 h-4 mr-1" />
-                      {job.company}
-                    </div>
-                    <div className="flex items-center">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      {job.location}
-                    </div>
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {job.postedAt.toLocaleDateString()}
-                    </div>
+                  <div className="ml-4">
+                    <Button
+                      variant={selectedJob?.id === job.id ? "default" : "outline"}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        console.log('Job selected via button:', job.title, job.company)
+                        setSelectedJob(job)
+                      }}
+                    >
+                      {selectedJob?.id === job.id ? 'Selected' : 'Select'}
+                    </Button>
                   </div>
-                  {job.salary && (
-                    <div className="flex items-center text-green-600 font-medium mb-3">
-                      <DollarSign className="w-4 h-4 mr-1" />
-                      ${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}
-                    </div>
-                  )}
-                  <p className="text-gray-700 line-clamp-2">{job.description}</p>
                 </div>
-                <div className="ml-4">
-                  <Button
-                    variant={selectedJob?.id === job.id ? "default" : "outline"}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setSelectedJob(job)
-                    }}
-                  >
-                    {selectedJob?.id === job.id ? 'Selected' : 'Select'}
-                  </Button>
-                </div>
-              </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Card className="p-8 text-center">
+            <CardContent>
+              <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">No jobs found</h3>
+              <p className="text-gray-500">
+                Try adjusting your search terms or browse all available positions.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => setSearchTerm('')}
+              >
+                Show All Jobs
+              </Button>
             </CardContent>
           </Card>
-        ))}
+        )}
       </div>
 
       {selectedJob && (
@@ -1612,14 +1790,14 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                     {selectedJob.company} • Ready to analyze your fit
                   </p>
                 </div>
-                <Button
-                  size="lg"
-                  onClick={() => onSelect(selectedJob)}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600"
-                >
+          <Button
+            size="lg"
+            onClick={() => onSelect(selectedJob)}
+            className="bg-gradient-to-r from-blue-600 to-indigo-600"
+          >
                   Analyze Fit
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
               </div>
             </CardContent>
           </Card>
@@ -2667,7 +2845,7 @@ function ResultsStep({
                   <div className="flex items-center gap-3">
                     <span className="capitalize text-lg font-semibold">
                       {getDocumentTitle(doc)}
-                    </span>
+                  </span>
                     {doc.industryOptimized && (
                       <Badge variant="default" className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
                         <Zap className="w-3 h-3 mr-1" />
@@ -2680,42 +2858,42 @@ function ResultsStep({
                       Template: {doc.template}
                     </Badge>
                     <Badge variant="default" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      ATS Score: {doc.atsScore}%
-                    </Badge>
+                    ATS Score: {doc.atsScore}%
+                  </Badge>
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Key Highlights */}
-                <div>
+                  <div>
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
                     <Star className="w-4 h-4 text-yellow-500" />
                     Key Highlights
                   </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {doc.highlights.map((highlight) => (
+                    <div className="flex flex-wrap gap-2">
+                      {doc.highlights.map((highlight) => (
                       <Badge key={highlight} variant="secondary" className="bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200">
-                        {highlight}
-                      </Badge>
-                    ))}
+                          {highlight}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                
+                  
                 {/* Optimized Keywords */}
-                <div>
+                  <div>
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
                     <Target className="w-4 h-4 text-green-500" />
                     Optimized Keywords
                   </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {doc.keywords.map((keyword) => (
+                    <div className="flex flex-wrap gap-2">
+                      {doc.keywords.map((keyword) => (
                       <Badge key={keyword} variant="outline" className="border-green-200 text-green-700 dark:border-green-800 dark:text-green-300">
-                        {keyword}
-                      </Badge>
-                    ))}
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-
+                  
                 {/* Document Metrics */}
                 <div>
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
@@ -2965,9 +3143,10 @@ export default function FitReportPage() {
   const [analysis, setAnalysis] = useState<FitAnalysis | null>(null)
   const [documentsGenerated, setDocumentsGenerated] = useState(false)
   const [profileImported, setProfileImported] = useState(false)
+  const ttffrStartTimeRef = useRef<number>(0)
 
   useEffect(() => {
-    try { startTimer('ttffr') } catch {}
+    ttffrStartTimeRef.current = startTimer('ttffr')
     
     // Check if profile was imported
     const imported = searchParams.get('profile_imported')
@@ -2987,6 +3166,7 @@ export default function FitReportPage() {
   }
 
   const handleJobSelect = (job: JobPosting) => {
+    console.log('Job selected in main component:', job.title, job.company)
     setSelectedJob(job)
     setCurrentStep(3)
   }
@@ -2994,7 +3174,7 @@ export default function FitReportPage() {
   const handleAnalysisComplete = (analysisData: FitAnalysis) => {
     setAnalysis(analysisData)
     try { import('../../../lib/analytics').then(m => m.track({ name: 'fit_analysis_complete' })) } catch {}
-    try { stopTimer('ttffr', { page: 'fit_report' }) } catch {}
+    try { stopTimer(ttffrStartTimeRef.current, 'ttffr') } catch {}
     setCurrentStep(4)
   }
 
@@ -3168,6 +3348,7 @@ export default function FitReportPage() {
               {currentStep < totalSteps && (
                 <Button
                   onClick={() => {
+                    console.log('Next Step clicked - currentStep:', currentStep, 'resume:', !!resume, 'selectedJob:', !!selectedJob, 'analysis:', !!analysis)
                     // Navigate to next step if data is available
                     if (currentStep === 1 && resume) {
                       setCurrentStep(2);

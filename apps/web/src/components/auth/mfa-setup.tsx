@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Button } from '@proof-of-fit/ui'
 import { Input } from '@proof-of-fit/ui'
@@ -377,7 +378,14 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
               <div className="space-y-4">
                 <div className="text-center">
                   <div className="bg-white p-4 rounded-lg border inline-block">
-                    <img src={qrCode} alt="QR Code" className="w-32 h-32" />
+                    <Image
+                      src={qrCode}
+                      alt="QR code"
+                      width={128}
+                      height={128}
+                      className="w-32 h-32"
+                      unoptimized
+                    />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
                     Or enter this secret manually: <code className="bg-gray-100 px-1 rounded">{secret}</code>

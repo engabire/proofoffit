@@ -1,0 +1,138 @@
+name: Uptime Monitor
+
+on:
+  schedule:
+    # Run every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  uptime-check:
+    name: Uptime Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check application health
+        run: |
+          echo "Checking application health..."
+          
+          # Check health endpoint
+          HEALTH_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://proofoffit.com/api/health)
+          
+          if [ "$HEALTH_RESPONSE" = "200" ]; then
+            echo "✅ Application is healthy (HTTP $HEALTH_RESPONSE)"
+            HEALTH_STATUS="healthy"
+          else
+            echo "❌ Application is unhealthy (HTTP $HEALTH_RESPONSE)"
+            HEALTH_STATUS="unhealthy"
+          fi
+          
+          # Get detailed health data
+          HEALTH_DATA=$(curl -s https://proofoffit.com/api/health)
+          echo "Health data: $HEALTH_DATA"
+          
+          # Check response time
+          RESPONSE_TIME=$(echo $HEALTH_DATA | jq -r '.response_time_ms // "unknown"')
+          echo "Response time: ${RESPONSE_TIME}ms"
+          
+          # Check database status
+          DB_STATUS=$(echo $HEALTH_DATA | jq -r '.services.database.status // "unknown"')
+          echo "Database status: $DB_STATUS"
+          
+          # Check authentication status
+          AUTH_STATUS=$(echo $HEALTH_DATA | jq -r '.services.authentication.status // "unknown"')
+          echo "Authentication status: $AUTH_STATUS"
+          
+          # Check storage status
+          STORAGE_STATUS=$(echo $HEALTH_DATA | jq -r '.services.storage.status // "unknown"')
+          echo "Storage status: $STORAGE_STATUS"
+          
+          # Log to Supabase for monitoring
+          curl -X POST "https://proofoffit.com/api/monitoring/uptime" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
+            -d "{
+              \"status\": \"$HEALTH_STATUS\",
+              \"response_time_ms\": $RESPONSE_TIME,
+              \"database_status\": \"$DB_STATUS\",
+              \"auth_status\": \"$AUTH_STATUS\",
+              \"storage_status\": \"$STORAGE_STATUS\",
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }" || echo "Failed to log to monitoring endpoint"
+      
+      - name: Alert on failure
+        if: failure()
+        run: |
+          echo "🚨 Uptime check failed!"
+          echo "Application appears to be down or unhealthy"
+          echo "Please check the application status immediately"
+          
+          # Send alert (implement your alerting mechanism)
+          # curl -X POST "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK" \
+          #   -H "Content-Type: application/json" \
+          #   -d '{"text":"🚨 ProofOfFit application is down!"}'
+      
+      - name: Check external dependencies
+        run: |
+          echo "Checking external dependencies..."
+          
+          # Check Supabase status
+          SUPABASE_STATUS=$(curl -s https://status.supabase.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          echo "Supabase status: $SUPABASE_STATUS"
+          
+          # Check Vercel status
+          VERCEL_STATUS=$(curl -s https://vercel-status.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          echo "Vercel status: $VERCEL_STATUS"
+          
+          # Check Stripe status
+          STRIPE_STATUS=$(curl -s https://status.stripe.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          echo "Stripe status: $STRIPE_STATUS"
+          
+          # Log dependency status
+          curl -X POST "https://proofoffit.com/api/monitoring/dependencies" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
+            -d "{
+              \"supabase_status\": \"$SUPABASE_STATUS\",
+              \"vercel_status\": \"$VERCEL_STATUS\",
+              \"stripe_status\": \"$STRIPE_STATUS\",
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }" || echo "Failed to log dependency status"
+
+  performance-check:
+    name: Performance Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+      - name: Performance monitoring
+        run: |
+          echo "Running performance checks..."
+          
+          # Test key endpoints
+          ENDPOINTS=(
+            "https://proofoffit.com/"
+            "https://proofoffit.com/api/jobs/search?limit=5"
+            "https://proofoffit.com/api/health"
+          )
+          
+          for endpoint in "${ENDPOINTS[@]}"; do
+            echo "Testing $endpoint"
+            
+            # Measure response time
+            RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" "$endpoint")
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$endpoint")
+            
+            echo "Response time: ${RESPONSE_TIME}s, HTTP code: $HTTP_CODE"
+            
+            # Log performance data
+            curl -X POST "https://proofoffit.com/api/monitoring/performance" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
+              -d "{
+                \"endpoint\": \"$endpoint\",
+                \"response_time_seconds\": $RESPONSE_TIME,
+                \"http_code\": $HTTP_CODE,
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+              }" || echo "Failed to log performance data for $endpoint"
+          done

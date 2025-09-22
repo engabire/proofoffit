@@ -1,15 +1,34 @@
 // Mock Supabase before any imports
+type QueryBuilderMock = {
+  select: jest.Mock<QueryBuilderMock, []>
+  insert: jest.Mock<QueryBuilderMock, []>
+  update: jest.Mock<QueryBuilderMock, []>
+  delete: jest.Mock<QueryBuilderMock, []>
+  eq: jest.Mock<any, []>
+  order: jest.Mock<QueryBuilderMock, []>
+  single: jest.Mock<Promise<any>, []>
+}
+
+const createQueryBuilderMock = (): QueryBuilderMock => {
+  const builder = {} as QueryBuilderMock
+  builder.select = jest.fn(() => builder)
+  builder.insert = jest.fn(() => builder)
+  builder.update = jest.fn(() => builder)
+  builder.delete = jest.fn(() => builder)
+  builder.eq = jest.fn(() => builder)
+  builder.order = jest.fn(() => builder)
+  builder.single = jest.fn<Promise<any>, []>()
+  return builder
+}
+
+const mockQueryBuilder = createQueryBuilderMock()
+
+const mockSupabase = {
+  from: jest.fn(() => mockQueryBuilder),
+}
+
 jest.mock('@supabase/auth-helpers-nextjs', () => ({
-  createClientComponentClient: () => ({
-    from: jest.fn(() => ({
-      select: jest.fn().mockReturnThis(),
-      insert: jest.fn().mockReturnThis(),
-      update: jest.fn().mockReturnThis(),
-      delete: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn(),
-    })),
-  }),
+  createClientComponentClient: () => mockSupabase,
 }))
 
 import { tailorEngine } from '@/lib/tailor-engine'

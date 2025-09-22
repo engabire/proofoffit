@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   Check,
   ExternalLink,
@@ -634,7 +635,7 @@ function LaneToggle({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void 
                 ? `bg-gradient-to-r text-white shadow-md ${theme.primary} ${theme.shadowStyle} transform scale-[1.02]`
                 : `text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white hover:scale-105`
             }`}
-            onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', props: { lane: l } })) } catch {} }}
+             onClick={() => { setLane(l); try { import('../lib/analytics').then(m => m.track({ name: 'lane_select', properties: { lane: l } })) } catch {} }}
             data-evt="toggle_lane"
             data-lane={l}
           >
@@ -1097,6 +1098,21 @@ type Lane = "seeker" | "employer";
 export default function ProofOfFitLanding() {
   const [lane, setLane] = useState<Lane>("seeker");
   const c = useMemo(() => laneCopy[lane], [lane]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Handle OAuth callback codes that might come to root instead of /auth/callback
+  useEffect(() => {
+    const code = searchParams.get('code');
+    const error = searchParams.get('error');
+    
+    if (code || error) {
+      // Redirect to the proper auth callback page with the query parameters
+      const currentUrl = new URL(window.location.href);
+      const callbackUrl = `/auth/callback${currentUrl.search}`;
+      router.replace(callbackUrl);
+    }
+  }, [searchParams, router]);
 
   return (
     <div className={warmBody}>

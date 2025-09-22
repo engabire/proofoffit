@@ -5,29 +5,12 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding database...')
 
-  // Create a demo tenant
-  const tenant = await prisma.tenant.upsert({
-    where: { id: 'demo-tenant' },
-    update: {},
-    create: {
-      id: 'demo-tenant',
-      name: 'Demo Organization',
-      plan: 'pro',
-    },
-  })
-
-  console.log('✅ Created tenant:', tenant.name)
-
-  // Create demo users
   const candidateUser = await prisma.user.upsert({
     where: { email: 'candidate@demo.com' },
     update: {},
     create: {
-      id: 'demo-candidate-user',
-      tenantId: tenant.id,
       email: 'candidate@demo.com',
-      role: 'candidate',
-      locale: 'en',
+      plan: 'PRO',
     },
   })
 
@@ -35,222 +18,163 @@ async function main() {
     where: { email: 'employer@demo.com' },
     update: {},
     create: {
-      id: 'demo-employer-user',
-      tenantId: tenant.id,
       email: 'employer@demo.com',
-      role: 'employer',
-      locale: 'en',
+      plan: 'PREMIUM',
     },
   })
 
-  console.log('✅ Created users:', candidateUser.email, employerUser.email)
+  const candidateTarget = await prisma.target.upsert({
+    where: { id: 'demo-candidate-target' },
+    update: {},
+    create: {
+      id: 'demo-candidate-target',
+      userId: candidateUser.id,
+      title: 'Senior Product Manager',
+      role: 'Product Manager',
+      companyHint: 'Proof of Fit',
+      layout: 'REPORT',
+      rubricJson: {
+        summary: 'Demo rubric for evaluating product strategy work',
+        competencies: [
+          {
+            name: 'Product Strategy',
+            weight: 3,
+          },
+          {
+            name: 'Execution',
+            weight: 2,
+          },
+        ],
+      },
+    },
+  })
 
-  // Create candidate profile
+  const candidateProof = await prisma.proof.upsert({
+    where: { id: 'demo-candidate-proof' },
+    update: {},
+    create: {
+      id: 'demo-candidate-proof',
+      userId: candidateUser.id,
+      title: 'Launched analytics overhaul',
+      kind: 'project',
+      summary: 'Led rollout of a new analytics suite that improved adoption by 45%.',
+      url: 'https://example.com/demo-proof',
+    },
+  })
+
   const candidateProfile = await prisma.candidateProfile.upsert({
     where: { userId: candidateUser.id },
     update: {},
     create: {
-      id: 'demo-candidate-profile',
-      tenantId: tenant.id,
       userId: candidateUser.id,
       preferences: {
-        workType: ['remote', 'hybrid'],
-        location: ['San Francisco', 'New York', 'Remote'],
-        salaryRange: { min: 80000, max: 150000 },
-        industries: ['Technology', 'Healthcare', 'Finance'],
+        desiredRoles: ['Product Manager'],
+        preferredLocations: ['Remote', 'Washington, D.C.'],
       },
       contactPolicy: {
-        allowDirectContact: true,
-        preferredMethod: 'email',
-        availability: 'business_hours',
+        email: true,
+        sms: false,
       },
     },
   })
 
-  console.log('✅ Created candidate profile')
-
-  // Create sample bullets
-  const bullets = [
-    {
-      candidateId: candidateProfile.id,
-      text: 'Led development of React-based dashboard serving 10,000+ daily active users',
+  await prisma.bullet.upsert({
+    where: { id: 'demo-bullet-1' },
+    update: {
+      text: 'Led a cross-functional team to ship analytics overhaul with 45% adoption gain.',
       tags: {
-        criterion: 'frontend_development',
+        criterion: 'Product Strategy',
         evidence_type: 'result',
-        metric: 10000,
-        scope: 'daily_active_users',
-        tool: 'React',
+        metric: '45% adoption lift',
       },
     },
-    {
+    create: {
+      id: 'demo-bullet-1',
       candidateId: candidateProfile.id,
-      text: 'Implemented TypeScript across 5 microservices, reducing runtime errors by 40%',
+      text: 'Led a cross-functional team to ship analytics overhaul with 45% adoption gain.',
       tags: {
-        criterion: 'typescript',
+        criterion: 'Product Strategy',
         evidence_type: 'result',
-        metric: 40,
-        scope: 'error_reduction',
-        tool: 'TypeScript',
+        metric: '45% adoption lift',
       },
     },
-    {
-      candidateId: candidateProfile.id,
-      text: 'Managed team of 8 engineers using Agile methodologies and CI/CD pipelines',
-      tags: {
-        criterion: 'team_leadership',
-        evidence_type: 'method',
-        metric: 8,
-        scope: 'team_size',
-        tool: 'Agile',
-      },
+  })
+
+  const demoJobId = 'usajobs-senior-product-manager-proof-of-fit'
+
+  const job = await prisma.job.upsert({
+    where: { id: demoJobId },
+    update: {
+      description: 'Help Proof of Fit expand product-market fit analytics across federal buyers.',
+      fetchedAt: new Date(),
     },
-  ]
-
-  for (const bullet of bullets) {
-    await prisma.bullet.create({
-      data: bullet,
-    })
-  }
-
-  console.log('✅ Created candidate bullets')
-
-  // Create sample jobs
-  const jobs = [
-    {
-      id: 'demo-job-1',
+    create: {
+      id: demoJobId,
       source: 'usajobs',
-      org: 'TechCorp Inc.',
-      title: 'Senior Frontend Developer',
-      location: 'San Francisco, CA',
+      org: 'Proof of Fit',
+      title: 'Senior Product Manager',
+      location: 'Washington, D.C. (Hybrid)',
       workType: 'hybrid',
-      pay: { min: 120000, max: 160000, currency: 'USD' },
-      description: 'We are looking for a senior frontend developer to join our growing team...',
+      description: 'Help Proof of Fit expand product-market fit analytics across federal buyers.',
       requirements: {
-        must_have: ['React', 'TypeScript', '5+ years experience'],
-        preferred: ['Next.js', 'GraphQL', 'Team leadership'],
+        must_have: ['5+ years product management experience', 'Evidence of data-driven decision making'],
+        preferred: ['GovTech or civic experience'],
       },
       constraints: {
-        work_auth: 'US_citizen_or_green_card',
-        clearance: null,
-        language: ['English'],
+        clearance: 'Public trust eligible',
       },
       tos: {
         allowed: true,
         captcha: false,
-        notes: 'Standard application process',
       },
     },
-    {
-      id: 'demo-job-2',
-      source: 'reliefweb',
-      org: 'Global Health Foundation',
-      title: 'Software Engineer - Healthcare',
-      location: 'Remote',
-      workType: 'remote',
-      pay: { min: 90000, max: 130000, currency: 'USD' },
-      description: 'Join our mission to improve healthcare access worldwide...',
-      requirements: {
-        must_have: ['JavaScript', 'Healthcare experience', '3+ years experience'],
-        preferred: ['React', 'Node.js', 'International experience'],
-      },
-      constraints: {
-        work_auth: 'any',
-        clearance: null,
-        language: ['English', 'French'],
-      },
-      tos: {
-        allowed: true,
-        captcha: false,
-        notes: 'Non-profit organization',
+  })
+
+  await prisma.application.upsert({
+    where: { id: 'demo-application' },
+    update: {
+      metadata: {
+        jobSource: job.source,
+        autoApplied: true,
       },
     },
-  ]
-
-  for (const job of jobs) {
-    await prisma.job.upsert({
-      where: { id: job.id },
-      update: {},
-      create: job,
-    })
-  }
-
-  console.log('✅ Created sample jobs')
-
-  // Create criteria nodes
-  const criteriaNodes = [
-    {
-      id: 'frontend_development',
-      key: 'frontend_development',
-      label: 'Frontend Development',
-      parentId: null,
-      synonyms: ['frontend', 'client-side', 'UI development'],
-      meta: { category: 'technical', weight: 1.0 },
+    create: {
+      id: 'demo-application',
+      candidateId: candidateProfile.id,
+      jobId: job.id,
+      status: 'submitted',
+      documents: {
+        resume: 'Demo resume content for Proof of Fit role.',
+        coverLetter: 'Demo cover letter content for Proof of Fit role.',
+      },
+      source: 'auto-apply',
+      metadata: {
+        jobSource: job.source,
+        autoApplied: true,
+      },
     },
-    {
-      id: 'typescript',
-      key: 'typescript',
-      label: 'TypeScript',
-      parentId: 'frontend_development',
-      synonyms: ['TS', 'type safety'],
-      meta: { category: 'technical', weight: 0.8 },
-    },
-    {
-      id: 'team_leadership',
-      key: 'team_leadership',
-      label: 'Team Leadership',
-      parentId: null,
-      synonyms: ['management', 'leadership', 'team lead'],
-      meta: { category: 'soft_skills', weight: 0.9 },
-    },
-  ]
+  })
 
-  for (const node of criteriaNodes) {
-    await prisma.criteriaNode.upsert({
-      where: { key: node.key },
-      update: {},
-      create: node,
-    })
-  }
-
-  console.log('✅ Created criteria nodes')
-
-  // Create policy sources
-  const policySources = [
-    {
-      id: 'usajobs-policy',
-      domain: 'usajobs.gov',
-      allowed: true,
-      captcha: false,
-      notes: 'Government job board - standard application process',
-      version: '1.0',
+  await prisma.targetProofWeight.upsert({
+    where: {
+      targetId_proofId: {
+        targetId: candidateTarget.id,
+        proofId: candidateProof.id,
+      },
     },
-    {
-      id: 'reliefweb-policy',
-      domain: 'reliefweb.int',
-      allowed: true,
-      captcha: false,
-      notes: 'UN humanitarian job board - direct applications allowed',
-      version: '1.0',
+    update: {
+      weight: 3,
     },
-    {
-      id: 'restricted-site-policy',
-      domain: 'restricted-careers.com',
-      allowed: false,
-      captcha: true,
-      notes: 'Site requires CAPTCHA and manual application only',
-      version: '1.0',
+    create: {
+      targetId: candidateTarget.id,
+      proofId: candidateProof.id,
+      weight: 3,
     },
-  ]
+  })
 
-  for (const policy of policySources) {
-    await prisma.policySource.upsert({
-      where: { domain: policy.domain },
-      update: {},
-      create: policy,
-    })
-  }
-
-  console.log('✅ Created policy sources')
+  console.log('✅ Seeded demo users, profiles, targets, proofs, and jobs')
+  console.log('   Candidate:', candidateUser.email)
+  console.log('   Employer: ', employerUser.email)
 
   console.log('🎉 Database seeding completed!')
 }

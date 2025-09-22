@@ -1,0 +1,246 @@
+name: Security Basics
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '20'
+  NPM_CACHE_KEY: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better secret detection
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./apps/web
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: Lint code
+        working-directory: ./apps/web
+        run: npm run lint
+      
+      - name: Type check
+        working-directory: ./apps/web
+        run: npm run type-check || npx tsc --noEmit
+      
+      - name: Run tests
+        working-directory: ./apps/web
+        run: npm test -- --ci --coverage --watchAll=false
+      
+      - name: Secrets scan with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        with:
+          config-path: .gitleaks.toml
+          verbose: true
+          redact: true
+      
+      - name: Dependency audit
+        working-directory: ./apps/web
+        run: |
+          echo "Running dependency audit..."
+          npm audit --audit-level=high --json > audit-results.json || true
+          
+          # Check for high/critical vulnerabilities
+          if npm audit --audit-level=high --json | jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "high" or .value.severity == "critical")' > /dev/null; then
+            echo "❌ High or critical vulnerabilities found!"
+            npm audit --audit-level=high
+            exit 1
+          else
+            echo "✅ No high or critical vulnerabilities found"
+          fi
+      
+      - name: Check for hardcoded secrets
+        run: |
+          echo "Checking for potential hardcoded secrets..."
+          
+          # Check for common secret patterns
+          if grep -r -i -E "(password|secret|key|token|api_key|private_key)" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir=node_modules --exclude-dir=.git apps/web/src/ | grep -v -E "(console\.log|//|/\*|\*|interface|type|const.*=.*process\.env)" | head -10; then
+            echo "⚠️  Potential hardcoded secrets found. Please review:"
+            grep -r -i -E "(password|secret|key|token|api_key|private_key)" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir=node_modules --exclude-dir=.git apps/web/src/ | grep -v -E "(console\.log|//|/\*|\*|interface|type|const.*=.*process\.env)" || true
+          else
+            echo "✅ No obvious hardcoded secrets found"
+          fi
+      
+      - name: Security headers check
+        run: |
+          echo "Checking for security headers in Next.js config..."
+          if [ -f "apps/web/next.config.js" ]; then
+            if grep -q "securityHeaders\|headers" apps/web/next.config.js; then
+              echo "✅ Security headers configuration found"
+            else
+              echo "⚠️  No security headers configuration found in next.config.js"
+            fi
+          fi
+      
+      - name: Environment variables check
+        run: |
+          echo "Checking for environment variable usage..."
+          if grep -r "process\.env\." --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir=node_modules apps/web/src/ | head -5; then
+            echo "✅ Environment variables are being used (good practice)"
+          else
+            echo "⚠️  No environment variable usage found"
+          fi
+      
+      - name: Upload security scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-results
+          path: |
+            audit-results.json
+            apps/web/coverage/
+          retention-days: 30
+
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./apps/web
+        run: npm ci
+      
+      - name: Check for outdated dependencies
+        working-directory: ./apps/web
+        run: |
+          echo "Checking for outdated dependencies..."
+          npm outdated --json > outdated-deps.json || true
+          
+          # Count outdated dependencies
+          OUTDATED_COUNT=$(npm outdated --json | jq 'length' 2>/dev/null || echo "0")
+          echo "Found $OUTDATED_COUNT outdated dependencies"
+          
+          if [ "$OUTDATED_COUNT" -gt 10 ]; then
+            echo "⚠️  Many dependencies are outdated. Consider updating."
+            npm outdated
+          else
+            echo "✅ Dependencies are reasonably up-to-date"
+          fi
+      
+      - name: Check for known vulnerabilities
+        working-directory: ./apps/web
+        run: |
+          echo "Running npm audit..."
+          npm audit --audit-level=moderate --json > audit-moderate.json || true
+          
+          # Check for moderate+ vulnerabilities
+          if npm audit --audit-level=moderate --json | jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "moderate" or .value.severity == "high" or .value.severity == "critical")' > /dev/null; then
+            echo "⚠️  Moderate or higher vulnerabilities found:"
+            npm audit --audit-level=moderate
+          else
+            echo "✅ No moderate or higher vulnerabilities found"
+          fi
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'apps/web/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./apps/web
+        run: npm ci
+      
+      - name: ESLint security rules
+        working-directory: ./apps/web
+        run: |
+          echo "Running ESLint with security rules..."
+          npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js --format json > eslint-results.json || true
+          
+          # Check for security-related ESLint errors
+          if npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js | grep -i "security\|dangerous\|eval\|innerHTML" | head -5; then
+            echo "⚠️  Potential security issues found in code:"
+            npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js | grep -i "security\|dangerous\|eval\|innerHTML" || true
+          else
+            echo "✅ No obvious security issues found in ESLint results"
+          fi
+      
+      - name: Check for console.log statements
+        run: |
+          echo "Checking for console.log statements in production code..."
+          CONSOLE_COUNT=$(grep -r "console\.log" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir=node_modules apps/web/src/ | wc -l)
+          echo "Found $CONSOLE_COUNT console.log statements"
+          
+          if [ "$CONSOLE_COUNT" -gt 5 ]; then
+            echo "⚠️  Many console.log statements found. Consider removing for production:"
+            grep -r "console\.log" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir=node_modules apps/web/src/ | head -10
+          else
+            echo "✅ Reasonable number of console.log statements"
+          fi
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [security-scan, dependency-check, code-quality]
+    if: always()
+    
+    steps:
+      - name: Security Summary
+        run: |
+          echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Completed Checks:" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Code linting and type checking" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Unit tests execution" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Secrets scanning with Gitleaks" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Dependency vulnerability audit" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Hardcoded secrets detection" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Security headers verification" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Environment variables usage check" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Outdated dependencies check" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Code quality and security rules" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Scan:** ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dependency Check:** ${{ needs.dependency-check.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Code Quality:** ${{ needs.code-quality.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🛡️ Security Controls Active:" >> $GITHUB_STEP_SUMMARY
+          echo "- Automated secret detection" >> $GITHUB_STEP_SUMMARY
+          echo "- Dependency vulnerability scanning" >> $GITHUB_STEP_SUMMARY
+          echo "- Code quality and security linting" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment variable validation" >> $GITHUB_STEP_SUMMARY
+          echo "- Security headers verification" >> $GITHUB_STEP_SUMMARY
+

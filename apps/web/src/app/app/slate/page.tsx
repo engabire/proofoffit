@@ -728,9 +728,12 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
               </div>
               <div>
                 <Label htmlFor="type">Job Type</Label>
-                <Select value={job.type} onValueChange={(value: any) => setJob(prev => ({ ...prev, type: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
+                <Select
+                  value={job.type}
+                  onValueChange={(value: any) => setJob(prev => ({ ...prev, type: value }))}
+                >
+                  <SelectTrigger aria-label="Job type">
+                    <SelectValue placeholder="Select a job type" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="full-time">Full-time</SelectItem>
@@ -742,9 +745,12 @@ function JobDescriptionStep({ onComplete }: { onComplete: (job: JobDescription) 
               </div>
               <div>
                 <Label htmlFor="experience">Experience Level</Label>
-                <Select value={job.experienceLevel} onValueChange={(value: any) => setJob(prev => ({ ...prev, experienceLevel: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
+                <Select
+                  value={job.experienceLevel}
+                  onValueChange={(value: any) => setJob(prev => ({ ...prev, experienceLevel: value }))}
+                >
+                  <SelectTrigger aria-label="Experience level">
+                    <SelectValue placeholder="Select experience level" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="entry">Entry Level</SelectItem>
@@ -1155,7 +1161,7 @@ function SlateGenerationStep({ job, onComplete }: {
   const [generating, setGenerating] = useState(false)
   const [slate, setSlate] = useState<CandidateSlate | null>(null)
 
-  const calculateMatchScore = (candidate: Candidate, job: JobDescription): number => {
+  const calculateMatchScore = useCallback((candidate: Candidate, job: JobDescription): number => {
     let score = 0
     let maxScore = 0
     
@@ -1201,9 +1207,9 @@ function SlateGenerationStep({ job, onComplete }: {
     maxScore += 10
     
     return Math.round((score / maxScore) * 100)
-  }
+  }, [])
 
-  const getFilteredCandidates = (job: JobDescription): Candidate[] => {
+  const getFilteredCandidates = useCallback((job: JobDescription): Candidate[] => {
     // Calculate match scores for all candidates
     const candidatesWithScores = mockCandidates.map(candidate => ({
       ...candidate,
@@ -1215,9 +1221,9 @@ function SlateGenerationStep({ job, onComplete }: {
       .filter(candidate => candidate.fitScore >= 60) // Minimum 60% match
       .sort((a, b) => b.fitScore - a.fitScore)
       .slice(0, 10) // Top 10 candidates
-  }
+  }, [calculateMatchScore])
 
-  const generateSlate = async () => {
+  const generateSlate = useCallback(async () => {
     setGenerating(true)
     
     // Simulate slate generation
@@ -1281,11 +1287,11 @@ function SlateGenerationStep({ job, onComplete }: {
     setSlate(mockSlate)
     setGenerating(false)
     onComplete(mockSlate)
-  }
+  }, [getFilteredCandidates, job, onComplete])
 
   useEffect(() => {
-    generateSlate()
-  }, [])
+    void generateSlate()
+  }, [generateSlate])
 
   if (generating) {
     return (

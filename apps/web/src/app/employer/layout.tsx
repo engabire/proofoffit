@@ -21,6 +21,8 @@ export default async function EmployerLayout({
   }
 
   const navItems = [
+    { href: '/employer/dashboard', label: 'Dashboard', icon: '🏠' },
+    { href: '/employer/jobs', label: 'Job Management', icon: '💼' },
     { href: '/employer/intake', label: 'Job Intake', icon: '📝' },
     { href: '/employer/slates', label: 'Candidate Slates', icon: '👥' },
     { href: '/employer/analytics', label: 'Analytics', icon: '📊' },

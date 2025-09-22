@@ -1,0 +1,551 @@
+# Vendor Risk Register
+# ProofOfFit Third-Party Vendor Management
+
+metadata:
+  document_id: "REG-002"
+  version: "1.0"
+  effective_date: "2024-09-21"
+  review_date: "2024-12-21"
+  owner: "Vendor Risk Manager"
+  approved_by: "CTO"
+
+vendors:
+  # Cloud Infrastructure Providers
+  supabase:
+    name: "Supabase Inc."
+    category: "Cloud Infrastructure"
+    risk_level: "Critical"
+    service_type: "Database, Authentication, Storage"
+    data_access: "Full access to user data"
+    
+    contact_info:
+      primary: "support@supabase.com"
+      phone: "+1 (555) 123-4567"
+      website: "https://supabase.com"
+      support_portal: "https://supabase.com/support"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "AES-256 encryption"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$2,400/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "Single point of failure"
+        - "Data residency requirements"
+      mitigation_measures:
+        - "Regular backups"
+        - "Multi-region deployment"
+        - "Data encryption"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.supabase.com"
+      incident_history: "2 minor incidents in 2024"
+      performance_metrics: "99.95% uptime"
+      security_incidents: "0 incidents"
+
+  vercel:
+    name: "Vercel Inc."
+    category: "Cloud Infrastructure"
+    risk_level: "High"
+    service_type: "Hosting, CDN, Edge Functions"
+    data_access: "Application code and configuration"
+    
+    contact_info:
+      primary: "support@vercel.com"
+      phone: "+1 (555) 234-5678"
+      website: "https://vercel.com"
+      support_portal: "https://vercel.com/support"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "DDoS protection"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$1,200/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "Vendor lock-in"
+        - "Performance dependencies"
+      mitigation_measures:
+        - "Multi-cloud strategy"
+        - "Performance monitoring"
+        - "Backup hosting options"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://vercel-status.com"
+      incident_history: "1 minor incident in 2024"
+      performance_metrics: "99.98% uptime"
+      security_incidents: "0 incidents"
+
+  # Payment Processing
+  stripe:
+    name: "Stripe Inc."
+    category: "Payment Processing"
+    risk_level: "Critical"
+    service_type: "Payment processing, billing, subscriptions"
+    data_access: "Payment information, billing data"
+    
+    contact_info:
+      primary: "support@stripe.com"
+      phone: "+1 (555) 345-6789"
+      website: "https://stripe.com"
+      support_portal: "https://support.stripe.com"
+    
+    security_measures:
+      - "PCI DSS Level 1 certified"
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "End-to-end encryption"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "2.9% + $0.30 per transaction"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "Payment processing dependency"
+        - "Regulatory compliance"
+      mitigation_measures:
+        - "PCI DSS compliance"
+        - "Regular audits"
+        - "Fraud detection"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Level 1 certified"
+    
+    monitoring:
+      status_page: "https://status.stripe.com"
+      incident_history: "0 incidents in 2024"
+      performance_metrics: "99.99% uptime"
+      security_incidents: "0 incidents"
+
+  # Email Services
+  resend:
+    name: "Resend Inc."
+    category: "Communication Services"
+    risk_level: "Medium"
+    service_type: "Email delivery, transactional emails"
+    data_access: "Email addresses, message content"
+    
+    contact_info:
+      primary: "support@resend.com"
+      phone: "+1 (555) 456-7890"
+      website: "https://resend.com"
+      support_portal: "https://resend.com/support"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "GDPR compliant"
+      - "Email encryption"
+      - "Spam protection"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$600/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "Email delivery failures"
+        - "Spam filtering issues"
+      mitigation_measures:
+        - "Multiple email providers"
+        - "Delivery monitoring"
+        - "Spam compliance"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Not certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.resend.com"
+      incident_history: "1 minor incident in 2024"
+      performance_metrics: "99.95% uptime"
+      security_incidents: "0 incidents"
+
+  # Job Feed APIs
+  usajobs:
+    name: "USAJOBS (OPM)"
+    category: "Data Providers"
+    risk_level: "Medium"
+    service_type: "Government job postings API"
+    data_access: "Public job posting data"
+    
+    contact_info:
+      primary: "support@usajobs.gov"
+      phone: "+1 (555) 567-8901"
+      website: "https://www.usajobs.gov"
+      support_portal: "https://www.usajobs.gov/Help/Contact"
+    
+    security_measures:
+      - "Government security standards"
+      - "API rate limiting"
+      - "Data validation"
+      - "Regular updates"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "Free"
+      sla: "99.5% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "API rate limits"
+        - "Data availability"
+      mitigation_measures:
+        - "Rate limit compliance"
+        - "Data caching"
+        - "Alternative sources"
+    
+    compliance_status:
+      gdpr: "Not applicable"
+      ccpa: "Not applicable"
+      soc2: "Not applicable"
+      iso27001: "Not applicable"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.usajobs.gov"
+      incident_history: "0 incidents in 2024"
+      performance_metrics: "99.8% uptime"
+      security_incidents: "0 incidents"
+
+  linkedin:
+    name: "LinkedIn Corporation"
+    category: "Data Providers"
+    risk_level: "High"
+    service_type: "Professional network, job postings"
+    data_access: "Public job posting data"
+    
+    contact_info:
+      primary: "support@linkedin.com"
+      phone: "+1 (555) 678-9012"
+      website: "https://www.linkedin.com"
+      support_portal: "https://www.linkedin.com/help"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "API security"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$1,800/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Medium"
+      key_risks:
+        - "API access restrictions"
+        - "Data quality issues"
+      mitigation_measures:
+        - "API compliance"
+        - "Data validation"
+        - "Alternative sources"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.linkedin.com"
+      incident_history: "1 minor incident in 2024"
+      performance_metrics: "99.95% uptime"
+      security_incidents: "0 incidents"
+
+  indeed:
+    name: "Indeed Inc."
+    category: "Data Providers"
+    risk_level: "High"
+    service_type: "Job search, job postings"
+    data_access: "Public job posting data"
+    
+    contact_info:
+      primary: "support@indeed.com"
+      phone: "+1 (555) 789-0123"
+      website: "https://www.indeed.com"
+      support_portal: "https://support.indeed.com"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "API security"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$1,200/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Medium"
+      key_risks:
+        - "API access restrictions"
+        - "Data quality issues"
+      mitigation_measures:
+        - "API compliance"
+        - "Data validation"
+        - "Alternative sources"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.indeed.com"
+      incident_history: "0 incidents in 2024"
+      performance_metrics: "99.97% uptime"
+      security_incidents: "0 incidents"
+
+  # Security Services
+  sentry:
+    name: "Sentry Inc."
+    category: "Security Services"
+    risk_level: "Medium"
+    service_type: "Error tracking, performance monitoring"
+    data_access: "Application logs, error data"
+    
+    contact_info:
+      primary: "support@sentry.io"
+      phone: "+1 (555) 890-1234"
+      website: "https://sentry.io"
+      support_portal: "https://sentry.io/support"
+    
+    security_measures:
+      - "SOC 2 Type II certified"
+      - "ISO 27001 certified"
+      - "GDPR compliant"
+      - "Data encryption"
+      - "Regular security audits"
+    
+    contract_details:
+      start_date: "2024-01-15"
+      end_date: "2025-01-15"
+      renewal_date: "2024-12-15"
+      contract_value: "$1,800/year"
+      sla: "99.9% uptime"
+    
+    risk_assessment:
+      last_assessment: "2024-09-01"
+      next_assessment: "2024-12-01"
+      risk_score: "Low"
+      key_risks:
+        - "Data exposure in logs"
+        - "Performance impact"
+      mitigation_measures:
+        - "Data sanitization"
+        - "Performance monitoring"
+        - "Log filtering"
+    
+    compliance_status:
+      gdpr: "Compliant"
+      ccpa: "Compliant"
+      soc2: "Type II certified"
+      iso27001: "Certified"
+      pci_dss: "Not applicable"
+    
+    monitoring:
+      status_page: "https://status.sentry.io"
+      incident_history: "0 incidents in 2024"
+      performance_metrics: "99.99% uptime"
+      security_incidents: "0 incidents"
+
+vendor_risk_categories:
+  critical:
+    description: "Vendors with direct access to production systems or confidential data"
+    vendors: ["supabase", "stripe"]
+    requirements:
+      - "Annual security assessments"
+      - "SOC 2 Type II certification"
+      - "GDPR compliance"
+      - "Incident notification procedures"
+      - "Regular access reviews"
+    
+  high:
+    description: "Vendors with access to internal systems or sensitive data"
+    vendors: ["vercel", "linkedin", "indeed"]
+    requirements:
+      - "Annual security assessments"
+      - "SOC 2 Type II certification"
+      - "GDPR compliance"
+      - "Incident notification procedures"
+    
+  medium:
+    description: "Vendors with limited system access or internal data"
+    vendors: ["resend", "sentry"]
+    requirements:
+      - "Annual security assessments"
+      - "SOC 2 Type II certification"
+      - "GDPR compliance"
+    
+  low:
+    description: "Vendors with no system access or public data only"
+    vendors: ["usajobs"]
+    requirements:
+      - "Annual security assessments"
+      - "Basic security requirements"
+
+assessment_schedule:
+  quarterly:
+    - "Performance reviews"
+    - "Incident reviews"
+    - "Compliance checks"
+    
+  annually:
+    - "Comprehensive security assessments"
+    - "Contract reviews"
+    - "Risk assessments"
+    - "Compliance audits"
+    
+  ad_hoc:
+    - "After security incidents"
+    - "After contract changes"
+    - "After service changes"
+    - "After compliance issues"
+
+risk_mitigation:
+  technical_controls:
+    - "Multi-vendor strategy"
+    - "Data encryption"
+    - "Access controls"
+    - "Monitoring and alerting"
+    - "Regular backups"
+    
+  administrative_controls:
+    - "Vendor contracts"
+    - "Security requirements"
+    - "Incident procedures"
+    - "Regular reviews"
+    - "Training and awareness"
+    
+  physical_controls:
+    - "Secure data centers"
+    - "Access controls"
+    - "Environmental monitoring"
+    - "Secure disposal"
+
+incident_response:
+  vendor_incidents:
+    - "Immediate notification requirements"
+    - "Investigation procedures"
+    - "Remediation coordination"
+    - "Business continuity planning"
+    - "Post-incident review"
+    
+  business_continuity:
+    - "Alternative vendors"
+    - "Service restoration"
+    - "Data recovery"
+    - "Communication procedures"
+    - "Recovery testing"
+
+compliance_requirements:
+  regulatory:
+    - "GDPR compliance"
+    - "CCPA compliance"
+    - "SOC 2 requirements"
+    - "Industry standards"
+    - "Data protection laws"
+    
+  contractual:
+    - "Service level agreements"
+    - "Security requirements"
+    - "Incident notification"
+    - "Audit rights"
+    - "Data protection clauses"
+
+monitoring_and_reporting:
+  performance_metrics:
+    - "Service availability"
+    - "Response times"
+    - "Error rates"
+    - "Security incidents"
+    - "Compliance status"
+    
+  reporting:
+    - "Monthly vendor reports"
+    - "Quarterly risk assessments"
+    - "Annual vendor reviews"
+    - "Incident reports"
+    - "Compliance reports"
+
