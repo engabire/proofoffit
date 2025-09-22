@@ -1,36 +1,90 @@
-# Privacy Notice v0.1
+# Privacy Notice v0.2
 
-**Last Updated:** September 21, 2024  
-**Version:** 1.0  
+**Last Updated:** January 15, 2025  
+**Version:** 2.0  
 
-## What We Collect
+## Table of Contents
 
-### Personal Information
-- **Account Information:** Email address, name, professional details
-- **Authentication Data:** Login credentials, session information
-- **Profile Data:** Resume, cover letters, work experience, skills
-- **Application Data:** Job applications, interview records, outcomes
-- **Usage Data:** How you use our platform, search history, preferences
+1. [Introduction and Scope](#introduction-and-scope)
+2. [Personal Data We Collect and Why](#personal-data-we-collect-and-why)
+3. [How We Use Your Data](#how-we-use-your-data)
+4. [Data Sharing and Disclosure](#data-sharing-and-disclosure)
+5. [Data Security and Retention](#data-security-and-retention)
+6. [Your Rights and Choices](#your-rights-and-choices)
+7. [International Transfers](#international-transfers)
+8. [Cookies and Tracking Technologies](#cookies-and-tracking-technologies)
+9. [Children's Privacy](#childrens-privacy)
+10. [Changes to This Notice](#changes-to-this-notice)
+11. [Contact Information](#contact-information)
 
-### Technical Information
-- **Device Information:** Browser type, operating system, IP address
-- **Log Data:** Application logs, error reports, performance data
-- **Cookies:** Essential cookies for functionality, analytics cookies (with consent)
+## Introduction and Scope
 
-## Why We Collect It
+This Privacy Notice describes how ProofOfFit ("we," "us," "our," or "Company") collects, uses, stores, protects, and discloses personal data when you use our AI-powered job matching and application automation platform.
 
-### Primary Purposes
-- **Service Delivery:** Provide job search and application services
-- **Account Management:** Create and manage your account
-- **Job Matching:** Connect you with relevant job opportunities
-- **Application Processing:** Process and track your job applications
-- **Communication:** Send you updates and notifications
+**Scope:** This notice applies to personal data we collect through our website (www.proofoffit.com), mobile applications, and related services (collectively, the "Services").
 
-### Secondary Purposes
-- **Service Improvement:** Analyze usage to improve our services
-- **Security:** Protect against fraud and security threats
-- **Compliance:** Meet legal and regulatory requirements
-- **Analytics:** Understand user behavior and market trends
+**Controller:** ProofOfFit is the data controller for personal data described in this notice, except where we act as a data processor on behalf of enterprise customers.
+
+## Personal Data We Collect and Why
+
+We collect and process personal data to provide our Services, fulfill our contractual obligations, and pursue our legitimate business interests. The following tables detail the categories of personal data we collect and the purposes for which we use them.
+
+### Information You Provide Directly
+
+| **Category of Personal Data** | **Specific Data Types** | **Purposes of Collection** |
+|-------------------------------|-------------------------|----------------------------|
+| **Account and Contact Information** | Name, email address, phone number, username, password, account preferences | • Create and manage your account<br>• Communicate with you about our Services<br>• Provide customer support<br>• Verify your identity<br>• Send important updates and notifications |
+| **Professional Profile Data** | Resume, cover letters, work experience, education history, skills, certifications, job preferences, salary expectations | • Provide personalized job recommendations<br>• Match you with relevant employers<br>• Enable job application processes<br>• Improve our matching algorithms<br>• Facilitate employer-candidate connections |
+| **Application and Job Data** | Job applications, interview records, application outcomes, job search history, saved jobs, application tracking | • Process and track your job applications<br>• Provide application status updates<br>• Enable automated application features<br>• Generate application analytics<br>• Improve our Services |
+| **Communication Data** | Messages, feedback, support requests, survey responses, event registrations | • Provide customer support<br>• Respond to your inquiries<br>• Improve our Services based on feedback<br>• Send relevant communications<br>• Conduct research and surveys |
+| **Payment and Billing Data** | Payment method information, billing address, subscription details, transaction history | • Process payments for premium services<br>• Manage subscriptions<br>• Provide billing support<br>• Detect and prevent fraud<br>• Comply with financial regulations |
+
+### Information Collected Automatically
+
+| **Category of Personal Data** | **Specific Data Types** | **Purposes of Collection** |
+|-------------------------------|-------------------------|----------------------------|
+| **Usage and Analytics Data** | Pages visited, features used, time spent, click patterns, search queries, job views, application actions | • Understand how you use our Services<br>• Improve user experience<br>• Optimize our platform performance<br>• Provide personalized recommendations<br>• Conduct analytics and research |
+| **Device and Technical Data** | IP address, browser type and version, operating system, device type, screen resolution, language settings | • Ensure compatibility and functionality<br>• Provide technical support<br>• Detect and prevent fraud<br>• Analyze usage patterns<br>• Improve security |
+| **Location Data** | General location (country, state, city) inferred from IP address | • Provide location-based job recommendations<br>• Ensure compliance with local laws<br>• Analyze regional usage patterns<br>• Improve service delivery |
+| **Log and Error Data** | Application logs, error reports, performance metrics, crash reports | • Monitor and improve service quality<br>• Diagnose technical issues<br>• Ensure system security<br>• Optimize performance<br>• Comply with legal obligations |
+
+### Information from Third Parties
+
+| **Category of Personal Data** | **Specific Data Types** | **Purposes of Collection** |
+|-------------------------------|-------------------------|----------------------------|
+| **Job Board Data** | Job postings, company information, application requirements, salary data | • Provide comprehensive job search capabilities<br>• Enable automated applications<br>• Improve job matching accuracy<br>• Expand job opportunities |
+| **Social Media Data** | Professional profiles, connections, endorsements (when you connect social accounts) | • Enhance your professional profile<br>• Improve job matching<br>• Enable social features<br>• Verify professional information |
+| **Background Check Data** | Criminal history, employment verification, education verification (when you consent) | • Facilitate employment processes<br>• Enable employer verification<br>• Comply with legal requirements<br>• Ensure platform integrity |
+
+## How We Use Your Data
+
+### Legal Basis for Processing (GDPR)
+
+We process your personal data based on the following legal grounds:
+
+| **Legal Basis** | **When We Use It** | **Examples** |
+|-----------------|-------------------|--------------|
+| **Contract Performance** | When processing is necessary to provide our Services | • Account creation and management<br>• Job matching and recommendations<br>• Application processing<br>• Payment processing |
+| **Legitimate Interest** | When we have a legitimate business interest that doesn't override your rights | • Service improvement and analytics<br>• Fraud prevention and security<br>• Marketing communications<br>• Research and development |
+| **Consent** | When you have given explicit consent | • Marketing communications<br>• Analytics cookies<br>• Background checks<br>• Social media integration |
+| **Legal Obligation** | When required by law | • Tax reporting<br>• Regulatory compliance<br>• Legal process compliance<br>• Audit requirements |
+
+### Specific Use Cases
+
+**AI-Powered Job Matching:**
+- We use your profile data, preferences, and behavior to provide personalized job recommendations
+- Our AI algorithms analyze patterns to improve matching accuracy
+- You can control which factors influence your recommendations
+
+**Automated Application Features:**
+- We may automatically submit applications on your behalf based on your preferences
+- You can enable/disable automated features at any time
+- We track application outcomes to improve our algorithms
+
+**Analytics and Research:**
+- We analyze aggregated, anonymized data to understand market trends
+- This helps us improve our Services and provide better insights
+- Individual user data is not identifiable in research reports
 
 ## Where It's Stored
 
@@ -125,18 +179,35 @@
 - **Opt-Out:** Use our cookie preferences center
 - **Third-Party:** Manage third-party cookies separately
 
-## Data Sharing
+## Data Sharing and Disclosure
 
 ### We Don't Sell Your Data
-- **No Sale:** We never sell your personal information
-- **No Sharing:** We don't share your data with third parties for marketing
-- **Limited Sharing:** Only share data as described in this notice
+We never sell your personal information to third parties. We only share your data in the limited circumstances described below.
 
-### When We Share
-- **Service Providers:** With trusted service providers (under contract)
-- **Legal Requirements:** When required by law or legal process
-- **Business Transfers:** In connection with business transfers
-- **Consent:** When you explicitly consent
+### When and With Whom We Share Data
+
+| **Category of Recipient** | **Types of Data Shared** | **Purpose** | **Legal Basis** |
+|---------------------------|--------------------------|-------------|-----------------|
+| **Service Providers** | Account data, usage data, technical data | • Hosting and infrastructure<br>• Payment processing<br>• Email delivery<br>• Analytics and monitoring<br>• Customer support | Contract performance, legitimate interest |
+| **Job Board Partners** | Profile data, application data | • Enable job applications<br>• Provide job recommendations<br>• Facilitate employer connections | Contract performance, consent |
+| **Employers (when you apply)** | Resume, cover letter, application data | • Process job applications<br>• Enable hiring decisions<br>• Facilitate interviews | Contract performance, consent |
+| **Legal and Regulatory Authorities** | Any data as required | • Comply with legal obligations<br>• Respond to legal process<br>• Protect rights and safety | Legal obligation, legitimate interest |
+| **Business Transfers** | All data (in case of merger/acquisition) | • Complete business transactions<br>• Ensure service continuity | Legitimate interest |
+| **With Your Consent** | Any data you specify | • As specifically requested by you | Consent |
+
+### Data Processing Agreements
+All service providers are bound by strict data processing agreements that:
+- Limit their use of your data to specific purposes
+- Require appropriate security measures
+- Prohibit them from selling or sharing your data
+- Require them to delete your data when no longer needed
+
+### International Data Transfers
+When we share data with service providers outside your country, we ensure appropriate safeguards are in place, including:
+- Standard Contractual Clauses (EU)
+- Adequacy decisions
+- Certification schemes
+- Binding corporate rules
 
 ## International Transfers
 

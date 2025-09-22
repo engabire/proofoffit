@@ -13,10 +13,21 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { type, reason, additionalInfo } = body
 
-    // Validate request type
-    if (!type || !['export', 'delete', 'rectify'].includes(type)) {
+    // Validate request type - expanded to include all GDPR rights
+    const validTypes = [
+      'export',      // Right of access / data portability
+      'delete',      // Right to erasure
+      'rectify',     // Right to rectification
+      'restrict',    // Right to restriction of processing
+      'object',      // Right to object
+      'portability', // Right to data portability
+      'withdraw_consent', // Withdraw consent
+      'automated_decision_review' // Right to human review of automated decisions
+    ]
+    
+    if (!type || !validTypes.includes(type)) {
       return NextResponse.json(
-        { error: 'Invalid request type. Must be export, delete, or rectify' },
+        { error: `Invalid request type. Must be one of: ${validTypes.join(', ')}` },
         { status: 400 }
       )
     }
@@ -156,9 +167,29 @@ function getEstimatedCompletion(type: string): string {
   const estimates = {
     export: '7-14 business days',
     delete: '30 days (grace period)',
-    rectify: '7-14 business days'
+    rectify: '7-14 business days',
+    restrict: '7-14 business days',
+    object: '7-14 business days',
+    portability: '7-14 business days',
+    withdraw_consent: '24-48 hours',
+    automated_decision_review: '7-14 business days'
   }
   return estimates[type as keyof typeof estimates] || '7-14 business days'
+}
+
+// Helper function to get request description
+function getRequestDescription(type: string): string {
+  const descriptions = {
+    export: 'Export all personal data in a structured format',
+    delete: 'Delete all personal data and close account',
+    rectify: 'Correct or update inaccurate personal data',
+    restrict: 'Restrict processing of personal data',
+    object: 'Object to processing of personal data',
+    portability: 'Receive personal data in a portable format',
+    withdraw_consent: 'Withdraw consent for data processing',
+    automated_decision_review: 'Request human review of automated decisions'
+  }
+  return descriptions[type as keyof typeof descriptions] || 'Process data subject request'
 }
 
 // Helper function to send DSR receipt email
