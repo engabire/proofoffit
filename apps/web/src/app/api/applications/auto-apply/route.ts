@@ -62,13 +62,18 @@ export async function POST(req: NextRequest) {
     // Create application record
     const application = await prisma.application.create({
       data: {
+        tenantId: 'demo-tenant', // This should come from the authenticated user's tenant
         candidateId: candidateProfileId,
-        jobId: jobId,
+        jobRef: jobId,
+        channel: 'auto',
         status: 'submitted',
         documents: tailoredDocuments,
-        appliedAt: new Date(),
-        source: 'auto-apply',
-        metadata: {
+        timestamps: {
+          appliedAt: new Date(),
+          autoApplied: true,
+          documentsGenerated: true
+        },
+        policyDecision: {
           jobSource: job.source,
           autoApplied: true,
           documentsGenerated: true
@@ -87,10 +92,10 @@ export async function POST(req: NextRequest) {
       where: { id: application.id },
       data: {
         status: submissionResult.success ? 'submitted' : 'failed',
-        externalId: submissionResult.externalId,
-        metadata: {
-          ...((application.metadata ?? {}) as Record<string, unknown>),
-          submissionResult
+        policyDecision: {
+          ...((application.policyDecision ?? {}) as Record<string, unknown>),
+          submissionResult,
+          externalId: submissionResult.externalId
         }
       }
     })

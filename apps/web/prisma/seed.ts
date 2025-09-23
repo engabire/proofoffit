@@ -5,12 +5,23 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding database...')
 
+  // Create demo tenant first
+  const demoTenant = await prisma.tenant.upsert({
+    where: { id: 'demo-tenant' },
+    update: {},
+    create: {
+      id: 'demo-tenant',
+      name: 'Demo Tenant',
+      plan: 'pro',
+    },
+  })
+
   const candidateUser = await prisma.user.upsert({
     where: { email: 'candidate@demo.com' },
     update: {},
     create: {
       email: 'candidate@demo.com',
-      plan: 'PRO',
+      tenantId: 'demo-tenant',
     },
   })
 
@@ -19,169 +30,59 @@ async function main() {
     update: {},
     create: {
       email: 'employer@demo.com',
-      plan: 'PREMIUM',
+      tenantId: 'demo-tenant',
     },
   })
 
-  const candidateTarget = await prisma.target.upsert({
-    where: { id: 'demo-candidate-target' },
-    update: {},
-    create: {
-      id: 'demo-candidate-target',
-      userId: candidateUser.id,
-      title: 'Senior Product Manager',
-      role: 'Product Manager',
-      companyHint: 'Proof of Fit',
-      layout: 'REPORT',
-      rubricJson: {
-        summary: 'Demo rubric for evaluating product strategy work',
-        competencies: [
-          {
-            name: 'Product Strategy',
-            weight: 3,
-          },
-          {
-            name: 'Execution',
-            weight: 2,
-          },
-        ],
-      },
-    },
-  })
-
-  const candidateProof = await prisma.proof.upsert({
-    where: { id: 'demo-candidate-proof' },
-    update: {},
-    create: {
-      id: 'demo-candidate-proof',
-      userId: candidateUser.id,
-      title: 'Launched analytics overhaul',
-      kind: 'project',
-      summary: 'Led rollout of a new analytics suite that improved adoption by 45%.',
-      url: 'https://example.com/demo-proof',
-    },
-  })
-
+  // Create candidate profile
   const candidateProfile = await prisma.candidateProfile.upsert({
     where: { userId: candidateUser.id },
     update: {},
     create: {
       userId: candidateUser.id,
+      tenantId: 'demo-tenant',
       preferences: {
-        desiredRoles: ['Product Manager'],
-        preferredLocations: ['Remote', 'Washington, D.C.'],
-      },
-      contactPolicy: {
-        email: true,
-        sms: false,
+        name: 'Demo Candidate',
+        title: 'Senior Product Manager',
+        summary: 'Experienced product manager with a track record of successful launches',
       },
     },
   })
 
-  await prisma.bullet.upsert({
-    where: { id: 'demo-bullet-1' },
-    update: {
-      text: 'Led a cross-functional team to ship analytics overhaul with 45% adoption gain.',
-      tags: {
-        criterion: 'Product Strategy',
-        evidence_type: 'result',
-        metric: '45% adoption lift',
-      },
-    },
-    create: {
-      id: 'demo-bullet-1',
-      candidateId: candidateProfile.id,
-      text: 'Led a cross-functional team to ship analytics overhaul with 45% adoption gain.',
-      tags: {
-        criterion: 'Product Strategy',
-        evidence_type: 'result',
-        metric: '45% adoption lift',
-      },
-    },
-  })
-
-  const demoJobId = 'usajobs-senior-product-manager-proof-of-fit'
-
+  // Create a demo job
   const job = await prisma.job.upsert({
-    where: { id: demoJobId },
-    update: {
-      description: 'Help Proof of Fit expand product-market fit analytics across federal buyers.',
-      fetchedAt: new Date(),
-    },
+    where: { id: 'demo-job' },
+    update: {},
     create: {
-      id: demoJobId,
-      source: 'usajobs',
-      org: 'Proof of Fit',
+      id: 'demo-job',
+      source: 'demo',
+      org: 'Demo Company',
       title: 'Senior Product Manager',
-      location: 'Washington, D.C. (Hybrid)',
+      location: 'San Francisco, CA',
       workType: 'hybrid',
-      description: 'Help Proof of Fit expand product-market fit analytics across federal buyers.',
+      description: 'We are looking for a senior product manager to lead our product strategy.',
       requirements: {
-        must_have: ['5+ years product management experience', 'Evidence of data-driven decision making'],
-        preferred: ['GovTech or civic experience'],
+        must_have: ['5+ years product management experience', 'Strong analytical skills'],
+        preferred: ['MBA degree', 'Technical background']
       },
-      constraints: {
-        clearance: 'Public trust eligible',
-      },
-      tos: {
-        allowed: true,
-        captcha: false,
+      pay: {
+        min: 120000,
+        max: 180000,
+        currency: 'USD'
       },
     },
   })
 
-  await prisma.application.upsert({
-    where: { id: 'demo-application' },
-    update: {
-      metadata: {
-        jobSource: job.source,
-        autoApplied: true,
-      },
-    },
-    create: {
-      id: 'demo-application',
-      candidateId: candidateProfile.id,
-      jobId: job.id,
-      status: 'submitted',
-      documents: {
-        resume: 'Demo resume content for Proof of Fit role.',
-        coverLetter: 'Demo cover letter content for Proof of Fit role.',
-      },
-      source: 'auto-apply',
-      metadata: {
-        jobSource: job.source,
-        autoApplied: true,
-      },
-    },
-  })
-
-  await prisma.targetProofWeight.upsert({
-    where: {
-      targetId_proofId: {
-        targetId: candidateTarget.id,
-        proofId: candidateProof.id,
-      },
-    },
-    update: {
-      weight: 3,
-    },
-    create: {
-      targetId: candidateTarget.id,
-      proofId: candidateProof.id,
-      weight: 3,
-    },
-  })
-
-  console.log('✅ Seeded demo users, profiles, targets, proofs, and jobs')
-  console.log('   Candidate:', candidateUser.email)
-  console.log('   Employer: ', employerUser.email)
-
-  console.log('🎉 Database seeding completed!')
+  console.log('✅ Database seeded successfully!')
+  console.log('👤 Demo users created:')
+  console.log(`   - Candidate: ${candidateUser.email}`)
+  console.log(`   - Employer: ${employerUser.email}`)
+  console.log(`   - Job: ${job.title} at ${job.org}`)
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seeding failed:', e)
+    console.error('❌ Error seeding database:', e)
     process.exit(1)
   })
   .finally(async () => {

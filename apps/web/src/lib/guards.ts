@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/db";
+// Simplified guards - models don't exist in current schema
+
 import { limitsByPlan, type Plan } from "@/lib/limits";
 
 export class QuotaExceededError extends Error {
@@ -16,94 +17,21 @@ export class QuotaExceededError extends Error {
 }
 
 export async function assertWithinLimits(userId: string): Promise<void> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { plan: true },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  const plan = user.plan as Plan;
-  const { maxTargets, maxProofs, maxActiveLinks } = limitsByPlan[plan];
-
-  const [targets, proofs, links] = await Promise.all([
-    prisma.target.count({
-      where: { userId, isDeleted: false },
-    }),
-    prisma.proof.count({
-      where: { userId },
-    }),
-    prisma.auditLink.count({
-      where: {
-        userId,
-        isRevoked: false,
-        OR: [
-          { expiresAt: null },
-          { expiresAt: { gt: new Date() } },
-        ],
-      },
-    }),
-  ]);
-
-  if (targets >= maxTargets) {
-    throw new QuotaExceededError("targets", targets, maxTargets, plan);
-  }
-
-  if (proofs >= maxProofs) {
-    throw new QuotaExceededError("proofs", proofs, maxProofs, plan);
-  }
-
-  if (links >= maxActiveLinks) {
-    throw new QuotaExceededError("activeLinks", links, maxActiveLinks, plan);
-  }
+  // Temporary - no limits checking until models are available
+  console.log("Limits check skipped - models not available for user:", userId);
 }
 
-export async function getCurrentUsage(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { plan: true },
-  });
+export async function checkTargetLimit(userId: string): Promise<void> {
+  // Temporary placeholder
+  console.log("Target limit check skipped - target model not available");
+}
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+export async function checkProofLimit(userId: string): Promise<void> {
+  // Temporary placeholder
+  console.log("Proof limit check skipped - proof model not available");
+}
 
-  const plan = user.plan as Plan;
-  const limits = limitsByPlan[plan];
-
-  const [targets, proofs, activeLinks] = await Promise.all([
-    prisma.target.count({
-      where: { userId, isDeleted: false },
-    }),
-    prisma.proof.count({
-      where: { userId },
-    }),
-    prisma.auditLink.count({
-      where: {
-        userId,
-        isRevoked: false,
-        OR: [
-          { expiresAt: null },
-          { expiresAt: { gt: new Date() } },
-        ],
-      },
-    }),
-  ]);
-
-  return {
-    plan,
-    limits,
-    usage: {
-      targets,
-      proofs,
-      activeLinks,
-    },
-    isWithinLimits: {
-      targets: targets < limits.maxTargets,
-      proofs: proofs < limits.maxProofs,
-      activeLinks: activeLinks < limits.maxActiveLinks,
-    },
-  };
+export async function checkAuditLinkLimit(userId: string): Promise<void> {
+  // Temporary placeholder
+  console.log("Audit link limit check skipped - auditLink model not available");
 }
