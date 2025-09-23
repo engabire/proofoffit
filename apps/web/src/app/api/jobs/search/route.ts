@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { isSupabaseConfigured } from '@/lib/env'
+import { jobSearchService } from '@/lib/job-search'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,12 +14,68 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = parseInt(searchParams.get('offset') || '0')
 
+    // Try enhanced job search first
+    if (query.trim()) {
+      try {
+        console.log('Using enhanced job search service...')
+        const enhancedJobs = await jobSearchService.searchJobs({
+          query,
+          location,
+          remote: workType === 'remote',
+          limit,
+          experienceLevel: 'mid',
+          jobType: 'full-time'
+        })
+
+        if (enhancedJobs.length > 0) {
+          // Transform enhanced jobs to match expected format
+          const transformedJobs = enhancedJobs.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: job.company,
+            location: job.location,
+            type: job.employmentType || 'full-time',
+            remote: job.isRemote,
+            salary: job.salary ? {
+              min: job.salaryMin || 0,
+              max: job.salaryMax || 0,
+              currency: 'USD'
+            } : undefined,
+            description: job.description,
+            requirements: job.skills || [],
+            niceToHaves: [],
+            benefits: job.benefits || [],
+            postedAt: job.postedDate,
+            companyLogo: undefined,
+            companySize: job.companySize,
+            industry: job.industry,
+            experienceLevel: job.experienceLevel || 'mid',
+            source: job.source,
+            constraints: {},
+            tos: { allowed: job.source === 'governmentjobs', captcha: false, notes: `${job.source} job posting` },
+            url: job.url,
+            applyUrl: job.applyUrl
+          }))
+
+          return NextResponse.json({
+            jobs: transformedJobs,
+            total: transformedJobs.length,
+            hasMore: false,
+            source: 'enhanced'
+          })
+        }
+      } catch (enhancedError) {
+        console.error('Enhanced job search failed, falling back:', enhancedError)
+      }
+    }
+
+    // Fallback to Supabase or mock data
     if (!isSupabaseConfigured() || !supabaseAdmin) {
-      // Return mock data if Supabase is not configured
       return NextResponse.json({
         jobs: getMockJobs(query, location, workType, limit),
         total: 6,
-        hasMore: false
+        hasMore: false,
+        source: 'mock'
       })
     }
 
@@ -53,7 +110,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         jobs: getMockJobs(query, location, workType, limit),
         total: 6,
-        hasMore: false
+        hasMore: false,
+        source: 'mock'
       })
     }
 
@@ -87,7 +145,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       jobs: transformedJobs,
       total: transformedJobs.length,
-      hasMore: transformedJobs.length === limit
+      hasMore: transformedJobs.length === limit,
+      source: 'supabase'
     })
 
   } catch (error) {
@@ -96,7 +155,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       jobs: getMockJobs('', '', '', 20),
       total: 6,
-      hasMore: false
+      hasMore: false,
+      source: 'mock'
     })
   }
 }

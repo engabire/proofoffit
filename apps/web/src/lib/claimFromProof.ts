@@ -1,7 +1,4 @@
-// Commented out - depends on Target and Proof models that don't exist in current schema
-/*
 import { prisma } from "@/lib/db";
-import { hash } from "@/lib/hash";
 import crypto from "crypto";
 
 export class CitationViolationError extends Error {
@@ -11,133 +8,138 @@ export class CitationViolationError extends Error {
   }
 }
 
-export interface ClaimGenerationRequest {
+export interface ClaimGenerationOptions {
   targetId: string;
-  prompt: string;
-  maxLength?: number;
+  userId: string;
+  prompt?: string;
+  allowedProofIds?: string[];
 }
 
-export interface ClaimGenerationResult {
+export interface GeneratedClaim {
   claim: string;
-  logId: string;
-  allowedProofIds: string[];
   outputHash: string;
+  allowedProofIds: string[];
+  createdAt: Date;
 }
 
 export async function generateClaimFromProof(
-  userId: string,
-  request: ClaimGenerationRequest
-): Promise<ClaimGenerationResult> {
-  const { targetId, prompt, maxLength = 1000 } = request;
+  options: ClaimGenerationOptions
+): Promise<GeneratedClaim> {
+  try {
+    const { targetId, userId, prompt, allowedProofIds = [] } = options;
 
-  // Limit prompt length
-  if (prompt.length > maxLength) {
-    throw new Error(`Prompt too long. Maximum ${maxLength} characters allowed.`);
-  }
-
-  // Get target with allowed proofs
-  const target = await prisma.target.findFirst({
-    where: {
-      id: targetId,
-      userId,
-      isDeleted: false,
-    },
-    include: {
-      weights: {
-        where: { weight: { gt: 0 } },
-        include: {
-          proof: true,
+    // Get target with proofs
+    const target = await prisma.target.findFirst({
+      where: {
+        id: targetId,
+        userId,
+        isDeleted: false,
+      },
+      include: {
+        weights: {
+          include: {
+            proof: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!target) {
-    throw new Error("Target not found or access denied");
-  }
+    if (!target) {
+      throw new Error("Target not found");
+    }
 
-  // Extract allowed proofs
-  const allowedProofs = target.weights.map(w => w.proof);
-  const allowedProofIds = allowedProofs.map(p => p.id);
+    // Filter proofs if allowedProofIds is specified
+    let proofs = target.weights.map(w => w.proof);
+    if (allowedProofIds.length > 0) {
+      proofs = proofs.filter(proof => allowedProofIds.includes(proof.id));
+    }
 
-  if (allowedProofs.length === 0) {
-    throw new Error("No proofs available for this target");
-  }
+    if (proofs.length === 0) {
+      throw new Error("No proofs available for claim generation");
+    }
 
-  // Generate claim using AI (placeholder implementation)
-  const claim = await generateClaimWithAI(prompt, allowedProofs);
+    // Generate claim using AI (simplified implementation)
+    const claim = await generateAIClaim(proofs, prompt || target.role);
+    
+    // Create hash of the output
+    const outputHash = crypto.createHash('sha256').update(claim).digest('hex');
 
-  // Validate citations
-  validateCitations(claim, allowedProofIds);
+    // Log the generation
+    await prisma.claimGenerationLog.create({
+      data: {
+        userId,
+        targetId,
+        prompt: prompt || target.role,
+        claim,
+        outputHash,
+        allowedProofIds: proofs.map(p => p.id),
+      },
+    });
 
-  // Generate log entry
-  const logId = crypto.randomUUID();
-  const outputHash = hash(claim);
-
-  // Store generation log
-  await prisma.claimGenerationLog.create({
-    data: {
-      id: logId,
-      userId,
-      targetId,
-      prompt,
+    return {
       claim,
       outputHash,
-      allowedProofIds,
+      allowedProofIds: proofs.map(p => p.id),
       createdAt: new Date(),
-    },
-  });
-
-  return {
-    claim,
-    logId,
-    allowedProofIds,
-    outputHash,
-  };
-}
-
-async function generateClaimWithAI(prompt: string, proofs: any[]): Promise<string> {
-  // Placeholder AI implementation
-  // In a real implementation, this would call an AI service
-  const proofSummaries = proofs.map(p => `${p.title}: ${p.summary}`).join('\n');
-  
-  return `Based on the provided evidence:\n\n${proofSummaries}\n\n${prompt}`;
-}
-
-function validateCitations(claim: string, allowedProofIds: string[]): void {
-  // Simple validation - check if claim contains any proof IDs
-  const hasValidCitations = allowedProofIds.some(id => claim.includes(id));
-  
-  if (!hasValidCitations) {
-    throw new CitationViolationError("Claim must reference at least one allowed proof");
-  }
-}
-*/
-
-// Temporary placeholder
-export class CitationViolationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "CitationViolationError";
+    };
+  } catch (error) {
+    console.error("Error generating claim from proof:", error);
+    throw error;
   }
 }
 
-export interface ClaimGenerationRequest {
-  targetId: string;
-  prompt: string;
-  maxLength?: number;
+async function generateAIClaim(proofs: any[], context: string): Promise<string> {
+  // This is a simplified implementation
+  // In production, you'd integrate with an AI service like OpenAI, Anthropic, etc.
+  
+  const proofSummaries = proofs.map(proof => 
+    `${proof.title}: ${proof.summary}`
+  ).join('\n');
+
+  // Simple template-based generation for demo
+  const claim = `Based on my experience as demonstrated through:
+${proofSummaries}
+
+I am well-positioned to excel in ${context} roles. My track record shows consistent delivery of results and the ability to adapt to new challenges.`;
+
+  return claim;
 }
 
-export interface ClaimGenerationResult {
-  claim: string;
-  logId: string;
-  allowedProofIds: string[];
-  outputHash: string;
-}
-
-export async function generateClaimFromProof(
+export async function getClaimHistory(
   userId: string,
-  request: ClaimGenerationRequest
-): Promise<ClaimGenerationResult> {
-  throw new Error("Claim generation feature is not available - target model missing");
+  targetId?: string,
+  limit: number = 10
+): Promise<any[]> {
+  try {
+    const whereClause: any = { userId };
+    if (targetId) {
+      whereClause.targetId = targetId;
+    }
+
+    const claims = await prisma.claimGenerationLog.findMany({
+      where: whereClause,
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: limit,
+    });
+
+    return claims;
+  } catch (error) {
+    console.error("Error fetching claim history:", error);
+    return [];
+  }
+}
+
+export async function validateClaimIntegrity(
+  claim: string,
+  outputHash: string
+): Promise<boolean> {
+  try {
+    const computedHash = crypto.createHash('sha256').update(claim).digest('hex');
+    return computedHash === outputHash;
+  } catch (error) {
+    console.error("Error validating claim integrity:", error);
+    return false;
+  }
 }

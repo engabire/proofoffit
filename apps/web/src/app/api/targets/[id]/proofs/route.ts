@@ -1,5 +1,3 @@
-// Commented out - target model doesn't exist in current schema
-/*
 import { prisma } from "@/lib/db";
 import { requireUserId } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,6 +15,7 @@ export async function POST(
       where: {
         id,
         userId,
+        isDeleted: false,
       },
     });
 
@@ -66,6 +65,7 @@ export async function DELETE(
       where: {
         id,
         userId,
+        isDeleted: false,
       },
     });
 
@@ -91,20 +91,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
-*/
-
-// Temporary placeholders
-export async function POST() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-export async function DELETE() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
 }

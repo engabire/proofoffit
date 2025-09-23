@@ -1,5 +1,3 @@
-// Commented out - target model doesn't exist in current schema
-/*
 import { prisma } from "@/lib/db";
 import { requireUserId } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -39,7 +37,10 @@ export async function GET(req: NextRequest) {
     const offset = (page - 1) * limit;
 
     const targets = await prisma.target.findMany({
-      where: { userId },
+      where: { 
+        userId,
+        isDeleted: false,
+      },
       include: {
         weights: {
           include: {
@@ -48,7 +49,7 @@ export async function GET(req: NextRequest) {
         },
         _count: {
           select: {
-            // auditLinks: true, // Model doesn't exist
+            auditLinks: true,
           },
         },
       },
@@ -60,7 +61,10 @@ export async function GET(req: NextRequest) {
     });
 
     const total = await prisma.target.count({
-      where: { userId },
+      where: { 
+        userId,
+        isDeleted: false,
+      },
     });
 
     return NextResponse.json({
@@ -79,20 +83,4 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
-}
-*/
-
-// Temporary placeholder
-export async function POST() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-export async function GET() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
 }

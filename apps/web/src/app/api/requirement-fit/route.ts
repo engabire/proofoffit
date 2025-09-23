@@ -1,5 +1,3 @@
-// Commented out - target model doesn't exist in current schema
-/*
 import { prisma } from "@/lib/db";
 import { requireUserId } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -14,6 +12,7 @@ export async function POST(req: NextRequest) {
       where: {
         id: targetId,
         userId,
+        isDeleted: false,
       },
       include: {
         weights: {
@@ -74,13 +73,4 @@ function calculateFitScore(proofs: any[], jdText: string): number {
   });
   
   return Math.min(100, (matches / jdKeywords.length) * 100);
-}
-*/
-
-// Temporary placeholder
-export async function POST() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
 }

@@ -307,3 +307,105 @@ model ActionLog {
 
   @@map("action_log")
 }
+
+// Target model for job targeting and proof organization
+model Target {
+  id           String   @id @default(cuid())
+  userId       String
+  title        String
+  role         String
+  companyHint  String?
+  layout       String   @default("REPORT") // REPORT, PORTFOLIO, ONEPAGER
+  rubricJson   Json     @default("{}")
+  jdSnapshot   String?
+  fitScore     Float?
+  lastAnalyzedAt DateTime?
+  isDeleted    Boolean  @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  weights      TargetProofWeight[]
+  auditLinks   AuditLink[]
+
+  @@map("targets")
+}
+
+// Proof model for evidence and achievements
+model Proof {
+  id          String   @id @default(cuid())
+  userId      String
+  targetId    String?
+  title       String
+  summary     String
+  kind        String   @default("achievement") // achievement, project, skill, etc.
+  artifacts   Json     @default("[]") // [{type, title, url}]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  targetWeights TargetProofWeight[]
+
+  @@map("proofs")
+}
+
+// Junction table for target-proof relationships with weights
+model TargetProofWeight {
+  id       String @id @default(cuid())
+  targetId String
+  proofId  String
+  weight   Float  @default(1.0)
+
+  // Relations
+  target Target @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  proof  Proof  @relation(fields: [proofId], references: [id], onDelete: Cascade)
+
+  @@unique([targetId, proofId])
+  @@map("target_proof_weights")
+}
+
+// Audit links for sharing targets with employers
+model AuditLink {
+  id          String    @id @default(cuid())
+  targetId    String
+  userId      String
+  token       String    @unique
+  isRevoked   Boolean   @default(false)
+  expiresAt   DateTime?
+  maxViews    Int?
+  viewsCount  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  target Target @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@map("audit_links")
+}
+
+// Analytics events for tracking user behavior
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  eventType String
+  userId    String?
+  targetId  String?
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@map("analytics_events")
+}
+
+// Claim generation logs for AI-generated content
+model ClaimGenerationLog {
+  id              String   @id @default(cuid())
+  userId          String
+  targetId        String
+  prompt          String
+  claim           String
+  outputHash      String
+  allowedProofIds String[] @default([])
+  createdAt       DateTime @default(now())
+
+  @@map("claim_generation_logs")
+}

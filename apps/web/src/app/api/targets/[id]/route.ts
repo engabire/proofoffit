@@ -1,5 +1,3 @@
-// Commented out - target model doesn't exist in current schema
-/*
 import { prisma } from "@/lib/db";
 import { requireUserId } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,6 +14,7 @@ export async function GET(
       where: {
         id,
         userId,
+        isDeleted: false,
       },
       include: {
         weights: {
@@ -23,18 +22,18 @@ export async function GET(
             proof: true,
           },
         },
-        // auditLinks: { // Model doesn't exist
-        //   where: {
-        //     isRevoked: false,
-        //     OR: [
-        //       { expiresAt: null },
-        //       { expiresAt: { gt: new Date() } },
-        //     ],
-        //   },
-        //   orderBy: {
-        //     createdAt: "desc",
-        //   },
-        // },
+        auditLinks: {
+          where: {
+            isRevoked: false,
+            OR: [
+              { expiresAt: null },
+              { expiresAt: { gt: new Date() } },
+            ],
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
     });
 
@@ -68,6 +67,7 @@ export async function PUT(
       where: {
         id,
         userId,
+        isDeleted: false,
       },
     });
 
@@ -111,6 +111,7 @@ export async function DELETE(
       where: {
         id,
         userId,
+        isDeleted: false,
       },
     });
 
@@ -124,6 +125,7 @@ export async function DELETE(
     await prisma.target.update({
       where: { id },
       data: {
+        isDeleted: true,
         deletedAt: new Date(),
       },
     });
@@ -136,27 +138,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
-*/
-
-// Temporary placeholders
-export async function GET() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-export async function PUT() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-export async function DELETE() {
-  return new Response(JSON.stringify({ error: "Not implemented - target model missing" }), {
-    status: 501,
-    headers: { "Content-Type": "application/json" },
-  });
 }

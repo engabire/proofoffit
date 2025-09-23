@@ -73,11 +73,56 @@ async function main() {
     },
   })
 
+  // Create candidate target
+  const candidateTarget = await prisma.target.create({
+    data: {
+      userId: candidateUser.id,
+      title: "Senior Software Engineer",
+      role: "Software Engineer",
+      companyHint: "Tech Company",
+      layout: "REPORT",
+      rubricJson: {
+        skills: ["JavaScript", "React", "Node.js"],
+        experience: "5+ years",
+        education: "Bachelor's degree"
+      }
+    }
+  })
+
+  // Create candidate proof
+  const candidateProof = await prisma.proof.create({
+    data: {
+      userId: candidateUser.id,
+      targetId: candidateTarget.id,
+      title: "Built scalable web application",
+      summary: "Developed a full-stack web application serving 10,000+ users",
+      kind: "achievement",
+      artifacts: [
+        {
+          type: "portfolio",
+          title: "Project Demo",
+          url: "https://example.com/demo"
+        }
+      ]
+    }
+  })
+
+  // Create target-proof weight
+  const targetProofWeight = await prisma.targetProofWeight.create({
+    data: {
+      targetId: candidateTarget.id,
+      proofId: candidateProof.id,
+      weight: 1.0
+    }
+  })
+
   console.log('✅ Database seeded successfully!')
   console.log('👤 Demo users created:')
   console.log(`   - Candidate: ${candidateUser.email}`)
   console.log(`   - Employer: ${employerUser.email}`)
   console.log(`   - Job: ${job.title} at ${job.org}`)
+  console.log(`   - Target: ${candidateTarget.title}`)
+  console.log(`   - Proof: ${candidateProof.title}`)
 }
 
 main()

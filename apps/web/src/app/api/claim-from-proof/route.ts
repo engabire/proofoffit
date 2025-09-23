@@ -1,35 +1,29 @@
 import { requireUserId } from "@/lib/auth";
-import { generateClaimFromProof, CitationViolationError } from "@/lib/claimFromProof";
+import { generateClaimFromProof } from "@/lib/claimFromProof";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const userId = await requireUserId();
-    const { targetId, prompt, maxLength } = await req.json();
+    const { targetId, prompt, allowedProofIds } = await req.json();
 
-    if (!targetId || !prompt) {
+    if (!targetId) {
       return NextResponse.json(
-        { error: "targetId and prompt are required" },
+        { error: "targetId is required" },
         { status: 400 }
       );
     }
 
-    const result = await generateClaimFromProof(userId, {
+    const result = await generateClaimFromProof({
       targetId,
+      userId,
       prompt,
-      maxLength,
+      allowedProofIds,
     });
 
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error generating claim from proof:", error);
-    
-    if (error instanceof CitationViolationError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
-    }
 
     if (error instanceof Error) {
       return NextResponse.json(
