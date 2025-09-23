@@ -54,6 +54,9 @@ import {
 } from "@proof-of-fit/ui";
 import LivingProofHero from "@/components/landing/living-proof-hero";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * ProofOfFit Landing
  * - Two-lane hero toggle (Job Seeker / Employer) without page reload
