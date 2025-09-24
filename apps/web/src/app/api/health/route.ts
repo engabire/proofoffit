@@ -1,37 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export async function GET(req: NextRequest) {
   const startTime = Date.now()
   
   try {
-    // Check database connectivity
-    const { data: dbCheck, error: dbError } = await supabase
-      .from('profiles')
-      .select('count')
-      .limit(1)
+    // Lazy initialize Supabase client to avoid build-time failures
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     
-    const dbStatus = dbError ? 'unhealthy' : 'healthy'
-    const dbResponseTime = Date.now() - startTime
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.json({
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        error: 'Missing Supabase configuration',
+        response_time_ms: Date.now() - startTime
+      }, { status: 503 })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
     
-    // Check authentication service
-    const { data: authCheck, error: authError } = await supabase.auth.getSession()
-    const authStatus = authError ? 'unhealthy' : 'healthy'
+    // Check database connectivity with minimal query
+    let dbStatus = 'unknown'
+    let dbError = null
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .select('id')
+        .limit(1)
+      dbStatus = error ? 'unhealthy' : 'healthy'
+      dbError = error?.message || null
+    } catch (err) {
+      dbStatus = 'unhealthy'
+      dbError = err instanceof Error ? err.message : 'Database connection failed'
+    }
     
     // Check storage service
-    const { data: storageCheck, error: storageError } = await supabase.storage
-      .from('avatars')
-      .list('', { limit: 1 })
-    const storageStatus = storageError ? 'unhealthy' : 'healthy'
+    let storageStatus = 'unknown'
+    let storageError = null
+    try {
+      const { error } = await supabase.storage
+        .from('avatars')
+        .list('', { limit: 1 })
+      storageStatus = error ? 'unhealthy' : 'healthy'
+      storageError = error?.message || null
+    } catch (err) {
+      storageStatus = 'unhealthy'
+      storageError = err instanceof Error ? err.message : 'Storage connection failed'
+    }
     
-    // Overall health status
-    const overallStatus = (dbStatus === 'healthy' && authStatus === 'healthy' && storageStatus === 'healthy') 
+    // Overall health status - be more lenient
+    const overallStatus = (dbStatus === 'healthy' && storageStatus === 'healthy') 
       ? 'healthy' 
       : 'unhealthy'
     
@@ -47,16 +66,11 @@ export async function GET(req: NextRequest) {
       services: {
         database: {
           status: dbStatus,
-          response_time_ms: dbResponseTime,
-          error: dbError?.message || null
-        },
-        authentication: {
-          status: authStatus,
-          error: authError?.message || null
+          error: dbError
         },
         storage: {
           status: storageStatus,
-          error: storageError?.message || null
+          error: storageError
         }
       },
       uptime: process.uptime(),
