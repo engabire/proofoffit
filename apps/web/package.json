@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "cd ../../packages/ui && npm run build",
     "dev": "next dev",
     "build": "npx prisma generate && next build",
     "start": "next start",
