@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "npm run build:ui && cd apps/web && npm run build",
     "build:ui": "cd packages/ui && npm run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
