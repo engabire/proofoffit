@@ -9,6 +9,7 @@
   "scripts": {
     "build": "npm run build:ui && cd apps/web && npm run build",
     "build:ui": "cd packages/ui && npm run build",
+    "build:web": "cd apps/web && npm run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
