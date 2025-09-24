@@ -116,13 +116,26 @@ async function main() {
     }
   })
 
-  console.log('✅ Database seeded successfully!')
-  console.log('👤 Demo users created:')
-  console.log(`   - Candidate: ${candidateUser.email}`)
-  console.log(`   - Employer: ${employerUser.email}`)
-  console.log(`   - Job: ${job.title} at ${job.org}`)
-  console.log(`   - Target: ${candidateTarget.title}`)
-  console.log(`   - Proof: ${candidateProof.title}`)
+         // Create system health record
+         await prisma.systemHealth.create({
+           data: {
+             status: 'healthy',
+             message: 'System initialized successfully',
+             metadata: {
+               version: '1.0.0',
+               initialized_at: new Date().toISOString()
+             }
+           }
+         })
+
+         console.log('✅ Database seeded successfully!')
+         console.log('👤 Demo users created:')
+         console.log(`   - Candidate: ${candidateUser.email}`)
+         console.log(`   - Employer: ${employerUser.email}`)
+         console.log(`   - Job: ${job.title} at ${job.org}`)
+         console.log(`   - Target: ${candidateTarget.title}`)
+         console.log(`   - Proof: ${candidateProof.title}`)
+         console.log('🏥 System health record created')
 }
 
 main()

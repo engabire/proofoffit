@@ -20,9 +20,20 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
     
-    // Database probe (non-fatal): avoid table dependency to prevent false negatives
-    let dbStatus = 'skipped'
+    // Database probe using dedicated health table
+    let dbStatus = 'unknown'
     let dbError = null
+    try {
+      const { error } = await supabase
+        .from('system_health')
+        .select('id')
+        .limit(1)
+      dbStatus = error ? 'unhealthy' : 'healthy'
+      dbError = error?.message || null
+    } catch (err) {
+      dbStatus = 'unhealthy'
+      dbError = err instanceof Error ? err.message : 'Database connection failed'
+    }
     
     // Check storage service
     let storageStatus = 'unknown'
@@ -38,8 +49,8 @@ export async function GET(req: NextRequest) {
       storageError = err instanceof Error ? err.message : 'Storage connection failed'
     }
     
-    // Overall health status - be more lenient
-    const overallStatus = (storageStatus === 'healthy') 
+    // Overall health status - both DB and storage must be healthy
+    const overallStatus = (dbStatus === 'healthy' && storageStatus === 'healthy') 
       ? 'healthy' 
       : 'unhealthy'
     

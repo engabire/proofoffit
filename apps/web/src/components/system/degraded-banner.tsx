@@ -14,9 +14,22 @@ export function DegradedBanner() {
         const ct = res.headers.get('content-type') || ''
         if (!res.ok || !ct.includes('application/json')) throw new Error('bad')
         const data = await res.json()
-        const ok = data?.status === 'ok'
-        setVisible(maintenance || !ok)
-        if (!ok) setMessage('Service degraded. Some features may be slow.')
+        const isHealthy = data?.status === 'healthy'
+        setVisible(maintenance || !isHealthy)
+        
+        if (!isHealthy) {
+          // Provide more specific messaging based on service status
+          const services = data?.services || {}
+          const unhealthyServices = Object.entries(services)
+            .filter(([_, service]: [string, any]) => service.status !== 'healthy')
+            .map(([name]) => name)
+          
+          if (unhealthyServices.length > 0) {
+            setMessage(`Service degraded. ${unhealthyServices.join(', ')} ${unhealthyServices.length === 1 ? 'is' : 'are'} experiencing issues.`)
+          } else {
+            setMessage('Service degraded. Some features may be slow.')
+          }
+        }
       } catch {
         setVisible(true)
         setMessage('Service degraded. Some features may be unavailable.')

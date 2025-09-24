@@ -409,3 +409,14 @@ model ClaimGenerationLog {
 
   @@map("claim_generation_logs")
 }
+
+// System health check table for monitoring
+model SystemHealth {
+  id        String   @id @default(cuid())
+  status    String   @default("healthy") // healthy, degraded, unhealthy
+  message   String?
+  timestamp DateTime @default(now())
+  metadata  Json     @default("{}")
+
+  @@map("system_health")
+}
