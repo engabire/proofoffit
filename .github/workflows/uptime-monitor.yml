@@ -15,10 +15,11 @@ jobs:
       - name: Check application health
         run: |
           echo "Checking application health..."
-          
+          HEALTH_URL="https://proofoffit.com/api/health"
+
           # Check health endpoint
-          HEALTH_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://proofoffit.com/api/health)
-          
+          HEALTH_RESPONSE=$(curl -s -L -o /dev/null -w "%{http_code}" "$HEALTH_URL")
+
           if [ "$HEALTH_RESPONSE" = "200" ]; then
             echo "✅ Application is healthy (HTTP $HEALTH_RESPONSE)"
             HEALTH_STATUS="healthy"
@@ -26,27 +27,37 @@ jobs:
             echo "❌ Application is unhealthy (HTTP $HEALTH_RESPONSE)"
             HEALTH_STATUS="unhealthy"
           fi
-          
+
           # Get detailed health data
-          HEALTH_DATA=$(curl -s https://proofoffit.com/api/health)
+          HEALTH_DATA=$(curl -s -L "$HEALTH_URL")
           echo "Health data: $HEALTH_DATA"
-          
-          # Check response time
-          RESPONSE_TIME=$(echo $HEALTH_DATA | jq -r '.response_time_ms // "unknown"')
-          echo "Response time: ${RESPONSE_TIME}ms"
-          
-          # Check database status
-          DB_STATUS=$(echo $HEALTH_DATA | jq -r '.services.database.status // "unknown"')
+
+          if echo "$HEALTH_DATA" | jq empty >/dev/null 2>&1; then
+            RESPONSE_TIME=$(echo "$HEALTH_DATA" | jq -r '.response_time_ms // empty')
+            if [ -z "$RESPONSE_TIME" ]; then
+              RESPONSE_TIME="null"
+            fi
+
+            DB_STATUS=$(echo "$HEALTH_DATA" | jq -r '.services.database.status // "unknown"')
+            AUTH_STATUS=$(echo "$HEALTH_DATA" | jq -r '.services.authentication.status // "unknown"')
+            STORAGE_STATUS=$(echo "$HEALTH_DATA" | jq -r '.services.storage.status // "unknown"')
+          else
+            echo "⚠️ Health endpoint did not return valid JSON; using fallback metrics."
+            RESPONSE_TIME="null"
+            DB_STATUS="unknown"
+            AUTH_STATUS="unknown"
+            STORAGE_STATUS="unknown"
+          fi
+
+          if [ "$RESPONSE_TIME" = "null" ]; then
+            echo "Response time: unknown"
+          else
+            echo "Response time: ${RESPONSE_TIME}ms"
+          fi
           echo "Database status: $DB_STATUS"
-          
-          # Check authentication status
-          AUTH_STATUS=$(echo $HEALTH_DATA | jq -r '.services.authentication.status // "unknown"')
           echo "Authentication status: $AUTH_STATUS"
-          
-          # Check storage status
-          STORAGE_STATUS=$(echo $HEALTH_DATA | jq -r '.services.storage.status // "unknown"')
           echo "Storage status: $STORAGE_STATUS"
-          
+
           # Log to Supabase for monitoring
           curl -X POST "https://proofoffit.com/api/monitoring/uptime" \
             -H "Content-Type: application/json" \
@@ -75,19 +86,19 @@ jobs:
       - name: Check external dependencies
         run: |
           echo "Checking external dependencies..."
-          
+
           # Check Supabase status
-          SUPABASE_STATUS=$(curl -s https://status.supabase.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          SUPABASE_STATUS=$(curl -s -L https://status.supabase.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
           echo "Supabase status: $SUPABASE_STATUS"
-          
+
           # Check Vercel status
-          VERCEL_STATUS=$(curl -s https://vercel-status.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          VERCEL_STATUS=$(curl -s -L https://vercel-status.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
           echo "Vercel status: $VERCEL_STATUS"
-          
+
           # Check Stripe status
-          STRIPE_STATUS=$(curl -s https://status.stripe.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          STRIPE_STATUS=$(curl -s -L https://status.stripe.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
           echo "Stripe status: $STRIPE_STATUS"
-          
+
           # Log dependency status
           curl -X POST "https://proofoffit.com/api/monitoring/dependencies" \
             -H "Content-Type: application/json" \
@@ -108,7 +119,7 @@ jobs:
       - name: Performance monitoring
         run: |
           echo "Running performance checks..."
-          
+
           # Test key endpoints
           ENDPOINTS=(
             "https://proofoffit.com/"
@@ -118,10 +129,10 @@ jobs:
           
           for endpoint in "${ENDPOINTS[@]}"; do
             echo "Testing $endpoint"
-            
+
             # Measure response time
-            RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" "$endpoint")
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$endpoint")
+            RESPONSE_TIME=$(curl -s -L -o /dev/null -w "%{time_total}" "$endpoint")
+            HTTP_CODE=$(curl -s -L -o /dev/null -w "%{http_code}" "$endpoint")
             
             echo "Response time: ${RESPONSE_TIME}s, HTTP code: $HTTP_CODE"
             

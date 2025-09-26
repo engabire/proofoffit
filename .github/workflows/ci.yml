@@ -25,23 +25,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
-        run: npm ci --prefer-offline
-      
+        run: npm ci
+
       - name: Run ESLint
-        working-directory: ./apps/web
-        run: npm run lint
-      
+        run: npm run lint --workspace web
+
       - name: Run TypeScript type check
-        working-directory: ./apps/web
-        run: npm run type-check || npx tsc --noEmit
-      
+        run: npm run type-check --workspace web
+
       - name: Check code formatting
-        working-directory: ./apps/web
-        run: npm run format:check || npx prettier --check .
+        run: npx prettier --check "apps/web"
 
   # Run tests
   test:
@@ -57,15 +53,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
-        run: npm ci --prefer-offline
-      
+        run: npm ci
+
       - name: Run unit tests
-        working-directory: ./apps/web
-        run: npm test -- --ci --coverage --watchAll=false
+        run: npm run test --workspace web -- --ci --coverage --watchAll=false
       
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
@@ -90,15 +84,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
-        run: npm ci --prefer-offline
-      
+        run: npm ci
+
       - name: Build application
-        working-directory: ./apps/web
-        run: npm run build
+        run: npm run build --workspace web
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
@@ -126,15 +118,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
-        run: npm ci --prefer-offline
-      
+        run: npm ci
+
       - name: Run security audit
-        working-directory: ./apps/web
-        run: npm audit --audit-level=high
+        run: npm audit --workspace web --audit-level=high
       
       - name: Scan for secrets
         uses: gitleaks/gitleaks-action@v2

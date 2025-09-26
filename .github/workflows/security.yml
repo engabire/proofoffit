@@ -29,23 +29,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
-        run: npm ci --prefer-offline --no-audit
-      
+        run: npm ci
+
       - name: Lint code
-        working-directory: ./apps/web
-        run: npm run lint
-      
+        run: npm run lint --workspace web
+
       - name: Type check
-        working-directory: ./apps/web
-        run: npm run type-check || npx tsc --noEmit
-      
+        run: npm run type-check --workspace web
+
       - name: Run tests
-        working-directory: ./apps/web
-        run: npm test -- --ci --coverage --watchAll=false
+        run: npm run test --workspace web -- --ci --coverage --watchAll=false
       
       - name: Secrets scan with Gitleaks
         uses: gitleaks/gitleaks-action@v2
@@ -58,15 +54,13 @@ jobs:
           redact: true
       
       - name: Dependency audit
-        working-directory: ./apps/web
         run: |
           echo "Running dependency audit..."
-          npm audit --audit-level=high --json > audit-results.json || true
-          
-          # Check for high/critical vulnerabilities
-          if npm audit --audit-level=high --json | jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "high" or .value.severity == "critical")' > /dev/null; then
+          npm audit --workspace web --audit-level=high --json > audit-results.json || true
+
+          if jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "high" or .value.severity == "critical")' audit-results.json > /dev/null; then
             echo "❌ High or critical vulnerabilities found!"
-            npm audit --audit-level=high
+            npm audit --workspace web --audit-level=high
             exit 1
           else
             echo "✅ No high or critical vulnerabilities found"
@@ -127,39 +121,34 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
         run: npm ci
       
       - name: Check for outdated dependencies
-        working-directory: ./apps/web
         run: |
           echo "Checking for outdated dependencies..."
-          npm outdated --json > outdated-deps.json || true
-          
-          # Count outdated dependencies
-          OUTDATED_COUNT=$(npm outdated --json | jq 'length' 2>/dev/null || echo "0")
+          npm outdated --workspace web --json > outdated-deps.json || true
+
+          OUTDATED_COUNT=$(jq 'length' outdated-deps.json 2>/dev/null || echo "0")
           echo "Found $OUTDATED_COUNT outdated dependencies"
-          
+
           if [ "$OUTDATED_COUNT" -gt 10 ]; then
             echo "⚠️  Many dependencies are outdated. Consider updating."
-            npm outdated
+            npm outdated --workspace web
           else
             echo "✅ Dependencies are reasonably up-to-date"
           fi
       
       - name: Check for known vulnerabilities
-        working-directory: ./apps/web
         run: |
           echo "Running npm audit..."
-          npm audit --audit-level=moderate --json > audit-moderate.json || true
-          
-          # Check for moderate+ vulnerabilities
-          if npm audit --audit-level=moderate --json | jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "moderate" or .value.severity == "high" or .value.severity == "critical")' > /dev/null; then
+          npm audit --workspace web --audit-level=moderate --json > audit-moderate.json || true
+
+          if jq -e '.vulnerabilities | to_entries[] | select(.value.severity == "moderate" or .value.severity == "high" or .value.severity == "critical")' audit-moderate.json > /dev/null; then
             echo "⚠️  Moderate or higher vulnerabilities found:"
-            npm audit --audit-level=moderate
+            npm audit --workspace web --audit-level=moderate
           else
             echo "✅ No moderate or higher vulnerabilities found"
           fi
@@ -177,22 +166,20 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'apps/web/package-lock.json'
-      
+          cache-dependency-path: 'package-lock.json'
+
       - name: Install dependencies
-        working-directory: ./apps/web
         run: npm ci
       
       - name: ESLint security rules
         working-directory: ./apps/web
         run: |
           echo "Running ESLint with security rules..."
-          npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js --format json > eslint-results.json || true
-          
-          # Check for security-related ESLint errors
-          if npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js | grep -i "security\|dangerous\|eval\|innerHTML" | head -5; then
+          npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.json --format json > eslint-results.json || true
+
+          if npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.json | grep -i "security\|dangerous\|eval\|innerHTML" | head -5; then
             echo "⚠️  Potential security issues found in code:"
-            npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.js | grep -i "security\|dangerous\|eval\|innerHTML" || true
+            npx eslint . --ext .ts,.tsx,.js,.jsx --config .eslintrc.json | grep -i "security\|dangerous\|eval\|innerHTML" || true
           else
             echo "✅ No obvious security issues found in ESLint results"
           fi
@@ -243,4 +230,3 @@ jobs:
           echo "- Code quality and security linting" >> $GITHUB_STEP_SUMMARY
           echo "- Environment variable validation" >> $GITHUB_STEP_SUMMARY
           echo "- Security headers verification" >> $GITHUB_STEP_SUMMARY
-
