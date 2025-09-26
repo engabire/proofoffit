@@ -10,7 +10,7 @@ export function DegradedBanner() {
     const maintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1'
     const check = async () => {
       try {
-        const res = await fetch('/api/health', { cache: 'no-store' })
+        const res = await fetch('/api/health-simple', { cache: 'no-store' })
         const ct = res.headers.get('content-type') || ''
         if (!res.ok || !ct.includes('application/json')) throw new Error('bad')
         const data = await res.json()
