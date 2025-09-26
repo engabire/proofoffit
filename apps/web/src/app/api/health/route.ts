@@ -28,8 +28,18 @@ export async function GET(req: NextRequest) {
         .from('system_health')
         .select('id')
         .limit(1)
-      dbStatus = error ? 'unhealthy' : 'healthy'
-      dbError = error?.message || null
+      
+      if (error && error.message.includes('relation "public.system_health" does not exist')) {
+        // Table doesn't exist yet - this is expected during initial setup
+        dbStatus = 'degraded'
+        dbError = 'System health table not yet created - migration pending'
+      } else if (error) {
+        dbStatus = 'unhealthy'
+        dbError = error.message
+      } else {
+        dbStatus = 'healthy'
+        dbError = null
+      }
     } catch (err) {
       dbStatus = 'unhealthy'
       dbError = err instanceof Error ? err.message : 'Database connection failed'
@@ -49,9 +59,11 @@ export async function GET(req: NextRequest) {
       storageError = err instanceof Error ? err.message : 'Storage connection failed'
     }
     
-    // Overall health status - both DB and storage must be healthy
+    // Overall health status - be more lenient during initial setup
     const overallStatus = (dbStatus === 'healthy' && storageStatus === 'healthy') 
       ? 'healthy' 
+      : (dbStatus === 'degraded' && storageStatus === 'healthy')
+      ? 'degraded'
       : 'unhealthy'
     
     // Response time
@@ -81,8 +93,8 @@ export async function GET(req: NextRequest) {
       }
     }
     
-    // Return appropriate HTTP status
-    const httpStatus = overallStatus === 'healthy' ? 200 : 503
+    // Return appropriate HTTP status - 200 for healthy/degraded, 503 for unhealthy
+    const httpStatus = (overallStatus === 'healthy' || overallStatus === 'degraded') ? 200 : 503
     
     return NextResponse.json(healthData, { status: httpStatus })
     
