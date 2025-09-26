@@ -1,0 +1,130 @@
+name: Dependency Monitor
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      manual_trigger:
+        description: 'Manual dependency check'
+        required: false
+        default: 'true'
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  dependency-check:
+    name: Check External Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Make script executable
+        run: chmod +x scripts/check-dependencies.sh
+      
+      - name: Run dependency check
+        run: ./scripts/check-dependencies.sh
+        env:
+          # These will be available if the monitoring endpoint is deployed
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      
+      - name: Check overall status
+        id: status_check
+        run: |
+          STATUS=$(./scripts/check-dependencies.sh | grep "Overall:" | awk '{print $2}')
+          echo "overall_status=$STATUS" >> $GITHUB_OUTPUT
+          
+          if [ "$STATUS" = "unhealthy" ]; then
+            echo "❌ Critical dependency issues detected!"
+            exit 1
+          elif [ "$STATUS" = "degraded" ]; then
+            echo "⚠️ Some dependencies are degraded"
+            exit 0
+          else
+            echo "✅ All dependencies healthy"
+            exit 0
+          fi
+      
+      - name: Create issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependency-issue'
+            });
+            
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🚨 Critical Dependency Issues Detected',
+                body: `## Dependency Status Alert
+                
+                **Status:** ${{ steps.status_check.outputs.overall_status }}
+                **Time:** ${new Date().toISOString()}
+                **Workflow:** [Dependency Monitor](${context.payload.repository.html_url}/actions/runs/${context.runId})
+                
+                ### Next Steps:
+                1. Check the [dependency monitoring logs](${context.payload.repository.html_url}/actions/runs/${context.runId})
+                2. Review external service status pages
+                3. Update monitoring thresholds if needed
+                4. Close this issue when resolved
+                
+                ---
+                *This issue was automatically created by the Dependency Monitor workflow.*`,
+                labels: ['dependency-issue', 'automated', 'critical']
+              });
+            }
+      
+      - name: Comment on existing issue
+        if: success() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependency-issue'
+            });
+            
+            for (const issue of issues) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ **Dependencies are now healthy!**
+                
+                **Status:** ${{ steps.status_check.outputs.overall_status }}
+                **Time:** ${new Date().toISOString()}
+                **Workflow:** [Dependency Monitor](${context.payload.repository.html_url}/actions/runs/${context.runId})
+                
+                This issue can now be closed.`
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
