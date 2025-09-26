@@ -59,10 +59,12 @@ export async function GET(req: NextRequest) {
       storageError = err instanceof Error ? err.message : 'Storage connection failed'
     }
     
-    // Overall health status - be more lenient during initial setup
+    // Overall health status - comprehensive evaluation
     const overallStatus = (dbStatus === 'healthy' && storageStatus === 'healthy') 
       ? 'healthy' 
       : (dbStatus === 'degraded' && storageStatus === 'healthy')
+      ? 'degraded'
+      : (dbStatus === 'healthy' && storageStatus === 'unhealthy')
       ? 'degraded'
       : 'unhealthy'
     
