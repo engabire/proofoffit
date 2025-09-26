@@ -35,3 +35,15 @@ export { NavigationMenu, NavigationMenuContent, NavigationMenuIndicator, Navigat
 export { ScrollArea, ScrollBar } from './components/scroll-area'
 export { Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from './components/toast'
 export { Toaster } from './components/toaster'
+
+// Enhanced UI Components
+export { LoadingSpinner, LoadingDots, LoadingSkeleton, LoadingOverlay } from './components/loading-spinner'
+export { Toast as EnhancedToast, ToastContainer } from './components/enhanced-toast'
+export { ErrorBoundary, useErrorHandler } from './components/error-boundary'
+export { Form, FormField, FormInput, FormTextarea, FormSubmitButton, validators } from './components/form'
+export { Modal, ConfirmModal, useModal } from './components/modal'
+export { DataTable } from './components/data-table'
+export type { Column, DataTableProps } from './components/data-table'
+export { NotificationCenter, useNotifications } from './components/notification-center'
+export type { Notification } from './components/notification-center'
+export { PerformanceMonitor } from './components/performance-monitor'
