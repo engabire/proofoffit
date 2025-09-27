@@ -31,7 +31,7 @@ export function SecureCta({
   label,
   href,
   onClick,
-  variant = 'default',
+  variant = 'primary',
   size = 'md',
   iconLeft,
   iconRight,
