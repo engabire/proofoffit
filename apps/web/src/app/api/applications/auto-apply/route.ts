@@ -1,289 +1,150 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
-import { requireUserId } from '@/lib/auth'
+import { applicationAutomation } from '@/lib/application-automation/auto-apply'
+import { createClient } from '@supabase/supabase-js'
 
-export async function POST(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const userId = await requireUserId()
-    const { jobId, candidateProfileId } = await req.json()
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('userId')
 
-    if (!jobId || !candidateProfileId) {
+    if (!userId) {
       return NextResponse.json(
-        { error: 'Job ID and candidate profile ID are required' },
+        { error: 'User ID is required' },
         { status: 400 }
       )
     }
 
-    // Get the job details
-    const job = await prisma.job.findUnique({
-      where: { id: jobId }
-    })
-
-    if (!job) {
-      return NextResponse.json(
-        { error: 'Job not found' },
-        { status: 404 }
-      )
+    // Get auto-apply configuration
+    const config = await applicationAutomation.getAutoApplyConfig(userId)
+    
+    if (!config) {
+      return NextResponse.json({
+        config: null,
+        message: 'No auto-apply configuration found'
+      })
     }
 
-    // Check if auto-apply is allowed for this job
-    const jobTos = (job.tos ?? {}) as { allowed?: boolean; [key: string]: unknown }
-
-    if (!jobTos.allowed) {
-      return NextResponse.json(
-        { error: 'Auto-apply not allowed for this job' },
-        { status: 403 }
-      )
-    }
-
-    // Get candidate profile
-    const candidateProfile = await prisma.candidateProfile.findUnique({
-      where: { id: candidateProfileId },
-      include: {
-        bullets: true,
-        credentials: true,
-        artifacts: true
-      }
-    })
-
-    if (!candidateProfile) {
-      return NextResponse.json(
-        { error: 'Candidate profile not found' },
-        { status: 404 }
-      )
-    }
-
-    // Generate tailored resume and cover letter
-    const tailoredDocuments = await generateTailoredDocuments(
-      candidateProfile,
-      job
-    )
-
-    // Create application record
-    const application = await prisma.application.create({
-      data: {
-        tenantId: 'demo-tenant', // This should come from the authenticated user's tenant
-        candidateId: candidateProfileId,
-        jobRef: jobId,
-        channel: 'auto',
-        status: 'submitted',
-        documents: tailoredDocuments,
-        timestamps: {
-          appliedAt: new Date(),
-          autoApplied: true,
-          documentsGenerated: true
-        },
-        policyDecision: {
-          jobSource: job.source,
-          autoApplied: true,
-          documentsGenerated: true
-        }
-      }
-    })
-
-    // Submit application to external system (if applicable)
-    const submissionResult = await submitApplicationToExternalSystem(
-      job,
-      tailoredDocuments
-    )
-
-    // Update application with submission result
-    await prisma.application.update({
-      where: { id: application.id },
-      data: {
-        status: submissionResult.success ? 'submitted' : 'failed',
-        policyDecision: {
-          ...((application.policyDecision ?? {}) as Record<string, unknown>),
-          submissionResult,
-          externalId: submissionResult.externalId
-        }
-      }
-    })
+    // Get application statistics
+    const stats = await applicationAutomation.getApplicationStats(userId)
 
     return NextResponse.json({
-      success: true,
-      applicationId: application.id,
-      status: submissionResult.success ? 'submitted' : 'failed',
-      message: submissionResult.success 
-        ? 'Application submitted successfully' 
-        : 'Application failed to submit',
-      documents: tailoredDocuments
+      config,
+      stats
     })
 
-  } catch (error) {
-    console.error('Error in auto-apply:', error)
+  } catch (error: any) {
+    console.error('Auto-apply GET error:', error)
     return NextResponse.json(
-      { error: 'Failed to submit application' },
+      { error: 'Failed to fetch auto-apply data' },
       { status: 500 }
     )
   }
 }
 
-async function generateTailoredDocuments(
-  candidateProfile: any,
-  job: any
-): Promise<{ resume: string; coverLetter: string }> {
-  // This would integrate with the tailor engine
-  // For now, return placeholder documents
-  
-  const resume = `# ${candidateProfile.user?.email || 'Candidate'} Resume
-
-## Professional Summary
-Experienced professional with relevant skills for ${job.title} position at ${job.org}.
-
-## Skills
-${candidateProfile.bullets?.map((bullet: any) => `- ${bullet.text}`).join('\n') || 'No skills listed'}
-
-## Experience
-${candidateProfile.bullets?.filter((bullet: any) => 
-  bullet.tags?.evidence_type === 'experience'
-).map((bullet: any) => `- ${bullet.text}`).join('\n') || 'No experience listed'}
-
-## Education
-${candidateProfile.credentials?.map((cred: any) => 
-  `- ${cred.type} from ${cred.issuer}`
-).join('\n') || 'No education listed'}
-
----
-Generated by ProofOfFit for ${job.title} at ${job.org}
-`
-
-  const coverLetter = `Dear Hiring Manager,
-
-I am writing to express my strong interest in the ${job.title} position at ${job.org}. 
-
-Based on the job requirements, I believe my background aligns well with what you're looking for:
-
-${job.requirements?.must_have?.map((req: string) => 
-  `- ${req}: Relevant experience and skills`
-).join('\n') || ''}
-
-I am excited about the opportunity to contribute to ${job.org} and would welcome the chance to discuss how my qualifications can benefit your team.
-
-Best regards,
-${candidateProfile.user?.email || 'Candidate'}
-
----
-Generated by ProofOfFit
-`
-
-  return { resume, coverLetter }
-}
-
-async function submitApplicationToExternalSystem(
-  job: any,
-  documents: { resume: string; coverLetter: string }
-): Promise<{ success: boolean; externalId?: string; error?: string }> {
+export async function POST(request: NextRequest) {
   try {
-    const jobTos = (job.tos ?? {}) as { allowed?: boolean; [key: string]: unknown }
+    const body = await request.json()
+    const { action, userId, config, jobId } = body
 
-    // Check if auto-apply is allowed for this job
-    if (!jobTos.allowed) {
-      return {
-        success: false,
-        error: 'Auto-apply not allowed for this job source'
-      }
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      )
     }
 
-    // Enhanced logging for debugging
-    console.log('Submitting application to external system:', {
-      jobId: job.id,
-      source: job.source,
-      title: job.title,
-      company: job.org
-    })
-
-    // This would integrate with different job boards based on job.source
-    switch (job.source) {
-      case 'usajobs':
-      case 'governmentjobs':
-        return await submitToUSAJobs(job, documents)
-      case 'linkedin':
-        return await submitToLinkedIn(job, documents)
-      case 'indeed':
-        return await submitToIndeed(job, documents)
-      case 'remoteok':
-        return await submitToRemoteOK(job, documents)
-      default:
-        // For unknown sources, just track the application
-        console.log(`Auto-apply tracking for ${job.source} - manual application required`)
-        return {
-          success: true,
-          externalId: `tracked-${Date.now()}`,
-          error: `Application tracked for ${job.source}. Manual submission required.`
+    switch (action) {
+      case 'update_config':
+        if (!config) {
+          return NextResponse.json(
+            { error: 'Configuration is required' },
+            { status: 400 }
+          )
         }
+
+        const success = await applicationAutomation.updateAutoApplyConfig(config)
+        
+        if (!success) {
+          return NextResponse.json(
+            { error: 'Failed to update configuration' },
+            { status: 500 }
+          )
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: 'Auto-apply configuration updated successfully'
+        })
+
+      case 'apply_to_job':
+        if (!jobId) {
+          return NextResponse.json(
+            { error: 'Job ID is required' },
+            { status: 400 }
+          )
+        }
+
+        // Get user's auto-apply configuration
+        const userConfig = await applicationAutomation.getAutoApplyConfig(userId)
+        
+        if (!userConfig) {
+          return NextResponse.json(
+            { error: 'Auto-apply configuration not found' },
+            { status: 404 }
+          )
+        }
+
+        // Get job details (this would come from your job search API)
+        const jobResponse = await fetch(`${request.nextUrl.origin}/api/jobs/search?q=${jobId}`)
+        const jobData = await jobResponse.json()
+        
+        if (!jobData.jobs || jobData.jobs.length === 0) {
+          return NextResponse.json(
+            { error: 'Job not found' },
+            { status: 404 }
+          )
+        }
+
+        const job = jobData.jobs[0]
+
+        // Check if job matches auto-apply criteria
+        const shouldApply = await applicationAutomation.shouldAutoApply(job, userConfig)
+        
+        if (!shouldApply) {
+          return NextResponse.json({
+            success: false,
+            message: 'Job does not match auto-apply criteria'
+          })
+        }
+
+        // Apply to the job
+        const application = await applicationAutomation.autoApplyToJob(job, userConfig)
+        
+        if (!application) {
+          return NextResponse.json(
+            { error: 'Failed to apply to job' },
+            { status: 500 }
+          )
+        }
+
+        return NextResponse.json({
+          success: true,
+          application,
+          message: 'Successfully applied to job'
+        })
+
+      default:
+        return NextResponse.json(
+          { error: 'Invalid action' },
+          { status: 400 }
+        )
     }
-  } catch (error) {
-    console.error('External submission error:', error)
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }
-  }
-}
 
-async function submitToUSAJobs(
-  job: any,
-  documents: { resume: string; coverLetter: string }
-): Promise<{ success: boolean; externalId?: string; error?: string }> {
-  // USAJOBS API integration would go here
-  // For now, simulate successful submission
-  return {
-    success: true,
-    externalId: `usajobs-${Date.now()}`
-  }
-}
-
-async function submitToLinkedIn(
-  job: any,
-  documents: { resume: string; coverLetter: string }
-): Promise<{ success: boolean; externalId?: string; error?: string }> {
-  // LinkedIn API integration would go here
-  // For now, return not supported
-  return {
-    success: false,
-    error: 'LinkedIn auto-apply not yet implemented'
-  }
-}
-
-async function submitToIndeed(
-  job: any,
-  documents: { resume: string; coverLetter: string }
-): Promise<{ success: boolean; externalId?: string; error?: string }> {
-  // Indeed API integration would go here
-  // For now, return not supported
-  return {
-    success: false,
-    error: 'Indeed auto-apply not yet implemented'
-  }
-}
-
-async function submitToRemoteOK(
-  job: any,
-  documents: { resume: string; coverLetter: string }
-): Promise<{ success: boolean; externalId?: string; error?: string }> {
-  try {
-    // RemoteOK doesn't have a direct application API
-    // This simulates application tracking and provides guidance
-    console.log('Processing RemoteOK application:', {
-      jobId: job.id,
-      title: job.title,
-      company: job.org
-    })
-
-    // Simulate a brief processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Return success with tracking info
-    return {
-      success: true,
-      externalId: `remoteok-tracked-${Date.now()}`,
-      error: 'Application tracked. Please apply manually through the RemoteOK job URL.'
-    }
-  } catch (error) {
-    return {
-      success: false,
-      error: 'Failed to track RemoteOK application'
-    }
+  } catch (error: any) {
+    console.error('Auto-apply POST error:', error)
+    return NextResponse.json(
+      { error: 'Failed to process auto-apply request' },
+      { status: 500 }
+    )
   }
 }
