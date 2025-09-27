@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { isSupabaseConfigured } from '@/lib/env'
 import { jobSearchService } from '@/lib/job-search'
+import { usajobsAPI, USAJobsSearchParams } from '@/lib/job-feeds/usajobs'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +15,67 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Try enhanced job search first
+    // Try USAJOBS API first for government jobs
+    if (query.trim()) {
+      try {
+        console.log('Searching USAJOBS API...')
+        const searchParams: USAJobsSearchParams = {
+          keyword: query,
+          location: location,
+          page: 1,
+          resultsPerPage: limit,
+        }
+
+        const usajobsResults = await usajobsAPI.searchJobs(searchParams)
+        
+        if (usajobsResults.length > 0) {
+          // Transform USAJOBS data to our format
+          const transformedJobs = usajobsResults.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: job.organization,
+            location: job.location,
+            type: 'full-time',
+            remote: false,
+            salary: job.salaryMin && job.salaryMax ? {
+              min: job.salaryMin,
+              max: job.salaryMax,
+              currency: 'USD'
+            } : undefined,
+            description: job.description,
+            requirements: job.requirements ? [job.requirements] : [],
+            niceToHaves: [],
+            benefits: ['Government benefits', 'Retirement plan', 'Health insurance'],
+            postedAt: new Date(job.postedDate),
+            companyLogo: undefined,
+            companySize: '1000+',
+            industry: 'Government',
+            experienceLevel: 'mid',
+            source: 'USAJOBS',
+            constraints: {},
+            tos: { allowed: true, captcha: false, notes: 'Government position - auto-apply eligible' },
+            url: job.url,
+            applyUrl: job.url,
+            department: job.department,
+            agency: job.agency,
+            workSchedule: job.workSchedule,
+            positionType: job.positionType,
+            closingDate: job.closingDate
+          }))
+
+          return NextResponse.json({
+            jobs: transformedJobs,
+            total: transformedJobs.length,
+            hasMore: false,
+            source: 'usajobs'
+          })
+        }
+      } catch (usajobsError) {
+        console.error('USAJOBS API failed, trying enhanced search:', usajobsError)
+      }
+    }
+
+    // Try enhanced job search as fallback
     if (query.trim()) {
       try {
         console.log('Using enhanced job search service...')
