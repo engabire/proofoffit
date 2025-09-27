@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProofOfFit CTA Component Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        .demo-section { margin: 40px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .event-log { background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 20px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🎯 ProofOfFit CTA Component Demo</h1>
+    
+    <div class="demo-section">
+        <h2>✅ Implementation Summary</h2>
+        <p>Successfully implemented a comprehensive CTA system for ProofOfFit with:</p>
+        <ul>
+            <li><strong>Unified CTA Component</strong> - Single component with variants, loading states, accessibility</li>
+            <li><strong>Built-in Analytics</strong> - Automatic event dispatch to Google Analytics and custom systems</li>
+            <li><strong>Backward Compatibility</strong> - Existing CTAButton imports continue working</li>
+            <li><strong>TypeScript Safety</strong> - Global window.gtag typing to prevent errors</li>
+            <li><strong>Analytics Bridge</strong> - Centralized event handling for all CTAs</li>
+        </ul>
+    </div>
+
+    <div class="demo-section">
+        <h2>🔧 Features Implemented</h2>
+        <h3>1. CTA Component (/packages/ui/src/components/cta.tsx)</h3>
+        <ul>
+            <li>5 variants: primary, secondary, subtle, ghost, link</li>
+            <li>2 sizes: md, lg</li>
+            <li>Loading states with spinner</li>
+            <li>Accessibility: focus rings, aria-labels, keyboard navigation</li>
+            <li>Icon support (left/right)</li>
+            <li>Auto href/onClick handling</li>
+        </ul>
+
+        <h3>2. Analytics Integration</h3>
+        <ul>
+            <li>Custom event dispatch: 'cta:click'</li>
+            <li>Google Analytics integration via gtag</li>
+            <li>Lane tracking: 'seeker' vs 'employer'</li>
+            <li>Event naming: data-evt for specific CTA identification</li>
+        </ul>
+
+        <h3>3. Usage Examples (from updated Hero component)</h3>
+        <pre><code>&lt;Cta
+  label="Start Your Autopilot"
+  href="/auth/signup"
+  size="lg"
+  variant="primary"
+  iconRight={&lt;ArrowRight /&gt;}
+  data-evt="seeker_primary"
+  data-lane="seeker"
+/&gt;
+
+&lt;Cta
+  label="See How It Works"
+  href="#how-it-works"
+  size="lg"
+  variant="secondary"
+  data-evt="seeker_secondary"
+  data-lane="seeker"
+/&gt;</code></pre>
+    </div>
+
+    <div class="demo-section">
+        <h2>📊 Analytics Bridge Setup</h2>
+        <p>The analytics bridge automatically:</p>
+        <ul>
+            <li>Listens for 'cta:click' events across the entire app</li>
+            <li>Forwards to Google Analytics with detailed metadata</li>
+            <li>Tracks internal analytics for ProofOfFit's system</li>
+            <li>Provides console logging for development</li>
+        </ul>
+        
+        <p><strong>Test it:</strong> Open browser console and run:</p>
+        <pre><code>window.addEventListener('cta:click', e => console.log('CTA Event:', e.detail));</code></pre>
+    </div>
+
+    <div class="demo-section">
+        <h2>🛡️ Safety & Compatibility</h2>
+        <ul>
+            <li>✅ Existing CTAButton imports continue working (thin wrapper)</li>
+            <li>✅ SSR-safe (no window references break server rendering)</li>
+            <li>✅ TypeScript safety with global window.gtag typing</li>
+            <li>✅ Fallback handling for missing analytics</li>
+            <li>✅ No breaking changes to existing components</li>
+        </ul>
+    </div>
+
+    <div class="demo-section">
+        <h2>🎨 Design System Integration</h2>
+        <p>The CTA component integrates seamlessly with ProofOfFit's design system:</p>
+        <ul>
+            <li>Uses existing color tokens (slate-900, primary, etc.)</li>
+            <li>Matches existing button patterns and spacing</li>
+            <li>Consistent with current UI package structure</li>
+            <li>Maintains accessibility standards</li>
+        </ul>
+    </div>
+
+    <div class="demo-section">
+        <h2>📈 Funnel Tracking Ready</h2>
+        <p>With the new system, you can now track complete user funnels:</p>
+        <ul>
+            <li><strong>Landing → Demo:</strong> data-evt="seeker_secondary"</li>
+            <li><strong>Landing → Sign Up:</strong> data-evt="seeker_primary"</li>
+            <li><strong>Demo → Sign Up:</strong> data-evt="demo_signup"</li>
+            <li><strong>Fit Report → Share:</strong> data-evt="fit_share"</li>
+            <li><strong>Employer → Slate:</strong> data-evt="employer_primary"</li>
+        </ul>
+    </div>
+
+    <script>
+        // Demo the analytics system
+        console.log('🎯 ProofOfFit CTA Demo Loaded!');
+        console.log('The CTA analytics system is now active.');
+        
+        // Listen for CTA events
+        window.addEventListener('cta:click', (e) => {
+            const logEl = document.getElementById('event-log');
+            if (logEl) {
+                const timestamp = new Date().toLocaleTimeString();
+                logEl.innerHTML += `[${timestamp}] CTA Event: ${JSON.stringify(e.detail, null, 2)}\n\n`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        });
+        
+        // Simulate some CTA clicks for demo
+        setTimeout(() => {
+            const event = new CustomEvent('cta:click', {
+                detail: {
+                    id: 'demo-cta',
+                    label: 'Start Your Autopilot',
+                    href: '/auth/signup',
+                    variant: 'primary',
+                    size: 'lg',
+                    lane: 'seeker',
+                    evt: 'seeker_primary',
+                    path: '/demo'
+                }
+            });
+            window.dispatchEvent(event);
+        }, 1000);
+    </script>
+    
+    <div class="demo-section">
+        <h2>📝 Event Log</h2>
+        <div id="event-log" class="event-log">
+            Waiting for CTA events...
+        </div>
+    </div>
+</body>
+</html>

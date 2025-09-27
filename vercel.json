@@ -2,5 +2,23 @@
   "version": 2,
   "buildCommand": "npm run build:ui && cd apps/web && npm run build",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm ci"
+  "installCommand": "npm ci",
+  "crons": [
+    {
+      "path": "/api/scrape",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cleanup", 
+      "schedule": "0 2 * * *"
+    }
+  ],
+  "functions": {
+    "apps/web/src/app/api/scrape/route.ts": {
+      "maxDuration": 300
+    },
+    "apps/web/src/app/api/cleanup/route.ts": {
+      "maxDuration": 120
+    }
+  }
 }
