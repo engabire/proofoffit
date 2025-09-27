@@ -147,25 +147,44 @@ async function conditionalGet(url: string, meta?: { etag?: string; lastmod?: str
   };
 }
 
-// URL Canonicalization
+// Enhanced URL Canonicalization with Unicode normalization
 function canonicalize(raw: string): string {
   try {
-    const u = new URL(raw);
+    // Decode URL and normalize Unicode to NFC
+    const decoded = decodeURIComponent(raw);
+    const normalized = decoded.normalize('NFC');
+    
+    const u = new URL(normalized);
     
     // Remove hash
     u.hash = '';
     
-    // Remove tracking parameters
-    const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'fbclid', 'gclid'];
+    // Remove tracking parameters (expanded list)
+    const trackingParams = [
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+      'ref', 'fbclid', 'gclid', 'mc_cid', 'mc_eid', '_hsenc', '_hsmi',
+      'source', 'campaign', 'medium', 'content', 'term'
+    ];
     trackingParams.forEach(param => u.searchParams.delete(param));
     
-    // Normalize hostname
+    // Normalize hostname to punycode and lowercase
     u.hostname = u.hostname.toLowerCase();
+    if (u.hostname.includes('xn--')) {
+      // Already punycode encoded
+    } else {
+      // Convert international domain names to punycode
+      try {
+        u.hostname = new URL(`http://${u.hostname}`).hostname;
+      } catch {}
+    }
     
-    // Normalize pathname
+    // Normalize pathname - remove trailing slash and decode
     if (u.pathname !== '/' && u.pathname.endsWith('/')) {
       u.pathname = u.pathname.slice(0, -1);
     }
+    
+    // Ensure proper encoding
+    u.pathname = encodeURI(decodeURI(u.pathname));
     
     return u.toString();
   } catch (error) {

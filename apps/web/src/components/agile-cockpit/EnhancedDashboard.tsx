@@ -18,7 +18,9 @@ import {
   Mail,
   Github,
   Download,
-  Webhook
+  Webhook,
+  Brain,
+  Smartphone
 } from 'lucide-react'
 import { AdvancedCharts } from './AdvancedCharts'
 import { SmartNotifications } from './SmartNotifications'
@@ -30,6 +32,10 @@ import { EmailNotifications } from './EmailNotifications'
 import { GitHubIntegration } from './GitHubIntegration'
 import { DataExport } from './DataExport'
 import { WebhookSystem } from './WebhookSystem'
+import { WorkflowAutomation } from './WorkflowAutomation'
+import { RealTimeCollaboration } from './RealTimeCollaboration'
+import { PredictiveAnalytics } from './PredictiveAnalytics'
+import { MobileOptimization } from './MobileOptimization'
 
 type DashboardView = 
   | 'overview' 
@@ -43,6 +49,10 @@ type DashboardView =
   | 'github'
   | 'export'
   | 'webhooks'
+  | 'automation'
+  | 'collaboration'
+  | 'analytics'
+  | 'mobile'
 
 export function EnhancedDashboard() {
   const [activeView, setActiveView] = useState<DashboardView>('overview')
@@ -114,6 +124,30 @@ export function EnhancedDashboard() {
       label: 'Webhook System',
       icon: <Webhook className="w-5 h-5" />,
       description: 'Configure webhooks for integrations'
+    },
+    {
+      id: 'automation' as DashboardView,
+      label: 'Workflow Automation',
+      icon: <Zap className="w-5 h-5" />,
+      description: 'Create and manage automated workflows'
+    },
+    {
+      id: 'collaboration' as DashboardView,
+      label: 'Real-Time Collaboration',
+      icon: <Users className="w-5 h-5" />,
+      description: 'Chat, meetings, and team presence'
+    },
+    {
+      id: 'analytics' as DashboardView,
+      label: 'Predictive Analytics',
+      icon: <Brain className="w-5 h-5" />,
+      description: 'AI-powered insights and forecasts'
+    },
+    {
+      id: 'mobile' as DashboardView,
+      label: 'Mobile Optimization',
+      icon: <Smartphone className="w-5 h-5" />,
+      description: 'PWA features and mobile performance'
     }
   ]
 
@@ -263,6 +297,14 @@ export function EnhancedDashboard() {
         return <DataExport />
       case 'webhooks':
         return <WebhookSystem />
+      case 'automation':
+        return <WorkflowAutomation />
+      case 'collaboration':
+        return <RealTimeCollaboration />
+      case 'analytics':
+        return <PredictiveAnalytics />
+      case 'mobile':
+        return <MobileOptimization />
       default:
         return renderOverview()
     }

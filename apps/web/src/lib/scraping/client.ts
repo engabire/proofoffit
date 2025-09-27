@@ -136,6 +136,71 @@ export class ScrapingClient {
     return data as ScrapedItem;
   }
   
+  // Get job execution history
+  async getJobHistory(limit = 10) {
+    const { data, error } = await this.supabase
+      .from('scrape_jobs')
+      .select('*')
+      .order('started_at', { ascending: false })
+      .limit(limit);
+    
+    if (error) {
+      throw new Error(`Failed to fetch job history: ${error.message}`);
+    }
+    
+    return data || [];
+  }
+
+  // Get SLO metrics
+  async getSloMetrics(days = 7) {
+    const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+    
+    const { data, error } = await this.supabase
+      .from('slo_metrics')
+      .select('*')
+      .gte('measured_at', cutoff)
+      .order('measured_at', { ascending: false });
+    
+    if (error) {
+      throw new Error(`Failed to fetch SLO metrics: ${error.message}`);
+    }
+    
+    return data || [];
+  }
+
+  // Trigger manual scraping (requires proper auth in production)
+  async triggerScraping() {
+    const response = await fetch('/api/scrape', {
+      method: 'GET',
+      headers: {
+        'x-internal-run': '1'
+      }
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to trigger scraping');
+    }
+    
+    return response.json();
+  }
+
+  // Run system tests
+  async runTest(testId: string, params = {}) {
+    const response = await fetch('/api/scrape/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ test: testId, params })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Test execution failed');
+    }
+    
+    return response.json();
+  }
+
   // Subscribe to real-time updates
   subscribeToUpdates(
     callback: (payload: any) => void,
