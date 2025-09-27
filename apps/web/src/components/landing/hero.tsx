@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { Button } from '@proof-of-fit/ui'
+import { Cta } from '@proof-of-fit/ui'
 import { ArrowRight, Shield, Users, Zap } from 'lucide-react'
 
 export function Hero() {
@@ -26,25 +25,25 @@ export function Hero() {
           </p>
           
           <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" asChild>
-              <Link 
-                href="/auth/signup"
-                aria-label="Start your autopilot - Sign up for ProofOfFit to begin your job search"
-                rel="noopener"
-                className="inline-flex items-center gap-2"
-              >
-                Start Your Autopilot
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link 
-                href="#how-it-works"
-                aria-label="See how it works - Learn about our process and features"
-              >
-                See How It Works
-              </Link>
-            </Button>
+            <Cta
+              label="Start Your Autopilot"
+              href="/auth/signup"
+              size="lg"
+              variant="primary"
+              iconRight={<ArrowRight className="h-4 w-4" aria-hidden="true" />}
+              ariaLabel="Start your autopilot - Sign up for ProofOfFit to begin your job search"
+              data-evt="seeker_primary"
+              data-lane="seeker"
+            />
+            <Cta
+              label="See How It Works"
+              href="#how-it-works"
+              size="lg"
+              variant="secondary"
+              ariaLabel="See how it works - Learn about our process and features"
+              data-evt="seeker_secondary"
+              data-lane="seeker"
+            />
           </div>
           
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">

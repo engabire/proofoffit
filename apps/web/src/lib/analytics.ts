@@ -163,3 +163,41 @@ export function stopTimer(startTime: number, name?: string): number {
 export function track(event: { name: string; [key: string]: any }): void {
   console.log("Track event:", event);
 }
+
+// CTA Analytics Bridge
+export function setupCtaBridge() {
+  if (typeof window === 'undefined') return;
+  if ((window as any).__ctaBridge) return;
+
+  window.addEventListener('cta:click', (e: Event) => {
+    const detail = (e as CustomEvent).detail || {};
+    
+    // Log all CTA events for debugging
+    console.log('CTA Event:', detail);
+    
+    try { 
+      // Send to Google Analytics if available
+      (window as any).gtag?.('event', 'cta_click', detail); 
+    } catch (error) {
+      console.warn('Failed to send CTA event to gtag:', error);
+    }
+    
+    // Track in internal analytics system
+    try {
+      trackEvent({
+        eventType: 'jd_fit_run', // Map CTA clicks to existing event type for now
+        metadata: {
+          cta_type: 'cta_click',
+          ...detail
+        }
+      });
+    } catch (error) {
+      console.warn('Failed to track CTA event internally:', error);
+    }
+    
+    // If you have a first-party tracker, call it here too
+    // fetch('/api/track', { method: 'POST', body: JSON.stringify({ type: 'cta_click', detail }) })
+  });
+
+  (window as any).__ctaBridge = true;
+}

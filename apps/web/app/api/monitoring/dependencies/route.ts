@@ -1,1 +1,1 @@
-export { POST, GET } from '../../src/app/api/monitoring/dependencies/route'
+export { POST, GET } from '@/app/api/monitoring/dependencies/route'

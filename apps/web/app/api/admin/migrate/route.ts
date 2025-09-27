@@ -1,1 +1,1 @@
-export { POST, dynamic } from '../../../../src/app/api/admin/migrate/route'
+export { POST, dynamic } from '../../@/app/api/admin/migrate/route'
