@@ -1,0 +1,260 @@
+name: Agile Cockpit Automation
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC for daily pulse checks
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'daily-check'
+        type: choice
+        options:
+          - daily-check
+          - weekly-report
+          - backlog-hygiene
+          - wip-check
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  daily-check:
+    name: Daily Agile Cockpit Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.action == 'daily-check'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Make script executable
+        run: chmod +x scripts/agile-cockpit-automation.sh
+      
+      - name: Check WIP limits
+        run: ./scripts/agile-cockpit-automation.sh check-wip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Check for blocked items
+        run: ./scripts/agile-cockpit-automation.sh check-blocked
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Generate daily report
+        run: ./scripts/agile-cockpit-automation.sh report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create issue if WIP exceeded
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'agile-cockpit-wip'
+            });
+            
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🚨 WIP Limit Exceeded in Agile Cockpit',
+                body: `## WIP Limit Alert
+                
+                The Agile Cockpit WIP limit has been exceeded. Please review and reduce work in progress.
+                
+                **Action Required:**
+                1. Review items in "This Sprint" and "In Progress"
+                2. Complete or drop some items
+                3. Ensure WIP stays within 3-8 items
+                
+                **Workflow:** [Agile Cockpit Automation](${context.payload.repository.html_url}/actions/runs/${context.runId})
+                
+                ---
+                *This issue was automatically created by the Agile Cockpit Automation workflow.*`,
+                labels: ['agile-cockpit-wip', 'automated', 'urgent']
+              });
+            }
+
+  weekly-report:
+    name: Weekly Sprint Report
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'weekly-report'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Make script executable
+        run: chmod +x scripts/agile-cockpit-automation.sh
+      
+      - name: Generate weekly report
+        run: ./scripts/agile-cockpit-automation.sh report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create weekly retrospective issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const weekStart = new Date();
+            weekStart.setDate(weekStart.getDate() - 7);
+            const weekEnd = new Date();
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 Weekly Sprint Retrospective - ${weekStart.toISOString().split('T')[0]} to ${weekEnd.toISOString().split('T')[0]}`,
+              body: `## Weekly Sprint Retrospective
+              
+              **Week:** ${weekStart.toISOString().split('T')[0]} to ${weekEnd.toISOString().split('T')[0]}
+              
+              ### Sprint Goal
+              <!-- Update with current sprint goal -->
+              
+              ### What Went Well
+              - [Success 1]
+              - [Success 2]
+              - [Success 3]
+              
+              ### What Could Be Improved
+              - [Improvement 1]
+              - [Improvement 2]
+              - [Improvement 3]
+              
+              ### Action Items
+              - [ ] [Action 1] - [Owner] - [Due Date]
+              - [ ] [Action 2] - [Owner] - [Due Date]
+              
+              ### Metrics
+              - **Items Completed:** [Number]
+              - **Cycle Time (avg):** [Days]
+              - **WIP (max):** [Number]
+              - **Blocked Items:** [Number]
+              
+              ### Demo
+              - **Demo Date:** [Date]
+              - **Demo Link:** [Link to demo]
+              - **Key Features:** [List features]
+              
+              ---
+              *This retrospective was automatically created by the Agile Cockpit Automation workflow.*`,
+              labels: ['agile-cockpit-retro', 'automated', 'weekly']
+            });
+
+  backlog-hygiene:
+    name: Backlog Hygiene
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'backlog-hygiene'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Make script executable
+        run: chmod +x scripts/agile-cockpit-automation.sh
+      
+      - name: Perform backlog hygiene
+        run: ./scripts/agile-cockpit-automation.sh hygiene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create backlog hygiene report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🧹 Backlog Hygiene Report',
+              body: `## Backlog Hygiene Report
+              
+              **Date:** ${new Date().toISOString().split('T')[0]}
+              
+              ### Backlog Status
+              <!-- Update with current backlog status -->
+              
+              ### Actions Taken
+              - [ ] Archived stale items
+              - [ ] Merged duplicates
+              - [ ] Renamed vague titles
+              - [ ] Kept top 10 sharp
+              
+              ### Items Requiring Attention
+              <!-- List items that need review -->
+              
+              ### Recommendations
+              <!-- Provide recommendations for backlog improvement -->
+              
+              ---
+              *This report was automatically generated by the Agile Cockpit Automation workflow.*`,
+              labels: ['agile-cockpit-hygiene', 'automated', 'backlog']
+            });
+
+  wip-check:
+    name: WIP Check
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'wip-check'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Make script executable
+        run: chmod +x scripts/agile-cockpit-automation.sh
+      
+      - name: Check WIP limits
+        run: ./scripts/agile-cockpit-automation.sh check-wip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Generate WIP report
+        run: ./scripts/agile-cockpit-automation.sh report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
