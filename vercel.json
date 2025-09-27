@@ -14,10 +14,10 @@
     }
   ],
   "functions": {
-    "apps/web/src/app/api/scrape/route.ts": {
+    "src/app/api/scrape/route.ts": {
       "maxDuration": 300
     },
-    "apps/web/src/app/api/cleanup/route.ts": {
+    "src/app/api/cleanup/route.ts": {
       "maxDuration": 120
     }
   }
