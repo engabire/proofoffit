@@ -1,10 +1,12 @@
 import Stripe from 'stripe'
 
-// Stripe configuration
+import { credentialManager } from '@/lib/security/credential-manager'
+
+// Stripe configuration - SECURE VERSION
 export const stripeConfig = {
-  apiKey: process.env.STRIPE_SECRET_KEY || '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',
-  publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_live_51S83Ea5r3cXmAzLDY68T3VZeoVtQnvpYS4pg9jR13Qv5u06ELjCqpRtexG4apd6Nrj5GFaYI4bTO7xB1fKbXiXYX00rYLEvEHq',
-  webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
+  apiKey: credentialManager.getCredential('STRIPE_SECRET_KEY'),
+  publishableKey: credentialManager.getCredential('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
+  webhookSecret: credentialManager.getCredential('STRIPE_WEBHOOK_SECRET'),
   connectAccountId: 'acct_1S83Ea5r3cXmAzLD', // Extracted from your connect URL
 }
 

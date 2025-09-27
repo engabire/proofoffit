@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
         // Get user ID from customer metadata
         const customer = await stripe.customers.retrieve(customerId)
-        const userId = customer.metadata?.userId
+        const userId = (customer as any).metadata?.userId
 
         if (userId) {
           await supabase
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
         // Get user ID from customer metadata
         const customer = await stripe.customers.retrieve(customerId)
-        const userId = customer.metadata?.userId
+        const userId = (customer as any).metadata?.userId
 
         if (userId) {
           await supabase
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
 
         // Get user ID from customer metadata
         const customer = await stripe.customers.retrieve(customerId)
-        const userId = customer.metadata?.userId
+        const userId = (customer as any).metadata?.userId
 
         if (userId) {
           // Log successful payment
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 
         // Get user ID from customer metadata
         const customer = await stripe.customers.retrieve(customerId)
-        const userId = customer.metadata?.userId
+        const userId = (customer as any).metadata?.userId
 
         if (userId) {
           // Log failed payment

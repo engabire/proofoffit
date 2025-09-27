@@ -1,7 +1,9 @@
-// Google OAuth configuration
+import { credentialManager } from '@/lib/security/credential-manager'
+
+// Google OAuth configuration - SECURE VERSION
 export const googleOAuthConfig = {
-  clientId: process.env.GOOGLE_CLIENT_ID || '200285779525-9prjj2o3heaarbq8n9kd842fvmikkapb.apps.googleusercontent.com',
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET || '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',
+  clientId: credentialManager.getCredential('GOOGLE_CLIENT_ID'),
+  clientSecret: credentialManager.getCredential('GOOGLE_CLIENT_SECRET'),
   redirectUri: process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.proofoffit.com'}/auth/callback/google`,
   scopes: [
     'openid',

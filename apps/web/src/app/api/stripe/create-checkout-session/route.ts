@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, stripeServer, subscriptionPlans } from '@/lib/stripe/config'
+import { stripe, subscriptionPlans, getPlanById } from '@/lib/stripe/config'
 import { createClient } from '@supabase/supabase-js'
 
 export async function POST(request: NextRequest) {
@@ -14,9 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get plan details
-    const plan = Object.values(subscriptionPlans.candidate)
-      .concat(Object.values(subscriptionPlans.employer))
-      .find(p => p.id === planId)
+    const plan = getPlanById(planId)
 
     if (!plan) {
       return NextResponse.json(
@@ -26,7 +24,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Get or create Stripe customer
-    const customer = await stripeServer.getOrCreateCustomer(userEmail, userId)
+    const existingCustomers = await stripe.customers.list({
+      email: userEmail,
+      limit: 1
+    });
+    
+    let customer;
+    if (existingCustomers.data.length > 0) {
+      customer = existingCustomers.data[0];
+    } else {
+      customer = await stripe.customers.create({
+        email: userEmail,
+        metadata: { userId }
+      });
+    }
 
     // Create Stripe price if it doesn't exist
     let priceId: string
