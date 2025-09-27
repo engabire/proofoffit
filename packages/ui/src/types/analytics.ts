@@ -1,13 +1,4 @@
-declare global {
-  interface Window {
-    gtag?: (
-      command: 'config' | 'event' | 'exception' | 'pageview' | 'set' | 'timing_complete',
-      targetId: string | object,
-      config?: object
-    ) => void
-    dataLayer?: object[]
-  }
-}
+// Global types are declared in global.d.ts
 
 export interface CTATrackingData {
   event_category?: string

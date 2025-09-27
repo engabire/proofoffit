@@ -226,7 +226,7 @@ export function AdvancedCharts() {
                   <div key={label} className="text-center">
                     <div 
                       className="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white font-bold text-lg mb-2"
-                      style={{ backgroundColor: wipData.datasets[0].backgroundColor[index] }}
+                      style={{ backgroundColor: wipData.datasets[0]?.backgroundColor?.[index] || '#666' }}
                     >
                       {value}
                     </div>

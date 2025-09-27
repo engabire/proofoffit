@@ -10,7 +10,7 @@ import {
   Info, 
   AlertTriangle,
   Settings,
-  MarkAsRead
+  Check
 } from 'lucide-react'
 import {
   DropdownMenu,

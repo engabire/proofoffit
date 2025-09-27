@@ -53,6 +53,7 @@ import {
   Separator,
 } from "@proof-of-fit/ui";
 import LivingProofHero from "@/components/landing/living-proof-hero";
+import { SecureHeader } from "@/components/navigation/secure-header";
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -1119,7 +1120,7 @@ export default function ProofOfFitLanding() {
 
   return (
     <div className={warmBody}>
-      <Header lane={lane} setLane={setLane} />
+      <SecureHeader />
       {/* HERO */}
       <LivingProofHero highlights={heroHighlights} trusted={trustedPartners} lane={lane} />
 

@@ -242,7 +242,7 @@ export function FormTextarea({
           {...props}
         />
       )}
-    </FormTextarea>
+    </FormField>
   )
 }
 

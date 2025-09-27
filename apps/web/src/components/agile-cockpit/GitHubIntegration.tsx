@@ -9,7 +9,7 @@ import {
   GitBranch, 
   GitCommit, 
   GitPullRequest, 
-  Issue, 
+  AlertTriangle, 
   Star,
   Users,
   Calendar,
@@ -17,7 +17,8 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  ExternalLink
+  ExternalLink,
+  GitMerge
 } from 'lucide-react'
 
 interface GitHubRepo {
@@ -28,13 +29,13 @@ interface GitHubRepo {
   language: string
   stars: number
   forks: number
-  openIssues: number
+  openAlertTriangles: number
   lastUpdated: Date
   url: string
   isPrivate: boolean
 }
 
-interface GitHubIssue {
+interface GitHubAlertTriangle {
   id: number
   number: number
   title: string
@@ -66,7 +67,7 @@ interface GitHubPR {
 interface GitHubStats {
   totalCommits: number
   totalPRs: number
-  totalIssues: number
+  totalAlertTriangles: number
   activeContributors: number
   averagePRSize: number
   averageCycleTime: number
@@ -75,7 +76,7 @@ interface GitHubStats {
 
 export function GitHubIntegration() {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
-  const [issues, setIssues] = useState<GitHubIssue[]>([])
+  const [issues, setAlertTriangles] = useState<GitHubAlertTriangle[]>([])
   const [pullRequests, setPullRequests] = useState<GitHubPR[]>([])
   const [stats, setStats] = useState<GitHubStats | null>(null)
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null)
@@ -99,7 +100,7 @@ export function GitHubIntegration() {
           language: 'TypeScript',
           stars: 12,
           forks: 3,
-          openIssues: 5,
+          openAlertTriangles: 5,
           lastUpdated: new Date(Date.now() - 2 * 60 * 60 * 1000),
           url: 'https://github.com/engabire/proofoffit',
           isPrivate: false
@@ -112,14 +113,14 @@ export function GitHubIntegration() {
           language: 'JavaScript',
           stars: 8,
           forks: 2,
-          openIssues: 2,
+          openAlertTriangles: 2,
           lastUpdated: new Date(Date.now() - 5 * 60 * 60 * 1000),
           url: 'https://github.com/engabire/agile-dashboard',
           isPrivate: true
         }
       ]
 
-      const mockIssues: GitHubIssue[] = [
+      const mockAlertTriangles: GitHubAlertTriangle[] = [
         {
           id: 1,
           number: 123,
@@ -195,7 +196,7 @@ export function GitHubIntegration() {
       const mockStats: GitHubStats = {
         totalCommits: 156,
         totalPRs: 45,
-        totalIssues: 23,
+        totalAlertTriangles: 23,
         activeContributors: 3,
         averagePRSize: 12.5,
         averageCycleTime: 2.3,
@@ -203,7 +204,7 @@ export function GitHubIntegration() {
       }
 
       setRepos(mockRepos)
-      setIssues(mockIssues)
+      setAlertTriangles(mockAlertTriangles)
       setPullRequests(mockPRs)
       setStats(mockStats)
 
@@ -262,8 +263,8 @@ export function GitHubIntegration() {
                     <span>{repo.forks}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Issue className="w-4 h-4" />
-                    <span>{repo.openIssues}</span>
+                    <AlertTriangle className="w-4 h-4" />
+                    <span>{repo.openAlertTriangles}</span>
                   </div>
                 </div>
               </div>
@@ -291,7 +292,7 @@ export function GitHubIntegration() {
     </div>
   )
 
-  const renderIssues = () => (
+  const renderAlertTriangles = () => (
     <div className="space-y-4">
       {issues.map(issue => (
         <Card key={issue.id}>
@@ -299,7 +300,7 @@ export function GitHubIntegration() {
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Issue className="w-5 h-5 text-gray-500" />
+                  <AlertTriangle className="w-5 h-5 text-gray-500" />
                   <h3 className="font-medium">#{issue.number}</h3>
                   <Badge className={getStateColor(issue.state)}>
                     {issue.state}
@@ -432,10 +433,10 @@ export function GitHubIntegration() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <Issue className="w-8 h-8 text-orange-500" />
+                  <AlertTriangle className="w-8 h-8 text-orange-500" />
                   <div>
-                    <div className="text-2xl font-bold">{stats.totalIssues}</div>
-                    <div className="text-sm text-gray-600">Issues</div>
+                    <div className="text-2xl font-bold">{stats.totalAlertTriangles}</div>
+                    <div className="text-sm text-gray-600">AlertTriangles</div>
                   </div>
                 </div>
               </CardContent>
@@ -493,7 +494,7 @@ export function GitHubIntegration() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-sm">Issues closed: 5</span>
+                    <span className="text-sm">AlertTriangles closed: 5</span>
                   </div>
                 </div>
               </CardContent>
@@ -544,7 +545,7 @@ export function GitHubIntegration() {
       <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
         {[
           { key: 'repos', label: 'Repositories', icon: <Github className="w-4 h-4" /> },
-          { key: 'issues', label: 'Issues', icon: <Issue className="w-4 h-4" /> },
+          { key: 'issues', label: 'AlertTriangles', icon: <AlertTriangle className="w-4 h-4" /> },
           { key: 'prs', label: 'Pull Requests', icon: <GitPullRequest className="w-4 h-4" /> },
           { key: 'stats', label: 'Statistics', icon: <TrendingUp className="w-4 h-4" /> }
         ].map(tab => (
@@ -565,7 +566,7 @@ export function GitHubIntegration() {
 
       {/* Content */}
       {activeTab === 'repos' && renderRepos()}
-      {activeTab === 'issues' && renderIssues()}
+      {activeTab === 'issues' && renderAlertTriangles()}
       {activeTab === 'prs' && renderPRs()}
       {activeTab === 'stats' && renderStats()}
 

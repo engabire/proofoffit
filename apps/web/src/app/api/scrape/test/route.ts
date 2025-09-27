@@ -103,7 +103,9 @@ async function testAuthPathing(req: NextRequest) {
     try {
       const response = await fetch('/api/scrape', {
         method: 'GET',
-        headers: test.headers
+        headers: Object.fromEntries(
+          Object.entries(test.headers).filter(([_, value]) => value !== undefined)
+        ) as Record<string, string>
       });
       
       results.push({

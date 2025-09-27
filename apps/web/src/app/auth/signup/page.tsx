@@ -1,5 +1,10 @@
-import { EnterpriseLogin } from '@/components/auth/enterprise-login'
+import { EnhancedEnterpriseLogin } from '@/components/auth/enhanced-enterprise-login'
+import { AuthGuard } from '@/components/auth/auth-guard'
 
 export default function SignUpPage() {
-  return <EnterpriseLogin mode="signup" />
+  return (
+    <AuthGuard requireAuth={false}>
+      <EnhancedEnterpriseLogin mode="signup" />
+    </AuthGuard>
+  )
 }

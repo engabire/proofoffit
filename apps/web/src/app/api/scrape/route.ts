@@ -305,7 +305,7 @@ export async function GET(req: NextRequest) {
         }
         
         // Parse HTML
-        const $ = cheerio.load(fetchResult.html);
+        const $ = cheerio.load(fetchResult.html || '');
         const domain = new URL(url).hostname.toLowerCase();
         
         // Extract items (example: quotes)
