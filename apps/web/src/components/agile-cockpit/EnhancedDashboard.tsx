@@ -14,7 +14,11 @@ import {
   TrendingUp,
   Users,
   Activity,
-  Zap
+  Zap,
+  Mail,
+  Github,
+  Download,
+  Webhook
 } from 'lucide-react'
 import { AdvancedCharts } from './AdvancedCharts'
 import { SmartNotifications } from './SmartNotifications'
@@ -22,6 +26,10 @@ import { AIChatbot } from './AIChatbot'
 import { MultiTenantDashboard } from './MultiTenantDashboard'
 import { GoalTracking } from './GoalTracking'
 import { BusinessIntelligence } from './BusinessIntelligence'
+import { EmailNotifications } from './EmailNotifications'
+import { GitHubIntegration } from './GitHubIntegration'
+import { DataExport } from './DataExport'
+import { WebhookSystem } from './WebhookSystem'
 
 type DashboardView = 
   | 'overview' 
@@ -31,6 +39,10 @@ type DashboardView =
   | 'tenants' 
   | 'goals' 
   | 'business-intelligence'
+  | 'email'
+  | 'github'
+  | 'export'
+  | 'webhooks'
 
 export function EnhancedDashboard() {
   const [activeView, setActiveView] = useState<DashboardView>('overview')
@@ -78,6 +90,30 @@ export function EnhancedDashboard() {
       label: 'Business Intelligence',
       icon: <TrendingUp className="w-5 h-5" />,
       description: 'Advanced analytics and insights'
+    },
+    {
+      id: 'email' as DashboardView,
+      label: 'Email Notifications',
+      icon: <Mail className="w-5 h-5" />,
+      description: 'Configure email templates and SMTP'
+    },
+    {
+      id: 'github' as DashboardView,
+      label: 'GitHub Integration',
+      icon: <Github className="w-5 h-5" />,
+      description: 'Connect and manage GitHub repositories'
+    },
+    {
+      id: 'export' as DashboardView,
+      label: 'Data Export',
+      icon: <Download className="w-5 h-5" />,
+      description: 'Export data in various formats'
+    },
+    {
+      id: 'webhooks' as DashboardView,
+      label: 'Webhook System',
+      icon: <Webhook className="w-5 h-5" />,
+      description: 'Configure webhooks for integrations'
     }
   ]
 
@@ -219,6 +255,14 @@ export function EnhancedDashboard() {
         return <GoalTracking />
       case 'business-intelligence':
         return <BusinessIntelligence />
+      case 'email':
+        return <EmailNotifications />
+      case 'github':
+        return <GitHubIntegration />
+      case 'export':
+        return <DataExport />
+      case 'webhooks':
+        return <WebhookSystem />
       default:
         return renderOverview()
     }
