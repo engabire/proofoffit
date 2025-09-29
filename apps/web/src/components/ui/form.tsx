@@ -1,9 +1,6 @@
 import React, { createContext, useContext, useId } from 'react'
 import { cn } from '@/lib/utils'
-import { Label } from './label'
-import { Input } from './input'
-import { Textarea } from './textarea'
-import { Button } from './button'
+import { Label, Input, Textarea, Button } from '@proof-of-fit/ui'
 import { AlertCircle, CheckCircle } from 'lucide-react'
 
 interface FormContextValue {

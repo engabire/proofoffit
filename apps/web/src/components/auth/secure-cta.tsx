@@ -11,8 +11,8 @@ interface SecureCtaProps {
   label: string
   href?: string
   onClick?: (e: React.MouseEvent) => void
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive'
-  size?: 'sm' | 'md' | 'lg'
+  variant?: SecureCtaVariant
+  size?: SecureCtaSize
   iconLeft?: React.ReactNode
   iconRight?: React.ReactNode
   disabled?: boolean
@@ -26,13 +26,17 @@ interface SecureCtaProps {
   prefetch?: boolean
 }
 
+type ButtonVariant = React.ComponentProps<typeof Button>['variant']
+type SecureCtaVariant = ButtonVariant | 'primary'
+type SecureCtaSize = React.ComponentProps<typeof Button>['size']
+
 export function SecureCta({
   id,
   label,
   href,
   onClick,
-  variant = 'secondary',
-  size = 'md',
+  variant = 'default',
+  size = 'default',
   iconLeft,
   iconRight,
   disabled = false,
@@ -47,6 +51,18 @@ export function SecureCta({
   ...props
 }: SecureCtaProps) {
   const { isAuthenticated, isLoading } = useAuth()
+  const resolvedVariant = mapToButtonVariant(variant)
+  const renderContent = (showSpinner: boolean) => (
+    <span className="flex items-center gap-2">
+      {showSpinner ? (
+        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+      ) : (
+        iconLeft
+      )}
+      <span>{label}</span>
+      {iconRight}
+    </span>
+  )
 
   // Handle click with auth check
   const handleClick = (e: React.MouseEvent) => {
@@ -83,15 +99,14 @@ export function SecureCta({
     return (
       <Button
         id={id}
-        variant={variant}
+        variant={resolvedVariant}
         size={size}
         disabled={true}
         className={cn(className)}
         aria-label={ariaLabel || label}
         {...props}
       >
-        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
-        Loading...
+        {renderContent(true)}
       </Button>
     )
   }
@@ -101,39 +116,26 @@ export function SecureCta({
     const finalHref = requireAuth && !isAuthenticated ? authRedirect : href
     
     return (
-      <Link
+      <Button
         id={id}
-        href={finalHref}
-        prefetch={prefetch}
-        aria-label={ariaLabel || label}
-        className={cn(
-          'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
-          {
-            'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
-            'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
-            'border border-input hover:bg-accent hover:text-accent-foreground': variant === 'outline',
-            'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
-            'bg-destructive text-destructive-foreground hover:bg-destructive/90': variant === 'destructive',
-            'h-9 px-3': size === 'sm',
-            'h-10 py-2 px-4': size === 'md',
-            'h-11 px-8': size === 'lg',
-          },
-          className
-        )}
-        onClick={handleClick}
+        variant={resolvedVariant}
+        size={size}
+        asChild
+        className={cn(className)}
         data-cta="true"
         data-evt={dataEvt}
         data-lane={dataLane}
         {...props}
       >
-        {loading ? (
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
-        ) : (
-          iconLeft
-        )}
-        <span>{label}</span>
-        {iconRight}
-      </Link>
+        <Link
+          href={finalHref}
+          prefetch={prefetch}
+          aria-label={ariaLabel || label}
+          onClick={handleClick}
+        >
+          {renderContent(loading)}
+        </Link>
+      </Button>
     )
   }
 
@@ -142,7 +144,7 @@ export function SecureCta({
     <Button
       id={id}
       type="button"
-      variant={variant}
+      variant={resolvedVariant}
       size={size}
       onClick={handleClick}
       disabled={disabled || loading}
@@ -154,15 +156,18 @@ export function SecureCta({
       data-lane={dataLane}
       {...props}
     >
-      {loading ? (
-        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
-      ) : (
-        iconLeft
-      )}
-      <span>{label}</span>
-      {iconRight}
+      {renderContent(loading)}
     </Button>
   )
+}
+
+function mapToButtonVariant(variant: SecureCtaVariant): ButtonVariant {
+  switch (variant) {
+    case 'primary':
+      return 'default'
+    default:
+      return (variant ?? 'default') as ButtonVariant
+  }
 }
 
 // Enhanced CTA with security features

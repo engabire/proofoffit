@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
 import { Badge } from './badge'
 import { Button } from './button'
-import { Progress } from './progress'
-import { 
+import {
   Activity, 
   Zap, 
   Database, 
   Globe, 
   Clock, 
   TrendingUp,
-  TrendingDown,
   AlertTriangle,
   CheckCircle,
   RefreshCw

@@ -60,7 +60,7 @@ export class OptimizedAIMatchingEngine {
         const batch = candidates.slice(i, i + this.batchSize)
         
         // Process batch in parallel
-        const batchPromises = batch.map(candidate => 
+        const batchPromises = batch.map((candidate: CandidateProfile) => 
           this.calculateFitScoreOptimized(candidate, job)
         )
         
@@ -178,8 +178,10 @@ export class OptimizedAIMatchingEngine {
     
     // Limit cache size
     if (this.similarityCache.size > 10000) {
-      const firstKey = this.similarityCache.keys().next().value
-      this.similarityCache.delete(firstKey)
+      const firstKey = this.similarityCache.keys().next().value as string | undefined
+      if (firstKey) {
+        this.similarityCache.delete(firstKey)
+      }
     }
 
     return similarity
@@ -194,8 +196,8 @@ export class OptimizedAIMatchingEngine {
     if (len2 === 0) return 0
 
     // Use single array instead of matrix for memory efficiency
-    const prev = new Array(len2 + 1)
-    const curr = new Array(len2 + 1)
+    let prev = new Array(len2 + 1)
+    let curr = new Array(len2 + 1)
 
     // Initialize first row
     for (let j = 0; j <= len2; j++) {
@@ -226,9 +228,11 @@ export class OptimizedAIMatchingEngine {
     const yearsDiff = Math.abs(candidateExp.years - jobExp.years)
     
     // Pre-computed level values for performance
-    const levelValues = { entry: 1, mid: 2, senior: 3, lead: 4 }
-    const candidateLevel = levelValues[candidateExp.level] || 1
-    const jobLevel = levelValues[jobExp.level] || 1
+    const levelValues = { entry: 1, mid: 2, senior: 3, lead: 4 } as const
+    const candidateLevelKey = (candidateExp.level ?? 'entry') as keyof typeof levelValues
+    const jobLevelKey = (jobExp.level ?? 'entry') as keyof typeof levelValues
+    const candidateLevel = levelValues[candidateLevelKey] ?? 1
+    const jobLevel = levelValues[jobLevelKey] ?? 1
     
     const levelDiff = Math.abs(candidateLevel - jobLevel)
     
@@ -251,13 +255,16 @@ export class OptimizedAIMatchingEngine {
       'master': 4,
       'phd': 5,
       'doctorate': 5
-    }
+    } as const
 
     const candidateDegree = candidateEdu.degree.toLowerCase()
     const jobDegree = jobEdu.toLowerCase()
 
-    const candidateLevel = degreeLevels[candidateDegree] || 1
-    const jobLevel = degreeLevels[jobDegree] || 1
+    const candidateDegreeKey = (candidateDegree as keyof typeof degreeLevels) ?? 'high school'
+    const jobDegreeKey = (jobDegree as keyof typeof degreeLevels) ?? 'high school'
+
+    const candidateLevel = degreeLevels[candidateDegreeKey] ?? 1
+    const jobLevel = degreeLevels[jobDegreeKey] ?? 1
 
     if (candidateLevel >= jobLevel) {
       return 100

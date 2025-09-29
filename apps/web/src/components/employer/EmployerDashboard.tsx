@@ -75,6 +75,8 @@ interface EmployerStats {
   responseTime: number
 }
 
+type BadgeVariant = React.ComponentProps<typeof Badge>['variant']
+
 export function EmployerDashboard() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<'overview' | 'jobs' | 'candidates' | 'analytics'>('overview')
@@ -171,18 +173,24 @@ export function EmployerDashboard() {
     setLoading(false)
   }, [])
 
-  const getStatusBadgeVariant = (status: string) => {
+  const getStatusBadgeStyle = (status: string): { variant: BadgeVariant; className?: string } => {
     switch (status) {
-      case 'active': return 'success'
-      case 'draft': return 'secondary'
-      case 'paused': return 'warning'
-      case 'closed': return 'destructive'
-      case 'new': return 'default'
-      case 'reviewed': return 'info'
-      case 'interview': return 'warning'
-      case 'rejected': return 'destructive'
-      case 'hired': return 'success'
-      default: return 'secondary'
+      case 'active':
+      case 'hired':
+        return { variant: 'outline', className: 'border-green-500 text-green-600 bg-green-50' }
+      case 'paused':
+      case 'interview':
+        return { variant: 'outline', className: 'border-amber-400 text-amber-600 bg-amber-50' }
+      case 'reviewed':
+        return { variant: 'outline', className: 'border-blue-400 text-blue-600 bg-blue-50' }
+      case 'closed':
+      case 'rejected':
+        return { variant: 'destructive' }
+      case 'new':
+        return { variant: 'default' }
+      case 'draft':
+      default:
+        return { variant: 'secondary' }
     }
   }
 
@@ -323,9 +331,14 @@ export function EmployerDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Badge variant={getStatusBadgeVariant(candidate.status)}>
-                        {candidate.status}
-                      </Badge>
+                      {(() => {
+                        const { variant, className } = getStatusBadgeStyle(candidate.status)
+                        return (
+                          <Badge variant={variant} className={className}>
+                            {candidate.status}
+                          </Badge>
+                        )
+                      })()}
                       <span className={`text-sm font-medium ${getFitScoreColor(candidate.fitScore)}`}>
                         {candidate.fitScore}%
                       </span>
@@ -347,9 +360,14 @@ export function EmployerDashboard() {
                   <div key={job.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-medium">{job.title}</h3>
-                      <Badge variant={getStatusBadgeVariant(job.status)}>
-                        {job.status}
-                      </Badge>
+                      {(() => {
+                        const { variant, className } = getStatusBadgeStyle(job.status)
+                        return (
+                          <Badge variant={variant} className={className}>
+                            {job.status}
+                          </Badge>
+                        )
+                      })()}
                     </div>
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
@@ -403,9 +421,14 @@ export function EmployerDashboard() {
                       <p className="text-gray-600">{job.location} • {job.type}</p>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Badge variant={getStatusBadgeVariant(job.status)}>
-                        {job.status}
-                      </Badge>
+                      {(() => {
+                        const { variant, className } = getStatusBadgeStyle(job.status)
+                        return (
+                          <Badge variant={variant} className={className}>
+                            {job.status}
+                          </Badge>
+                        )
+                      })()}
                       <Button variant="outline" size="sm">
                         <Settings className="w-4 h-4" />
                       </Button>
@@ -491,9 +514,14 @@ export function EmployerDashboard() {
                       <span className={`text-lg font-bold ${getFitScoreColor(candidate.fitScore)}`}>
                         {candidate.fitScore}%
                       </span>
-                      <Badge variant={getStatusBadgeVariant(candidate.status)}>
-                        {candidate.status}
-                      </Badge>
+                      {(() => {
+                        const { variant, className } = getStatusBadgeStyle(candidate.status)
+                        return (
+                          <Badge variant={variant} className={className}>
+                            {candidate.status}
+                          </Badge>
+                        )
+                      })()}
                     </div>
                   </div>
                   

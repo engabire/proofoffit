@@ -108,13 +108,16 @@ export class AdvancedAnalytics {
 
       if (appsError) throw appsError
 
+      const eventList = (events ?? []) as Array<Record<string, any>>
+      const applicationList = (applications ?? []) as Array<Record<string, any>>
+
       // Calculate metrics
-      const totalSearches = events.filter(e => e.event_type === 'job_search').length
-      const totalApplications = applications.length
-      const totalViews = events.filter(e => e.event_type === 'job_view').length
+      const totalSearches = eventList.filter((e) => e.event_type === 'job_search').length
+      const totalApplications = applicationList.length
+      const totalViews = eventList.filter((e) => e.event_type === 'job_view').length
 
       // Calculate session duration
-      const sessions = this.groupEventsBySession(events)
+      const sessions = this.groupEventsBySession(eventList)
       const avgSessionDuration = sessions.reduce((acc, session) => {
         const duration = session.endTime.getTime() - session.startTime.getTime()
         return acc + duration
@@ -124,13 +127,13 @@ export class AdvancedAnalytics {
       const conversionRate = totalSearches > 0 ? (totalApplications / totalSearches) * 100 : 0
 
       // Get top skills and locations
-      const topSkills = this.extractTopSkills(events)
-      const preferredLocations = this.extractPreferredLocations(events)
+      const topSkills = this.extractTopSkills(eventList)
+      const preferredLocations = this.extractPreferredLocations(eventList)
 
       // Calculate average fit score
-      const fitScores = events
-        .filter(e => e.event_type === 'job_match' && e.event_data.fitScore)
-        .map(e => e.event_data.fitScore)
+      const fitScores = eventList
+        .filter((e) => e.event_type === 'job_match' && e.event_data?.fitScore)
+        .map((e) => e.event_data.fitScore as number)
       const avgFitScore = fitScores.length > 0 
         ? fitScores.reduce((a, b) => a + b, 0) / fitScores.length 
         : 0
@@ -141,7 +144,7 @@ export class AdvancedAnalytics {
         totalApplications,
         totalViews,
         avgSessionDuration: Math.round(avgSessionDuration * 100) / 100,
-        lastActive: new Date(Math.max(...events.map(e => new Date(e.created_at).getTime()))),
+        lastActive: new Date(Math.max(...eventList.map((e) => new Date(e.created_at).getTime()))),
         conversionRate: Math.round(conversionRate * 100) / 100,
         topSkills,
         preferredLocations,
@@ -177,24 +180,27 @@ export class AdvancedAnalytics {
 
       if (appsError) throw appsError
 
+      const eventList = (events ?? []) as Array<Record<string, any>>
+      const applicationList = (applications ?? []) as Array<Record<string, any>>
+
       // Calculate metrics
-      const totalViews = events.filter(e => e.event_type === 'job_view').length
-      const totalApplications = applications.length
+      const totalViews = eventList.filter((e) => e.event_type === 'job_view').length
+      const totalApplications = applicationList.length
       const conversionRate = totalViews > 0 ? (totalApplications / totalViews) * 100 : 0
 
       // Calculate average fit score
-      const fitScores = events
-        .filter(e => e.event_type === 'job_match' && e.event_data.fitScore)
-        .map(e => e.event_data.fitScore)
+      const fitScores = eventList
+        .filter((e) => e.event_type === 'job_match' && e.event_data?.fitScore)
+        .map((e) => e.event_data.fitScore as number)
       const avgFitScore = fitScores.length > 0 
         ? fitScores.reduce((a, b) => a + b, 0) / fitScores.length 
         : 0
 
       // Get top candidate sources
-      const topCandidateSources = this.extractTopCandidateSources(applications)
+      const topCandidateSources = this.extractTopCandidateSources(applicationList)
 
       // Calculate time to first application
-      const firstApplication = applications.sort((a, b) => 
+      const firstApplication = [...applicationList].sort((a, b) => 
         new Date(a.applied_at).getTime() - new Date(b.applied_at).getTime()
       )[0]
       const timeToFirstApplication = firstApplication 
@@ -202,7 +208,7 @@ export class AdvancedAnalytics {
         : 0
 
       // Generate application trends
-      const applicationTrends = this.generateApplicationTrends(applications, days)
+      const applicationTrends = this.generateApplicationTrends(applicationList, days)
 
       return {
         jobId,

@@ -36,4 +36,7 @@ export { NavigationMenu, NavigationMenuContent, NavigationMenuIndicator, Navigat
 export { ScrollArea, ScrollBar } from './components/scroll-area'
 export { Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from './components/toast'
 export { Toaster } from './components/toaster'
-
+export { NotificationCenter, useNotifications } from './components/notification-center'
+export type { Notification } from './components/notification-center'
+export { ErrorBoundary, useErrorHandler } from './components/error-boundary'
+export { PerformanceMonitor } from './components/performance-monitor'

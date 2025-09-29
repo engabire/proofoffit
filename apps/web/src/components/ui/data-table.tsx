@@ -1,24 +1,13 @@
 import React, { useState, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from './button'
-import { Input } from './input'
-import { Badge } from './badge'
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  Search, 
-  Filter, 
-  MoreHorizontal,
+import { Input } from '@proof-of-fit/ui'
+import {
+  Search,
   ArrowUpDown,
   ArrowUp,
   ArrowDown
 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './dropdown-menu'
 
 export interface Column<T> {
   key: string

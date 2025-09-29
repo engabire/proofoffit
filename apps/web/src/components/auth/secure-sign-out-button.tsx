@@ -7,9 +7,13 @@ import { LogOut, Shield, AlertTriangle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+type ButtonVariant = React.ComponentProps<typeof Button>['variant']
+type ButtonSize = React.ComponentProps<typeof Button>['size']
+type SecureSignOutSize = ButtonSize | 'md'
+
 interface SecureSignOutButtonProps {
-  variant?: 'ghost' | 'outline' | 'destructive'
-  size?: 'sm' | 'md' | 'lg'
+  variant?: Extract<ButtonVariant, 'ghost' | 'outline' | 'destructive'>
+  size?: SecureSignOutSize
   showConfirmation?: boolean
   className?: string
 }
@@ -120,10 +124,12 @@ export function SecureSignOutButton({
     )
   }
 
+  const resolvedSize: ButtonSize = size === 'md' ? 'default' : size ?? 'default'
+
   return (
     <Button 
       variant={variant} 
-      size={size} 
+      size={resolvedSize} 
       onClick={handleSignOut}
       disabled={isLoading}
       className={className}

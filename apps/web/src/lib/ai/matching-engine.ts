@@ -166,9 +166,11 @@ export class AIMatchingEngine {
     const yearsDiff = Math.abs(candidateExp.years - jobExp.years)
     
     // Experience level mapping
-    const levelValues = { entry: 1, mid: 2, senior: 3, lead: 4 }
-    const candidateLevel = levelValues[candidateExp.level] || 1
-    const jobLevel = levelValues[jobExp.level] || 1
+    const levelValues = { entry: 1, mid: 2, senior: 3, lead: 4 } as const
+    const candidateLevelKey = (candidateExp.level ?? 'entry') as keyof typeof levelValues
+    const jobLevelKey = (jobExp.level ?? 'entry') as keyof typeof levelValues
+    const candidateLevel = levelValues[candidateLevelKey] ?? 1
+    const jobLevel = levelValues[jobLevelKey] ?? 1
     
     const levelDiff = Math.abs(candidateLevel - jobLevel)
     
@@ -194,10 +196,13 @@ export class AIMatchingEngine {
       'master': 4,
       'phd': 5,
       'doctorate': 5
-    }
+    } as const
 
-    const candidateLevel = degreeLevels[candidateDegree] || 1
-    const jobLevel = degreeLevels[jobDegree] || 1
+    const candidateLevelKey = (candidateDegree as keyof typeof degreeLevels) ?? 'high school'
+    const jobLevelKey = (jobDegree as keyof typeof degreeLevels) ?? 'high school'
+
+    const candidateLevel = degreeLevels[candidateLevelKey] ?? 1
+    const jobLevel = degreeLevels[jobLevelKey] ?? 1
 
     if (candidateLevel >= jobLevel) {
       return 100

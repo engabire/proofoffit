@@ -15,7 +15,8 @@ jobs:
       - name: Check application health
         run: |
           echo "Checking application health..."
-          HEALTH_URL="https://proofoffit.com/api/health"
+          BASE_URL="https://www.proofoffit.com"
+          HEALTH_URL="$BASE_URL/api/health"
 
           # Check health endpoint
           HEALTH_RESPONSE=$(curl -s -L -o /dev/null -w "%{http_code}" "$HEALTH_URL")
@@ -59,7 +60,7 @@ jobs:
           echo "Storage status: $STORAGE_STATUS"
 
           # Log to Supabase for monitoring
-          curl -X POST "https://proofoffit.com/api/monitoring/uptime" \
+          curl -X POST "$BASE_URL/api/monitoring/uptime" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
             -d "{
@@ -100,7 +101,9 @@ jobs:
           echo "Stripe status: $STRIPE_STATUS"
 
           # Log dependency status
-          curl -X POST "https://proofoffit.com/api/monitoring/dependencies" \
+          BASE_URL="https://www.proofoffit.com"
+
+          curl -X POST "$BASE_URL/api/monitoring/dependencies" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
             -d "{
@@ -120,11 +123,13 @@ jobs:
         run: |
           echo "Running performance checks..."
 
+          BASE_URL="https://www.proofoffit.com"
+
           # Test key endpoints
           ENDPOINTS=(
-            "https://proofoffit.com/"
-            "https://proofoffit.com/api/jobs/search?limit=5"
-            "https://proofoffit.com/api/health"
+            "$BASE_URL/"
+            "$BASE_URL/api/jobs/search?limit=5"
+            "$BASE_URL/api/health"
           )
           
           for endpoint in "${ENDPOINTS[@]}"; do
@@ -137,7 +142,7 @@ jobs:
             echo "Response time: ${RESPONSE_TIME}s, HTTP code: $HTTP_CODE"
             
             # Log performance data
-            curl -X POST "https://proofoffit.com/api/monitoring/performance" \
+            curl -X POST "$BASE_URL/api/monitoring/performance" \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
               -d "{

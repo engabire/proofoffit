@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from './button'
 import { Badge } from './badge'
-import { 
-  Bell, 
-  X, 
-  CheckCircle, 
-  AlertCircle, 
-  Info, 
+import {
+  Bell,
+  X,
+  CheckCircle,
+  AlertCircle,
+  Info,
   AlertTriangle,
-  Settings,
   Check
 } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from './dropdown-menu'
 
 export interface Notification {
@@ -133,7 +130,7 @@ export function NotificationCenter({
                   onClick={onMarkAllAsRead}
                   className="h-8 px-2 text-xs"
                 >
-                  <MarkAsRead className="h-3 w-3 mr-1" />
+                  <Check className="h-3 w-3 mr-1" />
                   Mark all read
                 </Button>
               )}
