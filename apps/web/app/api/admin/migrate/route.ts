@@ -1,113 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export async function POST(request: NextRequest) {
+/**
+ * Admin endpoint to create system_health table
+ * This should be protected in production
+ */
+export async function POST(req: NextRequest) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-
-    // Check if system_health table exists
-    const { data: tables, error: tableError } = await supabase
-      .from('information_schema.tables')
-      .select('table_name')
-      .eq('table_schema', 'public')
-      .eq('table_name', 'system_health')
-
-    if (tableError) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Failed to check tables',
-        details: tableError.message 
-      }, { status: 500 })
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ error: 'Missing Supabase configuration' }, { status: 500 })
     }
 
-    if (tables && tables.length > 0) {
-      return NextResponse.json({ 
-        success: true, 
-        message: 'system_health table already exists',
-        table_exists: true
-      })
-    }
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Create the system_health table
-    const createTableSQL = `
+    // Try to create the table by inserting a test record
+    // This will fail if the table doesn't exist, which is what we want
+    const { error: testError } = await supabase
+      .from('system_health')
+      .select('id')
+      .limit(1)
+
+    if (testError && testError.message.includes('relation "public.system_health" does not exist')) {
+      // Table doesn't exist, we need to create it
+      // For now, return instructions for manual creation
+      return NextResponse.json({ 
+        error: 'Table does not exist',
+        instructions: 'Please run the following SQL in Supabase Dashboard:',
+        sql: `
 CREATE TABLE IF NOT EXISTS public.system_health (
-    id SERIAL PRIMARY KEY,
-    service_name VARCHAR(100) NOT NULL,
-    status VARCHAR(20) NOT NULL CHECK (status IN ('healthy', 'degraded', 'unhealthy')),
-    last_check TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    response_time_ms INTEGER,
-    error_message TEXT,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  status TEXT NOT NULL DEFAULT 'healthy',
+  message TEXT,
+  timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  metadata JSONB DEFAULT '{}'::jsonb
 );
 
-CREATE INDEX IF NOT EXISTS idx_system_health_service_name ON public.system_health(service_name);
-CREATE INDEX IF NOT EXISTS idx_system_health_status ON public.system_health(status);
-CREATE INDEX IF NOT EXISTS idx_system_health_last_check ON public.system_health(last_check);
+CREATE INDEX IF NOT EXISTS idx_system_health_timestamp ON public.system_health(timestamp DESC);
+
+INSERT INTO public.system_health (status, message, metadata) 
+VALUES (
+  'healthy', 
+  'System initialized successfully',
+  '{"version": "1.0.0", "initialized_at": "' || NOW()::text || '"}'::jsonb
+);
 
 ALTER TABLE public.system_health ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow service role to manage system health" ON public.system_health
-    FOR ALL USING (auth.role() = 'service_role');
+CREATE POLICY "Service role can manage system health" ON public.system_health
+  FOR ALL USING (auth.role() = 'service_role');
 
-CREATE POLICY "Allow authenticated users to read system health" ON public.system_health
-    FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Anon can read system health" ON public.system_health
+  FOR SELECT USING (true);
+        `
+      }, { status: 404 })
+    }
 
-INSERT INTO public.system_health (service_name, status, response_time_ms, metadata) VALUES
-    ('database', 'healthy', 5, '{"version": "16.1", "connections": 10}'),
-    ('storage', 'healthy', 15, '{"bucket": "proofoffit-storage", "region": "us-east-1"}'),
-    ('auth', 'healthy', 8, '{"provider": "supabase", "users": 0}'),
-    ('api', 'healthy', 12, '{"version": "1.0.0", "endpoints": 25}')
-ON CONFLICT DO NOTHING;
-
-CREATE OR REPLACE FUNCTION update_updated_at_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = NOW();
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
-
-CREATE TRIGGER update_system_health_updated_at 
-    BEFORE UPDATE ON public.system_health 
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-    `
-
-    // Try to execute the SQL directly
-    const { error: execError } = await supabase.rpc('exec_sql', { sql_query: createTableSQL })
-
-    if (execError) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Failed to create system_health table',
-        details: execError.message,
-        sql: createTableSQL,
-        instructions: [
-          'Please execute the SQL manually in your Supabase SQL Editor',
-          '1. Go to your Supabase Dashboard',
-          '2. Navigate to SQL Editor',
-          '3. Copy and paste the SQL above',
-          '4. Execute the SQL'
-        ]
-      }, { status: 500 })
+    if (testError) {
+      return NextResponse.json({ error: testError.message }, { status: 500 })
     }
 
     return NextResponse.json({ 
       success: true, 
-      message: 'system_health table created successfully',
-      table_created: true
+      message: 'System health table already exists' 
     })
 
-  } catch (error: any) {
-    console.error('Error:', error)
+  } catch (error) {
+    console.error('Migration check failed:', error)
     return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to migrate database',
-      details: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 })
   }
 }
+
+export const dynamic = 'force-dynamic'

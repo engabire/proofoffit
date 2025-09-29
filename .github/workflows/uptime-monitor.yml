@@ -88,16 +88,31 @@ jobs:
         run: |
           echo "Checking external dependencies..."
 
+          parse_indicator() {
+            local response="$1"
+            local value
+            value=$(echo "$response" | jq -r '.status.indicator // empty' 2>/dev/null || true)
+
+            if [ -z "$value" ] || [ "$value" = "null" ]; then
+              echo "unknown"
+            else
+              echo "$value"
+            fi
+          }
+
           # Check Supabase status
-          SUPABASE_STATUS=$(curl -s -L https://status.supabase.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          SUPABASE_RESPONSE=$(curl -s -L https://status.supabase.com/api/v2/status.json || true)
+          SUPABASE_STATUS=$(parse_indicator "$SUPABASE_RESPONSE")
           echo "Supabase status: $SUPABASE_STATUS"
 
           # Check Vercel status
-          VERCEL_STATUS=$(curl -s -L https://vercel-status.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          VERCEL_RESPONSE=$(curl -s -L https://www.vercel-status.com/api/v2/status.json || true)
+          VERCEL_STATUS=$(parse_indicator "$VERCEL_RESPONSE")
           echo "Vercel status: $VERCEL_STATUS"
 
           # Check Stripe status
-          STRIPE_STATUS=$(curl -s -L https://status.stripe.com/api/v2/status.json | jq -r '.status.indicator // "unknown"')
+          STRIPE_RESPONSE=$(curl -s -L https://status.stripe.com/api/v2/status.json || true)
+          STRIPE_STATUS=$(parse_indicator "$STRIPE_RESPONSE")
           echo "Stripe status: $STRIPE_STATUS"
 
           # Log dependency status

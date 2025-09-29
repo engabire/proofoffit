@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 33% 98%;
+    --foreground: 224 35% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 35% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 35% 14%;
+    --primary: 222 86% 57%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 44% 94%;
+    --secondary-foreground: 224 35% 18%;
+    --muted: 214 36% 92%;
+    --muted-foreground: 220 17% 42%;
+    --accent: 191 68% 76%;
+    --accent-foreground: 215 40% 18%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 216 36% 89%;
+    --input: 215 36% 88%;
+    --ring: 214 80% 65%;
+    --radius: 0.75rem;
+    --glow-start: 203 100% 85%;
+    --glow-end: 267 100% 87%;
+  }
+
+  .dark {
+    --background: 224 46% 7%;
+    --foreground: 216 33% 92%;
+    --card: 224 47% 9%;
+    --card-foreground: 216 33% 92%;
+    --popover: 224 47% 9%;
+    --popover-foreground: 216 33% 92%;
+    --primary: 216 88% 72%;
+    --primary-foreground: 224 47% 9%;
+    --secondary: 222 25% 17%;
+    --secondary-foreground: 216 33% 92%;
+    --muted: 222 24% 17%;
+    --muted-foreground: 220 16% 64%;
+    --accent: 189 70% 58%;
+    --accent-foreground: 224 47% 10%;
+    --destructive: 0 76% 40%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 222 23% 22%;
+    --input: 222 23% 22%;
+    --ring: 216 88% 72%;
+    --glow-start: 203 88% 65%;
+    --glow-end: 267 76% 68%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(120% 120% at 10% 20%, hsl(var(--glow-start) / 0.45), transparent 65%),
+      radial-gradient(140% 160% at 85% 10%, hsl(var(--glow-end) / 0.35), transparent 70%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)) 65%, hsl(var(--muted)) 100%);
+    background-attachment: fixed;
+  }
+}
+
+/* Print styles for audit links and briefings */
+@media print {
+  a[href]:after { 
+    content: "" !important; 
+  }
+  .no-print { 
+    display: none !important; 
+  }
+  body { 
+    color: #000 !important; 
+    -webkit-print-color-adjust: exact; 
+    print-color-adjust: exact; 
+    background: white !important;
+  }
+  .page-break { 
+    page-break-before: always; 
+  }
+  .print\\:text-2xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  .print\\:text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+  .print\\:text-lg {
+    font-size: 1.125rem !important;
+    line-height: 1.75rem !important;
+  }
+  .print\\:text-base {
+    font-size: 1rem !important;
+    line-height: 1.5rem !important;
+  }
+  .print\\:text-sm {
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
+  .print\\:text-xs {
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+  }
+  .print\\:p-4 {
+    padding: 1rem !important;
+  }
+  .print\\:mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  .print\\:mt-4 {
+    margin-top: 1rem !important;
+  }
+  .print\\:space-y-4 > * + * {
+    margin-top: 1rem !important;
+  }
+  .print\\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .print\\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .print\\:gap-4 {
+    gap: 1rem !important;
+  }
+  .print\\:border {
+    border: 1px solid #d1d5db !important;
+  }
+  .print\\:bg-white {
+    background-color: white !important;
+  }
+  .print\\:bg-gray-100 {
+    background-color: #f3f4f6 !important;
+  }
+  .print\\:text-gray-800 {
+    color: #1f2937 !important;
+  }
+  .print\\:text-blue-800 {
+    color: #1e40af !important;
+  }
+  .print\\:border-gray-300 {
+    border-color: #d1d5db !important;
+  }
+  .print\\:shadow-none {
+    box-shadow: none !important;
+  }
+  .print\\:max-w-none {
+    max-width: none !important;
+  }
+}

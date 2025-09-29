@@ -1,24 +1,53 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+/**
+ * Simple health endpoint that doesn't depend on database tables
+ * Use this as a temporary fix while the system_health table is being created
+ */
+export async function GET(req: NextRequest) {
+  const startTime = Date.now()
+  
   try {
-    return NextResponse.json({
+    // Basic health check without database dependency
+    const healthData = {
       status: 'healthy',
       timestamp: new Date().toISOString(),
-      version: '0.1.0',
+      version: process.env.npm_package_version || '1.0.0',
       environment: process.env.NODE_ENV || 'development',
+      response_time_ms: Date.now() - startTime,
+      services: {
+        system: {
+          status: 'healthy',
+          message: 'Basic health check passed'
+        }
+      },
       uptime: process.uptime(),
       memory: {
         used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
         total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
         external: Math.round(process.memoryUsage().external / 1024 / 1024)
       }
+    }
+    
+    return NextResponse.json(healthData, { 
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     })
-  } catch (error: any) {
-    return NextResponse.json({
+    
+  } catch (error) {
+    const errorData = {
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
-      error: error.message
-    }, { status: 500 })
+      error: error instanceof Error ? error.message : 'Unknown error',
+      response_time_ms: Date.now() - startTime
+    }
+    
+    return NextResponse.json(errorData, { status: 503 })
   }
 }
+
+export const dynamic = 'force-dynamic'

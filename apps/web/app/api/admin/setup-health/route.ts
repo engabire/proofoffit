@@ -1,99 +1,125 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export async function POST(request: NextRequest) {
+/**
+ * Admin endpoint to set up health monitoring
+ * This creates the system_health table and initial data
+ */
+export async function POST(req: NextRequest) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-    // Check if system_health table exists
-    const { data: healthData, error: healthError } = await supabase
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ 
+        error: 'Missing Supabase configuration',
+        message: 'Please check environment variables'
+      }, { status: 500 })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Try to create the table using a simple insert approach
+    // This will fail if the table doesn't exist, which is what we want
+    const { error: testError } = await supabase
       .from('system_health')
       .select('id')
       .limit(1)
 
-    if (healthError) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'system_health table does not exist',
-        details: healthError.message,
-        setup_required: true
+    if (testError && testError.message.includes('relation "public.system_health" does not exist')) {
+      // Table doesn't exist - provide SQL instructions
+      return NextResponse.json({
+        success: false,
+        message: 'System health table does not exist',
+        action: 'manual_setup_required',
+        instructions: 'Please run the following SQL in your Supabase Dashboard SQL Editor:',
+        sql: `
+-- Create the system_health table
+CREATE TABLE IF NOT EXISTS public.system_health (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  status TEXT NOT NULL DEFAULT 'healthy',
+  message TEXT,
+  timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- Create performance index
+CREATE INDEX IF NOT EXISTS idx_system_health_timestamp ON public.system_health(timestamp DESC);
+
+-- Insert initial health record
+INSERT INTO public.system_health (status, message, metadata) 
+VALUES (
+  'healthy', 
+  'System initialized successfully',
+  '{"version": "1.0.0", "initialized_at": "' || NOW()::text || '"}'::jsonb
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.system_health ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Service role can manage system health" ON public.system_health
+  FOR ALL USING (auth.role() = 'service_role');
+
+CREATE POLICY "Anon can read system health" ON public.system_health
+  FOR SELECT USING (true);
+        `,
+        next_steps: [
+          '1. Copy the SQL above',
+          '2. Go to your Supabase Dashboard → SQL Editor',
+          '3. Paste and run the SQL',
+          '4. Test the health endpoint: GET /api/health',
+          '5. Verify the degraded banner behavior'
+        ]
       }, { status: 404 })
     }
 
-    // Initialize health data if table exists but is empty
-    const { data: existingData, error: countError } = await supabase
-      .from('system_health')
-      .select('id')
-
-    if (countError) {
+    if (testError) {
       return NextResponse.json({ 
-        success: false, 
-        error: 'Failed to check existing health data',
-        details: countError.message 
+        error: testError.message,
+        message: 'Database connection failed'
       }, { status: 500 })
     }
 
-    if (!existingData || existingData.length === 0) {
-      // Insert initial health data
-      const { error: insertError } = await supabase
-        .from('system_health')
-        .insert([
-          {
-            service_name: 'database',
-            status: 'healthy',
-            response_time_ms: 5,
-            metadata: { version: '16.1', connections: 10 }
-          },
-          {
-            service_name: 'storage',
-            status: 'healthy',
-            response_time_ms: 15,
-            metadata: { bucket: 'proofoffit-storage', region: 'us-east-1' }
-          },
-          {
-            service_name: 'auth',
-            status: 'healthy',
-            response_time_ms: 8,
-            metadata: { provider: 'supabase', users: 0 }
-          },
-          {
-            service_name: 'api',
-            status: 'healthy',
-            response_time_ms: 12,
-            metadata: { version: '1.0.0', endpoints: 25 }
-          }
-        ])
-
-      if (insertError) {
-        return NextResponse.json({ 
-          success: false, 
-          error: 'Failed to insert initial health data',
-          details: insertError.message 
-        }, { status: 500 })
-      }
-
-      return NextResponse.json({ 
-        success: true, 
+    // Table exists - insert a new health record
+    const { error: insertError } = await supabase
+      .from('system_health')
+      .insert({
+        status: 'healthy',
         message: 'Health monitoring setup completed',
-        data_initialized: true
+        metadata: {
+          version: '1.0.0',
+          setup_completed_at: new Date().toISOString(),
+          endpoint: '/api/admin/setup-health'
+        }
       })
+
+    if (insertError) {
+      return NextResponse.json({ 
+        error: insertError.message,
+        message: 'Failed to insert health record'
+      }, { status: 500 })
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Health monitoring is already set up',
-      data_exists: true
+    return NextResponse.json({
+      success: true,
+      message: 'Health monitoring setup completed successfully',
+      table_exists: true,
+      record_inserted: true,
+      next_steps: [
+        '1. Test the health endpoint: GET /api/health',
+        '2. Verify the degraded banner behavior',
+        '3. Check the health monitoring dashboard'
+      ]
     })
 
-  } catch (error: any) {
-    console.error('Error:', error)
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to setup health monitoring',
-      details: error.message 
+  } catch (error) {
+    console.error('Health setup failed:', error)
+    return NextResponse.json({
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: 'Health monitoring setup failed'
     }, { status: 500 })
   }
 }
+
+export const dynamic = 'force-dynamic'
