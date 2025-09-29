@@ -12,21 +12,21 @@
     "shell": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-shell"],
-      "env": { "SHELL": /bin/zsh }
+      "env": { "SHELL": "/bin/zsh" }
     },
     "supabase": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-supabase"],
       "env": {
-        "SUPABASE_URL": ,
-        "SUPABASE_ANON_KEY": 
+        "SUPABASE_URL": "",
+        "SUPABASE_ANON_KEY": ""
       }
     },
     "stripe": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-stripe"],
       "env": {
-        "STRIPE_API_KEY": 
+        "STRIPE_API_KEY": ""
       }
     }
   }
