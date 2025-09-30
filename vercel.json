@@ -18,13 +18,13 @@
     }
   ],
   "functions": {
-    "src/app/api/scrape/route.ts": {
+    "apps/web/app/api/scrape/route.ts": {
       "maxDuration": 300
     },
-    "src/app/api/cleanup/route.ts": {
+    "apps/web/app/api/cleanup/route.ts": {
       "maxDuration": 120
     },
-    "src/app/api/ai/analyze/route.ts": {
+    "apps/web/app/api/ai/analyze/route.ts": {
       "maxDuration": 300
     }
   }
