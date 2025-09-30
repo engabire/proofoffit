@@ -1,3 +1,4 @@
+"use client";
 // Core utilities
 export { cn } from './lib/utils'
 
