@@ -12,6 +12,10 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@supabase/supabase-js', 'undici']
   },
+  eslint: {
+    // Disable ESLint during builds to avoid v9 compatibility issues
+    ignoreDuringBuilds: true,
+  },
   // Optimize resource loading to reduce preload warnings
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
