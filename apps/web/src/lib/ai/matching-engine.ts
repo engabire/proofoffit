@@ -85,10 +85,14 @@ export class AIMatchingEngine {
   private supabase: any
 
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (supabaseUrl && supabaseServiceKey) {
+      this.supabase = createClient(supabaseUrl, supabaseServiceKey)
+    } else {
+      this.supabase = null
+    }
   }
 
   // Calculate fit score between candidate and job
@@ -432,6 +436,9 @@ export class AIMatchingEngine {
   // Find best matches for a job
   async findBestMatchesForJob(jobId: string, limit: number = 10): Promise<MatchResult[]> {
     try {
+      if (!this.supabase) {
+        return []
+      }
       // Get job requirements
       const { data: job, error: jobError } = await this.supabase
         .from('jobs')
@@ -475,6 +482,9 @@ export class AIMatchingEngine {
   // Find best jobs for a candidate
   async findBestJobsForCandidate(candidateId: string, limit: number = 10): Promise<MatchResult[]> {
     try {
+      if (!this.supabase) {
+        return []
+      }
       // Get candidate profile
       const { data: candidate, error: candidateError } = await this.supabase
         .from('candidate_profiles')
