@@ -93,16 +93,18 @@ export class ScrapingClient {
   
   // Get available domains
   async getDomains() {
-    // Supabase JS doesn't support .group in the client. Fetch distinct domains instead.
+    // Fetch domains then de-duplicate client-side (distinct not available in typed options)
     const { data, error } = await this.supabase
       .from('scraped_items')
-      .select('source_domain', { distinct: true });
+      .select('source_domain')
+      .order('source_domain', { ascending: true });
     
     if (error) {
       throw new Error(`Failed to fetch domains: ${error.message}`);
     }
     
-    return data?.map(item => item.source_domain) || [];
+    const domains = (data || []).map((item: any) => item.source_domain).filter(Boolean);
+    return Array.from(new Set(domains));
   }
   
   // Search items across all domains
