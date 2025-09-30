@@ -1,8 +1,7 @@
+"use client";
 import { Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Alert, AlertDescription, AlertTitle } from '@proof-of-fit/ui'
-// Ensure this page is a Client Component since it uses UI package client components
-"use client";
 import { Check, Gift, Shield } from 'lucide-react'
 import { isStripeConfigured } from '@/lib/env'
 import GiftCheckoutForm from './gift-checkout-form'
