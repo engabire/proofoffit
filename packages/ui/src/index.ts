@@ -1,4 +1,5 @@
-"use client";
+// Note: Do NOT mark the entire UI package as a client module.
+// Individual components that require client features declare "use client" inside their own files.
 // Core utilities
 export { cn } from './lib/utils'
 
