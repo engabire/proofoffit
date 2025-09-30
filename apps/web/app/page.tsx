@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@proof-of-fit/ui";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@proof-of-fit/ui";
+import { Button } from "@proof-of-fit/ui/server";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@proof-of-fit/ui/server";
 import { Check, Shield, Users, Zap } from "lucide-react";
 
 export default function HomePage() {
