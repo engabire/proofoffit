@@ -12,7 +12,7 @@ export const stripeConfig = {
 
 // Initialize Stripe instance
 export const stripe = new Stripe(stripeConfig.apiKey, {
-  apiVersion: '2024-06-20',
+  apiVersion: '2023-10-16',
   typescript: true,
 })
 
