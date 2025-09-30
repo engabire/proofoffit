@@ -9,6 +9,7 @@ export interface ErrorContext {
   userAgent?: string
   ip?: string
   timestamp: Date
+  metadata?: Record<string, any>
 }
 
 export interface ErrorDetails {

@@ -263,30 +263,39 @@ export class AdvancedAnalytics {
       if (healthError) throw healthError
 
       // Calculate metrics
-      const totalUsers = users.length
-      const activeUsers = users.filter(u => 
+      type AuthUserRow = { last_sign_in_at: string | null }
+      type JobRow = { status?: string | null }
+      type HealthRow = { response_time_ms?: number | null; status?: string | null }
+
+      const userRows = (users ?? []) as AuthUserRow[]
+      const jobRows = (jobs ?? []) as JobRow[]
+      const healthRows = (healthData ?? []) as HealthRow[]
+      const applicationRows = (applications ?? []) as Array<Record<string, unknown>>
+
+      const totalUsers = userRows.length
+      const activeUsers = userRows.filter((u: AuthUserRow) => 
         u.last_sign_in_at && new Date(u.last_sign_in_at) >= startDate
       ).length
 
-      const totalJobs = jobs.length
-      const activeJobs = jobs.filter(j => j.status === 'active').length
-      const totalApplications = applications.length
+      const totalJobs = jobRows.length
+      const activeJobs = jobRows.filter((j: JobRow) => j.status === 'active').length
+      const totalApplications = applicationRows.length
 
       // Calculate average response time
-      const responseTimes = healthData
-        .filter(h => h.response_time_ms)
-        .map(h => h.response_time_ms)
+      const responseTimes = healthRows
+        .filter((h: HealthRow) => h.response_time_ms)
+        .map((h: HealthRow) => h.response_time_ms as number)
       const avgResponseTime = responseTimes.length > 0 
         ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length 
         : 0
 
       // Calculate system uptime
-      const healthyChecks = healthData.filter(h => h.status === 'healthy').length
-      const systemUptime = healthData.length > 0 ? (healthyChecks / healthData.length) * 100 : 100
+      const healthyChecks = healthRows.filter((h: HealthRow) => h.status === 'healthy').length
+      const systemUptime = healthRows.length > 0 ? (healthyChecks / healthRows.length) * 100 : 100
 
       // Calculate error rate
-      const errorChecks = healthData.filter(h => h.status === 'unhealthy').length
-      const errorRate = healthData.length > 0 ? (errorChecks / healthData.length) * 100 : 0
+      const errorChecks = healthRows.filter((h: HealthRow) => h.status === 'unhealthy').length
+      const errorRate = healthRows.length > 0 ? (errorChecks / healthRows.length) * 100 : 0
 
       // Calculate revenue (from subscriptions)
       const { data: subscriptions, error: subError } = await this.supabase
@@ -296,13 +305,14 @@ export class AdvancedAnalytics {
 
       if (subError) throw subError
 
-      const revenue = subscriptions.reduce((acc, sub) => {
+      const subscriptionRows = (subscriptions ?? []) as Array<Record<string, unknown>>
+      const revenue = subscriptionRows.reduce((acc, sub) => {
         // This would need to be calculated based on actual subscription data
         return acc + 0 // Placeholder
       }, 0)
 
       // Calculate churn rate
-      const churnedUsers = users.filter(u => 
+      const churnedUsers = userRows.filter((u: AuthUserRow) => 
         u.last_sign_in_at && new Date(u.last_sign_in_at) < startDate
       ).length
       const churnRate = totalUsers > 0 ? (churnedUsers / totalUsers) * 100 : 0

@@ -391,10 +391,15 @@ export class ApplicationAutomation {
         thisMonth: 0
       }
 
-      data.forEach(app => {
-        stats[app.status as keyof typeof stats]++
-        
-        const appliedAt = new Date(app.applied_at)
+      const applications = (data ?? []) as Array<{ status: string; applied_at: string | Date }>
+
+      applications.forEach((app) => {
+        const statusKey = app.status as keyof typeof stats
+        if (statusKey in stats) {
+          stats[statusKey]++
+        }
+
+        const appliedAt = new Date(app.applied_at as any)
         if (appliedAt >= weekStart) stats.thisWeek++
         if (appliedAt >= monthStart) stats.thisMonth++
       })
