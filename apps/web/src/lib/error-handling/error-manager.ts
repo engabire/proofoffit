@@ -198,7 +198,7 @@ export class ErrorManager {
         total: errors.length,
         byType: {} as Record<string, number>,
         byEndpoint: {} as Record<string, number>,
-        recent: errors.slice(0, 10).map(error => ({
+        recent: errors.slice(0, 10).map((error: any) => ({
           message: error.message,
           stack: error.stack,
           code: error.code,
@@ -218,7 +218,7 @@ export class ErrorManager {
       }
 
       // Calculate statistics
-      errors.forEach(error => {
+      errors.forEach((error: any) => {
         // Count by type
         const type = error.metadata?.type || 'unknown'
         stats.byType[type] = (stats.byType[type] || 0) + 1

@@ -1,9 +1,25 @@
 import { credentialManager } from '@/lib/security/credential-manager'
 
+// Check if Google OAuth is configured
+export const isGoogleOAuthConfigured = (): boolean => {
+  return credentialManager.hasCredential('GOOGLE_CLIENT_ID') && 
+         credentialManager.hasCredential('GOOGLE_CLIENT_SECRET')
+}
+
 // Google OAuth configuration - SECURE VERSION
 export const googleOAuthConfig = {
-  clientId: credentialManager.getCredential('GOOGLE_CLIENT_ID'),
-  clientSecret: credentialManager.getCredential('GOOGLE_CLIENT_SECRET'),
+  get clientId() {
+    if (!isGoogleOAuthConfigured()) {
+      throw new Error('Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.')
+    }
+    return credentialManager.getCredential('GOOGLE_CLIENT_ID')
+  },
+  get clientSecret() {
+    if (!isGoogleOAuthConfigured()) {
+      throw new Error('Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.')
+    }
+    return credentialManager.getCredential('GOOGLE_CLIENT_SECRET')
+  },
   redirectUri: process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.proofoffit.com'}/auth/callback/google`,
   scopes: [
     'openid',

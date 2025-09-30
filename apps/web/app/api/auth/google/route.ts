@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { googleOAuth } from '@/lib/auth/google-oauth'
+import { googleOAuth, isGoogleOAuthConfigured } from '@/lib/auth/google-oauth'
 import { createClient } from '@supabase/supabase-js'
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if Google OAuth is configured
+    if (!isGoogleOAuthConfigured()) {
+      return NextResponse.json(
+        { error: 'Google OAuth is not configured. Please contact support.' },
+        { status: 503 }
+      )
+    }
     const { searchParams } = new URL(request.url)
     const code = searchParams.get('code')
     const state = searchParams.get('state')
@@ -123,3 +130,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 }
+
+// Export dynamic configuration to prevent build-time evaluation
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
