@@ -52,6 +52,7 @@ jobs:
             src/test/gifting.test.ts
       
       - name: Secrets scan with Gitleaks
+        if: ${{ secrets.GITLEAKS_LICENSE != '' }}
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -60,6 +61,11 @@ jobs:
           config-path: .gitleaks.toml
           verbose: true
           redact: true
+
+      - name: Note Gitleaks skip
+        if: ${{ secrets.GITLEAKS_LICENSE == '' }}
+        run: |
+          echo "> ℹ️  Gitleaks scan skipped (set GITLEAKS_LICENSE to enable)." >> $GITHUB_STEP_SUMMARY
       
       - name: Dependency audit
         run: |

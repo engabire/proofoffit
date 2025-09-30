@@ -36,7 +36,7 @@ check_service_status() {
 
 # Check each service
 SUPABASE_STATUS=$(check_service_status "Supabase" "https://status.supabase.com/api/v2/status.json")
-VERCEL_STATUS=$(check_service_status "Vercel" "https://vercel-status.com/api/v2/status.json")
+VERCEL_STATUS=$(check_service_status "Vercel" "https://www.vercel-status.com/api/v2/status.json")
 STRIPE_STATUS=$(check_service_status "Stripe" "https://status.stripe.com/api/v2/status.json")
 
 # Create status summary
@@ -60,9 +60,11 @@ echo "Overall:  $OVERALL_STATUS"
 echo ""
 
 # Log to our monitoring endpoint (if available)
+BASE_URL="https://www.proofoffit.com"
+
 if command -v curl >/dev/null 2>&1; then
     echo "📝 Logging dependency status..."
-    curl -X POST "https://proofoffit.com/api/monitoring/dependencies" \
+    curl -X POST "$BASE_URL/api/monitoring/dependencies" \
         -H "Content-Type: application/json" \
         -d "{
             \"supabase_status\": \"$SUPABASE_STATUS\",

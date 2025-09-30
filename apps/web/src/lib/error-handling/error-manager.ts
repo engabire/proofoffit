@@ -28,10 +28,12 @@ export class ErrorManager {
   private flushInterval = 30000 // 30 seconds
 
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    this.supabase = supabaseUrl && supabaseServiceKey
+      ? createClient(supabaseUrl, supabaseServiceKey)
+      : null
 
     // Start error flushing interval
     setInterval(() => {
@@ -137,6 +139,7 @@ export class ErrorManager {
 
   // Flush errors to database
   private async flushErrors(): Promise<void> {
+    if (!this.supabase) return
     if (this.errorQueue.length === 0) return
 
     const errorsToFlush = [...this.errorQueue]

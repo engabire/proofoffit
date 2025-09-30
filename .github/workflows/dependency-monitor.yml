@@ -37,7 +37,11 @@ jobs:
         run: chmod +x scripts/check-dependencies.sh
       
       - name: Run dependency check
-        run: ./scripts/check-dependencies.sh
+        id: run_check
+        run: |
+          ./scripts/check-dependencies.sh | tee dependency-status.log
+          STATUS=$(grep "Overall:" dependency-status.log | awk '{print $2}')
+          echo "overall_status=$STATUS" >> $GITHUB_OUTPUT
         env:
           # These will be available if the monitoring endpoint is deployed
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -46,7 +50,7 @@ jobs:
       - name: Check overall status
         id: status_check
         run: |
-          STATUS=$(./scripts/check-dependencies.sh | grep "Overall:" | awk '{print $2}')
+          STATUS=${{ steps.run_check.outputs.overall_status }}
           echo "overall_status=$STATUS" >> $GITHUB_OUTPUT
           
           if [ "$STATUS" = "unhealthy" ]; then
@@ -79,7 +83,7 @@ jobs:
                 title: '🚨 Critical Dependency Issues Detected',
                 body: `## Dependency Status Alert
                 
-                **Status:** ${{ steps.status_check.outputs.overall_status }}
+                **Status:** ${{ steps.run_check.outputs.overall_status }}
                 **Time:** ${new Date().toISOString()}
                 **Workflow:** [Dependency Monitor](${context.payload.repository.html_url}/actions/runs/${context.runId})
                 
@@ -114,7 +118,7 @@ jobs:
                 issue_number: issue.number,
                 body: `✅ **Dependencies are now healthy!**
                 
-                **Status:** ${{ steps.status_check.outputs.overall_status }}
+                **Status:** ${{ steps.run_check.outputs.overall_status }}
                 **Time:** ${new Date().toISOString()}
                 **Workflow:** [Dependency Monitor](${context.payload.repository.html_url}/actions/runs/${context.runId})
                 
