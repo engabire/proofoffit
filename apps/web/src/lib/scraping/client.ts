@@ -93,10 +93,10 @@ export class ScrapingClient {
   
   // Get available domains
   async getDomains() {
+    // Supabase JS doesn't support .group in the client. Fetch distinct domains instead.
     const { data, error } = await this.supabase
       .from('scraped_items')
-      .select('source_domain')
-      .group('source_domain');
+      .select('source_domain', { distinct: true });
     
     if (error) {
       throw new Error(`Failed to fetch domains: ${error.message}`);
