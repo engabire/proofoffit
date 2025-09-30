@@ -1,4 +1,3 @@
-"use client";
 import { Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Alert, AlertDescription, AlertTitle } from '@proof-of-fit/ui'

@@ -10,7 +10,7 @@ const nextConfig = {
   },
   trailingSlash: false,
   experimental: {
-    serverComponentsExternalPackages: ['@supabase/supabase-js']
+    serverComponentsExternalPackages: ['@supabase/supabase-js', 'undici']
   },
   // Optimize resource loading to reduce preload warnings
   compiler: {
