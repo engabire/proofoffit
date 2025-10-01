@@ -22,7 +22,7 @@ import {
   DollarSign,
   Filter
 } from 'lucide-react'
-import { useAuth } from '@/components/auth/auth-guard'
+// import { useAuth } from '@/components/auth/auth-guard'
 import { toast } from 'sonner'
 
 interface AutoApplyConfig {
@@ -67,7 +67,8 @@ interface ApplicationStats {
 }
 
 export function AutoApplyDashboard() {
-  const { user } = useAuth()
+  // const { user } = useAuth()
+  const user = { id: 'demo-user', email: 'demo@example.com' }
   const [config, setConfig] = useState<AutoApplyConfig | null>(null)
   const [stats, setStats] = useState<ApplicationStats | null>(null)
   const [loading, setLoading] = useState(true)

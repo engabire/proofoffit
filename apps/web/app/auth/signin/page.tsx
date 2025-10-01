@@ -1,10 +1,10 @@
-import { EnhancedEnterpriseLogin } from '@/components/auth/enhanced-enterprise-login'
-import { AuthGuard } from '@/components/auth/auth-guard'
+import { SimpleLogin } from '@/components/auth/simple-login'
+import { SimpleAuthGuard } from '@/components/auth/simple-auth-guard'
 
 export default function SignInPage() {
   return (
-    <AuthGuard requireAuth={false}>
-      <EnhancedEnterpriseLogin mode="signin" />
-    </AuthGuard>
+    <SimpleAuthGuard requireAuth={false}>
+      <SimpleLogin mode="signin" />
+    </SimpleAuthGuard>
   )
 }

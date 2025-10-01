@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button } from '@proof-of-fit/ui'
-import { useAuth } from '@/components/auth/auth-guard'
+// import { useAuth } from '@/components/auth/auth-guard'
 import { cn } from '@/lib/utils'
 
 interface SecureCtaProps {
@@ -50,7 +50,9 @@ export function SecureCta({
   prefetch = true,
   ...props
 }: SecureCtaProps) {
-  const { isAuthenticated, isLoading } = useAuth()
+  // const { isAuthenticated, isLoading } = useAuth()
+  const isAuthenticated = true // Demo mode
+  const isLoading = false
   const resolvedVariant = mapToButtonVariant(variant)
   const renderContent = (showSpinner: boolean) => (
     <span className="flex items-center gap-2">

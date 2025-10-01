@@ -24,7 +24,7 @@ import {
   CheckCircle,
   AlertCircle
 } from 'lucide-react'
-import { useAuth } from '@/components/auth/auth-guard'
+// import { useAuth } from '@/components/auth/auth-guard'
 import { toast } from 'sonner'
 
 interface JobPosting {
@@ -78,7 +78,8 @@ interface EmployerStats {
 type BadgeVariant = React.ComponentProps<typeof Badge>['variant']
 
 export function EmployerDashboard() {
-  const { user } = useAuth()
+  // const { user } = useAuth()
+  const user = { id: 'demo-user', email: 'demo@example.com' }
   const [activeTab, setActiveTab] = useState<'overview' | 'jobs' | 'candidates' | 'analytics'>('overview')
   const [jobs, setJobs] = useState<JobPosting[]>([])
   const [candidates, setCandidates] = useState<Candidate[]>([])

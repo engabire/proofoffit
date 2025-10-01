@@ -49,12 +49,12 @@ export default function HomePage() {
             Our evidence engine reviews each role, tailors your application, and explains exactly why you match—so you apply with confidence, not hope.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="text-lg px-8 py-4" asChild>
-              <a href="/app/fit">
-                Get my Fit Report
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+                 <Button size="lg" className="text-lg px-8 py-4" asChild>
+                   <a href="/app/fit-simple">
+                     Get my Fit Report
+                     <ArrowRight className="ml-2 h-4 w-4" />
+                   </a>
+                 </Button>
             <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
               <a href="/demo">
                 Try interactive demo
@@ -311,13 +311,13 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8 py-4" asChild>
-              <a href="/app/fit">
-                Get My Fit Report
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+               <div className="text-center mt-12">
+                 <Button size="lg" className="text-lg px-8 py-4" asChild>
+                   <a href="/app/fit-simple">
+                     Get My Fit Report
+                     <ArrowRight className="ml-2 h-4 w-4" />
+                   </a>
+                 </Button>
             <p className="text-sm text-gray-500 mt-4">
               SOC2-ready • Accessible • Bias-aware by design
             </p>

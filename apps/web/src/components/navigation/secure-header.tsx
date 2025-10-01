@@ -4,13 +4,16 @@ import Link from 'next/link'
 import { Button } from '@proof-of-fit/ui'
 import { Menu, X, User, Settings, Shield, LogOut } from 'lucide-react'
 import { useState } from 'react'
-import { useAuth } from '@/components/auth/auth-guard'
+// import { useAuth } from '@/components/auth/auth-guard'
 import { SecureSignOutButton } from '@/components/auth/secure-sign-out-button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@proof-of-fit/ui'
 
 export function SecureHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { isLoading, isAuthenticated, user } = useAuth()
+  // const { isLoading, isAuthenticated, user } = useAuth()
+  const isLoading = false
+  const isAuthenticated = true // Demo mode
+  const user = { id: 'demo-user', email: 'demo@example.com', name: 'Demo User' }
 
   const navigationItems = [
     { href: '#features', label: 'Features' },
