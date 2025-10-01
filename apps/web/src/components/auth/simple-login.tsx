@@ -19,7 +19,11 @@ import {
   User,
   Building2
 } from 'lucide-react'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 interface SimpleLoginProps {
   mode?: 'signin' | 'signup'

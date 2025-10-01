@@ -1,7 +1,11 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 type QuickAction = {
   label: string

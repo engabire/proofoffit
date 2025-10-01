@@ -39,7 +39,12 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message),
+  info: (message: string) => console.log('Info:', message)
+}
 import { detectEnterpriseDomain, getEnterpriseBranding } from '@/lib/enterprise-domains'
 import { isSupabaseConfigured } from '@/lib/env'
 
@@ -188,23 +193,20 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
       
       // Enhanced success message with detailed instructions
       toast.success(
-        '📧 Verification email sent! Check your inbox and click the link to continue.',
-        { duration: 8000 }
+        '📧 Verification email sent! Check your inbox and click the link to continue.'
       )
       
       // Show additional guidance after a delay
       setTimeout(() => {
         toast.info(
-          '📋 Next steps: 1) Check your email 2) Click the verification link 3) You\'ll be redirected to your dashboard',
-          { duration: 10000 }
+          '📋 Next steps: 1) Check your email 2) Click the verification link 3) You\'ll be redirected to your dashboard'
         )
       }, 2000)
       
       // Reminder about spam folder
       setTimeout(() => {
         toast.info(
-          '📁 Email not arrived? Check your spam/junk folder or try again in 60 seconds.',
-          { duration: 8000 }
+          '📁 Email not arrived? Check your spam/junk folder or try again in 60 seconds.'
         )
       }, 5000)
     } catch (error: any) {
@@ -238,23 +240,20 @@ export function EnterpriseLogin({ mode = 'signup', onSuccess }: EnterpriseLoginP
         
         // Enhanced verification message for account creation
         toast.success(
-          '🎉 Account created! Please check your email to verify your account.',
-          { duration: 8000 }
+          '🎉 Account created! Please check your email to verify your account.'
         )
         
         // Show verification instructions
         setTimeout(() => {
           toast.info(
-            '📧 Verification required: Click the link in your email to activate your account and sign in.',
-            { duration: 10000 }
+            '📧 Verification required: Click the link in your email to activate your account and sign in.'
           )
         }, 2000)
         
         // Reminder about spam folder
         setTimeout(() => {
           toast.info(
-            '📁 Can\'t find the email? Check your spam/junk folder or contact support if needed.',
-            { duration: 8000 }
+            '📁 Can\'t find the email? Check your spam/junk folder or contact support if needed.'
           )
         }, 6000)
       } else {

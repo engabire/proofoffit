@@ -8,7 +8,11 @@ import { Check, Star, Zap, Building2, User } from 'lucide-react'
 import { subscriptionPlans } from '@/lib/stripe/config'
 import { stripeClient } from '@/lib/stripe/client'
 // import { useAuth } from '@/components/auth/auth-guard'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 export default function PricingPage() {
   const [selectedUserType, setSelectedUserType] = useState<'candidate' | 'employer'>('candidate')

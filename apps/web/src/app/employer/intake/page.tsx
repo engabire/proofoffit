@@ -12,7 +12,11 @@ import { Textarea } from '@proof-of-fit/ui'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@proof-of-fit/ui'
 import { Checkbox } from '@proof-of-fit/ui'
 import { Plus, Trash2, Save } from 'lucide-react'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 export default function JobIntakePage() {
   const router = useRouter()

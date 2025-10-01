@@ -23,7 +23,11 @@ import {
   Filter
 } from 'lucide-react'
 // import { useAuth } from '@/components/auth/auth-guard'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 interface AutoApplyConfig {
   userId: string

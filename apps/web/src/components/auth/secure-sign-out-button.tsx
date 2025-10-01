@@ -5,7 +5,11 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@proof-of-fit/ui'
 import { LogOut, Shield, AlertTriangle } from 'lucide-react'
 import { useState } from 'react'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message)
+}
 
 type ButtonVariant = React.ComponentProps<typeof Button>['variant']
 type ButtonSize = React.ComponentProps<typeof Button>['size']

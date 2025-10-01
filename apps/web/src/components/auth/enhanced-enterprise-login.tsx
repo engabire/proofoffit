@@ -20,7 +20,12 @@ import {
   User,
   Building2
 } from 'lucide-react'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  success: (message: string) => console.log('Success:', message),
+  error: (message: string) => console.error('Error:', message),
+  info: (message: string) => console.log('Info:', message)
+}
 import { isSupabaseConfigured } from '@/lib/env'
 import { detectEnterpriseDomain } from '@/lib/enterprise-domains'
 
@@ -154,8 +159,7 @@ export function EnhancedEnterpriseLogin({
       // Enhanced instructions
       setTimeout(() => {
         toast.info(
-          '📧 Check your email and click the magic link to sign in. The link will expire in 1 hour.',
-          { duration: 8000 }
+          '📧 Check your email and click the magic link to sign in. The link will expire in 1 hour.'
         )
       }, 2000)
 
@@ -204,16 +208,14 @@ export function EnhancedEnterpriseLogin({
         // Enhanced verification message
         setTimeout(() => {
           toast.info(
-            '📧 Verification required: Click the link in your email to activate your account.',
-            { duration: 10000 }
+            '📧 Verification required: Click the link in your email to activate your account.'
           )
         }, 2000)
 
         // Security reminder
         setTimeout(() => {
           toast.info(
-            '🔒 For security, please verify your email within 24 hours to keep your account active.',
-            { duration: 8000 }
+            '🔒 For security, please verify your email within 24 hours to keep your account active.'
           )
         }, 6000)
         
