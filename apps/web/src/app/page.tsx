@@ -30,6 +30,8 @@ import {
   Layers,
   Compass,
   Palette,
+  Search,
+  Users,
 } from "lucide-react";
 import {
   Button,
