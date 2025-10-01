@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
+    const url = new URL(req.url)
+    const { searchParams } = url
     const limit = parseInt(searchParams.get('limit') || '10')
     const status = searchParams.get('status')
 
