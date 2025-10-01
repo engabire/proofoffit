@@ -29,7 +29,8 @@ export function SimpleAuthGuard({
     const checkAuth = () => {
       try {
         // Check if we're in demo mode or have a user session
-        const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+        const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || 
+                      process.env.NODE_ENV === 'development'
         const hasUser = typeof window !== 'undefined' && localStorage.getItem('user')
         
         setIsAuthenticated(isDemo || !!hasUser)
@@ -42,7 +43,17 @@ export function SimpleAuthGuard({
     }
 
     checkAuth()
-  }, [])
+    
+    // Fallback timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        console.warn('Auth check timeout, setting loading to false')
+        setIsLoading(false)
+      }
+    }, 5000)
+
+    return () => clearTimeout(timeout)
+  }, [isLoading])
 
   // Show loading state
   if (isLoading) {
