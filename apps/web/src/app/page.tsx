@@ -1101,6 +1101,7 @@ function FooterTrustBar() {
   );
 }
 
+
 // ---------- Page ----------
 
 type Lane = "seeker" | "employer";
@@ -1130,12 +1131,12 @@ export default function ProofOfFitLanding() {
       {/* HERO */}
       <LivingProofHero highlights={heroHighlights} trusted={trustedPartners} lane={lane} />
 
-      <AIShowcase />
+      {/* <AIShowcase />
       <WhyChoose />
       <HowItWorks items={lane === "seeker" ? howSeeker : howEmployer} lane={lane} />
       <Pricing lane={lane} />
       <DMTestimonials lane={lane} />
-      <FooterTrustBar />
+      <FooterTrustBar /> */}
     </div>
   );
 }
