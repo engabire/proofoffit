@@ -33,7 +33,6 @@ import {
   Switch,
   Label,
   Breadcrumb,
-  BreadcrumbItem,
 } from "@proof-of-fit/ui"
 
 export default function DemoPage() {
@@ -46,7 +45,7 @@ export default function DemoPage() {
   const mockBiasScore = 95
   const mockDiversityScore = 88
 
-  const getBreadcrumbItems = (): BreadcrumbItem[] => [
+  const getBreadcrumbItems = () => [
     { label: 'Demo', href: '/demo' },
     { label: activeTab === 'fit-report' ? 'Job Seeker Demo' : 'Employer Demo', current: true }
   ];
