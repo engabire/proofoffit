@@ -1,12 +1,15 @@
-import { prisma } from "@/lib/db";
-
+// Simple analytics implementation that doesn't depend on Prisma
 export type AnalyticsEventType = 
   | "target_created"
   | "audit_link_created"
   | "audit_view"
   | "proof_click"
   | "jd_fit_run"
-  | "claim_generated";
+  | "claim_generated"
+  | "fit_analysis_complete"
+  | "resume_import_complete"
+  | "document_download"
+  | "lane_select";
 
 export interface AnalyticsEvent {
   eventType: AnalyticsEventType;
@@ -17,130 +20,50 @@ export interface AnalyticsEvent {
 
 export async function trackEvent(event: AnalyticsEvent) {
   try {
-    await prisma.analyticsEvent.create({
-      data: {
-        eventType: event.eventType,
-        userId: event.userId,
-        targetId: event.targetId,
-        metadata: event.metadata || {},
-      },
-    });
+    // For now, just log analytics events
+    console.log("Analytics event:", event);
+    
+    // TODO: Implement proper analytics storage when database is ready
+    // await prisma.analyticsEvent.create({
+    //   data: {
+    //     eventType: event.eventType,
+    //     userId: event.userId,
+    //     targetId: event.targetId,
+    //     metadata: event.metadata || {},
+    //   },
+    // });
   } catch (error) {
     console.error("Failed to track analytics event:", error);
     // Don't throw - analytics failures shouldn't break the app
   }
 }
 
-export async function getAnalyticsForTarget(targetId: string, days: number = 30) {
-  const since = new Date();
-  since.setDate(since.getDate() - days);
-
-  const events = await prisma.analyticsEvent.findMany({
-    where: {
-      targetId,
-      createdAt: {
-        gte: since,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
+export async function getAnalyticsForTarget(_targetId: string, _days: number = 30) {
+  // TODO: Implement when database is ready
   return {
-    totalEvents: events.length,
-    eventsByType: events.reduce((acc, event) => {
-      acc[event.eventType] = (acc[event.eventType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
-    recentEvents: events.slice(0, 10),
+    totalEvents: 0,
+    eventsByType: {} as Record<string, number>,
+    recentEvents: [],
   };
 }
 
-export async function getAnalyticsForUser(userId: string, days: number = 30) {
-  const since = new Date();
-  since.setDate(since.getDate() - days);
-
-  const events = await prisma.analyticsEvent.findMany({
-    where: {
-      userId,
-      createdAt: {
-        gte: since,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
+export async function getAnalyticsForUser(_userId: string, _days: number = 30) {
+  // TODO: Implement when database is ready
   return {
-    totalEvents: events.length,
-    eventsByType: events.reduce((acc, event) => {
-      acc[event.eventType] = (acc[event.eventType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
-    eventsByTarget: events.reduce((acc, event) => {
-      if (event.targetId) {
-        const targetId = event.targetId;
-        if (!acc[targetId]) {
-          acc[targetId] = {
-            title: `Target ${targetId}`,
-            count: 0,
-            events: [],
-          };
-        }
-        acc[targetId].count++;
-        acc[targetId].events.push(event);
-      }
-      return acc;
-    }, {} as Record<string, any>),
-    recentEvents: events.slice(0, 10),
+    totalEvents: 0,
+    eventsByType: {} as Record<string, number>,
+    eventsByTarget: {} as Record<string, any>,
+    recentEvents: [],
   };
 }
 
-export async function getAnalyticsSummary(days: number = 30) {
-  const since = new Date();
-  since.setDate(since.getDate() - days);
-
-  const [totalEvents, uniqueUsers, eventsByType, topTargets] = await Promise.all([
-    prisma.analyticsEvent.count({
-      where: { createdAt: { gte: since } },
-    }),
-    prisma.analyticsEvent.groupBy({
-      by: ['userId'],
-      where: { 
-        createdAt: { gte: since },
-        userId: { not: null },
-      },
-    }),
-    prisma.analyticsEvent.groupBy({
-      by: ['eventType'],
-      where: { createdAt: { gte: since } },
-      _count: { eventType: true },
-    }),
-    prisma.analyticsEvent.groupBy({
-      by: ['targetId'],
-      where: { 
-        createdAt: { gte: since },
-        targetId: { not: null },
-      },
-      _count: { targetId: true },
-      orderBy: { _count: { targetId: 'desc' } },
-      take: 10,
-    }),
-  ]);
-
+export async function getAnalyticsSummary(_days: number = 30) {
+  // TODO: Implement when database is ready
   return {
-    totalEvents,
-    uniqueUsers: uniqueUsers.length,
-    eventsByType: eventsByType.reduce((acc, item) => {
-      acc[item.eventType] = item._count.eventType;
-      return acc;
-    }, {} as Record<string, number>),
-    topTargets: topTargets.map(item => ({
-      targetId: item.targetId,
-      count: item._count.targetId,
-    })),
+    totalEvents: 0,
+    uniqueUsers: 0,
+    eventsByType: {} as Record<string, number>,
+    topTargets: [],
   };
 }
 

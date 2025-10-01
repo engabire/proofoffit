@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { startTimer, stopTimer } from "../../../lib/analytics"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { isSupabaseConfigured } from "@/lib/env"
+import { startTimer, stopTimer } from "@/lib/analytics"
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+// import { isSupabaseConfigured } from "@/lib/env"
 import {
   Upload,
   FileText,
@@ -94,7 +94,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
   Breadcrumb,
-  BreadcrumbItem,
 } from "@proof-of-fit/ui"
 
 // Types
@@ -2172,7 +2171,8 @@ function ResultsStep({
   const [allowSuggestionIntegration, setAllowSuggestionIntegration] = useState(false)
   const [appliedSuggestions, setAppliedSuggestions] = useState<string[]>([])
   const [submissionState, setSubmissionState] = useState<{ status: 'idle' | 'submitting' | 'success' | 'error'; message?: string }>({ status: 'idle' })
-  const supabase = useMemo(() => (isSupabaseConfigured() ? createClientComponentClient() : null), [])
+  // const supabase = useMemo(() => (isSupabaseConfigured() ? createClientComponentClient() : null), [])
+  const supabase = null
 
   const escapeRegExp = useCallback((value: string) => value.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'), [])
   const formatSuggestionParagraph = useCallback((suggestion: string) => `\n\n${suggestion.trim()}`, [])
@@ -2506,30 +2506,31 @@ function ResultsStep({
       const signatureValue = coverLetterSignature.trim()
       const suggestionsIntegrated = doc.aiSuggestions.filter(suggestion => signedContent.includes(suggestion))
 
-      if (supabase) {
-        const { data: { user } } = await supabase.auth.getUser()
-        await supabase
-          .from('action_log')
-          .insert({
-            tenantId: user?.id ?? null,
-            actorType: user ? 'user' : 'guest',
-            actorId: user?.id ?? 'guest',
-            action: 'cover_letter_submitted',
-            objType: 'document',
-            objId: doc.id,
-            payloadHash: JSON.stringify({
-              jobId: job.id,
-              jobTitle: job.title,
-              company: job.company,
-              content: signedContent,
-              signature: signatureValue,
-              allowSuggestionIntegration,
-              suggestionsIntegrated
-            })
-          })
-      } else {
+      // TODO: Implement action logging when Supabase is configured
+      // if (supabase) {
+      //   const { data: { user } } = await supabase.auth.getUser()
+      //   await supabase
+      //     .from('action_log')
+      //     .insert({
+      //       tenantId: user?.id ?? null,
+      //       actorType: user ? 'user' : 'guest',
+      //       actorId: user?.id ?? 'guest',
+      //       action: 'cover_letter_submitted',
+      //       objType: 'document',
+      //       objId: doc.id,
+      //       payloadHash: JSON.stringify({
+      //         jobId: job.id,
+      //         jobTitle: job.title,
+      //         company: job.company,
+      //         content: signedContent,
+      //         signature: signatureValue,
+      //         allowSuggestionIntegration,
+      //         suggestionsIntegrated
+      //       })
+      //     })
+      // } else {
         await new Promise(resolve => setTimeout(resolve, 400))
-      }
+      // }
 
       setSubmissionState({ status: 'success', message: 'Cover letter submitted successfully.' })
     } catch (error: any) {
@@ -3161,7 +3162,10 @@ export default function FitReportPage() {
 
   const handleResumeComplete = (resumeData: ResumeData) => {
     setResume(resumeData)
-    try { import('../../../lib/analytics').then(m => m.track({ name: 'resume_import_complete' })) } catch {}
+    try { 
+      const { track } = require('@/lib/analytics')
+      track({ name: 'resume_import_complete' })
+    } catch {}
     setCurrentStep(2)
   }
 
@@ -3173,7 +3177,10 @@ export default function FitReportPage() {
 
   const handleAnalysisComplete = (analysisData: FitAnalysis) => {
     setAnalysis(analysisData)
-    try { import('../../../lib/analytics').then(m => m.track({ name: 'fit_analysis_complete' })) } catch {}
+    try { 
+      const { track } = require('@/lib/analytics')
+      track({ name: 'fit_analysis_complete' })
+    } catch {}
     try { stopTimer(ttffrStartTimeRef.current, 'ttffr') } catch {}
     setCurrentStep(4)
   }
@@ -3182,9 +3189,9 @@ export default function FitReportPage() {
     setDocumentsGenerated(true)
   }
 
-  const getBreadcrumbItems = (): BreadcrumbItem[] => {
+  const getBreadcrumbItems = () => {
     const stepNames = ['Import Resume', 'Select Job', 'Analyze Fit', 'Download Results'];
-    const items: BreadcrumbItem[] = [
+    const items: Array<{ label: string; href?: string; current?: boolean }> = [
       { label: 'Fit Report', href: '/app/fit' }
     ];
     

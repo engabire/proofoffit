@@ -40,7 +40,11 @@ import {
   Save,
   RefreshCw
 } from 'lucide-react'
-import { toast } from 'sonner'
+// Simple toast implementation
+const toast = {
+  error: (message: string) => console.error('Error:', message),
+  success: (message: string) => console.log('Success:', message)
+}
 
 export default function SimpleFitPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -272,3 +276,4 @@ export default function SimpleFitPage() {
     </div>
   )
 }
+
