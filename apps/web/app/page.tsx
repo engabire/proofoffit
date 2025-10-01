@@ -22,8 +22,12 @@ export default function HomePage() {
               <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
             </nav>
             <div className="flex space-x-4">
-              <Button variant="outline" size="sm">Sign In</Button>
-              <Button size="sm">Get Started</Button>
+              <Button variant="outline" size="sm" asChild>
+                <a href="/auth/signin">Sign In</a>
+              </Button>
+              <Button size="sm" asChild>
+                <a href="/auth/signup">Get Started</a>
+              </Button>
             </div>
           </div>
         </div>
@@ -46,12 +50,16 @@ export default function HomePage() {
             employers get ranked, explainable slates with full audit trails.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="text-lg px-8 py-4">
-              Start Free Trial
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button size="lg" className="text-lg px-8 py-4" asChild>
+              <a href="/auth/signup">
+                Start Free Trial
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-              Watch Demo
+            <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
+              <a href="/demo">
+                Watch Demo
+              </a>
             </Button>
           </div>
           
@@ -242,12 +250,16 @@ export default function HomePage() {
             with full compliance and transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
-              Start Free Trial
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button size="lg" variant="secondary" className="text-lg px-8 py-4" asChild>
+              <a href="/auth/signup">
+                Start Free Trial
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-blue-600">
-              Schedule Demo
+            <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-blue-600" asChild>
+              <a href="/contact">
+                Schedule Demo
+              </a>
             </Button>
           </div>
           <p className="text-blue-200 text-sm mt-4">

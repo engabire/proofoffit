@@ -420,3 +420,20 @@ model SystemHealth {
 
   @@map("system_health")
 }
+
+// Audit events for compliance tracking
+model AuditEvent {
+  id          String   @id @default(cuid())
+  eventType   String   // login, data_access, data_export, data_deletion, etc.
+  userId      String?
+  tenantId    String?
+  action      String   // create, read, update, delete, export, etc.
+  resource    String   // user, profile, application, etc.
+  resourceId  String?
+  metadata    Json     @default("{}")
+  ipAddress   String?
+  userAgent   String?
+  timestamp   DateTime @default(now())
+
+  @@map("audit_events")
+}
