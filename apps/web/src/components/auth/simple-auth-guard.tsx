@@ -33,6 +33,7 @@ export function SimpleAuthGuard({
                       process.env.NODE_ENV === 'development'
         const hasUser = typeof window !== 'undefined' && localStorage.getItem('user')
         
+        console.log('Auth check:', { isDemo, hasUser, NODE_ENV: process.env.NODE_ENV })
         setIsAuthenticated(isDemo || !!hasUser)
       } catch (error) {
         console.error('Auth check failed:', error)
@@ -42,18 +43,9 @@ export function SimpleAuthGuard({
       }
     }
 
+    // Run auth check immediately
     checkAuth()
-    
-    // Fallback timeout to prevent infinite loading
-    const timeout = setTimeout(() => {
-      if (isLoading) {
-        console.warn('Auth check timeout, setting loading to false')
-        setIsLoading(false)
-      }
-    }, 5000)
-
-    return () => clearTimeout(timeout)
-  }, [isLoading])
+  }, [])
 
   // Show loading state
   if (isLoading) {
