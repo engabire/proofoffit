@@ -29,7 +29,10 @@ export async function GET(req: NextRequest) {
         .select('id')
         .limit(1)
       
-      if (error && error.message.includes('relation "public.system_health" does not exist')) {
+      if (error && (
+        error.message.includes('relation "public.system_health" does not exist') ||
+        error.message.includes('Could not find the table \'public.system_health\' in the schema cache')
+      )) {
         // Table doesn't exist yet - this is expected during initial setup
         dbStatus = 'degraded'
         dbError = 'System health table not yet created - migration pending'
