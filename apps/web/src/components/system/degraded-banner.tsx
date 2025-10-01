@@ -16,12 +16,24 @@ export function DegradedBanner() {
         const data = await res.json()
         const isHealthy = data?.status === 'healthy'
         const isDegraded = data?.status === 'degraded'
-        setVisible(maintenance || !isHealthy)
+        
+        // Don't show banner if it's just a monitoring setup issue
+        const services = data?.services || {}
+        const dbService = services.database
+        const isMonitoringSetup = isDegraded && dbService?.error?.includes('System health table not yet created')
+        
+        setVisible(maintenance || (!isHealthy && !isMonitoringSetup))
         
         if (!isHealthy) {
           if (isDegraded) {
-            // Show a more informative message for degraded state
-            setMessage('System initializing. Some features may be temporarily unavailable.')
+            // Check if it's a database initialization issue
+            const services = data?.services || {}
+            const dbService = services.database
+            if (dbService?.error?.includes('System health table not yet created')) {
+              setMessage('Setting up monitoring systems. All features are fully operational.')
+            } else {
+              setMessage('System performance may be reduced. We\'re monitoring and optimizing.')
+            }
           } else {
             // Provide more specific messaging based on service status
             const services = data?.services || {}
