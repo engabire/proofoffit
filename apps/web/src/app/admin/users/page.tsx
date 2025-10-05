@@ -28,7 +28,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function AdminUsersPage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   if (!userData || userData.profile?.role !== 'admin') {
     return (

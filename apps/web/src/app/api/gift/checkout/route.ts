@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid message' }, { status: 400 })
     }
 
-    const supabase = createRouteHandlerClient({ cookies })
+  const supabase = createRouteHandlerClient({ cookies: async () => cookies() })
     const {
       data: { user },
     } = await supabase.auth.getUser()

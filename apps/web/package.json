@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "cd ../../packages/ui && npm run build && cd ../../apps/web && npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+  "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -38,6 +38,9 @@
     "stripe": "^14.9.0",
     "tailwindcss-animate": "^1.0.7"
   },
+  "engines": {
+    "node": ">=22 <23"
+  },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "@testing-library/jest-dom": "^6.1.5",
@@ -48,7 +51,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.0.1",
-    "eslint": "^9.0.0",
+    "eslint": "8.57.1",
     "eslint-config-next": "14.0.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",

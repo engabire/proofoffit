@@ -51,11 +51,11 @@ function emitCta(detail: Record<string, unknown>) {
   try {
     // Broadcast for your app to listen & forward to analytics
     globalThis.dispatchEvent?.(new CustomEvent('cta:click', { detail }));
-  } catch {}
+  } catch {/* intentionally empty */}
   try {
     // Optional direct gtag (SSR-safe)
     (globalThis as any).gtag?.('event', 'cta_click', detail);
-  } catch {}
+  } catch {/* intentionally empty */}
 }
 
 function Spinner() {

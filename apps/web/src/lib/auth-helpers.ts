@@ -8,7 +8,7 @@ export async function getCurrentUser() {
     return null
   }
   
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies: async () => cookies() })
   const {
     data: { user },
     error,
@@ -40,7 +40,7 @@ export async function getCurrentUserWithProfile() {
     }
   }
 
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies: async () => cookies() })
   
   // Get user profile from our users table
   const { data: userProfile } = await supabase

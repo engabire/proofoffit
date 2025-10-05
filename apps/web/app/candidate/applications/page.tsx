@@ -32,7 +32,7 @@ export default async function ApplicationsPage() {
     return <div>Loading...</div>
   }
 
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   // Get candidate applications
   const { data: applications } = supabase ? await supabase

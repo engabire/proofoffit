@@ -1,0 +1,34 @@
+// Root flat ESLint config for monorepo (ESLint v9+)
+import js from '@eslint/js'
+
+// Attempt to load Next.js recommended config if available
+// (Next 14 still ships legacy config, so we keep minimal rules and rely on per-app .eslintrc for Next specifics)
+
+export default [
+  js.configs.recommended,
+  {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    ignores: [
+      '**/dist/**',
+      '**/.next/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '**/storybook-static/**'
+    ],
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: true,
+    },
+    plugins: {},
+    rules: {
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
+    },
+  },
+]

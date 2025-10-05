@@ -4,7 +4,7 @@ import { Label } from './label'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Button } from './button'
-import { AlertCircle, CheckCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 
 interface FormContextValue {
   errors: Record<string, string>
@@ -259,7 +259,7 @@ export function FormSubmitButton({
   disabled,
   ...props 
 }: FormSubmitButtonProps) {
-  const { errors, validateForm } = useFormContext()
+  const { errors } = useFormContext()
   const hasErrors = Object.values(errors).some(error => !!error)
 
   return (

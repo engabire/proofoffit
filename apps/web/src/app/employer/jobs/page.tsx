@@ -50,7 +50,7 @@ export default async function JobsPage() {
     return <div>Loading...</div>
   }
 
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   // Get all jobs with pagination
   const { data: jobs, error } = supabase ? await supabase

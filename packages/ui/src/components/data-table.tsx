@@ -2,23 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from './button'
 import { Input } from './input'
-import { Badge } from './badge'
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  Search, 
-  Filter, 
-  MoreHorizontal,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown
-} from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './dropdown-menu'
+import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 export interface Column<T> {
   key: string
@@ -71,7 +55,7 @@ export function DataTable<T extends Record<string, any>>({
   const [sortColumn, setSortColumn] = useState<string | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(pagination?.pageSize || 10)
+  const [pageSize] = useState(pagination?.pageSize || 10)
 
   // Filter data based on search query
   const filteredData = useMemo(() => {

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.next/
+packages/ui/dist/
+stories/assets/
+scripts/**
+supabase/migrations/**
+supabase/functions/**/dist/**
+**/*.d.ts

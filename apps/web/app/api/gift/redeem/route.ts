@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 })
   }
 
-  const supabase = createRouteHandlerClient({ cookies })
+  const supabase = createRouteHandlerClient({ cookies: async () => cookies() })
   const [{ data: sessionData }, { data: userData }] = await Promise.all([
     supabase.auth.getSession(),
     supabase.auth.getUser(),

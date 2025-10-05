@@ -27,7 +27,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function EnterpriseSettingsPage() {
   const userData = await getCurrentUserWithProfile()
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   if (!userData) {
     return (

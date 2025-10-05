@@ -79,7 +79,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 Something went wrong
               </CardTitle>
               <CardDescription className="text-slate-600 dark:text-slate-400">
-                We're sorry, but something unexpected happened. Our team has been notified.
+                We&apos;re sorry, but something unexpected happened. Our team has been notified.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

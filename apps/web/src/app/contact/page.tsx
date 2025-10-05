@@ -42,7 +42,7 @@ import {
   Lightbulb,
   ChevronRight,
   Quote,
-  Handshake,
+  // Handshake, // Not exported by lucide-react
   GraduationCap,
   Linkedin,
   Twitter,
@@ -78,7 +78,7 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle form submission
-    console.log('Form submitted:', formData)
+  // console.log('Form submitted:', formData)
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -115,10 +115,10 @@ export default function ContactPage() {
     },
     {
       title: "Partnerships",
-      description: "Interested in partnering with us? Let's explore collaboration opportunities.",
+  description: "Interested in partnering with us? Let&apos;s explore collaboration opportunities.",
       email: "partnerships@proofoffit.com",
       phone: "+1 (555) 123-4570",
-      icon: <Handshake className="h-8 w-8" />,
+  // icon: <Handshake className="h-8 w-8" />,
       color: "emerald",
       features: ["Integration partners", "Channel partners", "Technology partners", "Strategic alliances"]
     }
@@ -173,7 +173,7 @@ export default function ContactPage() {
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
                 <CheckCircle className="h-4 w-4 mr-2" />
-                < 2 Hour Response Time
+                &lt; 2 Hour Response Time
               </Badge>
               <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2">
                 <Shield className="h-4 w-4 mr-2" />
@@ -243,7 +243,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Send Us a Message</h2>
               <p className="text-lg text-slate-600 dark:text-slate-300 mb-8">
-                Fill out the form below and we'll get back to you within 2 hours during business hours.
+                Fill out the form below and we&apos;ll get back to you within 2 hours during business hours.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -369,7 +369,7 @@ export default function ContactPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Offices</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              Visit us at one of our locations worldwide. We're always happy to meet in person.
+              Visit us at one of our locations worldwide. We&apos;re always happy to meet in person.
             </p>
           </div>
 
@@ -447,7 +447,7 @@ export default function ContactPage() {
                 <div className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
                   <div>24/7 Available</div>
                   <div>Emergency Response</div>
-                  <div className="text-xs text-green-600">< 1 Hour SLA</div>
+                  <div className="text-xs text-green-600">&lt; 1 Hour SLA</div>
                 </div>
               </CardContent>
             </Card>

@@ -32,7 +32,7 @@ export default async function EmployerDashboard() {
     return <div>Loading...</div>
   }
 
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   // Get employer statistics
   const { data: intakes } = supabase ? await supabase

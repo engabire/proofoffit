@@ -20,7 +20,7 @@ export default async function JobMatchesPage() {
   }
 
   // Only create Supabase client if environment variables are configured
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
 
   // Get candidate profile
   const { data: profile } = supabase ? await supabase

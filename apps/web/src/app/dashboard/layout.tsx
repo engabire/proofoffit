@@ -9,7 +9,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies: async () => cookies() })
   const {
     data: { user },
   } = await supabase.auth.getUser()

@@ -33,7 +33,6 @@ import {
   Sparkles,
   ChevronRight,
   Quote,
-  Handshake,
   Briefcase,
   GraduationCap,
   Linkedin,
@@ -141,13 +140,11 @@ import {
   Battery,
   BatteryLow,
   BatteryMedium,
-  BatteryHigh,
   BatteryFull,
   Plug,
   Unplug,
   Power,
   PowerOff,
-  Refresh,
   RefreshCw,
   RefreshCcw as RefreshCcwIcon,
   RotateCw as RotateCwIcon,
@@ -157,209 +154,6 @@ import {
   FlipVertical,
   FlipHorizontal2,
   FlipVertical2,
-  Mirror,
-  MirrorHorizontal,
-  MirrorVertical,
-  ReflectHorizontal,
-  ReflectVertical,
-  ReflectHorizontal2,
-  ReflectVertical2,
-  ReflectHorizontal3,
-  ReflectVertical3,
-  ReflectHorizontal4,
-  ReflectVertical4,
-  ReflectHorizontal5,
-  ReflectVertical5,
-  ReflectHorizontal6,
-  ReflectVertical6,
-  ReflectHorizontal7,
-  ReflectVertical7,
-  ReflectHorizontal8,
-  ReflectVertical8,
-  ReflectHorizontal9,
-  ReflectVertical9,
-  ReflectHorizontal10,
-  ReflectVertical10,
-  ReflectHorizontal11,
-  ReflectVertical11,
-  ReflectHorizontal12,
-  ReflectVertical12,
-  ReflectHorizontal13,
-  ReflectVertical13,
-  ReflectHorizontal14,
-  ReflectVertical14,
-  ReflectHorizontal15,
-  ReflectVertical15,
-  ReflectHorizontal16,
-  ReflectVertical16,
-  ReflectHorizontal17,
-  ReflectVertical17,
-  ReflectHorizontal18,
-  ReflectVertical18,
-  ReflectHorizontal19,
-  ReflectVertical19,
-  ReflectHorizontal20,
-  ReflectVertical20,
-  ReflectHorizontal21,
-  ReflectVertical21,
-  ReflectHorizontal22,
-  ReflectVertical22,
-  ReflectHorizontal23,
-  ReflectVertical23,
-  ReflectHorizontal24,
-  ReflectVertical24,
-  ReflectHorizontal25,
-  ReflectVertical25,
-  ReflectHorizontal26,
-  ReflectVertical26,
-  ReflectHorizontal27,
-  ReflectVertical27,
-  ReflectHorizontal28,
-  ReflectVertical28,
-  ReflectHorizontal29,
-  ReflectVertical29,
-  ReflectHorizontal30,
-  ReflectVertical30,
-  ReflectHorizontal31,
-  ReflectVertical31,
-  ReflectHorizontal32,
-  ReflectVertical32,
-  ReflectHorizontal33,
-  ReflectVertical33,
-  ReflectHorizontal34,
-  ReflectVertical34,
-  ReflectHorizontal35,
-  ReflectVertical35,
-  ReflectHorizontal36,
-  ReflectVertical36,
-  ReflectHorizontal37,
-  ReflectVertical37,
-  ReflectHorizontal38,
-  ReflectVertical38,
-  ReflectHorizontal39,
-  ReflectVertical39,
-  ReflectHorizontal40,
-  ReflectVertical40,
-  ReflectHorizontal41,
-  ReflectVertical41,
-  ReflectHorizontal42,
-  ReflectVertical42,
-  ReflectHorizontal43,
-  ReflectVertical43,
-  ReflectHorizontal44,
-  ReflectVertical44,
-  ReflectHorizontal45,
-  ReflectVertical45,
-  ReflectHorizontal46,
-  ReflectVertical46,
-  ReflectHorizontal47,
-  ReflectVertical47,
-  ReflectHorizontal48,
-  ReflectVertical48,
-  ReflectHorizontal49,
-  ReflectVertical49,
-  ReflectHorizontal50,
-  ReflectVertical50,
-  ReflectHorizontal51,
-  ReflectVertical51,
-  ReflectHorizontal52,
-  ReflectVertical52,
-  ReflectHorizontal53,
-  ReflectVertical53,
-  ReflectHorizontal54,
-  ReflectVertical54,
-  ReflectHorizontal55,
-  ReflectVertical55,
-  ReflectHorizontal56,
-  ReflectVertical56,
-  ReflectHorizontal57,
-  ReflectVertical57,
-  ReflectHorizontal58,
-  ReflectVertical58,
-  ReflectHorizontal59,
-  ReflectVertical59,
-  ReflectHorizontal60,
-  ReflectVertical60,
-  ReflectHorizontal61,
-  ReflectVertical61,
-  ReflectHorizontal62,
-  ReflectVertical62,
-  ReflectHorizontal63,
-  ReflectVertical63,
-  ReflectHorizontal64,
-  ReflectVertical64,
-  ReflectHorizontal65,
-  ReflectVertical65,
-  ReflectHorizontal66,
-  ReflectVertical66,
-  ReflectHorizontal67,
-  ReflectVertical67,
-  ReflectHorizontal68,
-  ReflectVertical68,
-  ReflectHorizontal69,
-  ReflectVertical69,
-  ReflectHorizontal70,
-  ReflectVertical70,
-  ReflectHorizontal71,
-  ReflectVertical71,
-  ReflectHorizontal72,
-  ReflectVertical72,
-  ReflectHorizontal73,
-  ReflectVertical73,
-  ReflectHorizontal74,
-  ReflectVertical74,
-  ReflectHorizontal75,
-  ReflectVertical75,
-  ReflectHorizontal76,
-  ReflectVertical76,
-  ReflectHorizontal77,
-  ReflectVertical77,
-  ReflectHorizontal78,
-  ReflectVertical78,
-  ReflectHorizontal79,
-  ReflectVertical79,
-  ReflectHorizontal80,
-  ReflectVertical80,
-  ReflectHorizontal81,
-  ReflectVertical81,
-  ReflectHorizontal82,
-  ReflectVertical82,
-  ReflectHorizontal83,
-  ReflectVertical83,
-  ReflectHorizontal84,
-  ReflectVertical84,
-  ReflectHorizontal85,
-  ReflectVertical85,
-  ReflectHorizontal86,
-  ReflectVertical86,
-  ReflectHorizontal87,
-  ReflectVertical87,
-  ReflectHorizontal88,
-  ReflectVertical88,
-  ReflectHorizontal89,
-  ReflectVertical89,
-  ReflectHorizontal90,
-  ReflectVertical90,
-  ReflectHorizontal91,
-  ReflectVertical91,
-  ReflectHorizontal92,
-  ReflectVertical92,
-  ReflectHorizontal93,
-  ReflectVertical93,
-  ReflectHorizontal94,
-  ReflectVertical94,
-  ReflectHorizontal95,
-  ReflectVertical95,
-  ReflectHorizontal96,
-  ReflectVertical96,
-  ReflectHorizontal97,
-  ReflectVertical97,
-  ReflectHorizontal98,
-  ReflectVertical98,
-  ReflectHorizontal99,
-  ReflectVertical99,
-  ReflectHorizontal100,
-  ReflectVertical100
 } from "lucide-react"
 import {
   Card,
@@ -589,15 +383,15 @@ export default function PressPage() {
               Access our press kit and connect with our media team.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
+              <Badge variant="success" className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Media Kit Available
               </Badge>
-              <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2">
+              <Badge variant="info" className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2">
                 <Award className="h-4 w-4 mr-2" />
                 Award-Winning Technology
               </Badge>
-              <Badge className="bg-purple-100 text-purple-800 border-purple-200 px-4 py-2">
+              <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 px-4 py-2">
                 <Star className="h-4 w-4 mr-2" />
                 Industry Recognition
               </Badge>
@@ -695,7 +489,7 @@ export default function PressPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-xl font-semibold">{release.title}</h3>
-                        <Badge variant="outline">{release.category}</Badge>
+                        <Badge variant="outline" className="text-xs">{release.category}</Badge>
                       </div>
                       
                       <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-300 mb-3">
@@ -721,11 +515,11 @@ export default function PressPage() {
                     </div>
 
                     <div className="flex flex-col gap-3 lg:min-w-48">
-                      <Button className="w-full">
+                      <Button className="w-full" size="sm">
                         <Download className="h-4 w-4 mr-2" />
                         Download PDF
                       </Button>
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full" size="sm">
                         <ExternalLink className="h-4 w-4 mr-2" />
                         Read More
                       </Button>
@@ -762,7 +556,7 @@ export default function PressPage() {
                         <span>{article.author}</span>
                       </div>
                     </div>
-                    <Badge variant="outline">{article.category}</Badge>
+                        <Badge variant="outline" className="text-xs">{article.category}</Badge>
                   </div>
                   
                   <p className="text-slate-600 dark:text-slate-300 mb-4">{article.summary}</p>
@@ -807,7 +601,7 @@ export default function PressPage() {
                         <span>{new Date(award.date).toLocaleDateString()}</span>
                       </div>
                     </div>
-                    <Badge variant="outline">{award.category}</Badge>
+                    <Badge variant="outline" className="text-xs">{award.category}</Badge>
                   </div>
                   
                   <p className="text-slate-600 dark:text-slate-300">{award.description}</p>
