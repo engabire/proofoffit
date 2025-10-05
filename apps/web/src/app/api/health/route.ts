@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { flags } from '@/src/lib/flags'
 import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req: NextRequest) {
@@ -69,7 +70,8 @@ export async function GET(req: NextRequest) {
     const healthData = {
       status: overallStatus,
       timestamp: new Date().toISOString(),
-      version: '2.0.0',
+  version: process.env.VERCEL_GIT_COMMIT_SHA || 'dev',
+  demoMode: flags.demoMode,
       environment: process.env.NODE_ENV || 'development',
       response_time_ms: responseTime,
       services: {

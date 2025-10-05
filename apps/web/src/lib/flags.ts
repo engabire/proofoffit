@@ -1,3 +1,9 @@
+export const flags = {
+  demoMode: process.env.DEMO_MODE === 'true',
+  enableAdvancedFit: process.env.ENABLE_ADVANCED_FIT === 'true',
+}
+
+export type Flags = typeof flags
 export function getEnabledFeatures(): Set<string> {
   if (typeof window !== 'undefined') {
     const raw = (window as any).__FEATURES__ || process.env.NEXT_PUBLIC_FEATURES || ''

@@ -11,10 +11,11 @@
     "build:ui": "cd packages/ui && npm run build",
     "build:web": "cd apps/web && npm run build",
     "dev": "turbo run dev",
-  "lint": "turbo run lint",
+    "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean",
     "type-check": "turbo run type-check",
+    "preflight": "bash ./scripts/preflight.sh",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
