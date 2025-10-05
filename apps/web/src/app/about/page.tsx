@@ -501,6 +501,169 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Business Impact */}
+        <section>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Business Impact</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+              Our technology delivers measurable results for enterprise customers, reducing bias while improving hiring outcomes.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20">
+              <CardContent className="p-8">
+                <TrendingUp className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">40% Reduction in Bias</h3>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Our customers see a 40% reduction in hiring bias across all protected characteristics, 
+                  leading to more diverse and qualified candidate pools.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20">
+              <CardContent className="p-8">
+                <Clock className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">60% Faster Hiring</h3>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Automated bias detection and transparent scoring reduce time-to-hire by 60% 
+                  while maintaining the highest quality standards.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-950/20">
+              <CardContent className="p-8">
+                <Shield className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">100% Audit Ready</h3>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Every hiring decision comes with complete audit trails and cryptographic proof, 
+                  ensuring compliance with EEOC and OFCCP regulations.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Technology & Innovation */}
+        <section>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Technology & Innovation</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+              Built on cutting-edge research and enterprise-grade infrastructure, our platform sets the standard for fair hiring technology.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-6">Advanced Analytics Engine</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">Multi-Modal Bias Detection</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Analyzes text, images, and behavioral patterns to identify bias across all protected characteristics.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">Real-Time Scoring</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Provides instant, explainable fit scores with detailed reasoning for every evaluation.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">Cryptographic Audit Trails</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Immutable records of all decisions with cryptographic proof for regulatory compliance.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">Enterprise Integration</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Seamless integration with existing ATS, HRIS, and recruiting platforms.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="aspect-video bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-slate-200 dark:border-slate-700 p-8 flex items-center justify-center">
+                <div className="text-center">
+                  <Brain className="h-16 w-16 text-blue-600 mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold mb-2">AI-Powered Fairness</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    Our proprietary algorithms are trained on diverse datasets and continuously 
+                    validated for bias across multiple dimensions.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Compliance & Security */}
+        <section>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Compliance & Security</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+              Enterprise-grade security and compliance certifications ensure your data is protected and your hiring practices meet regulatory requirements.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <Shield className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="font-semibold mb-2">SOC 2 Type II</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Certified for security, availability, and confidentiality controls.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <Lock className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                <h3 className="font-semibold mb-2">ISO 27001</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Information security management systems certification.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <Eye className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+                <h3 className="font-semibold mb-2">GDPR Compliant</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Full compliance with European data protection regulations.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <Scale className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
+                <h3 className="font-semibold mb-2">EEOC Ready</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Built to meet Equal Employment Opportunity Commission requirements.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Call to Action */}
         <section className="text-center">
           <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">

@@ -9,6 +9,7 @@ export const demoUser = {
 export const demoProfile = {
   id: 'demo-profile-1',
   userId: 'demo-user-1',
+  photoUrl: null as string | null,
   preferences: {
     workType: ['remote', 'hybrid'],
     location: ['San Francisco, CA', 'New York, NY'],

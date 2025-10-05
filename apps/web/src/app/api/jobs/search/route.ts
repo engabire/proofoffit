@@ -6,14 +6,54 @@ import { usajobsAPI, USAJobsSearchParams } from '@/lib/job-feeds/usajobs'
 
 export const dynamic = 'force-dynamic'
 
+// Rate limiting map (in production, use Redis or similar)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const windowMs = 60 * 1000 // 1 minute
+  const maxRequests = 30 // 30 requests per minute
+  
+  const current = rateLimitMap.get(ip)
+  
+  if (!current || now > current.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs })
+    return true
+  }
+  
+  if (current.count >= maxRequests) {
+    return false
+  }
+  
+  current.count++
+  return true
+}
+
+function sanitizeInput(input: string): string {
+  // Remove potentially harmful characters and limit length
+  return input
+    .replace(/[<>\"'&]/g, '')
+    .substring(0, 100)
+    .trim()
+}
+
 export async function GET(req: NextRequest) {
   try {
+    // Rate limiting
+    const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown'
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const { searchParams } = new URL(req.url)
-    const query = searchParams.get('q') || ''
-    const location = searchParams.get('location') || ''
-    const workType = searchParams.get('workType') || ''
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const query = sanitizeInput(searchParams.get('q') || '')
+    const location = sanitizeInput(searchParams.get('location') || '')
+    const workType = sanitizeInput(searchParams.get('workType') || '')
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50) // Cap at 50
+    const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
     // Try USAJOBS API first for government jobs
     if (query.trim()) {

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@proof-of-fit/ui";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Badge } from "@proof-of-fit/ui";
-import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp } from "lucide-react";
+import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -253,6 +253,101 @@ export default function HomePage() {
               <div className="text-4xl font-bold mb-2">60%</div>
               <div className="text-blue-100">Faster Hiring</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600">
+              Proof for both sides of the table
+            </div>
+            <h2 className="mt-6 text-4xl font-bold text-gray-900">
+              Built for employers and job seekers alike
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Whether you need explainable hiring decisions or a confident job search plan, ProofOfFit keeps every step transparent, auditable, and bias-aware.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            <Card className="h-full border border-blue-100 shadow-lg">
+              <CardHeader>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                    <Briefcase className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl">For Employers</CardTitle>
+                    <CardDescription>
+                      Evidence-backed shortlists with immutable audit trails and compliance guardrails.
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <ul className="space-y-3 text-left text-sm text-gray-600">
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-blue-500" />
+                    Ranked slates that explain every match in plain language.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-blue-500" />
+                    Guardrails that respect privacy, consent, and EEOC requirements by default.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-blue-500" />
+                    Collaboration tools that help hiring managers, compliance, and recruiters stay aligned.
+                  </li>
+                </ul>
+                <Button size="lg" className="w-full" asChild>
+                  <a href="/contact">
+                    I am hiring
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="h-full border border-purple-100 shadow-lg">
+              <CardHeader>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+                    <UserCheck className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl">For Job Seekers</CardTitle>
+                    <CardDescription>
+                      Tailored Fit Reports, guided outreach, and receipts you can bring into every conversation.
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <ul className="space-y-3 text-left text-sm text-gray-600">
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-purple-500" />
+                    Structured stories that map your experience to each requirement line by line.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-purple-500" />
+                    Resume, cover letter, and outreach drafts that stay consistent with the evidence.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 h-4 w-4 text-purple-500" />
+                    A shareable audit trail that sets you apart without bending any platform rules.
+                  </li>
+                </ul>
+                <Button size="lg" variant="outline" className="w-full border-purple-200 text-purple-700 hover:bg-purple-600 hover:text-white" asChild>
+                  <a href="/app/fit-simple">
+                    I am seeking a job
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

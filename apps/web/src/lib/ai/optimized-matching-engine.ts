@@ -40,6 +40,7 @@ export class OptimizedAIMatchingEngine {
         .select(`
           id,
           user_id,
+          photo_url,
           skills,
           experience,
           education,

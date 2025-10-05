@@ -149,3 +149,6 @@ build/
 tmp/
 temp/
 .env*.local
+
+*storybook.log
+storybook-static

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@proof-of-fit/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
@@ -41,6 +41,28 @@ export function SimpleLogin({
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [isValid, setIsValid] = useState(false)
+
+  // Basic validation rules
+  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  const validatePassword = (value: string) => value.length >= 8
+
+  useEffect(() => {
+    // Re-validate on changes
+    if (email && !validateEmail(email)) {
+      setEmailError('Enter a valid email address')
+    } else {
+      setEmailError('')
+    }
+    if (password && !validatePassword(password)) {
+      setPasswordError('Password must be at least 8 characters')
+    } else {
+      setPasswordError('')
+    }
+    setIsValid(!!email && !!password && validateEmail(email) && validatePassword(password))
+  }, [email, password])
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,7 +75,7 @@ export function SimpleLogin({
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // For demo purposes, accept any email/password
-      if (email && password) {
+      if (isValid) {
         // Store user in localStorage for demo
         if (typeof window !== 'undefined') {
           localStorage.setItem('user', JSON.stringify({ email, name: email.split('@')[0] }))
@@ -67,7 +89,7 @@ export function SimpleLogin({
           router.push(redirectTo)
         }
       } else {
-        setError('Please enter both email and password')
+        setError('Fix validation errors before continuing')
       }
     } catch (error) {
       console.error('Auth error:', error)
@@ -116,6 +138,8 @@ export function SimpleLogin({
                     type="email"
                     autoComplete="email"
                     required
+                    aria-describedby={emailError ? 'email-error' : undefined}
+                    aria-invalid={!!emailError || undefined}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -123,6 +147,9 @@ export function SimpleLogin({
                   />
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 </div>
+                {emailError && (
+                  <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">{emailError}</p>
+                )}
               </div>
 
               <div>
@@ -134,6 +161,8 @@ export function SimpleLogin({
                     type={showPassword ? 'text' : 'password'}
                     autoComplete={isSignUp ? 'new-password' : 'current-password'}
                     required
+                    aria-describedby={passwordError ? 'password-error' : undefined}
+                    aria-invalid={!!passwordError || undefined}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -144,6 +173,7 @@ export function SimpleLogin({
                     type="button"
                     className="absolute right-3 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-gray-400" />
@@ -152,12 +182,17 @@ export function SimpleLogin({
                     )}
                   </button>
                 </div>
+                {passwordError && (
+                  <p id="password-error" className="mt-1 text-sm text-red-600" role="alert">{passwordError}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500">Minimum 8 characters.</p>
               </div>
 
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isLoading}
+                disabled={isLoading || !isValid}
+                aria-disabled={isLoading || !isValid}
               >
                 {isLoading ? (
                   <>

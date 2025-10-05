@@ -62,6 +62,10 @@ import {
   Brain,
   Lightbulb,
   Trash2,
+  Filter,
+  Bookmark,
+  Bell,
+  Heart,
 } from "lucide-react"
 import {
   Button,
@@ -1599,30 +1603,54 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState({
+    location: '',
+    workType: '',
+    experienceLevel: '',
+    salaryRange: '',
+    companySize: '',
+    industry: '',
+    remote: false,
+    postedWithin: ''
+  })
+  const [savedJobs, setSavedJobs] = useState<Set<string>>(new Set())
+  const [recommendedJobs, setRecommendedJobs] = useState<JobPosting[]>([])
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
 
-  // Load initial jobs
+  // Load initial jobs and recommendations
   useEffect(() => {
     loadJobs()
+    loadRecommendations()
+    loadSearchHistory()
   }, [])
 
-  // Search jobs when search term changes
+  // Search jobs when search term or filters change
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm.trim()) {
         searchJobs(searchTerm.trim())
+        addToSearchHistory(searchTerm.trim())
       } else {
         loadJobs()
       }
-    }, 300) // Debounce search
+    }, 500) // Increased debounce for better UX
 
     return () => clearTimeout(timeoutId)
-  }, [searchTerm])
+  }, [searchTerm, filters])
 
   const loadJobs = async () => {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/jobs/search?limit=20')
+      const queryParams = new URLSearchParams({
+        limit: '20',
+        ...(filters.location && { location: filters.location }),
+        ...(filters.workType && { workType: filters.workType }),
+        ...(filters.remote && { remote: 'true' })
+      })
+      
+      const response = await fetch(`/api/jobs/search?${queryParams}`)
       if (!response.ok) throw new Error('Failed to load jobs')
       
       const data = await response.json()
@@ -1630,7 +1658,6 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } catch (err) {
       console.error('Error loading jobs:', err)
       setError('Failed to load jobs. Using sample data.')
-      // Fallback to mock data
       setFilteredJobs(mockJobs)
     } finally {
       setLoading(false)
@@ -1641,7 +1668,15 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`/api/jobs/search?q=${encodeURIComponent(query)}&limit=20`)
+      const queryParams = new URLSearchParams({
+        q: query,
+        limit: '20',
+        ...(filters.location && { location: filters.location }),
+        ...(filters.workType && { workType: filters.workType }),
+        ...(filters.remote && { remote: 'true' })
+      })
+      
+      const response = await fetch(`/api/jobs/search?${queryParams}`)
       if (!response.ok) throw new Error('Failed to search jobs')
       
       const data = await response.json()
@@ -1649,31 +1684,109 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } catch (err) {
       console.error('Error searching jobs:', err)
       setError('Search failed. Using sample data.')
-      // Fallback to mock data with local filtering
+      // Enhanced fallback with filter support
       const searchLower = query.toLowerCase()
-      setFilteredJobs(
-        mockJobs.filter(job =>
-          job.title.toLowerCase().includes(searchLower) ||
+      let filtered = mockJobs.filter(job => {
+        const matchesSearch = job.title.toLowerCase().includes(searchLower) ||
           job.company.toLowerCase().includes(searchLower) ||
           job.location.toLowerCase().includes(searchLower) ||
           job.description.toLowerCase().includes(searchLower) ||
           job.requirements.some(req => req.toLowerCase().includes(searchLower))
-        )
-      )
+        
+        const matchesLocation = !filters.location || 
+          job.location.toLowerCase().includes(filters.location.toLowerCase())
+        
+        const matchesWorkType = !filters.workType || 
+          job.type.toLowerCase().includes(filters.workType.toLowerCase())
+        
+        const matchesRemote = !filters.remote || job.remote
+        
+        return matchesSearch && matchesLocation && matchesWorkType && matchesRemote
+      })
+      
+      setFilteredJobs(filtered)
     } finally {
       setLoading(false)
     }
   }
 
+  const loadRecommendations = async () => {
+    try {
+      // In a real app, this would analyze the user's resume/profile
+      const response = await fetch('/api/jobs/recommendations?limit=5')
+      if (response.ok) {
+        const data = await response.json()
+        setRecommendedJobs(data.jobs || [])
+      }
+    } catch (err) {
+      console.error('Error loading recommendations:', err)
+    }
+  }
+
+  const loadSearchHistory = () => {
+    try {
+      const history = localStorage.getItem('jobSearchHistory')
+      if (history) {
+        setSearchHistory(JSON.parse(history))
+      }
+    } catch (err) {
+      console.error('Error loading search history:', err)
+    }
+  }
+
+  const addToSearchHistory = (query: string) => {
+    if (!query.trim()) return
+    
+    const newHistory = [query, ...searchHistory.filter(item => item !== query)].slice(0, 10)
+    setSearchHistory(newHistory)
+    
+    try {
+      localStorage.setItem('jobSearchHistory', JSON.stringify(newHistory))
+    } catch (err) {
+      console.error('Error saving search history:', err)
+    }
+  }
+
+  const toggleSavedJob = (jobId: string) => {
+    const newSavedJobs = new Set(savedJobs)
+    if (newSavedJobs.has(jobId)) {
+      newSavedJobs.delete(jobId)
+    } else {
+      newSavedJobs.add(jobId)
+    }
+    setSavedJobs(newSavedJobs)
+    
+    // In a real app, this would sync with the backend
+    try {
+      localStorage.setItem('savedJobs', JSON.stringify(Array.from(newSavedJobs)))
+    } catch (err) {
+      console.error('Error saving job:', err)
+    }
+  }
+
+  const clearFilters = () => {
+    setFilters({
+      location: '',
+      workType: '',
+      experienceLevel: '',
+      salaryRange: '',
+      companySize: '',
+      industry: '',
+      remote: false,
+      postedWithin: ''
+    })
+  }
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Find Your Target Job</h2>
         <p className="text-gray-600">
-          Search for the job you want to apply for
+          Search for the job you want to apply for with AI-powered recommendations
         </p>
       </div>
 
+      {/* Enhanced Search Bar */}
       <div className="mb-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -1681,15 +1794,41 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
             placeholder="Search by job title, company, or location..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 pr-20"
             disabled={loading}
           />
           {loading && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <div className="absolute right-12 top-1/2 transform -translate-y-1/2">
               <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
             </div>
           )}
+          <Button
+            variant="outline"
+            size="sm"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="w-4 h-4 mr-1" />
+            Filters
+          </Button>
         </div>
+        
+        {/* Search History */}
+        {searchHistory.length > 0 && !searchTerm && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            <span className="text-sm text-gray-500">Recent searches:</span>
+            {searchHistory.slice(0, 5).map((term, index) => (
+              <button
+                key={index}
+                onClick={() => setSearchTerm(term)}
+                className="text-sm bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-full transition-colors"
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        )}
+
         {error && (
           <div className="mt-2 text-sm text-amber-600 bg-amber-50 p-2 rounded">
             {error}
@@ -1697,13 +1836,163 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
         )}
       </div>
 
+      {/* Advanced Filters */}
+      {showFilters && (
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  placeholder="City, State"
+                  value={filters.location}
+                  onChange={(e) => setFilters(prev => ({ ...prev, location: e.target.value }))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="workType">Work Type</Label>
+                <Select value={filters.workType} onValueChange={(value) => setFilters(prev => ({ ...prev, workType: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="full-time">Full-time</SelectItem>
+                    <SelectItem value="part-time">Part-time</SelectItem>
+                    <SelectItem value="contract">Contract</SelectItem>
+                    <SelectItem value="internship">Internship</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="experienceLevel">Experience Level</Label>
+                <Select value={filters.experienceLevel} onValueChange={(value) => setFilters(prev => ({ ...prev, experienceLevel: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="entry">Entry Level</SelectItem>
+                    <SelectItem value="mid">Mid Level</SelectItem>
+                    <SelectItem value="senior">Senior Level</SelectItem>
+                    <SelectItem value="executive">Executive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="salaryRange">Salary Range</Label>
+                <Select value={filters.salaryRange} onValueChange={(value) => setFilters(prev => ({ ...prev, salaryRange: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0-50k">$0 - $50k</SelectItem>
+                    <SelectItem value="50k-75k">$50k - $75k</SelectItem>
+                    <SelectItem value="75k-100k">$75k - $100k</SelectItem>
+                    <SelectItem value="100k-150k">$100k - $150k</SelectItem>
+                    <SelectItem value="150k+">$150k+</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="remote"
+                  checked={filters.remote}
+                  onChange={(e) => setFilters(prev => ({ ...prev, remote: e.target.checked }))}
+                  className="rounded"
+                />
+                <Label htmlFor="remote">Remote only</Label>
+              </div>
+              <Button variant="outline" size="sm" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* AI Recommendations */}
+      {recommendedJobs.length > 0 && !searchTerm && (
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Brain className="w-5 h-5 text-purple-600" />
+            <h3 className="text-lg font-semibold">AI-Powered Recommendations</h3>
+            <Badge variant="secondary">Based on your profile</Badge>
+          </div>
+          <div className="grid gap-3">
+            {recommendedJobs.map((job) => (
+              <Card
+                key={`rec-${job.id}`}
+                className="cursor-pointer transition-all hover:shadow-md border-purple-200 bg-purple-50/50"
+                onClick={() => setSelectedJob(job)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-semibold">{job.title}</h4>
+                        <Badge variant="outline" className="text-xs">Recommended</Badge>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <span>{job.company}</span>
+                        <span>•</span>
+                        <span>{job.location}</span>
+                        {job.salary && (
+                          <>
+                            <span>•</span>
+                            <span className="text-green-600 font-medium">
+                              ${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      Select
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Results Summary */}
+      {filteredJobs.length > 0 && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">
+              {filteredJobs.length} job{filteredJobs.length !== 1 ? 's' : ''} found
+            </span>
+            {searchTerm && (
+              <Badge variant="outline">for "{searchTerm}"</Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm">
+              <Bookmark className="w-4 h-4 mr-1" />
+              Saved ({savedJobs.size})
+            </Button>
+            <Button variant="outline" size="sm">
+              <Bell className="w-4 h-4 mr-1" />
+              Create Alert
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-4">
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
             <Card
               key={job.id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                selectedJob?.id === job.id ? 'ring-2 ring-blue-500' : ''
+              className={`cursor-pointer transition-all hover:shadow-lg border-l-4 ${
+                selectedJob?.id === job.id 
+                  ? 'ring-2 ring-blue-500 border-l-blue-500 bg-blue-50/50' 
+                  : 'border-l-transparent hover:border-l-blue-300'
               }`}
               onClick={() => {
                 console.log('Job selected:', job.title, job.company)
@@ -1713,15 +2002,47 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-xl font-semibold">{job.title}</h3>
-                      <Badge variant="outline">{job.type}</Badge>
-                      {job.remote && <Badge variant="secondary">Remote</Badge>}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <h3 className="text-xl font-semibold">{job.title}</h3>
+                        <Badge variant="outline">{job.type}</Badge>
+                        {job.remote && <Badge variant="secondary">Remote</Badge>}
+                        {job.source === 'governmentjobs' && (
+                          <Badge variant="default" className="bg-green-600">Government</Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleSavedJob(job.id)
+                          }}
+                        >
+                          {savedJobs.has(job.id) ? (
+                            <Heart className="w-4 h-4 text-red-500 fill-current" />
+                          ) : (
+                            <Heart className="w-4 h-4" />
+                          )}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // Share functionality
+                          }}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
+                    
                     <div className="flex items-center space-x-4 text-gray-600 mb-3">
                       <div className="flex items-center">
                         <Building2 className="w-4 h-4 mr-1" />
-                        {job.company}
+                        <span className="font-medium">{job.company}</span>
                       </div>
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 mr-1" />
@@ -1731,16 +2052,55 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                         <Calendar className="w-4 h-4 mr-1" />
                         {job.postedAt.toLocaleDateString()}
                       </div>
+                      {job.experienceLevel && (
+                        <div className="flex items-center">
+                          <User className="w-4 h-4 mr-1" />
+                          {job.experienceLevel}
+                        </div>
+                      )}
                     </div>
+                    
                     {job.salary && (
                       <div className="flex items-center text-green-600 font-medium mb-3">
                         <DollarSign className="w-4 h-4 mr-1" />
                         ${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}
+                        <span className="text-gray-500 text-sm ml-1">/year</span>
                       </div>
                     )}
-                    <p className="text-gray-700 line-clamp-2">{job.description}</p>
+                    
+                    <p className="text-gray-700 line-clamp-2 mb-3">{job.description}</p>
+                    
+                    {/* Key Requirements Preview */}
+                    {job.requirements && job.requirements.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {job.requirements.slice(0, 3).map((req, idx) => (
+                          <Badge key={idx} variant="secondary" className="text-xs">
+                            {req}
+                          </Badge>
+                        ))}
+                        {job.requirements.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{job.requirements.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Security & Compliance Indicators */}
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <Shield className="w-3 h-3" />
+                      <span>Secure application</span>
+                      {job.tos?.allowed && (
+                        <>
+                          <span>•</span>
+                          <CheckCircle className="w-3 h-3 text-green-500" />
+                          <span>Terms compliant</span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className="ml-4">
+                  
+                  <div className="ml-6 flex flex-col gap-2">
                     <Button
                       variant={selectedJob?.id === job.id ? "default" : "outline"}
                       onClick={(e) => {
@@ -1748,9 +2108,24 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                         console.log('Job selected via button:', job.title, job.company)
                         setSelectedJob(job)
                       }}
+                      className="min-w-24"
                     >
                       {selectedJob?.id === job.id ? 'Selected' : 'Select'}
                     </Button>
+                    {job.applyUrl && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          window.open(job.applyUrl, '_blank', 'noopener,noreferrer')
+                        }}
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        Apply
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardContent>

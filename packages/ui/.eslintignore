@@ -1,0 +1,14 @@
+dist/
+coverage/
+*.js
+*.cjs
+*.mjs
+*.d.ts
+*.test.js
+*.test.cjs
+*.test.mjs
+*.stories.*
+*.config.js
+*.config.cjs
+*.config.mjs
+node_modules/

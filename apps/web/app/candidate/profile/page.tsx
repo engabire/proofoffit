@@ -7,6 +7,7 @@ import { Button } from '@proof-of-fit/ui'
 import { Plus, Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { isSupabaseConfigured } from '@/lib/env'
+import { ProfilePhotoCard } from '@/components/candidate/profile-photo-card'
 
 // Force dynamic rendering to prevent build-time data collection
 export const dynamic = 'force-dynamic'
@@ -42,6 +43,11 @@ export default async function CandidateProfilePage() {
     .eq('candidateId', profile?.id)
     .order('issuedOn', { ascending: false }) : { data: null }
 
+  const profilePhotoUrl = (profile as any)?.photoUrl ?? (profile as any)?.photo_url ?? null
+  const displayName = (userData.profile as any)?.full_name
+    ?? (userData.user.user_metadata as Record<string, any> | undefined)?.full_name
+    ?? userData.user.email
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -58,6 +64,13 @@ export default async function CandidateProfilePage() {
           </Link>
         </Button>
       </div>
+
+      <ProfilePhotoCard
+        userId={userData.user.id}
+        profileId={profile?.id ?? null}
+        initialPhotoUrl={profilePhotoUrl}
+        fullName={typeof displayName === 'string' ? displayName : null}
+      />
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Profile Overview */}

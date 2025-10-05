@@ -2,6 +2,7 @@ import { getCurrentUserWithProfile } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import { SignOutButton } from '@/components/auth/sign-out-button'
 import Link from 'next/link'
+import { SectionNav } from '@/components/navigation/section-nav'
 
 export default async function EmployerLayout({
   children,
@@ -41,18 +42,9 @@ export default async function EmployerLayout({
             </Link>
           </div>
           
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center space-x-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden md:flex items-center space-x-2">
+            <SectionNav items={navItems} orientation="horizontal" ariaLabel="Employer primary" />
+          </div>
 
           <div className="flex items-center space-x-4">
             <span className="text-sm text-emerald-600 dark:text-emerald-400">{userData.user.email}</span>
@@ -64,21 +56,10 @@ export default async function EmployerLayout({
       <div className="container py-6">
         <div className="flex flex-col md:flex-row gap-6">
           <aside className="md:w-64 space-y-2">
-            <nav className="space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-xl text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
-                >
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </nav>
+            <SectionNav items={navItems} ariaLabel="Employer section" showPrevNext />
           </aside>
           
-          <main className="flex-1">
+          <main className="flex-1" id="main-content">
             {children}
           </main>
         </div>

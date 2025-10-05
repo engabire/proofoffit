@@ -9,14 +9,18 @@ interface SimpleAuthGuardProps {
   children: React.ReactNode
   requireAuth?: boolean
   redirectTo?: string
-  fallback?: React.ReactNode
+  /**
+   * Optional element shown while auth state is being resolved (loading).
+   * If omitted a default spinner screen is rendered.
+   */
+  loadingFallback?: React.ReactNode
 }
 
 export function SimpleAuthGuard({ 
   children, 
   requireAuth = true, 
   redirectTo = '/auth/signin',
-  fallback 
+  loadingFallback
 }: SimpleAuthGuardProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -49,19 +53,15 @@ export function SimpleAuthGuard({
 
   // Show loading state
   if (isLoading) {
+    if (loadingFallback) return <>{loadingFallback}</>
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" role="status" aria-live="polite">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Checking session…</p>
         </div>
       </div>
     )
-  }
-
-  // Show fallback if provided
-  if (fallback) {
-    return <>{fallback}</>
   }
 
   // Redirect if authentication is required but user is not authenticated

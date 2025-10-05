@@ -2,7 +2,7 @@ import { getCurrentUserWithProfile } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import { SignOutButton } from '@/components/auth/sign-out-button'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import { SectionNav } from '@/components/navigation/section-nav'
 
 export default async function CandidateLayout({
   children,
@@ -40,18 +40,9 @@ export default async function CandidateLayout({
             </Link>
           </div>
           
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden md:flex items-center space-x-2">
+            <SectionNav items={navItems} orientation="horizontal" ariaLabel="Candidate primary" />
+          </div>
 
           <div className="flex items-center space-x-4">
             <span className="text-sm text-muted-foreground">{userData.user.email}</span>
@@ -63,21 +54,10 @@ export default async function CandidateLayout({
       <div className="container py-6">
         <div className="flex flex-col md:flex-row gap-6">
           <aside className="md:w-64 space-y-2">
-            <nav className="space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                >
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </nav>
+            <SectionNav items={navItems} ariaLabel="Candidate section" showPrevNext />
           </aside>
           
-          <main className="flex-1">
+          <main className="flex-1" id="main-content">
             {children}
           </main>
         </div>

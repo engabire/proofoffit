@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 export interface CandidateProfile {
   id: string
   userId: string
+  photoUrl?: string | null
   skills: string[]
   experience: {
     years: number

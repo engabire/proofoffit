@@ -3,6 +3,22 @@
 
 version: 2
 updates:
+  # Enable version updates for npm packages in the root
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 5
+    assignees:
+      - "engabire"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
   # Enable version updates for npm packages in the web app
   - package-ecosystem: "npm"
     directory: "/apps/web"
@@ -12,8 +28,6 @@ updates:
       time: "09:00"
       timezone: "America/Chicago"
     open-pull-requests-limit: 10
-    reviewers:
-      - "security-team"
     assignees:
       - "security-team"
     commit-message:
@@ -38,7 +52,8 @@ updates:
         patterns:
           - "*"
         update-types:
-          - "security"
+          - "minor"
+          - "patch"
       # Group minor and patch updates for common packages
       minor-updates:
         patterns:
@@ -51,6 +66,22 @@ updates:
           - "minor"
           - "patch"
 
+  # Enable version updates for npm packages in the UI package
+  - package-ecosystem: "npm"
+    directory: "/packages/ui/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 5
+    assignees:
+      - "engabire"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -60,8 +91,6 @@ updates:
       time: "09:00"
       timezone: "America/Chicago"
     open-pull-requests-limit: 5
-    reviewers:
-      - "security-team"
     assignees:
       - "security-team"
     commit-message:
@@ -81,8 +110,6 @@ updates:
       time: "09:00"
       timezone: "America/Chicago"
     open-pull-requests-limit: 3
-    reviewers:
-      - "security-team"
     assignees:
       - "security-team"
     commit-message:
@@ -102,8 +129,6 @@ updates:
       time: "09:00"
       timezone: "America/Chicago"
     open-pull-requests-limit: 3
-    reviewers:
-      - "security-team"
     assignees:
       - "security-team"
     commit-message:

@@ -4,6 +4,7 @@ import { Button } from '@proof-of-fit/ui'
 import { Plus, Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { demoUser, demoProfile, demoBullets } from '@/lib/demo-data'
+import { ProfilePhotoCard } from '@/components/candidate/profile-photo-card'
 
 export default function CandidateProfileDemoPage() {
   return (
@@ -22,6 +23,14 @@ export default function CandidateProfileDemoPage() {
           </Link>
         </Button>
       </div>
+
+      <ProfilePhotoCard
+        userId={demoUser.id}
+        profileId={demoProfile.id}
+        initialPhotoUrl={demoProfile.photoUrl}
+        fullName={demoUser.email.split('@')[0]}
+        showStorageHint={false}
+      />
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Profile Overview */}
