@@ -98,6 +98,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
   Breadcrumb,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@proof-of-fit/ui"
 
 // Types
