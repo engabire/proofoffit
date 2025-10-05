@@ -60,7 +60,7 @@ jobs:
       
       - name: Create issue if WIP exceeded
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -120,7 +120,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create weekly retrospective issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const weekStart = new Date();
@@ -196,7 +196,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create backlog hygiene report
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.issues.create({
