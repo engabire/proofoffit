@@ -34,7 +34,6 @@ import {
   Sparkles,
   ChevronRight,
   Quote,
-  Handshake,
   Briefcase,
   GraduationCap,
   User,

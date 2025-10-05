@@ -383,11 +383,11 @@ export default function PressPage() {
               Access our press kit and connect with our media team.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <Badge variant="success" className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
+              <Badge variant="default" className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Media Kit Available
               </Badge>
-              <Badge variant="info" className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2">
+              <Badge variant="default" className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2">
                 <Award className="h-4 w-4 mr-2" />
                 Award-Winning Technology
               </Badge>
@@ -697,7 +697,9 @@ export default function PressPage() {
 
             <Card className="text-center">
               <CardContent className="p-6">
-                <Handshake className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+                <div className="h-12 w-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8" />
+                </div>
                 <h3 className="text-lg font-semibold mb-2">Partnerships</h3>
                 <p className="text-slate-600 dark:text-slate-300 mb-4">
                   Media partnerships and collaboration opportunities

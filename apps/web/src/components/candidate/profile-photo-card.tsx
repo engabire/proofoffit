@@ -122,7 +122,6 @@ export function ProfilePhotoCard({
             .from("candidate_profiles")
             .update({ photo_url: publicUrl })
             .eq("id", nextProfileId)
-            .catch(() => undefined)
         }
       } else {
         let insertedProfileId: string | number | null = null
@@ -156,12 +155,10 @@ export function ProfilePhotoCard({
             .from("candidate_profiles")
             .update({ photo_url: publicUrl })
             .eq("id", nextProfileId)
-            .catch(() => undefined)
           await supabase
             .from("candidate_profiles")
             .update({ photoUrl: publicUrl })
             .eq("id", nextProfileId)
-            .catch(() => undefined)
         }
       }
 
