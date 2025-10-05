@@ -70,7 +70,7 @@ jobs:
             src/test/gifting.test.ts
       
       - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           file: ./apps/web/coverage/lcov.info
           flags: unittests
