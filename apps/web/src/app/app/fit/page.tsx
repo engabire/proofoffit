@@ -105,6 +105,15 @@ import {
   SelectItem,
 } from "@proof-of-fit/ui"
 
+// Additional imports for Select components to ensure they're available
+import {
+  Select as SelectComponent,
+  SelectTrigger as SelectTriggerComponent,
+  SelectValue as SelectValueComponent,
+  SelectContent as SelectContentComponent,
+  SelectItem as SelectItemComponent,
+} from "@proof-of-fit/ui"
+
 // Types
 interface ResumeData {
   id: string
@@ -194,6 +203,9 @@ interface JobPosting {
   companySize?: string
   industry?: string
   experienceLevel?: 'entry' | 'mid' | 'senior' | 'executive'
+  source?: string
+  tos?: { allowed?: boolean; captcha?: boolean }
+  applyUrl?: string
 }
 
 interface FitAnalysis {
@@ -1857,46 +1869,46 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
               </div>
               <div>
                 <Label htmlFor="workType">Work Type</Label>
-                <Select value={filters.workType} onValueChange={(value) => setFilters(prev => ({ ...prev, workType: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="full-time">Full-time</SelectItem>
-                    <SelectItem value="part-time">Part-time</SelectItem>
-                    <SelectItem value="contract">Contract</SelectItem>
-                    <SelectItem value="internship">Internship</SelectItem>
-                  </SelectContent>
-                </Select>
+                <SelectComponent value={filters.workType} onValueChange={(value) => setFilters(prev => ({ ...prev, workType: value }))}>
+                  <SelectTriggerComponent>
+                    <SelectValueComponent placeholder="Select type" />
+                  </SelectTriggerComponent>
+                  <SelectContentComponent>
+                    <SelectItemComponent value="full-time">Full-time</SelectItemComponent>
+                    <SelectItemComponent value="part-time">Part-time</SelectItemComponent>
+                    <SelectItemComponent value="contract">Contract</SelectItemComponent>
+                    <SelectItemComponent value="internship">Internship</SelectItemComponent>
+                  </SelectContentComponent>
+                </SelectComponent>
               </div>
               <div>
                 <Label htmlFor="experienceLevel">Experience Level</Label>
-                <Select value={filters.experienceLevel} onValueChange={(value) => setFilters(prev => ({ ...prev, experienceLevel: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="entry">Entry Level</SelectItem>
-                    <SelectItem value="mid">Mid Level</SelectItem>
-                    <SelectItem value="senior">Senior Level</SelectItem>
-                    <SelectItem value="executive">Executive</SelectItem>
-                  </SelectContent>
-                </Select>
+                <SelectComponent value={filters.experienceLevel} onValueChange={(value) => setFilters(prev => ({ ...prev, experienceLevel: value }))}>
+                  <SelectTriggerComponent>
+                    <SelectValueComponent placeholder="Select level" />
+                  </SelectTriggerComponent>
+                  <SelectContentComponent>
+                    <SelectItemComponent value="entry">Entry Level</SelectItemComponent>
+                    <SelectItemComponent value="mid">Mid Level</SelectItemComponent>
+                    <SelectItemComponent value="senior">Senior Level</SelectItemComponent>
+                    <SelectItemComponent value="executive">Executive</SelectItemComponent>
+                  </SelectContentComponent>
+                </SelectComponent>
               </div>
               <div>
                 <Label htmlFor="salaryRange">Salary Range</Label>
-                <Select value={filters.salaryRange} onValueChange={(value) => setFilters(prev => ({ ...prev, salaryRange: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0-50k">$0 - $50k</SelectItem>
-                    <SelectItem value="50k-75k">$50k - $75k</SelectItem>
-                    <SelectItem value="75k-100k">$75k - $100k</SelectItem>
-                    <SelectItem value="100k-150k">$100k - $150k</SelectItem>
-                    <SelectItem value="150k+">$150k+</SelectItem>
-                  </SelectContent>
-                </Select>
+                <SelectComponent value={filters.salaryRange} onValueChange={(value) => setFilters(prev => ({ ...prev, salaryRange: value }))}>
+                  <SelectTriggerComponent>
+                    <SelectValueComponent placeholder="Select range" />
+                  </SelectTriggerComponent>
+                  <SelectContentComponent>
+                    <SelectItemComponent value="0-50k">$0 - $50k</SelectItemComponent>
+                    <SelectItemComponent value="50k-75k">$50k - $75k</SelectItemComponent>
+                    <SelectItemComponent value="75k-100k">$75k - $100k</SelectItemComponent>
+                    <SelectItemComponent value="100k-150k">$100k - $150k</SelectItemComponent>
+                    <SelectItemComponent value="150k+">$150k+</SelectItemComponent>
+                  </SelectContentComponent>
+                </SelectComponent>
               </div>
             </div>
             <div className="flex items-center justify-between mt-4">
