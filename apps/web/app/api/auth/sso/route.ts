@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const { accessToken, userInfo } = result
 
     // Create Supabase client
-  const supabase = createRouteHandlerClient({ cookies: async () => cookies() })
+  const supabase = createRouteHandlerClient({ cookies })
 
     // Check if user exists
     const { data: existingUser } = await supabase.auth.getUser()

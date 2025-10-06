@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { log } from '@/src/lib/log'
+import { log } from '@/lib/log'
 
 type Handler<T = any> = (req: NextRequest) => Promise<NextResponse<T>> | NextResponse<T>
 

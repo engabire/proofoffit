@@ -40,7 +40,7 @@ function sanitizeInput(input: string): string {
 export async function GET(req: NextRequest) {
   try {
     // Rate limiting
-    const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown'
+    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
     if (!checkRateLimit(ip)) {
       return NextResponse.json(
         { error: 'Rate limit exceeded. Please try again later.' },

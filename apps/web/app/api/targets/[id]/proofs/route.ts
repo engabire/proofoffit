@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = await requireUserId();
-    const { id } = params;
+    const { id } = await params;
     const { proofId, weight } = await req.json();
 
     const target = await prisma.target.findFirst({
@@ -46,11 +46,11 @@ export async function POST(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = await requireUserId();
-    const { id } = params;
+    const { id } = await params;
     const { searchParams } = new URL(req.url);
     const proofId = searchParams.get("proofId");
 

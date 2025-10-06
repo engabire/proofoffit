@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Get user ID from headers (assuming you have auth middleware)
-    const headersList = headers()
+    const headersList = await headers()
     const userId = headersList.get('x-user-id') // Adjust based on your auth setup
     
     if (!userId) {
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Get user ID from headers
-    const headersList = headers()
+    const headersList = await headers()
     const userId = headersList.get('x-user-id')
     
     if (!userId) {

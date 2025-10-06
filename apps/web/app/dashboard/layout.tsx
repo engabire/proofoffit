@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { SecureSignOutButton } from '@/components/auth/secure-sign-out-button'
 import { BusinessHubMenu } from '@/components/dashboard/business-hub-menu'
@@ -9,7 +9,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies: async () => cookies() })
+  const supabase = createServerComponentClient({ cookies })
   const {
     data: { user },
   } = await supabase.auth.getUser()

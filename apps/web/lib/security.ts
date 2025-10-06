@@ -14,8 +14,8 @@ export function generateCorrelationId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
-export function getSecurityContext(req: Request, userId?: string): SecurityContext {
-  const headersList = headers();
+export async function getSecurityContext(req: Request, userId?: string): Promise<SecurityContext> {
+  const headersList = await headers();
   const forwarded = req.headers.get("x-forwarded-for");
   const realIp = headersList.get("x-real-ip");
   const userAgent = req.headers.get("user-agent") || "";

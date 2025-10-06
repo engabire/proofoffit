@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 import { giftingStripe } from '@/lib/gifting/stripe'
 import { isSupabaseConfigured, env } from '@/lib/env'
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid message' }, { status: 400 })
     }
 
-  const supabase = createRouteHandlerClient({ cookies: async () => cookies() })
+  const supabase = createRouteHandlerClient({ cookies })
     const {
       data: { user },
     } = await supabase.auth.getUser()

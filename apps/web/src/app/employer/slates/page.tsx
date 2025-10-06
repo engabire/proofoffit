@@ -19,7 +19,7 @@ export default async function SlatesPage() {
   }
 
   // Only create Supabase client if environment variables are configured
-  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies: async () => cookies() }) : null
+  const supabase = isSupabaseConfigured() ? createServerComponentClient({ cookies }) : null
 
   // Get employer intakes with their slates
   const { data: intakes } = supabase ? await supabase

@@ -1,15 +1,16 @@
 import { notFound } from "next/navigation";
 
 interface AuditPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
-export default function AuditPage({ params }: AuditPageProps) {
+export default async function AuditPage({ params }: AuditPageProps) {
+  const { token } = await params
   // TODO: Implement audit page when auditLink and target models are available
   
-  if (!params.token) {
+  if (!token) {
     notFound();
   }
 
@@ -23,7 +24,7 @@ export default function AuditPage({ params }: AuditPageProps) {
           This feature is currently being developed.
         </p>
         <p className="text-sm text-gray-500">
-          Token: {params.token.substring(0, 8)}...
+          Token: {token.substring(0, 8)}...
         </p>
       </div>
     </div>

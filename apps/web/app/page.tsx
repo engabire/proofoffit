@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@proo
 import { Badge } from "@proof-of-fit/ui";
 import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from "lucide-react";
 
+export const dynamic = 'force-dynamic'
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

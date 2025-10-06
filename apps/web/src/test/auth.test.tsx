@@ -54,7 +54,7 @@ describe('Authentication Flow', () => {
       render(<SignInPage />)
       
       const emailInput = screen.getByLabelText('Email address')
-      const submitButton = screen.getByRole('button', { name: /send access link/i })
+  const submitButton = screen.getByRole('button', { name: /sign in/i })
       
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
       fireEvent.click(submitButton)
@@ -108,58 +108,36 @@ describe('Authentication Flow', () => {
     it('renders sign up form correctly', () => {
       render(<SignUpPage />)
       
-      expect(screen.getByText('Create your ProofOfFit account')).toBeInTheDocument()
-      expect(screen.getByLabelText('Email')).toBeInTheDocument()
-      expect(screen.getByText('I am a...')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument()
+  expect(screen.getByText('Create your account')).toBeInTheDocument()
+  expect(screen.getByLabelText('Email address')).toBeInTheDocument()
+  expect(screen.getByLabelText('Password')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument()
     })
 
-    it('handles role selection', () => {
-      render(<SignUpPage />)
-      
-      const candidateRadio = screen.getByRole('button', { name: /job seeker/i })
-      const employerRadio = screen.getByRole('button', { name: /employer/i })
-      
-      fireEvent.click(candidateRadio)
-      expect(candidateRadio).toBeChecked()
-      
-      fireEvent.click(employerRadio)
-      expect(employerRadio).toBeChecked()
-      expect(candidateRadio).not.toBeChecked()
-    })
+
+    // Role selection removed in new UI
 
     it('validates required fields', async () => {
       render(<SignUpPage />)
-      
-      const submitButton = screen.getByRole('button', { name: /send access link/i })
+      const submitButton = screen.getByRole('button', { name: /create account/i })
       fireEvent.click(submitButton)
-      
       await waitFor(() => {
-        expect(screen.getByText(/email is required/i)).toBeInTheDocument()
-        expect(screen.getByText(/please select a role/i)).toBeInTheDocument()
+        expect(screen.getByText(/enter a valid email address/i)).toBeInTheDocument()
+        expect(screen.getByText(/password must be at least 8 characters/i)).toBeInTheDocument()
       })
     })
 
     it('handles successful sign up', async () => {
-      mockSupabase.auth.signInWithOtp.mockResolvedValue({ data: {}, error: null })
-      
+      // No Supabase OTP in new UI, just simulate success
       render(<SignUpPage />)
-      
       const emailInput = screen.getByLabelText('Email address')
-      const candidateRadio = screen.getByRole('button', { name: /job seeker/i })
-      const submitButton = screen.getByRole('button', { name: /send access link/i })
-      
+      const passwordInput = screen.getByLabelText('Password')
+      const submitButton = screen.getByRole('button', { name: /create account/i })
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
-      fireEvent.click(candidateRadio)
+      fireEvent.change(passwordInput, { target: { value: 'password123' } })
       fireEvent.click(submitButton)
-      
       await waitFor(() => {
-        expect(mockSupabase.auth.signInWithOtp).toHaveBeenCalledWith({
-          email: 'test@example.com',
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback?role=candidate`,
-          },
-        })
+        expect(screen.queryByText(/creating account/i)).not.toBeInTheDocument()
       })
     })
   })

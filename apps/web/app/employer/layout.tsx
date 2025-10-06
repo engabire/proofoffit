@@ -4,6 +4,9 @@ import { SignOutButton } from '@/components/auth/sign-out-button'
 import Link from 'next/link'
 import { SectionNav } from '@/components/navigation/section-nav'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function EmployerLayout({
   children,
 }: {

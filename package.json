@@ -16,6 +16,7 @@
     "clean": "turbo run clean",
     "type-check": "turbo run type-check",
     "preflight": "bash ./scripts/preflight.sh",
+    "validate-migrations": "bash ./scripts/validate-migrations.sh",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

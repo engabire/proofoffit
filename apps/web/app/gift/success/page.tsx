@@ -6,15 +6,16 @@ import { PageNav } from '@/components/system/page-nav'
 import ShareGiftButtons from './share-gift'
 
 interface GiftSuccessPageProps {
-  searchParams: {
+  searchParams: Promise<{
     code?: string
     months?: string
-  }
+  }>
 }
 
-export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) {
-  const code = searchParams.code ?? ''
-  const months = Number.parseInt(searchParams.months || '0', 10)
+export default async function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) {
+  const { code: codeParam, months: monthsParam } = await searchParams
+  const code = codeParam ?? ''
+  const months = Number.parseInt(monthsParam || '0', 10)
   const giftValue = months * 29 // Assuming $29/month
 
   return (
