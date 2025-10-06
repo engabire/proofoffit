@@ -22,15 +22,18 @@ const createQueryBuilderMock = (): QueryBuilderMock => {
 
 const mockQueryBuilder = createQueryBuilderMock()
 
+
 const mockSupabase = {
   from: jest.fn(() => mockQueryBuilder),
 }
 
-jest.mock('@supabase/auth-helpers-nextjs', () => ({
-  createClientComponentClient: () => mockSupabase,
-}))
+beforeAll(() => {
+  jest.mock('@supabase/auth-helpers-nextjs', () => ({
+    createClientComponentClient: () => mockSupabase,
+  }))
+})
 
-import { policyEngine } from '@/lib/policy-engine'
+const { policyEngine } = require('@/lib/policy-engine')
 
 describe('Policy Engine', () => {
   beforeEach(() => {

@@ -20,26 +20,64 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
   const router = useRouter()
+
+  // Validation helpers
+  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  const validatePassword = (value: string) => value.length >= 8
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    let valid = true
     setError('')
 
+    // Validate email
+    if (!validateEmail(email)) {
+      setEmailError('Enter a valid email address')
+      valid = false
+    } else {
+      setEmailError('')
+    }
+    // Validate password
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 8 characters')
+      valid = false
+    } else {
+      setPasswordError('')
+    }
+
+    if (!valid) return
+
+    setIsLoading(true)
     try {
       // Simulate authentication
       await new Promise(resolve => setTimeout(resolve, 1000))
-      
       // For demo purposes, accept any email/password
       console.log('Sign in attempt:', { email, password })
-      
       // Redirect to dashboard
       router.push('/dashboard')
     } catch (err) {
       setError('Sign in failed. Please try again.')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // Blur handlers for immediate validation
+  const handleEmailBlur = () => {
+    if (!validateEmail(email)) {
+      setEmailError('Enter a valid email address')
+    } else {
+      setEmailError('')
+    }
+  }
+  const handlePasswordBlur = () => {
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 8 characters')
+    } else {
+      setPasswordError('')
     }
   }
 
@@ -82,11 +120,17 @@ export default function SignInPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={handleEmailBlur}
                     className="pl-10"
                     placeholder="Enter your email"
+                    aria-describedby={emailError ? 'email-error' : undefined}
+                    aria-invalid={!!emailError || undefined}
                   />
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 </div>
+                {emailError && (
+                  <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">{emailError}</p>
+                )}
               </div>
 
               <div>
@@ -100,8 +144,11 @@ export default function SignInPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onBlur={handlePasswordBlur}
                     className="pl-10 pr-10"
                     placeholder="Enter your password"
+                    aria-describedby={passwordError ? 'password-error' : undefined}
+                    aria-invalid={!!passwordError || undefined}
                   />
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <button
@@ -116,6 +163,9 @@ export default function SignInPage() {
                     )}
                   </button>
                 </div>
+                {passwordError && (
+                  <p id="password-error" className="mt-1 text-sm text-red-600" role="alert">{passwordError}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">

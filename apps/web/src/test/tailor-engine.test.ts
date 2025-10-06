@@ -23,15 +23,18 @@ const createQueryBuilderMock = (): QueryBuilderMock => {
 
 const mockQueryBuilder = createQueryBuilderMock()
 
+
 const mockSupabase = {
   from: jest.fn(() => mockQueryBuilder),
 }
 
-jest.mock('@supabase/auth-helpers-nextjs', () => ({
-  createClientComponentClient: () => mockSupabase,
-}))
+beforeAll(() => {
+  jest.mock('@supabase/auth-helpers-nextjs', () => ({
+    createClientComponentClient: () => mockSupabase,
+  }))
+})
 
-import { tailorEngine } from '@/lib/tailor-engine'
+const { tailorEngine } = require('@/lib/tailor-engine')
 
 describe('Tailor Engine', () => {
   beforeEach(() => {
