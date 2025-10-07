@@ -1121,10 +1121,13 @@ export default function ProofOfFitLanding() {
     const error = searchParams.get('error');
     
     if (code || error) {
-      // Redirect to the proper auth callback page with the query parameters
-      const currentUrl = new URL(window.location.href);
-      const callbackUrl = `/auth/callback${currentUrl.search}`;
-      router.replace(callbackUrl);
+      // Only redirect if we're not already on the callback page
+      if (!window.location.pathname.includes('/auth/callback')) {
+        // Redirect to the proper auth callback page with the query parameters
+        const currentUrl = new URL(window.location.href);
+        const callbackUrl = `/auth/callback${currentUrl.search}`;
+        router.replace(callbackUrl);
+      }
     }
   }, [searchParams, router]);
 

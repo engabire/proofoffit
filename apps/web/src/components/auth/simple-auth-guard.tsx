@@ -64,11 +64,17 @@ export function SimpleAuthGuard({
     )
   }
 
+  // Handle redirects in useEffect to prevent infinite loops
+  useEffect(() => {
+    if (requireAuth && !isAuthenticated && !isLoading) {
+      router.push(redirectTo)
+    } else if (!requireAuth && isAuthenticated && (pathname === '/auth/signin' || pathname === '/auth/signup')) {
+      router.push('/dashboard')
+    }
+  }, [requireAuth, isAuthenticated, isLoading, pathname, redirectTo, router])
+
   // Redirect if authentication is required but user is not authenticated
   if (requireAuth && !isAuthenticated) {
-    if (typeof window !== 'undefined') {
-      router.push(redirectTo)
-    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -85,9 +91,6 @@ export function SimpleAuthGuard({
 
   // Redirect if user is authenticated but shouldn't be on auth pages
   if (!requireAuth && isAuthenticated && (pathname === '/auth/signin' || pathname === '/auth/signup')) {
-    if (typeof window !== 'undefined') {
-      router.push('/dashboard')
-    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
