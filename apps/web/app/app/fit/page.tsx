@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import React, { useState, useEffect, useCallback, useRef, useMemo, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { startTimer, stopTimer } from "../../../lib/analytics"
@@ -3134,8 +3134,8 @@ function ResultsStep({
   )
 }
 
-// Main Component
-export default function FitReportPage() {
+// Component that uses searchParams
+function FitReportPageContent() {
   const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(1)
   const [resume, setResume] = useState<ResumeData | null>(null)
@@ -3386,5 +3386,21 @@ export default function FitReportPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Main Component with Suspense wrapper
+export default function FitReportPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading Fit Report...</p>
+        </div>
+      </div>
+    }>
+      <FitReportPageContent />
+    </Suspense>
   )
 }
