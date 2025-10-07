@@ -1,0 +1,37 @@
+# Global code owners
+* @engabire
+
+# Security-related files
+.github/ @engabire
+.github/workflows/ @engabire
+.github/dependabot.yml @engabire
+.gitleaks.toml @engabire
+audit-ci.json @engabire
+
+# Configuration files
+vercel.json @engabire
+.vercelignore @engabire
+next.config.js @engabire
+tailwind.config.js @engabire
+tsconfig.json @engabire
+
+# Package files
+package.json @engabire
+package-lock.json @engabire
+
+# Environment files
+.env* @engabire
+
+# Database files
+prisma/ @engabire
+infra/ @engabire
+
+# Security files
+security/ @engabire
+legal/ @engabire
+
+# Documentation
+*.md @engabire
+
+# Scripts
+scripts/ @engabire

@@ -1,0 +1,314 @@
+name: Branch Protection Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to protect (default: main)'
+        required: false
+        default: 'main'
+      enforce_admins:
+        description: 'Enforce protection for admins'
+        required: false
+        default: true
+      required_status_checks:
+        description: 'Required status checks'
+        required: false
+        default: '["CI/CD Pipeline", "Security Scan", "Build Application"]'
+      required_reviews:
+        description: 'Number of required reviews'
+        required: false
+        default: 1
+      dismiss_stale_reviews:
+        description: 'Dismiss stale reviews'
+        required: false
+        default: true
+      require_code_owner_reviews:
+        description: 'Require code owner reviews'
+        required: false
+        default: true
+      require_last_push_approval:
+        description: 'Require last push approval'
+        required: false
+        default: true
+      required_linear_history:
+        description: 'Require linear history'
+        required: false
+        default: true
+      allow_force_pushes:
+        description: 'Allow force pushes'
+        required: false
+        default: false
+      allow_deletions:
+        description: 'Allow deletions'
+        required: false
+        default: false
+      block_creations:
+        description: 'Block creations'
+        required: false
+        default: true
+      lock_branch:
+        description: 'Lock branch'
+        required: false
+        default: false
+      allow_fork_syncing:
+        description: 'Allow fork syncing'
+        required: false
+        default: true
+
+jobs:
+  setup-branch-protection:
+    name: Setup Branch Protection
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
+      checks: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup branch protection
+        run: |
+          echo "🔒 Setting up branch protection for ${{ github.event.inputs.branch || 'main' }}"
+          
+          # Create branch protection rule
+          gh api \
+            --method PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/branches/${{ github.event.inputs.branch || 'main' }}/protection \
+            --field required_status_checks='{"strict":true,"contexts":${{ github.event.inputs.required_status_checks || '["CI/CD Pipeline", "Security Scan", "Build Application"]' }}}' \
+            --field enforce_admins=${{ github.event.inputs.enforce_admins || 'true' }} \
+            --field required_pull_request_reviews='{"required_approving_review_count":${{ github.event.inputs.required_reviews || '1' }},"dismiss_stale_reviews":${{ github.event.inputs.dismiss_stale_reviews || 'true' }},"require_code_owner_reviews":${{ github.event.inputs.require_code_owner_reviews || 'true' }},"require_last_push_approval":${{ github.event.inputs.require_last_push_approval || 'true' }}}' \
+            --field restrictions='{"users":[],"teams":[],"apps":[]}' \
+            --field required_linear_history=${{ github.event.inputs.required_linear_history || 'true' }} \
+            --field allow_force_pushes=${{ github.event.inputs.allow_force_pushes || 'false' }} \
+            --field allow_deletions=${{ github.event.inputs.allow_deletions || 'false' }} \
+            --field block_creations='{"enabled":${{ github.event.inputs.block_creations || 'true' }}}' \
+            --field lock_branch=${{ github.event.inputs.lock_branch || 'false' }} \
+            --field allow_fork_syncing=${{ github.event.inputs.allow_fork_syncing || 'true' }}
+          
+          echo "✅ Branch protection configured successfully"
+      
+      - name: Verify branch protection
+        run: |
+          echo "🔍 Verifying branch protection settings..."
+          gh api \
+            --method GET \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/branches/${{ github.event.inputs.branch || 'main' }}/protection \
+            | jq '.'
+          
+          echo "✅ Branch protection verification completed"
+      
+      - name: Create CODEOWNERS file
+        run: |
+          echo "👥 Creating CODEOWNERS file..."
+          cat > CODEOWNERS << 'EOF'
+          # Global code owners
+          * @engabire
+          
+          # Security-related files
+          .github/ @engabire
+          .github/workflows/ @engabire
+          .github/dependabot.yml @engabire
+          .gitleaks.toml @engabire
+          audit-ci.json @engabire
+          
+          # Configuration files
+          vercel.json @engabire
+          .vercelignore @engabire
+          next.config.js @engabire
+          tailwind.config.js @engabire
+          tsconfig.json @engabire
+          
+          # Package files
+          package.json @engabire
+          package-lock.json @engabire
+          
+          # Environment files
+          .env* @engabire
+          
+          # Database files
+          prisma/ @engabire
+          infra/ @engabire
+          
+          # Security files
+          security/ @engabire
+          legal/ @engabire
+          
+          # Documentation
+          *.md @engabire
+          
+          # Scripts
+          scripts/ @engabire
+          EOF
+          
+          echo "✅ CODEOWNERS file created"
+      
+      - name: Create security issue template
+        run: |
+          echo "🚨 Creating security issue template..."
+          mkdir -p .github/ISSUE_TEMPLATE
+          
+          cat > .github/ISSUE_TEMPLATE/security-vulnerability.md << 'EOF'
+          ---
+          name: Security Vulnerability Report
+          about: Report a security vulnerability in ProofOfFit
+          title: '[SECURITY] '
+          labels: ['security', 'vulnerability', 'urgent']
+          assignees: ['engabire']
+          
+          ---
+          
+          ## 🚨 Security Vulnerability Report
+          
+          **⚠️ IMPORTANT: This is a security vulnerability report. Please do not share this information publicly.**
+          
+          ### Vulnerability Details
+          
+          **Type of vulnerability:**
+          - [ ] SQL Injection
+          - [ ] Cross-Site Scripting (XSS)
+          - [ ] Cross-Site Request Forgery (CSRF)
+          - [ ] Authentication/Authorization Bypass
+          - [ ] Information Disclosure
+          - [ ] Code Injection
+          - [ ] Other (please specify)
+          
+          **Severity:**
+          - [ ] Critical
+          - [ ] High
+          - [ ] Medium
+          - [ ] Low
+          
+          **Affected components:**
+          - [ ] Frontend (React/Next.js)
+          - [ ] Backend (API routes)
+          - [ ] Database (Prisma/Supabase)
+          - [ ] Authentication (Supabase Auth)
+          - [ ] Infrastructure (Vercel)
+          - [ ] Other (please specify)
+          
+          ### Description
+          
+          Please provide a detailed description of the vulnerability:
+          
+          ```
+          [Describe the vulnerability here]
+          ```
+          
+          ### Steps to Reproduce
+          
+          1. [Step 1]
+          2. [Step 2]
+          3. [Step 3]
+          
+          ### Expected Behavior
+          
+          [What should happen]
+          
+          ### Actual Behavior
+          
+          [What actually happens]
+          
+          ### Impact Assessment
+          
+          **Potential impact:**
+          - [ ] Data breach
+          - [ ] Service disruption
+          - [ ] Unauthorized access
+          - [ ] Data manipulation
+          - [ ] Other (please specify)
+          
+          **Affected users:**
+          - [ ] All users
+          - [ ] Specific user groups
+          - [ ] Admin users only
+          - [ ] Other (please specify)
+          
+          ### Additional Information
+          
+          **Screenshots/Logs:**
+          [If applicable, add screenshots or logs]
+          
+          **Environment:**
+          - OS: [e.g., Windows 10, macOS 12, Ubuntu 20.04]
+          - Browser: [e.g., Chrome 95, Firefox 94, Safari 15]
+          - Version: [e.g., v1.2.3]
+          
+          **Additional context:**
+          [Any other relevant information]
+          
+          ### Contact Information
+          
+          **Preferred contact method:**
+          - [ ] Email
+          - [ ] GitHub private message
+          - [ ] Other (please specify)
+          
+          **Contact details:**
+          [Your contact information]
+          
+          ---
+          
+          **Thank you for reporting this security vulnerability. We take security seriously and will investigate this issue promptly.**
+          EOF
+          
+          echo "✅ Security issue template created"
+      
+      - name: Setup repository security settings
+        run: |
+          echo "🔒 Configuring repository security settings..."
+          
+          # Enable vulnerability alerts
+          gh api \
+            --method PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/vulnerability-alerts
+          
+          # Enable security advisories
+          gh api \
+            --method PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/security-advisories
+          
+          echo "✅ Repository security settings configured"
+      
+      - name: Summary
+        run: |
+          echo "## 🔒 Branch Protection Setup Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Completed Actions:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch Protection:** Configured for \`${{ github.event.inputs.branch || 'main' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Required Reviews:** ${{ github.event.inputs.required_reviews || '1' }} reviewer(s)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status Checks:** ${{ github.event.inputs.required_status_checks || '["CI/CD Pipeline", "Security Scan", "Build Application"]' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Admin Enforcement:** ${{ github.event.inputs.enforce_admins || 'true' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Force Push:** ${{ github.event.inputs.allow_force_pushes || 'false' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Linear History:** ${{ github.event.inputs.required_linear_history || 'true' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **CODEOWNERS:** Created with proper ownership" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Template:** Created for vulnerability reports" >> $GITHUB_STEP_SUMMARY
+          echo "- **Vulnerability Alerts:** Enabled" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Advisories:** Enabled" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🛡️ Security Features:" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch protection prevents unauthorized changes" >> $GITHUB_STEP_SUMMARY
+          echo "- Required reviews ensure code quality" >> $GITHUB_STEP_SUMMARY
+          echo "- Status checks prevent broken code from merging" >> $GITHUB_STEP_SUMMARY
+          echo "- Admin enforcement applies rules to all users" >> $GITHUB_STEP_SUMMARY
+          echo "- Force push prevention maintains history integrity" >> $GITHUB_STEP_SUMMARY
+          echo "- Linear history prevents complex merge conflicts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links:" >> $GITHUB_STEP_SUMMARY
+          echo "- [Branch Protection Settings](https://github.com/${{ github.repository }}/settings/branches)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Security Tab](https://github.com/${{ github.repository }}/security)" >> $GITHUB_STEP_SUMMARY
+          echo "- [CODEOWNERS File](https://github.com/${{ github.repository }}/blob/main/CODEOWNERS)" >> $GITHUB_STEP_SUMMARY

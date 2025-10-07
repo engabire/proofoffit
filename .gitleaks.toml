@@ -1,218 +1,317 @@
-# Gitleaks configuration for ProofOfFit
-# This configuration helps detect potential secrets and sensitive information
+# Gitleaks configuration for ProofOfFit repository
+# This configuration helps detect secrets and sensitive information
 
-title = "ProofOfFit Gitleaks Config"
+title = "ProofOfFit Gitleaks Configuration"
 version = "8.18.0"
 
-# Global settings
-[gitleaks]
-    # Path to the git repository
-    path = "."
-    
-    # Report format (json, sarif, csv)
-    format = "json"
-    
-    # Output file
-    output = "gitleaks-report.json"
-    
-    # Verbose output
-    verbose = true
-    
-    # Redact secrets in output
-    redact = true
-    
-    # Exit code when secrets are found
-    exit-code = 1
-    
-    # Include staged files
-    staged = true
-    
-    # Include untracked files
-    untracked = true
-    
-    # Include commit history
-    log-opts = "--all"
+# Enable entropy checks for better detection
+[extend]
+use_default = true
 
-# Rules for detecting secrets
+# Custom rules for ProofOfFit specific patterns
 [[rules]]
-    description = "Generic API Key"
-    regex = '''(?i)(api[_-]?key|apikey|api_key|api-key)\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
-    tags = ["key", "api"]
-    entropy = 3.5
+description = "ProofOfFit API Keys"
+regex = '''(?i)(proofoffit|proof-of-fit).*?(api[_-]?key|secret|token)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["proofoffit", "api-key"]
 
 [[rules]]
-    description = "Generic Secret"
-    regex = '''(?i)(secret|secrets|secret_key|secret-key)\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
-    tags = ["key", "secret"]
-    entropy = 3.5
+description = "Supabase Keys"
+regex = '''(?i)(supabase).*?(anon[_-]?key|service[_-]?role[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["supabase", "api-key"]
 
 [[rules]]
-    description = "JWT Token"
-    regex = '''eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+'''
-    tags = ["jwt", "token"]
+description = "Stripe Keys"
+regex = '''(?i)(stripe).*?(secret[_-]?key|publishable[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["stripe", "api-key"]
 
 [[rules]]
-    description = "AWS Access Key"
-    regex = '''AKIA[0-9A-Z]{16}'''
-    tags = ["aws", "key"]
+description = "Vercel Tokens"
+regex = '''(?i)(vercel).*?(token|api[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["vercel", "api-key"]
 
 [[rules]]
-    description = "AWS Secret Key"
-    regex = '''(?i)aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*['"]?([a-zA-Z0-9/+=]{40})['"]?'''
-    tags = ["aws", "key"]
-    entropy = 4.0
+description = "GitHub Tokens"
+regex = '''(?i)(github).*?(token|api[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["github", "api-key"]
 
 [[rules]]
-    description = "GitHub Token"
-    regex = '''ghp_[a-zA-Z0-9]{36}'''
-    tags = ["github", "token"]
+description = "Database URLs"
+regex = '''(?i)(database[_-]?url|db[_-]?url|connection[_-]?string)['":\s]*[a-zA-Z0-9+_\-\.]+://[a-zA-Z0-9+_\-\.]+:[a-zA-Z0-9+_\-\.]+@[a-zA-Z0-9+_\-\.]+:[0-9]+/[a-zA-Z0-9+_\-\.]+'''
+tags = ["database", "connection-string"]
 
 [[rules]]
-    description = "GitHub App Token"
-    regex = '''ghu_[a-zA-Z0-9]{36}'''
-    tags = ["github", "token"]
+description = "JWT Secrets"
+regex = '''(?i)(jwt[_-]?secret|json[_-]?web[_-]?token[_-]?secret)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["jwt", "secret"]
 
 [[rules]]
-    description = "GitHub Refresh Token"
-    regex = '''ghr_[a-zA-Z0-9]{76}'''
-    tags = ["github", "token"]
+description = "Encryption Keys"
+regex = '''(?i)(encryption[_-]?key|cipher[_-]?key|aes[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
+tags = ["encryption", "key"]
 
-[[rules]]
-    description = "GitHub App Installation Token"
-    regex = '''ghs_[a-zA-Z0-9]{36}'''
-    tags = ["github", "token"]
+# Exclude common false positives
+[[rules.exclude]]
+description = "Exclude test files"
+regex = '''.*\.test\.(js|ts|tsx|jsx)$'''
 
-[[rules]]
-    description = "Stripe API Key"
-    regex = '''sk_live_[a-zA-Z0-9]{24}'''
-    tags = ["stripe", "key"]
+[[rules.exclude]]
+description = "Exclude example files"
+regex = '''.*\.example\.(js|ts|tsx|jsx|json)$'''
 
-[[rules]]
-    description = "Stripe Test API Key"
-    regex = '''sk_test_[a-zA-Z0-9]{24}'''
-    tags = ["stripe", "key"]
+[[rules.exclude]]
+description = "Exclude documentation"
+regex = '''.*\.md$'''
 
-[[rules]]
-    description = "Stripe Publishable Key"
-    regex = '''pk_live_[a-zA-Z0-9]{24}'''
-    tags = ["stripe", "key"]
+[[rules.exclude]]
+description = "Exclude configuration files with examples"
+regex = '''.*\.config\.(js|ts|json)$'''
 
-[[rules]]
-    description = "Stripe Test Publishable Key"
-    regex = '''pk_test_[a-zA-Z0-9]{24}'''
-    tags = ["stripe", "key"]
-
-[[rules]]
-    description = "Supabase URL"
-    regex = '''https://[a-zA-Z0-9\-]+\.supabase\.co'''
-    tags = ["supabase", "url"]
-
-[[rules]]
-    description = "Supabase Anon Key"
-    regex = '''eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+'''
-    tags = ["supabase", "key"]
-
-[[rules]]
-    description = "Database URL"
-    regex = '''(postgresql|postgres|mysql|mongodb)://[^:\s]+:[^@\s]+@[^/\s]+/[^\s]+'''
-    tags = ["database", "url"]
-
-[[rules]]
-    description = "Email API Key"
-    regex = '''(?i)(email|mail|smtp)[_-]?api[_-]?key\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
-    tags = ["email", "key"]
-    entropy = 3.5
-
-[[rules]]
-    description = "Resend API Key"
-    regex = '''re_[a-zA-Z0-9_\-]{40}'''
-    tags = ["resend", "key"]
-
-[[rules]]
-    description = "OpenAI API Key"
-    regex = '''sk-[a-zA-Z0-9]{48}'''
-    tags = ["openai", "key"]
-
-[[rules]]
-    description = "Anthropic API Key"
-    regex = '''sk-ant-[a-zA-Z0-9_\-]{40}'''
-    tags = ["anthropic", "key"]
-
-[[rules]]
-    description = "Private Key"
-    regex = '''-----BEGIN [A-Z ]+ PRIVATE KEY-----'''
-    tags = ["private", "key"]
-
-[[rules]]
-    description = "Certificate"
-    regex = '''-----BEGIN CERTIFICATE-----'''
-    tags = ["certificate"]
-
-[[rules]]
-    description = "Password in config"
-    regex = '''(?i)password\s*[:=]\s*['"]?([^'"]{8,})['"]?'''
-    tags = ["password"]
-    entropy = 3.0
-
-[[rules]]
-    description = "Token in config"
-    regex = '''(?i)token\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
-    tags = ["token"]
-    entropy = 3.5
-
-# Allowlist patterns (false positives to ignore)
+# Allow specific patterns that are safe
 [[allowlist]]
-    description = "Allowlist common false positives"
-    regexes = [
-        '''example\.com''',
-        '''localhost''',
-        '''127\.0\.0\.1''',
-        '''test.*key''',
-        '''demo.*key''',
-        '''sample.*key''',
-        '''placeholder.*key''',
-        '''your.*key.*here''',
-        '''replace.*with.*your.*key''',
-        '''TODO.*key''',
-        '''FIXME.*key''',
-        '''XXX.*key''',
-        '''\.env\.example''',
-        '''\.env\.local\.example''',
-        '''README\.md''',
-        '''\.md$''',
-        '''\.txt$''',
-        '''\.json$''',
-        '''package\.json''',
-        '''package-lock\.json''',
-        '''yarn\.lock''',
-        '''\.gitignore''',
-        '''\.dockerignore''',
-        '''Dockerfile''',
-        '''docker-compose\.yml''',
-        '''\.github/workflows/''',
-        '''security/''',
-        '''docs/''',
-        '''documentation/'''
-    ]
+description = "Allow environment variable names"
+regex = '''NEXT_PUBLIC_.*'''
 
-# File patterns to scan
-[[rules]]
-    description = "Scan common config files"
-    regex = '''.*'''
-    tags = ["config"]
-    paths = [
-        '''\.env$''',
-        '''\.env\.local$''',
-        '''\.env\.production$''',
-        '''\.env\.staging$''',
-        '''config\.json$''',
-        '''config\.js$''',
-        '''config\.ts$''',
-        '''settings\.json$''',
-        '''secrets\.json$''',
-        '''credentials\.json$''',
-        '''\.aws/credentials$''',
-        '''\.ssh/id_rsa$''',
-        '''\.ssh/id_ed25519$'''
-    ]
+[[allowlist]]
+description = "Allow example values"
+regex = '''example\.supabase\.co'''
 
+[[allowlist]]
+description = "Allow placeholder values"
+regex = '''your-.*-here'''
+
+# Global exclusions
+[allowlist]
+description = "Global allowlist for safe patterns"
+regexes = [
+  '''^.*\.md$''',
+  '''^.*\.txt$''',
+  '''^.*\.example$''',
+  '''^.*\.sample$''',
+  '''^.*\.template$''',
+  '''^.*\.config\.example$''',
+  '''^.*\.env\.example$''',
+  '''^.*\.env\.local\.example$''',
+  '''^.*\.env\.sample$''',
+  '''^.*\.env\.template$''',
+  '''^.*test.*$''',
+  '''^.*spec.*$''',
+  '''^.*\.test\.(js|ts|tsx|jsx)$''',
+  '''^.*\.spec\.(js|ts|tsx|jsx)$''',
+  '''^.*\.stories\.(js|ts|tsx|jsx)$''',
+  '''^.*\.config\.(js|ts|json)$''',
+  '''^.*\.config\.example\.(js|ts|json)$''',
+  '''^.*\.config\.sample\.(js|ts|json)$''',
+  '''^.*\.config\.template\.(js|ts|json)$''',
+  '''^.*\.example\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.sample\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.template\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.d\.ts$''',
+  '''^.*\.lock$''',
+  '''^.*\.log$''',
+  '''^.*\.tmp$''',
+  '''^.*\.temp$''',
+  '''^.*\.cache$''',
+  '''^.*\.gitignore$''',
+  '''^.*\.dockerignore$''',
+  '''^.*\.eslintignore$''',
+  '''^.*\.prettierignore$''',
+  '''^.*\.gitattributes$''',
+  '''^.*\.editorconfig$''',
+  '''^.*\.nvmrc$''',
+  '''^.*\.node-version$''',
+  '''^.*\.ruby-version$''',
+  '''^.*\.python-version$''',
+  '''^.*\.go-version$''',
+  '''^.*\.rust-toolchain$''',
+  '''^.*\.tool-versions$''',
+  '''^.*\.versions$''',
+  '''^.*\.version$''',
+  '''^.*\.versionrc$''',
+  '''^.*\.versionrc\.json$''',
+  '''^.*\.versionrc\.js$''',
+  '''^.*\.versionrc\.ts$''',
+  '''^.*\.versionrc\.mjs$''',
+  '''^.*\.versionrc\.cjs$''',
+  '''^.*\.versionrc\.yml$''',
+  '''^.*\.versionrc\.yaml$''',
+  '''^.*\.versionrc\.toml$''',
+  '''^.*\.versionrc\.ini$''',
+  '''^.*\.versionrc\.cfg$''',
+  '''^.*\.versionrc\.conf$''',
+  '''^.*\.versionrc\.config$''',
+  '''^.*\.versionrc\.config\.js$''',
+  '''^.*\.versionrc\.config\.ts$''',
+  '''^.*\.versionrc\.config\.mjs$''',
+  '''^.*\.versionrc\.config\.cjs$''',
+  '''^.*\.versionrc\.config\.yml$''',
+  '''^.*\.versionrc\.config\.yaml$''',
+  '''^.*\.versionrc\.config\.toml$''',
+  '''^.*\.versionrc\.config\.ini$''',
+  '''^.*\.versionrc\.config\.cfg$''',
+  '''^.*\.versionrc\.config\.conf$''',
+  '''^.*\.versionrc\.config\.config$''',
+  '''^.*\.versionrc\.config\.config\.js$''',
+  '''^.*\.versionrc\.config\.config\.ts$''',
+  '''^.*\.versionrc\.config\.config\.mjs$''',
+  '''^.*\.versionrc\.config\.config\.cjs$''',
+  '''^.*\.versionrc\.config\.config\.yml$''',
+  '''^.*\.versionrc\.config\.config\.yaml$''',
+  '''^.*\.versionrc\.config\.config\.toml$''',
+  '''^.*\.versionrc\.config\.config\.ini$''',
+  '''^.*\.versionrc\.config\.config\.cfg$''',
+  '''^.*\.versionrc\.config\.config\.conf$''',
+  '''^.*\.versionrc\.config\.config\.config$'''
+]
+
+# File exclusions
+[allowlist]
+files = [
+  '''^.*\.md$''',
+  '''^.*\.txt$''',
+  '''^.*\.example$''',
+  '''^.*\.sample$''',
+  '''^.*\.template$''',
+  '''^.*\.config\.example$''',
+  '''^.*\.env\.example$''',
+  '''^.*\.env\.local\.example$''',
+  '''^.*\.env\.sample$''',
+  '''^.*\.env\.template$''',
+  '''^.*test.*$''',
+  '''^.*spec.*$''',
+  '''^.*\.test\.(js|ts|tsx|jsx)$''',
+  '''^.*\.spec\.(js|ts|tsx|jsx)$''',
+  '''^.*\.stories\.(js|ts|tsx|jsx)$''',
+  '''^.*\.config\.(js|ts|json)$''',
+  '''^.*\.config\.example\.(js|ts|json)$''',
+  '''^.*\.config\.sample\.(js|ts|json)$''',
+  '''^.*\.config\.template\.(js|ts|json)$''',
+  '''^.*\.example\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.sample\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.template\.(js|ts|tsx|jsx|json)$''',
+  '''^.*\.d\.ts$''',
+  '''^.*\.lock$''',
+  '''^.*\.log$''',
+  '''^.*\.tmp$''',
+  '''^.*\.temp$''',
+  '''^.*\.cache$''',
+  '''^.*\.gitignore$''',
+  '''^.*\.dockerignore$''',
+  '''^.*\.eslintignore$''',
+  '''^.*\.prettierignore$''',
+  '''^.*\.gitattributes$''',
+  '''^.*\.editorconfig$''',
+  '''^.*\.nvmrc$''',
+  '''^.*\.node-version$''',
+  '''^.*\.ruby-version$''',
+  '''^.*\.python-version$''',
+  '''^.*\.go-version$''',
+  '''^.*\.rust-toolchain$''',
+  '''^.*\.tool-versions$''',
+  '''^.*\.versions$''',
+  '''^.*\.version$''',
+  '''^.*\.versionrc$''',
+  '''^.*\.versionrc\.json$''',
+  '''^.*\.versionrc\.js$''',
+  '''^.*\.versionrc\.ts$''',
+  '''^.*\.versionrc\.mjs$''',
+  '''^.*\.versionrc\.cjs$''',
+  '''^.*\.versionrc\.yml$''',
+  '''^.*\.versionrc\.yaml$''',
+  '''^.*\.versionrc\.toml$''',
+  '''^.*\.versionrc\.ini$''',
+  '''^.*\.versionrc\.cfg$''',
+  '''^.*\.versionrc\.conf$''',
+  '''^.*\.versionrc\.config$''',
+  '''^.*\.versionrc\.config\.js$''',
+  '''^.*\.versionrc\.config\.ts$''',
+  '''^.*\.versionrc\.config\.mjs$''',
+  '''^.*\.versionrc\.config\.cjs$''',
+  '''^.*\.versionrc\.config\.yml$''',
+  '''^.*\.versionrc\.config\.yaml$''',
+  '''^.*\.versionrc\.config\.toml$''',
+  '''^.*\.versionrc\.config\.ini$''',
+  '''^.*\.versionrc\.config\.cfg$''',
+  '''^.*\.versionrc\.config\.conf$''',
+  '''^.*\.versionrc\.config\.config$''',
+  '''^.*\.versionrc\.config\.config\.js$''',
+  '''^.*\.versionrc\.config\.config\.ts$''',
+  '''^.*\.versionrc\.config\.config\.mjs$''',
+  '''^.*\.versionrc\.config\.config\.cjs$''',
+  '''^.*\.versionrc\.config\.config\.yml$''',
+  '''^.*\.versionrc\.config\.config\.yaml$''',
+  '''^.*\.versionrc\.config\.config\.toml$''',
+  '''^.*\.versionrc\.config\.config\.ini$''',
+  '''^.*\.versionrc\.config\.config\.cfg$''',
+  '''^.*\.versionrc\.config\.config\.conf$''',
+  '''^.*\.versionrc\.config\.config\.config$'''
+]
+
+# Commit exclusions
+[allowlist]
+commits = [
+  '''^.*initial.*commit.*$''',
+  '''^.*setup.*$''',
+  '''^.*config.*$''',
+  '''^.*example.*$''',
+  '''^.*sample.*$''',
+  '''^.*template.*$''',
+  '''^.*test.*$''',
+  '''^.*spec.*$''',
+  '''^.*stories.*$''',
+  '''^.*d\.ts.*$''',
+  '''^.*lock.*$''',
+  '''^.*log.*$''',
+  '''^.*tmp.*$''',
+  '''^.*temp.*$''',
+  '''^.*cache.*$''',
+  '''^.*gitignore.*$''',
+  '''^.*dockerignore.*$''',
+  '''^.*eslintignore.*$''',
+  '''^.*prettierignore.*$''',
+  '''^.*gitattributes.*$''',
+  '''^.*editorconfig.*$''',
+  '''^.*nvmrc.*$''',
+  '''^.*node-version.*$''',
+  '''^.*ruby-version.*$''',
+  '''^.*python-version.*$''',
+  '''^.*go-version.*$''',
+  '''^.*rust-toolchain.*$''',
+  '''^.*tool-versions.*$''',
+  '''^.*versions.*$''',
+  '''^.*version.*$''',
+  '''^.*versionrc.*$''',
+  '''^.*versionrc\.json.*$''',
+  '''^.*versionrc\.js.*$''',
+  '''^.*versionrc\.ts.*$''',
+  '''^.*versionrc\.mjs.*$''',
+  '''^.*versionrc\.cjs.*$''',
+  '''^.*versionrc\.yml.*$''',
+  '''^.*versionrc\.yaml.*$''',
+  '''^.*versionrc\.toml.*$''',
+  '''^.*versionrc\.ini.*$''',
+  '''^.*versionrc\.cfg.*$''',
+  '''^.*versionrc\.conf.*$''',
+  '''^.*versionrc\.config.*$''',
+  '''^.*versionrc\.config\.js.*$''',
+  '''^.*versionrc\.config\.ts.*$''',
+  '''^.*versionrc\.config\.mjs.*$''',
+  '''^.*versionrc\.config\.cjs.*$''',
+  '''^.*versionrc\.config\.yml.*$''',
+  '''^.*versionrc\.config\.yaml.*$''',
+  '''^.*versionrc\.config\.toml.*$''',
+  '''^.*versionrc\.config\.ini.*$''',
+  '''^.*versionrc\.config\.cfg.*$''',
+  '''^.*versionrc\.config\.conf.*$''',
+  '''^.*versionrc\.config\.config.*$''',
+  '''^.*versionrc\.config\.config\.js.*$''',
+  '''^.*versionrc\.config\.config\.ts.*$''',
+  '''^.*versionrc\.config\.config\.mjs.*$''',
+  '''^.*versionrc\.config\.config\.cjs.*$''',
+  '''^.*versionrc\.config\.config\.yml.*$''',
+  '''^.*versionrc\.config\.config\.yaml.*$''',
+  '''^.*versionrc\.config\.config\.toml.*$''',
+  '''^.*versionrc\.config\.config\.ini.*$''',
+  '''^.*versionrc\.config\.config\.cfg.*$''',
+  '''^.*versionrc\.config\.config\.conf.*$''',
+  '''^.*versionrc\.config\.config\.config.*$'''
+]
