@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { isSupabaseConfigured } from '@/lib/env'
@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
 import { Loader2, CheckCircle, AlertCircle, Building2 } from 'lucide-react'
 
-export default function AuthCallbackPage() {
+function AuthCallbackPageContent() {
   const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -207,5 +207,28 @@ export default function AuthCallbackPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+// Main Component with Suspense wrapper
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            </div>
+            <CardTitle className="text-xl">Loading...</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-gray-600">Initializing authentication...</p>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <AuthCallbackPageContent />
+    </Suspense>
   )
 }
