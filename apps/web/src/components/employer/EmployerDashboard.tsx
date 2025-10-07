@@ -459,7 +459,7 @@ export function EmployerDashboard() {
                   
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600">
-                      Posted {job.postedAt.toLocaleDateString()}
+                      Posted {new Date(job.postedAt).toLocaleDateString()}
                     </div>
                     <div className="flex space-x-2">
                       <Button variant="outline" size="sm">

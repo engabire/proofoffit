@@ -1730,7 +1730,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {job.postedAt.toLocaleDateString()}
+                        {new Date(job.postedAt).toLocaleDateString()}
                       </div>
                     </div>
                     {job.salary && (

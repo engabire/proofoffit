@@ -146,7 +146,7 @@ export async function GET(req: NextRequest) {
             requirements: job.skills || [],
             niceToHaves: [],
             benefits: job.benefits || [],
-            postedAt: job.postedDate,
+            postedAt: new Date(job.postedDate),
             companyLogo: undefined,
             companySize: job.companySize,
             industry: job.industry,
