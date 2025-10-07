@@ -14,6 +14,12 @@ updates:
     open-pull-requests-limit: 5
     assignees:
       - "engabire"
+    reviewers:
+      - "engabire"
+    labels:
+      - "dependencies"
+      - "automated"
+      - "do-not-deploy"
     groups:
       all-dependencies:
         patterns:
@@ -30,6 +36,8 @@ updates:
     open-pull-requests-limit: 10
     assignees:
       - "security-team"
+    reviewers:
+      - "engabire"
     commit-message:
       prefix: "deps"
       include: "scope"
@@ -37,6 +45,7 @@ updates:
       - "dependencies"
       - "security"
       - "automated"
+      - "do-not-deploy"
     ignore:
       # Ignore major version updates for stable packages
       - dependency-name: "react"
@@ -77,6 +86,12 @@ updates:
     open-pull-requests-limit: 5
     assignees:
       - "engabire"
+    reviewers:
+      - "engabire"
+    labels:
+      - "dependencies"
+      - "automated"
+      - "do-not-deploy"
     groups:
       all-dependencies:
         patterns:
@@ -93,6 +108,8 @@ updates:
     open-pull-requests-limit: 5
     assignees:
       - "security-team"
+    reviewers:
+      - "engabire"
     commit-message:
       prefix: "ci"
       include: "scope"
@@ -100,6 +117,7 @@ updates:
       - "github-actions"
       - "ci"
       - "automated"
+      - "do-not-deploy"
 
   # Enable version updates for Docker (if using Docker)
   - package-ecosystem: "docker"
@@ -112,6 +130,8 @@ updates:
     open-pull-requests-limit: 3
     assignees:
       - "security-team"
+    reviewers:
+      - "engabire"
     commit-message:
       prefix: "docker"
       include: "scope"
@@ -119,6 +139,7 @@ updates:
       - "docker"
       - "infrastructure"
       - "automated"
+      - "do-not-deploy"
 
   # Enable version updates for Terraform (if using Terraform)
   - package-ecosystem: "terraform"
@@ -131,6 +152,8 @@ updates:
     open-pull-requests-limit: 3
     assignees:
       - "security-team"
+    reviewers:
+      - "engabire"
     commit-message:
       prefix: "terraform"
       include: "scope"
@@ -138,4 +161,5 @@ updates:
       - "terraform"
       - "infrastructure"
       - "automated"
+      - "do-not-deploy"
 
