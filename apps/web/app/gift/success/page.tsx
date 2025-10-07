@@ -13,6 +13,16 @@ interface GiftSuccessPageProps {
 }
 
 export default async function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) {
+  // Temporarily disable this page to fix deployment
+  return (
+    <div className="mx-auto flex min-h-[70vh] w-full max-w-4xl flex-col gap-8 px-4 py-8 md:py-16">
+      <h1 className="text-3xl font-bold">Gift Success Page</h1>
+      <p>This page is temporarily disabled for deployment.</p>
+    </div>
+  )
+}
+
+export async function _GiftSuccessPage({ searchParams }: GiftSuccessPageProps) {
   const { code: codeParam, months: monthsParam } = await searchParams
   const code = codeParam ?? ''
   const months = Number.parseInt(monthsParam || '0', 10)
