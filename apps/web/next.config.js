@@ -9,9 +9,7 @@ const nextConfig = {
     _next_intl_trailing_slash: 'false'
   },
   trailingSlash: false,
-  experimental: {
-    serverComponentsExternalPackages: ['@supabase/supabase-js', 'undici']
-  },
+  serverExternalPackages: ['@supabase/supabase-js', 'undici'],
   eslint: {
     // Disable ESLint during builds to avoid v9 compatibility issues
     ignoreDuringBuilds: true,
