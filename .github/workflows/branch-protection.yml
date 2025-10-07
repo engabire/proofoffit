@@ -10,7 +10,7 @@ on:
       enforce_admins:
         description: 'Enforce protection for admins'
         required: false
-        default: true
+        default: 'true'
       required_status_checks:
         description: 'Required status checks'
         required: false
@@ -18,43 +18,43 @@ on:
       required_reviews:
         description: 'Number of required reviews'
         required: false
-        default: 1
+        default: '1'
       dismiss_stale_reviews:
         description: 'Dismiss stale reviews'
         required: false
-        default: true
+        default: 'true'
       require_code_owner_reviews:
         description: 'Require code owner reviews'
         required: false
-        default: true
+        default: 'true'
       require_last_push_approval:
         description: 'Require last push approval'
         required: false
-        default: true
+        default: 'true'
       required_linear_history:
         description: 'Require linear history'
         required: false
-        default: true
+        default: 'true'
       allow_force_pushes:
         description: 'Allow force pushes'
         required: false
-        default: false
+        default: 'false'
       allow_deletions:
         description: 'Allow deletions'
         required: false
-        default: false
+        default: 'false'
       block_creations:
         description: 'Block creations'
         required: false
-        default: true
+        default: 'true'
       lock_branch:
         description: 'Lock branch'
         required: false
-        default: false
+        default: 'false'
       allow_fork_syncing:
         description: 'Allow fork syncing'
         required: false
-        default: true
+        default: 'true'
 
 jobs:
   setup-branch-protection:
