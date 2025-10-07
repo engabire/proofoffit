@@ -15,6 +15,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@octokit/rest": "^22.0.0",
     "@prisma/client": "^6.16.1",
     "@proof-of-fit/ui": "file:../../packages/ui",
@@ -34,9 +35,11 @@
     "prisma": "^6.16.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.64.0",
     "sonner": "^1.2.4",
     "stripe": "^14.9.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.1.12"
   },
   "engines": {
     "node": ">=22 <23"
