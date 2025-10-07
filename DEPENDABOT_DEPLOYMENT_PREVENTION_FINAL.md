@@ -11,7 +11,7 @@ The issue of Dependabot branches being deployed as preview deployments has been 
 #### **File: `vercel-deployment-guard.js`**
 ```javascript
 // Comprehensive branch filtering
-const allowedBranches = ['main', 'develop'];
+const allowedBranches = ['main'];
 
 // Blocks ALL unwanted branches:
 - dependabot/* (all Dependabot branches)
@@ -105,7 +105,6 @@ VERCEL_GIT_COMMIT_REF="main" node vercel-deployment-guard.js
 - **temp/*** → ❌ BLOCKED
 - **temporary/*** → ❌ BLOCKED
 - **main** → ✅ ALLOWED
-- **develop** → ✅ ALLOWED
 
 ## 🚫 **DEPLOYMENT PREVENTION GUARANTEE**
 
@@ -117,7 +116,7 @@ VERCEL_GIT_COMMIT_REF="main" node vercel-deployment-guard.js
 - ❌ Unauthorized branch deployments
 
 ### **What Will ALWAYS Happen:**
-- ✅ Only main and develop branches can be deployed
+- ✅ Only the main branch can be deployed
 - ✅ All Dependabot PRs are properly labeled
 - ✅ Deployment prevention notices are added automatically
 - ✅ Clear communication about deployment policies

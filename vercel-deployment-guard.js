@@ -4,7 +4,7 @@
 // This script prevents deployments from unwanted branches
 
 const branch = process.env.VERCEL_GIT_COMMIT_REF;
-const allowedBranches = ['main', 'develop'];
+const allowedBranches = ['main'];
 
 console.log(`🔍 Checking deployment for branch: ${branch}`);
 
