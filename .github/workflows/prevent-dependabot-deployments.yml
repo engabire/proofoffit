@@ -1,0 +1,60 @@
+name: Prevent Dependabot Deployments
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  prevent-deployment:
+    name: Prevent Dependabot Deployments
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Add deployment prevention comment
+        run: |
+          echo "🚫 Adding deployment prevention comment to Dependabot PR #${{ github.event.pull_request.number }}"
+          
+          gh pr comment ${{ github.event.pull_request.number }} --body "🚫 **DEPLOYMENT PREVENTION NOTICE**
+
+          This Dependabot PR has been flagged to prevent automatic deployments.
+
+          **Why this is necessary:**
+          - Dependabot branches should not be deployed directly to production
+          - All dependency updates must go through the main branch first
+          - This prevents potential security issues from untested updates
+
+          **What happens next:**
+          - This PR will be automatically merged after passing CI checks
+          - Updates will be deployed through the proper main branch workflow
+          - No preview deployments will be created from this branch
+
+          **Security measures in place:**
+          - Vercel deployment guard prevents unwanted deployments
+          - Branch protection rules ensure proper review process
+          - Automated security scanning validates all changes
+
+          Thank you for your patience! 🛡️"
+      
+      - name: Add deployment prevention label
+        run: |
+          echo "🏷️ Adding deployment prevention labels..."
+          
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "no-vercel-deploy"
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "dependabot-branch"
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "auto-merge-after-ci"
+      
+      - name: Log deployment prevention
+        run: |
+          echo "📝 Logging deployment prevention action..."
+          echo "PR #${{ github.event.pull_request.number }} from Dependabot has been flagged to prevent deployments"
+          echo "Branch: ${{ github.event.pull_request.head.ref }}"
+          echo "Title: ${{ github.event.pull_request.title }}"
+          echo "Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"

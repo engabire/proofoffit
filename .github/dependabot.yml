@@ -20,6 +20,7 @@ updates:
       - "dependencies"
       - "automated"
       - "do-not-deploy"
+      - "no-vercel-deploy"
     groups:
       all-dependencies:
         patterns:
@@ -92,6 +93,7 @@ updates:
       - "dependencies"
       - "automated"
       - "do-not-deploy"
+      - "no-vercel-deploy"
     groups:
       all-dependencies:
         patterns:
