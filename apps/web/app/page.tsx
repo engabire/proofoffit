@@ -40,20 +40,23 @@ export default function HomePage() {
             Trusted by 500+ Companies
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Land interviews with proof.
+            Evidence-based hiring for
             <br />
-            <span className="text-blue-600">Grow with confidence.</span>
+            <span className="text-blue-600">both sides of the table.</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Our evidence engine reviews each role, tailors your application, and explains exactly why you match—so you apply with confidence, not hope.
+            Whether you're seeking your next role or building your team, ProofOfFit provides transparent, auditable matching with full compliance guardrails.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="/app/fit-simple" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
-              Get my Fit Report
+            <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+              <UserCheck className="mr-2 h-5 w-5" />
+              I am seeking a job
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
-            <a href="/demo" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
-              Try interactive demo
+            <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
+              <Briefcase className="mr-2 h-5 w-5" />
+              I am hiring
+              <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </div>
           <p className="text-sm text-gray-500 mb-8">
@@ -386,10 +389,18 @@ export default function HomePage() {
           </div>
           
                <div className="text-center mt-12">
-                 <a href="/app/fit-simple" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
-                   Get My Fit Report
-                   <ArrowRight className="ml-2 h-4 w-4" />
-                 </a>
+                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                   <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                     <UserCheck className="mr-2 h-5 w-5" />
+                     Start as Job Seeker
+                     <ArrowRight className="ml-2 h-4 w-4" />
+                   </a>
+                   <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-blue-600 text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition-colors">
+                     <Briefcase className="mr-2 h-5 w-5" />
+                     Start as Employer
+                     <ArrowRight className="ml-2 h-4 w-4" />
+                   </a>
+                 </div>
             <p className="text-sm text-gray-500 mt-4">
               SOC2-ready • Accessible • Bias-aware by design
             </p>
@@ -451,12 +462,15 @@ export default function HomePage() {
             with full compliance and transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/auth/signup" className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors">
-              Start Free Trial
+            <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors">
+              <UserCheck className="mr-2 h-5 w-5" />
+              Start as Job Seeker
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
-            <a href="/contact" className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors">
-              Schedule Demo
+            <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors">
+              <Briefcase className="mr-2 h-5 w-5" />
+              Start as Employer
+              <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </div>
           <p className="text-blue-200 text-sm mt-4">

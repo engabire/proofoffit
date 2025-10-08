@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Upload,
   FileText,
@@ -41,10 +42,54 @@ const toast = {
 }
 
 export default function SimpleFitPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [jobDescription, setJobDescription] = useState('')
   const [fitScore, setFitScore] = useState<number | null>(null)
   const [analysis, setAnalysis] = useState<any>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        // In a real app, you'd check with your auth service
+        // For now, we'll simulate checking localStorage or cookies
+        const token = localStorage.getItem('auth-token')
+        if (token) {
+          setIsAuthenticated(true)
+        } else {
+          // Redirect to sign-in with return URL
+          router.push('/auth/signin?redirect=/app/fit-simple')
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error)
+        router.push('/auth/signin?redirect=/app/fit-simple')
+      } finally {
+        setIsCheckingAuth(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  // Show loading while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Don't render the main content if not authenticated
+  if (!isAuthenticated) {
+    return null
+  }
 
   const handleAnalyze = async () => {
     if (!jobDescription.trim()) {
