@@ -1,12 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Button } from '@proof-of-fit/ui'
-import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Badge } from '@proof-of-fit/ui'
-import { Input } from '@proof-of-fit/ui'
-import { Label } from '@proof-of-fit/ui'
-import { Alert, AlertDescription } from '@proof-of-fit/ui'
 import { 
   Upload,
   FileText,
@@ -108,11 +102,13 @@ export default function SimpleFitPage() {
               <span className="text-2xl font-bold text-gray-900">ProofOfFit</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Badge variant="secondary">Demo Mode</Badge>
-              <Button variant="outline" size="sm">
+              <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+                Demo Mode
+              </span>
+              <button className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                 <User className="h-4 w-4 mr-2" />
                 Profile
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -126,16 +122,16 @@ export default function SimpleFitPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <FileText className="h-5 w-5 mr-2" />
-                Job Description
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="rounded-lg border bg-white shadow-sm p-6">
+            <div className="flex items-center mb-6">
+              <FileText className="h-5 w-5 mr-2" />
+              <h3 className="text-lg font-semibold">Job Description</h3>
+            </div>
+            <div className="space-y-4">
               <div>
-                <Label htmlFor="job-description">Paste the job description here</Label>
+                <label htmlFor="job-description" className="block text-sm font-medium text-gray-700 mb-2">
+                  Paste the job description here
+                </label>
                 <textarea
                   id="job-description"
                   value={jobDescription}
@@ -146,10 +142,10 @@ export default function SimpleFitPage() {
                 />
               </div>
               
-              <Button 
+              <button 
                 onClick={handleAnalyze} 
                 disabled={isLoading || !jobDescription.trim()}
-                className="w-full"
+                className="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? (
                   <>
@@ -162,113 +158,101 @@ export default function SimpleFitPage() {
                     Analyze Fit
                   </>
                 )}
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
 
           {/* Results Section */}
           <div className="space-y-6">
             {fitScore !== null && analysis && (
               <>
                 {/* Fit Score */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Target className="h-5 w-5 mr-2" />
-                      Fit Score
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center">
-                      <div className="text-6xl font-bold text-blue-600 mb-2">
-                        {fitScore}
-                      </div>
-                      <div className="text-lg text-gray-600 mb-4">
-                        {fitScore >= 80 ? 'Excellent Match' : 
-                         fitScore >= 60 ? 'Good Match' : 
-                         fitScore >= 40 ? 'Fair Match' : 'Poor Match'}
-                      </div>
-                      <Badge variant={fitScore >= 80 ? 'default' : fitScore >= 60 ? 'secondary' : 'destructive'}>
-                        {fitScore >= 80 ? 'Highly Recommended' : 
-                         fitScore >= 60 ? 'Recommended' : 
-                         fitScore >= 40 ? 'Consider Applying' : 'Not Recommended'}
-                      </Badge>
+                <div className="rounded-lg border bg-white shadow-sm p-6">
+                  <div className="flex items-center mb-6">
+                    <Target className="h-5 w-5 mr-2" />
+                    <h3 className="text-lg font-semibold">Fit Score</h3>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-6xl font-bold text-blue-600 mb-2">
+                      {fitScore}
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="text-lg text-gray-600 mb-4">
+                      {fitScore >= 80 ? 'Excellent Match' : 
+                       fitScore >= 60 ? 'Good Match' : 
+                       fitScore >= 40 ? 'Fair Match' : 'Poor Match'}
+                    </div>
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
+                      fitScore >= 80 ? 'bg-green-100 text-green-800' : 
+                      fitScore >= 60 ? 'bg-blue-100 text-blue-800' : 
+                      fitScore >= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {fitScore >= 80 ? 'Highly Recommended' : 
+                       fitScore >= 60 ? 'Recommended' : 
+                       fitScore >= 40 ? 'Consider Applying' : 'Not Recommended'}
+                    </span>
+                  </div>
+                </div>
 
                 {/* Strengths */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-green-600">
-                      <CheckCircle className="h-5 w-5 mr-2" />
-                      Strengths
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {analysis.strengths.map((strength: string, index: number) => (
-                        <li key={index} className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{strength}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                <div className="rounded-lg border bg-white shadow-sm p-6">
+                  <div className="flex items-center mb-6">
+                    <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
+                    <h3 className="text-lg font-semibold text-green-600">Strengths</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {analysis.strengths.map((strength: string, index: number) => (
+                      <li key={index} className="flex items-start">
+                        <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{strength}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* Gaps */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-orange-600">
-                      <AlertCircle className="h-5 w-5 mr-2" />
-                      Areas for Improvement
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {analysis.gaps.map((gap: string, index: number) => (
-                        <li key={index} className="flex items-start">
-                          <X className="h-4 w-4 text-orange-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{gap}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                <div className="rounded-lg border bg-white shadow-sm p-6">
+                  <div className="flex items-center mb-6">
+                    <AlertCircle className="h-5 w-5 mr-2 text-orange-600" />
+                    <h3 className="text-lg font-semibold text-orange-600">Areas for Improvement</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {analysis.gaps.map((gap: string, index: number) => (
+                      <li key={index} className="flex items-start">
+                        <X className="h-4 w-4 text-orange-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{gap}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* Recommendations */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-blue-600">
-                      <Sparkles className="h-5 w-5 mr-2" />
-                      Recommendations
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {analysis.recommendations.map((rec: string, index: number) => (
-                        <li key={index} className="flex items-start">
-                          <ArrowRight className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{rec}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                <div className="rounded-lg border bg-white shadow-sm p-6">
+                  <div className="flex items-center mb-6">
+                    <Sparkles className="h-5 w-5 mr-2 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-blue-600">Recommendations</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {analysis.recommendations.map((rec: string, index: number) => (
+                      <li key={index} className="flex items-start">
+                        <ArrowRight className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </>
             )}
 
             {!analysis && (
-              <Card>
-                <CardContent className="text-center py-12">
+              <div className="rounded-lg border bg-white shadow-sm p-6">
+                <div className="text-center py-12">
                   <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Ready to Analyze</h3>
                   <p className="text-gray-600">
                     Paste a job description in the left panel and click "Analyze Fit" to get started.
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
           </div>
         </div>
