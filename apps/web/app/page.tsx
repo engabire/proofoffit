@@ -1,7 +1,4 @@
 import React from "react";
-import { Button } from "@proof-of-fit/ui";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@proof-of-fit/ui";
-import { Badge } from "@proof-of-fit/ui";
 import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from "lucide-react";
 
 export const dynamic = 'force-dynamic'
@@ -24,12 +21,12 @@ export default function HomePage() {
               <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
             </nav>
             <div className="flex space-x-4">
-              <Button variant="outline" size="sm" asChild>
-                <a href="/auth/signin">Sign In</a>
-              </Button>
-              <Button size="sm" asChild>
-                <a href="/auth/signup">Get Started</a>
-              </Button>
+              <a href="/auth/signin" className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                Sign In
+              </a>
+              <a href="/auth/signup" className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+                Get Started
+              </a>
             </div>
           </div>
         </div>
@@ -38,10 +35,10 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4">
+          <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 mb-4">
             <Star className="h-3 w-3 mr-1" />
             Trusted by 500+ Companies
-          </Badge>
+          </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Land interviews with proof.
             <br />
@@ -51,17 +48,13 @@ export default function HomePage() {
             Our evidence engine reviews each role, tailors your application, and explains exactly why you match—so you apply with confidence, not hope.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                 <Button size="lg" className="text-lg px-8 py-4" asChild>
-                   <a href="/app/fit-simple">
-                     Get my Fit Report
-                     <ArrowRight className="ml-2 h-4 w-4" />
-                   </a>
-                 </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
-              <a href="/demo">
-                Try interactive demo
-              </a>
-            </Button>
+            <a href="/app/fit-simple" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+              Get my Fit Report
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+            <a href="/demo" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
+              Try interactive demo
+            </a>
           </div>
           <p className="text-sm text-gray-500 mb-8">
             No card • 2 minutes to first Fit Report
@@ -94,7 +87,7 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                 <span className="text-sm font-medium text-gray-700">Fit Report</span>
-                <Badge variant="secondary" className="text-xs">Live</Badge>
+                <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">Live</span>
               </div>
               <div className="text-sm text-gray-500">Audit trail</div>
             </div>
@@ -138,57 +131,49 @@ export default function HomePage() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-blue-600" />
-                </div>
-                <div className="text-sm font-medium text-blue-600 mb-2">Signal</div>
-                <CardTitle>Explainable Fit Reports</CardTitle>
-                <CardDescription>
-                  Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <Shield className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="text-sm font-medium text-blue-600 mb-2">Signal</div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Explainable Fit Reports</h3>
+              <p className="text-sm text-gray-600">
+                Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams.
+              </p>
+            </div>
             
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-green-600" />
-                </div>
-                <div className="text-sm font-medium text-green-600 mb-2">Signal</div>
-                <CardTitle>Adaptive Autopilot</CardTitle>
-                <CardDescription>
-                  Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                <Zap className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="text-sm font-medium text-green-600 mb-2">Signal</div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Adaptive Autopilot</h3>
+              <p className="text-sm text-gray-600">
+                Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away.
+              </p>
+            </div>
             
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-purple-600" />
-                </div>
-                <div className="text-sm font-medium text-purple-600 mb-2">Signal</div>
-                <CardTitle>Bias-aware Scoring</CardTitle>
-                <CardDescription>
-                  We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                <Users className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="text-sm font-medium text-purple-600 mb-2">Signal</div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Bias-aware Scoring</h3>
+              <p className="text-sm text-gray-600">
+                We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story.
+              </p>
+            </div>
             
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                  <Star className="h-6 w-6 text-orange-600" />
-                </div>
-                <div className="text-sm font-medium text-orange-600 mb-2">Signal</div>
-                <CardTitle>Design-grade outputs</CardTitle>
-                <CardDescription>
-                  From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <Star className="h-6 w-6 text-orange-600" />
+              </div>
+              <div className="text-sm font-medium text-orange-600 mb-2">Signal</div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Design-grade outputs</h3>
+              <p className="text-sm text-gray-600">
+                From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it.
+              </p>
+            </div>
           </div>
 
           {/* Why ProofOfFit Section */}
@@ -275,21 +260,19 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
-            <Card className="h-full border border-blue-100 shadow-lg">
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                    <Briefcase className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl">For Employers</CardTitle>
-                    <CardDescription>
-                      Evidence-backed shortlists with immutable audit trails and compliance guardrails.
-                    </CardDescription>
-                  </div>
+            <div className="h-full border border-blue-100 shadow-lg rounded-lg bg-white p-6">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                  <Briefcase className="h-7 w-7" />
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">For Employers</h3>
+                  <p className="text-sm text-gray-600">
+                    Evidence-backed shortlists with immutable audit trails and compliance guardrails.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-6">
                 <ul className="space-y-3 text-left text-sm text-gray-600">
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-blue-500" />
@@ -304,30 +287,26 @@ export default function HomePage() {
                     Collaboration tools that help hiring managers, compliance, and recruiters stay aligned.
                   </li>
                 </ul>
-                <Button size="lg" className="w-full" asChild>
-                  <a href="/contact">
-                    I am hiring
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                <a href="/contact" className="inline-flex items-center justify-center w-full px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                  I am hiring
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </div>
 
-            <Card className="h-full border border-purple-100 shadow-lg">
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-50 text-purple-600">
-                    <UserCheck className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl">For Job Seekers</CardTitle>
-                    <CardDescription>
-                      Tailored Fit Reports, guided outreach, and receipts you can bring into every conversation.
-                    </CardDescription>
-                  </div>
+            <div className="h-full border border-purple-100 shadow-lg rounded-lg bg-white p-6">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+                  <UserCheck className="h-7 w-7" />
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">For Job Seekers</h3>
+                  <p className="text-sm text-gray-600">
+                    Tailored Fit Reports, guided outreach, and receipts you can bring into every conversation.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-6">
                 <ul className="space-y-3 text-left text-sm text-gray-600">
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-purple-500" />
@@ -342,14 +321,12 @@ export default function HomePage() {
                     A shareable audit trail that sets you apart without bending any platform rules.
                   </li>
                 </ul>
-                <Button size="lg" variant="outline" className="w-full border-purple-200 text-purple-700 hover:bg-purple-600 hover:text-white" asChild>
-                  <a href="/app/fit-simple">
-                    I am seeking a job
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                <a href="/app/fit-simple" className="inline-flex items-center justify-center w-full px-8 py-4 border border-purple-200 text-purple-700 text-lg font-medium rounded-md hover:bg-purple-600 hover:text-white transition-colors">
+                  I am seeking a job
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -409,12 +386,10 @@ export default function HomePage() {
           </div>
           
                <div className="text-center mt-12">
-                 <Button size="lg" className="text-lg px-8 py-4" asChild>
-                   <a href="/app/fit-simple">
-                     Get My Fit Report
-                     <ArrowRight className="ml-2 h-4 w-4" />
-                   </a>
-                 </Button>
+                 <a href="/app/fit-simple" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                   Get My Fit Report
+                   <ArrowRight className="ml-2 h-4 w-4" />
+                 </a>
             <p className="text-sm text-gray-500 mt-4">
               SOC2-ready • Accessible • Bias-aware by design
             </p>
@@ -438,33 +413,29 @@ export default function HomePage() {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="mb-4">
-                  <div className="text-sm font-medium text-blue-600 mb-2">Proof in practice</div>
-                  <blockquote className="text-lg text-gray-700 italic mb-4">
-                    "I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
-                  </blockquote>
-                  <div className="text-sm text-gray-600">
-                    — Amara B., Data Analyst
-                  </div>
+            <div className="border-0 shadow-lg rounded-lg bg-white p-8">
+              <div className="mb-4">
+                <div className="text-sm font-medium text-blue-600 mb-2">Proof in practice</div>
+                <blockquote className="text-lg text-gray-700 italic mb-4">
+                  "I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
+                </blockquote>
+                <div className="text-sm text-gray-600">
+                  — Amara B., Data Analyst
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="mb-4">
-                  <div className="text-sm font-medium text-green-600 mb-2">Proof in practice</div>
-                  <blockquote className="text-lg text-gray-700 italic mb-4">
-                    "The tailored bullets were spooky‑good. It became my pre‑screen script."
-                  </blockquote>
-                  <div className="text-sm text-gray-600">
-                    — Luis R., Product Manager
-                  </div>
+            <div className="border-0 shadow-lg rounded-lg bg-white p-8">
+              <div className="mb-4">
+                <div className="text-sm font-medium text-green-600 mb-2">Proof in practice</div>
+                <blockquote className="text-lg text-gray-700 italic mb-4">
+                  "The tailored bullets were spooky‑good. It became my pre‑screen script."
+                </blockquote>
+                <div className="text-sm text-gray-600">
+                  — Luis R., Product Manager
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -480,17 +451,13 @@ export default function HomePage() {
             with full compliance and transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-4" asChild>
-              <a href="/auth/signup">
-                Start Free Trial
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-blue-600" asChild>
-              <a href="/contact">
-                Schedule Demo
-              </a>
-            </Button>
+            <a href="/auth/signup" className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors">
+              Start Free Trial
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+            <a href="/contact" className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors">
+              Schedule Demo
+            </a>
           </div>
           <p className="text-blue-200 text-sm mt-4">
             No credit card required • 14-day free trial • Cancel anytime
