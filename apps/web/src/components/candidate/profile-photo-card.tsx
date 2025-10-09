@@ -1,11 +1,11 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
-import Image from "next/image"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { isSupabaseConfigured } from "@/lib/env"
 import { Card, CardContent, Button, Badge } from "@proof-of-fit/ui"
-import { Camera, Check, Loader2, Sparkles, Upload, Linkedin } from "lucide-react"
+import { Camera, Check, Loader2, Sparkles, Upload } from "lucide-react"
+import { ProfilePhotoPreview } from "./profile-photo-preview"
 
 interface ProfilePhotoCardProps {
   userId: string
@@ -174,107 +174,90 @@ export function ProfilePhotoCard({
   }
 
   return (
-    <Card className="relative overflow-hidden border-none bg-gradient-to-br from-amber-100 via-orange-100 to-amber-200 shadow-lg">
-      <CardContent className="relative flex flex-col items-center gap-6 px-8 py-10 text-center">
-        <Sparkles className="absolute left-10 top-8 h-6 w-6 text-amber-400" aria-hidden="true" />
-        <Sparkles className="absolute right-12 bottom-10 h-5 w-5 text-amber-300" aria-hidden="true" />
+    <div className="space-y-6">
+      <ProfilePhotoPreview photoUrl={currentPhotoUrl} displayName={fullName ?? null} />
 
-        <div className="relative">
-          <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-xl">
-            {currentPhotoUrl ? (
-              <Image
-                src={currentPhotoUrl}
-                alt={`${firstName}'s profile portrait`}
-                width={128}
-                height={128}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-amber-300 text-4xl font-semibold text-amber-900">
-                {firstName?.[0]?.toUpperCase() ?? "?"}
-              </div>
+      <Card className="relative overflow-hidden border-none bg-gradient-to-br from-amber-100 via-orange-100 to-amber-200 shadow-lg">
+        <CardContent className="relative flex flex-col items-center gap-6 px-8 py-10 text-center">
+          <Sparkles className="absolute left-10 top-8 h-6 w-6 text-amber-400" aria-hidden="true" />
+          <Sparkles className="absolute right-12 bottom-10 h-5 w-5 text-amber-300" aria-hidden="true" />
+
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-amber-900">
+              {firstName.charAt(0).toUpperCase() + firstName.slice(1)}, refresh your portrait
+            </h2>
+            <p className="text-sm text-amber-800">
+              Upload a polished headshot to update the LinkedIn-ready background above.
+            </p>
+          </div>
+
+          <div className="grid gap-2 text-left text-sm text-amber-900">
+            <div className="flex items-start gap-2">
+              <Check className="mt-0.5 h-4 w-4 text-amber-600" />
+              <span>Highlight the person behind the proof.</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <Check className="mt-0.5 h-4 w-4 text-amber-600" />
+              <span>Appear on Fit Reports and recruiter briefings.</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <Check className="mt-0.5 h-4 w-4 text-amber-600" />
+              <span>Reuse safely across your ProofOfFit workflows.</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-3">
+            <Button
+              onClick={triggerFileDialog}
+              disabled={uploading || !supabase}
+              className="min-w-[220px] bg-amber-500 text-amber-950 hover:bg-amber-600"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving portrait…
+                </>
+              ) : (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  {currentPhotoUrl ? "Replace photo" : "Upload photo"}
+                </>
+              )}
+            </Button>
+            {!supabase && showStorageHint && (
+              <Badge variant="secondary" className="bg-white/60 text-amber-900">
+                Connect Supabase storage to enable uploads
+              </Badge>
             )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={ACCEPTED_TYPES.join(",")}
+              className="hidden"
+              onChange={handleFileChange}
+            />
           </div>
-          <div className="absolute -bottom-2 -right-2 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500 text-white shadow-md">
-            <Linkedin className="h-6 w-6" aria-hidden="true" />
-          </div>
-        </div>
 
-        <div className="space-y-2">
-          <h2 className="text-2xl font-semibold text-amber-900">
-            {firstName.charAt(0).toUpperCase() + firstName.slice(1)}, ready for your next role?
-          </h2>
-          <p className="text-sm text-amber-800">
-            Give hiring teams a warm, trustworthy first impression with a professional portrait.
-          </p>
-        </div>
-
-        <div className="grid gap-2 text-left text-sm text-amber-900">
-          <div className="flex items-start gap-2">
-            <Check className="mt-0.5 h-4 w-4 text-amber-600" />
-            <span>Highlight the person behind the proof.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <Check className="mt-0.5 h-4 w-4 text-amber-600" />
-            <span>Appear on Fit Reports and recruiter briefings.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <Check className="mt-0.5 h-4 w-4 text-amber-600" />
-            <span>Reuse safely across your ProofOfFit workflows.</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center gap-3">
-          <Button
-            onClick={triggerFileDialog}
-            disabled={uploading || !supabase}
-            className="min-w-[220px] bg-amber-500 text-amber-950 hover:bg-amber-600"
-          >
-            {uploading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving portrait…
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                {currentPhotoUrl ? "Replace photo" : "Upload photo"}
-              </>
-            )}
-          </Button>
-          {!supabase && showStorageHint && (
-            <Badge variant="secondary" className="bg-white/60 text-amber-900">
-              Connect Supabase storage to enable uploads
-            </Badge>
+          {statusMessage && (
+            <div
+              className={`text-xs font-medium ${
+                statusTone === "success"
+                  ? "text-emerald-700"
+                  : statusTone === "error"
+                  ? "text-red-700"
+                  : "text-amber-700"
+              }`}
+            >
+              {statusMessage}
+            </div>
           )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={ACCEPTED_TYPES.join(",")}
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
 
-        {statusMessage && (
-          <div
-            className={`text-xs font-medium ${
-              statusTone === "success"
-                ? "text-emerald-700"
-                : statusTone === "error"
-                ? "text-red-700"
-                : "text-amber-700"
-            }`}
-          >
-            {statusMessage}
+          <div className="mt-2 flex items-center gap-2 text-xs text-amber-800">
+            <Camera className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>Tip: natural light, centered shoulders, confident smile.</span>
           </div>
-        )}
-
-        <div className="mt-2 flex items-center gap-2 text-xs text-amber-800">
-          <Camera className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Tip: natural light, centered shoulders, confident smile.</span>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

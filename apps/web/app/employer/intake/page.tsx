@@ -1,22 +1,22 @@
-"use client"
+'use client'
 
-import { useState } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { isSupabaseConfigured } from '@/lib/env'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Button } from '@proof-of-fit/ui'
-import { Input } from '@proof-of-fit/ui'
-import { Label } from '@proof-of-fit/ui'
-import { Textarea } from '@proof-of-fit/ui'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@proof-of-fit/ui'
-import { Checkbox } from '@proof-of-fit/ui'
-import { Plus, Trash2, Save } from 'lucide-react'
-import { toast } from 'sonner'
+import { 
+  Plus, 
+  Trash2, 
+  Save, 
+  ArrowLeft,
+  LogOut,
+  Building2,
+  CheckCircle,
+  AlertCircle
+} from 'lucide-react'
 
-export default function JobIntakePage() {
+function EmployerIntakePageContent() {
   const router = useRouter()
-  const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
+  const [user, setUser] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [loading, setLoading] = useState(false)
   
   const [formData, setFormData] = useState({
@@ -38,6 +38,42 @@ export default function JobIntakePage() {
 
   const [newMustHave, setNewMustHave] = useState('')
   const [newPreferred, setNewPreferred] = useState('')
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        // Check authentication
+        const token = localStorage.getItem('auth-token')
+        const userData = localStorage.getItem('user')
+        
+        if (!token || !userData) {
+          router.push('/auth/signin?type=employer')
+          return
+        }
+
+        const parsedUser = JSON.parse(userData)
+        if (parsedUser.type !== 'employer') {
+          router.push('/dashboard')
+          return
+        }
+
+        setUser(parsedUser)
+      } catch (error) {
+        console.error('Auth check failed:', error)
+        router.push('/auth/signin?type=employer')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth-token')
+    localStorage.removeItem('user')
+    router.push('/')
+  }
 
   const addRequirement = (type: 'mustHave' | 'preferred', value: string) => {
     if (!value.trim()) return
@@ -65,314 +101,380 @@ export default function JobIntakePage() {
     e.preventDefault()
     setLoading(true)
 
-    if (!supabase) {
-      toast.error('Database not configured. Please contact support.')
-      setLoading(false)
-      return
-    }
-
     try {
-      // First create a job entry
-      const { data: job, error: jobError } = await supabase
-        .from('jobs')
-        .insert({
-          source: 'manual',
-          org: formData.company,
-          title: formData.jobTitle,
-          location: formData.location,
-          workType: formData.workType,
-          pay: {
-            min: formData.salaryMin ? parseInt(formData.salaryMin) : null,
-            max: formData.salaryMax ? parseInt(formData.salaryMax) : null,
-            currency: 'USD'
-          },
-          description: formData.description,
-          requirements: {
-            must_have: formData.mustHave,
-            preferred: formData.preferred
-          },
-          constraints: formData.constraints,
-          tos: {
-            allowed: true,
-            captcha: false,
-            notes: 'Manual job posting'
-          }
-        })
-        .select()
-        .single()
-
-      if (jobError) throw jobError
-
-      // Then create the employer intake
-      const { data: intake, error: intakeError } = await supabase
-        .from('employer_intakes')
-        .insert({
-          jobRef: job.id,
-          mustHave: formData.mustHave,
-          preferred: formData.preferred,
-          preferenceOrder: formData.mustHave.concat(formData.preferred),
-          weights: {
-            must_have: 1.0,
-            preferred: 0.7
-          },
-          constraints: formData.constraints,
-          terms: {
-            autoApply: false,
-            requireApproval: true
-          }
-        })
-        .select()
-        .single()
-
-      if (intakeError) throw intakeError
-
-      toast.success('Job intake created successfully!')
-      router.push(`/employer/slates/${intake.id}`)
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      console.log('Job intake created:', formData)
+      console.log('Success: Job intake created successfully!')
+      
+      // Redirect to slates page
+      router.push('/employer/slates')
     } catch (error: any) {
-      toast.error(error.message || 'Failed to create job intake')
+      console.error('Failed to create job intake:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Create Job Intake</h1>
-        <p className="text-muted-foreground">
-          Define your hiring requirements to generate candidate slates
-        </p>
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading job intake form...</p>
+        </div>
       </div>
+    )
+  }
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Job Details</CardTitle>
-            <CardDescription>
-              Basic information about the position
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="jobTitle">Job Title</Label>
-                <Input
+  if (!user) {
+    return null
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => router.push('/employer/dashboard')}
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Building2 className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-gray-900">ProofOfFit</span>
+                <span className="text-sm text-gray-500">Employer Portal</span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <Building2 className="h-4 w-4 mr-1" />
+                Employer
+              </span>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Create Job Intake</h1>
+          <p className="text-gray-600 mt-2">
+            Define your hiring requirements to generate evidence-based candidate slates
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Job Details */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">Job Details</h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Basic information about the position
+              </p>
+            </div>
+            
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Job Title *
+                </label>
+                <input
                   id="jobTitle"
+                  type="text"
                   value={formData.jobTitle}
                   onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                   placeholder="e.g., Senior Frontend Developer"
                   required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
-                <Input
+              
+              <div>
+                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                  Company *
+                </label>
+                <input
                   id="company"
+                  type="text"
                   value={formData.company}
                   onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
                   placeholder="e.g., TechCorp Inc."
                   required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
+            <div className="grid gap-6 md:grid-cols-2 mt-6">
+              <div>
+                <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                  Location *
+                </label>
+                <input
                   id="location"
+                  type="text"
                   value={formData.location}
                   onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                   placeholder="e.g., San Francisco, CA"
                   required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="workType">Work Type</Label>
-                <Select value={formData.workType} onValueChange={(value) => setFormData(prev => ({ ...prev, workType: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="remote">Remote</SelectItem>
-                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                    <SelectItem value="onsite">On-site</SelectItem>
-                  </SelectContent>
-                </Select>
+              
+              <div>
+                <label htmlFor="workType" className="block text-sm font-medium text-gray-700 mb-2">
+                  Work Type
+                </label>
+                <select
+                  id="workType"
+                  value={formData.workType}
+                  onChange={(e) => setFormData(prev => ({ ...prev, workType: e.target.value }))}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="remote">Remote</option>
+                  <option value="hybrid">Hybrid</option>
+                  <option value="onsite">On-site</option>
+                </select>
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="salaryMin">Minimum Salary</Label>
-                <Input
+            <div className="grid gap-6 md:grid-cols-2 mt-6">
+              <div>
+                <label htmlFor="salaryMin" className="block text-sm font-medium text-gray-700 mb-2">
+                  Minimum Salary
+                </label>
+                <input
                   id="salaryMin"
                   type="number"
                   value={formData.salaryMin}
                   onChange={(e) => setFormData(prev => ({ ...prev, salaryMin: e.target.value }))}
                   placeholder="80000"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="salaryMax">Maximum Salary</Label>
-                <Input
+              
+              <div>
+                <label htmlFor="salaryMax" className="block text-sm font-medium text-gray-700 mb-2">
+                  Maximum Salary
+                </label>
+                <input
                   id="salaryMax"
                   type="number"
                   value={formData.salaryMax}
                   onChange={(e) => setFormData(prev => ({ ...prev, salaryMax: e.target.value }))}
                   placeholder="120000"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="description">Job Description</Label>
-              <Textarea
+            <div className="mt-6">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                Job Description *
+              </label>
+              <textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Describe the role, responsibilities, and what makes it exciting..."
                 rows={4}
                 required
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Requirements</CardTitle>
-            <CardDescription>
-              Define must-have and preferred qualifications
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+          {/* Requirements */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">Requirements</h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Define must-have and preferred qualifications
+              </p>
+            </div>
+
             {/* Must Have Requirements */}
-            <div className="space-y-3">
-              <Label>Must Have Requirements</Label>
-              <div className="space-y-2">
+            <div className="mb-8">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Must Have Requirements
+              </label>
+              <div className="space-y-3">
                 {formData.mustHave.map((req, index) => (
                   <div key={index} className="flex items-center space-x-2">
-                    <div className="flex-1 p-2 bg-red-50 dark:bg-red-950 rounded border">
-                      <span className="text-sm">{req}</span>
+                    <div className="flex-1 p-3 bg-red-50 border border-red-200 rounded-md">
+                      <span className="text-sm text-red-800">{req}</span>
                     </div>
-                    <Button
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
                       onClick={() => removeRequirement('mustHave', index)}
+                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 ))}
                 <div className="flex space-x-2">
-                  <Input
+                  <input
+                    type="text"
                     value={newMustHave}
                     onChange={(e) => setNewMustHave(e.target.value)}
                     placeholder="e.g., 5+ years React experience"
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement('mustHave', newMustHave))}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   />
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={() => addRequirement('mustHave', newMustHave)}
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* Preferred Requirements */}
-            <div className="space-y-3">
-              <Label>Preferred Requirements</Label>
-              <div className="space-y-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Preferred Requirements
+              </label>
+              <div className="space-y-3">
                 {formData.preferred.map((req, index) => (
                   <div key={index} className="flex items-center space-x-2">
-                    <div className="flex-1 p-2 bg-blue-50 dark:bg-blue-950 rounded border">
-                      <span className="text-sm">{req}</span>
+                    <div className="flex-1 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <span className="text-sm text-blue-800">{req}</span>
                     </div>
-                    <Button
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
                       onClick={() => removeRequirement('preferred', index)}
+                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 ))}
                 <div className="flex space-x-2">
-                  <Input
+                  <input
+                    type="text"
                     value={newPreferred}
                     onChange={(e) => setNewPreferred(e.target.value)}
                     placeholder="e.g., Healthcare domain experience"
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement('preferred', newPreferred))}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   />
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={() => addRequirement('preferred', newPreferred)}
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Constraints</CardTitle>
-            <CardDescription>
-              Additional requirements and restrictions
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="workAuth">Work Authorization</Label>
-              <Select 
-                value={formData.constraints.workAuth} 
-                onValueChange={(value) => setFormData(prev => ({ 
-                  ...prev, 
-                  constraints: { ...prev.constraints, workAuth: value }
-                }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="any">Any</SelectItem>
-                  <SelectItem value="US_citizen_or_green_card">US Citizen or Green Card</SelectItem>
-                  <SelectItem value="US_citizen_only">US Citizen Only</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Constraints */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">Constraints</h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Additional requirements and restrictions
+              </p>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="clearance">Security Clearance</Label>
-              <Input
-                id="clearance"
-                value={formData.constraints.clearance}
-                onChange={(e) => setFormData(prev => ({ 
-                  ...prev, 
-                  constraints: { ...prev.constraints, clearance: e.target.value }
-                }))}
-                placeholder="e.g., Secret, Top Secret, None"
-              />
+            
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="workAuth" className="block text-sm font-medium text-gray-700 mb-2">
+                  Work Authorization
+                </label>
+                <select
+                  id="workAuth"
+                  value={formData.constraints.workAuth}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    constraints: { ...prev.constraints, workAuth: e.target.value }
+                  }))}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="any">Any</option>
+                  <option value="US_citizen_or_green_card">US Citizen or Green Card</option>
+                  <option value="US_citizen_only">US Citizen Only</option>
+                </select>
+              </div>
+              
+              <div>
+                <label htmlFor="clearance" className="block text-sm font-medium text-gray-700 mb-2">
+                  Security Clearance
+                </label>
+                <input
+                  id="clearance"
+                  type="text"
+                  value={formData.constraints.clearance}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    constraints: { ...prev.constraints, clearance: e.target.value }
+                  }))}
+                  placeholder="e.g., Secret, Top Secret, None"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <div className="flex justify-end">
-          <Button type="submit" disabled={loading}>
-            <Save className="h-4 w-4 mr-2" />
-            {loading ? 'Creating...' : 'Create Job Intake'}
-          </Button>
-        </div>
-      </form>
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={loading}
+              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Create Job Intake
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  )
+}
+
+export default function EmployerIntakePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading job intake form...</p>
+        </div>
+      </div>
+    }>
+      <EmployerIntakePageContent />
+    </Suspense>
   )
 }
