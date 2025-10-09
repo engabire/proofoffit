@@ -4,6 +4,12 @@
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci",
   "ignoreCommand": "node vercel-deployment-guard.js",
+  "builds": [
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "crons": [
     {
       "path": "/api/scrape",
@@ -19,13 +25,13 @@
     }
   ],
   "functions": {
-    "app/api/scrape/route.ts": {
+    "apps/web/app/api/scrape/route.ts": {
       "maxDuration": 300
     },
-    "app/api/cleanup/route.ts": {
+    "apps/web/app/api/cleanup/route.ts": {
       "maxDuration": 120
     },
-    "app/api/ai/analyze/route.ts": {
+    "apps/web/app/api/ai/analyze/route.ts": {
       "maxDuration": 300
     }
   }
