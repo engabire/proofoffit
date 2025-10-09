@@ -146,7 +146,7 @@ export default function EnhancedAuth({
         console.log(mode === 'signin' ? 'Signed in successfully!' : 'Account created successfully!')
         
         // Redirect to appropriate page based on user type
-        if (audience === 'employer') {
+        if (audience === 'hirer') {
           router.push('/employer/dashboard')
         } else {
           router.push(redirectTo)
