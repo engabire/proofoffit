@@ -60,12 +60,12 @@ export default function SimpleFitPage() {
         if (token) {
           setIsAuthenticated(true)
         } else {
-          // Redirect to sign-in with return URL
-          router.push('/auth/signin?redirect=/app/fit-simple')
+          // Redirect to sign-in with return URL and user type
+          router.push('/auth/signin?redirect=/app/fit-simple&type=seeker')
         }
       } catch (error) {
         console.error('Auth check failed:', error)
-        router.push('/auth/signin?redirect=/app/fit-simple')
+        router.push('/auth/signin?redirect=/app/fit-simple&type=seeker')
       } finally {
         setIsCheckingAuth(false)
       }
