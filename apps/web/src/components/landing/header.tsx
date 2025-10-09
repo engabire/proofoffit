@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Button } from '@proof-of-fit/ui'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { LogoSymbol } from '@/components/branding/logo-symbol'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -13,9 +14,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">PF</span>
-            </div>
+            <LogoSymbol className="h-8 w-8" />
             <span className="font-bold text-xl">ProofOfFit</span>
           </Link>
         </div>

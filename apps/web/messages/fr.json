@@ -1,0 +1,423 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "clear": "Effacer",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "continue": "Continuer",
+    "skip": "Passer",
+    "finish": "Terminer",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "support": "Support",
+    "contact": "Contact",
+    "about": "À propos",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "security": "Sécurité",
+    "status": "Statut"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "jobs": "Emplois",
+    "candidates": "Candidats",
+    "matches": "Correspondances",
+    "applications": "Candidatures",
+    "analytics": "Analytiques",
+    "admin": "Administration",
+    "enterprise": "Entreprise",
+    "pricing": "Tarifs",
+    "features": "Fonctionnalités",
+    "blog": "Blog",
+    "careers": "Carrières",
+    "press": "Presse"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "rememberMe": "Se souvenir de moi",
+    "createAccount": "Créer un compte",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "signInWith": "Se connecter avec",
+    "signUpWith": "S'inscrire avec",
+    "or": "ou",
+    "continueWithEmail": "Continuer avec l'e-mail",
+    "magicLink": "M'envoyer un lien magique par e-mail",
+    "passkey": "Utiliser une clé d'accès",
+    "sso": "Se connecter avec le SSO de l'entreprise",
+    "google": "Continuer avec Google Workspace",
+    "microsoft": "Continuer avec Microsoft Entra ID",
+    "hiringTeam": "Équipe de recrutement",
+    "jobSeeker": "Chercheur d'emploi",
+    "enterWorkEmail": "Utilisez votre e-mail professionnel. Si votre entreprise a le SSO activé, nous vous redirigerons automatiquement.",
+    "enterEmail": "Utilisez votre e-mail pour accéder à vos candidatures et profil. Nous vous enverrons un lien de connexion sécurisé par e-mail.",
+    "detectedSSO": "Détecté {provider} depuis votre domaine — vous pouvez continuer ou utiliser le SSO suggéré ci-dessous.",
+    "noAccess": "Vous n'avez pas accès ? Demandez à votre administrateur de vous inviter en tant que Recruteur, Évaluateur ou Administrateur.",
+    "needHelp": "Besoin d'aide pour vous connecter ? Obtenir de l'aide.",
+    "noAccountYet": "Pas encore de compte ? Nous en créerons un lors de votre connexion et connecterons automatiquement vos candidatures.",
+    "havingTrouble": "Des difficultés ? Aide aux candidats.",
+    "agreeToTerms": "En continuant, vous acceptez les Conditions et la Politique de Confidentialité de ProofOfFit et notre engagement EEOC. Nous n'envoyons que des e-mails essentiels de compte et de sécurité."
+  },
+  "homepage": {
+    "hero": {
+      "title": "Recrutement basé sur des preuves pour les deux côtés de la table.",
+      "subtitle": "Que vous cherchiez votre prochain poste ou que vous constituiez votre équipe, ProofOfFit fournit un appariement transparent et vérifiable avec des garde-fous de conformité complets.",
+      "seekingJob": "Je cherche un emploi",
+      "hiring": "Je recrute",
+      "noCard": "Aucune carte • 2 minutes jusqu'au premier rapport de correspondance",
+      "trustedBy": "Fait confiance par 500+ entreprises"
+    },
+    "features": {
+      "title": "Flux de travail IA conçus",
+      "subtitle": "Une IA qui ressemble à un designer senior, pas à un assistant bruyant.",
+      "description": "Nous associons l'approche à la gouvernance—reflétant la clarté apaisante des produits que vous aimez, tout en prouvant chaque recommandation.",
+      "explainableFit": {
+        "title": "Rapports de correspondance explicables",
+        "description": "Notre moteur narratif traduit les critères en preuves que vous pouvez partager avec les recruteurs ou les équipes de conformité."
+      },
+      "adaptiveAutopilot": {
+        "title": "Autopilote adaptatif",
+        "description": "Les automatisations guidées préparent les CV, les approches et les briefs d'entretien tout en vous gardant à un clic d'approbation."
+      },
+      "biasAware": {
+        "title": "Scorement conscient des biais",
+        "description": "Nous mettons en évidence les angles morts et suggérons des signaux alternatifs pour que votre liste raconte une histoire équitable et transparente."
+      },
+      "designGrade": {
+        "title": "Sorties de qualité design",
+        "description": "Des tableaux de bord aux rapports de correspondance, chaque écran est conçu pour se sentir aussi considéré que les décisions qui le sous-tendent."
+      }
+    },
+    "whyProofOfFit": {
+      "title": "Pourquoi ProofOfFit",
+      "subtitle": "Parce que le recrutement mérite des preuves—et un logiciel délicieux.",
+      "description": "Appariement basé sur les preuves, automatisation consciente des biais, et transparence prête pour l'audit, le tout enveloppé dans une expérience produit que les équipes adorent.",
+      "explainableMatching": {
+        "title": "Appariement explicable",
+        "description": "Voyez pourquoi vous correspondez, ligne par ligne. Aucun filtre mystérieux."
+      },
+      "biasReducing": {
+        "title": "Algorithmes de réduction des biais",
+        "description": "Signaux structurés et logique transparente pour soutenir des décisions plus équitables."
+      },
+      "immutableAudit": {
+        "title": "Pistes d'audit immuables",
+        "description": "Chaque décision a une URL vérifiable—parfait pour les parties prenantes et la conformité."
+      },
+      "smartAutomation": {
+        "title": "Automatisation intelligente",
+        "description": "CV et lettres de motivation sur mesure qui reflètent les preuves, pas le remplissage."
+      }
+    },
+    "workflow": {
+      "title": "Flux de travail",
+      "subtitle": "Un autopilote guidé qui vous garde en contrôle.",
+      "description": "Chaque voie suit le même rythme apaisant : rassembler les preuves, mapper aux critères, générer le rapport de correspondance, et partager avec confiance.",
+      "step1": {
+        "title": "Construisez vos preuves",
+        "description": "Importez le CV, ajoutez des projets, liez les preuves."
+      },
+      "step2": {
+        "title": "Choisissez un rôle",
+        "description": "Nous analysons l'offre d'emploi et la mappons à vos preuves."
+      },
+      "step3": {
+        "title": "Obtenez votre rapport de correspondance",
+        "description": "Une page que vous pouvez joindre, plus un CV/lettre sur mesure."
+      },
+      "step4": {
+        "title": "Postulez avec confiance",
+        "description": "Connaissez votre histoire avant l'appel du recruteur."
+      }
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "subtitle": "Aimé par les candidats, fait confiance par les équipes de recrutement.",
+      "description": "ProofOfFit rend les entretiens plus calmes pour les candidats et donne aux parties prenantes des reçus sur lesquels ils peuvent s'appuyer.",
+      "testimonial1": {
+        "quote": "J'ai arrêté de deviner. En deux semaines, j'avais des entretiens qui référençaient directement mon rapport de correspondance.",
+        "author": "Amara B., Analyste de données"
+      },
+      "testimonial2": {
+        "quote": "Les puces sur mesure étaient effrayamment bonnes. C'est devenu mon script de pré-sélection.",
+        "author": "Luis R., Chef de produit"
+      }
+    },
+    "cta": {
+      "title": "Prêt à transformer votre recrutement ?",
+      "subtitle": "Rejoignez des milliers d'entreprises utilisant ProofOfFit pour construire des équipes meilleures et plus équitables avec une conformité et une transparence complètes.",
+      "startAsSeeker": "Commencer en tant que chercheur d'emploi",
+      "startAsEmployer": "Commencer en tant qu'employeur",
+      "noCardRequired": "Aucune carte de crédit requise • Essai gratuit de 14 jours • Annulez à tout moment"
+    },
+    "footer": {
+      "description": "Des reçus, pas des boîtes noires. Nous mélangeons la finition apaisante, les garde-fous robustes, la chaleur professionnelle et l'IA intuitive pour garder le recrutement à la fois beau et responsable.",
+      "product": "Produit",
+      "company": "Entreprise",
+      "trust": "Confiance et Légal",
+      "copyright": "© 2024 ProofOfFit, Inc. Conçu avec transparence dans le Midwest, avec équité et responsabilité au cœur."
+    }
+  },
+  "dashboard": {
+    "welcome": "Bon retour",
+    "overview": "Aperçu",
+    "recentActivity": "Activité récente",
+    "quickActions": "Actions rapides",
+    "stats": {
+      "totalJobs": "Total des emplois",
+      "activeJobs": "Emplois actifs",
+      "totalCandidates": "Total des candidats",
+      "matches": "Correspondances",
+      "applications": "Candidatures",
+      "interviews": "Entretiens"
+    }
+  },
+  "jobs": {
+    "title": "Emplois",
+    "createJob": "Créer un emploi",
+    "editJob": "Modifier l'emploi",
+    "deleteJob": "Supprimer l'emploi",
+    "jobTitle": "Titre du poste",
+    "company": "Entreprise",
+    "location": "Localisation",
+    "workType": "Type de travail",
+    "salary": "Salaire",
+    "description": "Description",
+    "requirements": "Exigences",
+    "mustHave": "Obligatoire",
+    "preferred": "Préféré",
+    "postedDate": "Date de publication",
+    "status": "Statut",
+    "applications": "Candidatures",
+    "matches": "Correspondances",
+    "remote": "Distant",
+    "hybrid": "Hybride",
+    "onsite": "Sur site",
+    "fullTime": "Temps plein",
+    "partTime": "Temps partiel",
+    "contract": "Contrat",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "draft": "Brouillon",
+    "closed": "Fermé"
+  },
+  "candidates": {
+    "title": "Candidats",
+    "profile": "Profil",
+    "resume": "CV",
+    "coverLetter": "Lettre de motivation",
+    "experience": "Expérience",
+    "education": "Éducation",
+    "skills": "Compétences",
+    "languages": "Langues",
+    "certifications": "Certifications",
+    "projects": "Projets",
+    "references": "Références",
+    "fitScore": "Score de correspondance",
+    "matchReason": "Raison de la correspondance",
+    "contact": "Contact",
+    "scheduleInterview": "Planifier un entretien",
+    "reject": "Rejeter",
+    "shortlist": "Liste restreinte"
+  },
+  "admin": {
+    "title": "Administration",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "analytics": "Analytiques",
+    "reports": "Rapports",
+    "userManagement": "Gestion des utilisateurs",
+    "roleManagement": "Gestion des rôles",
+    "permissions": "Permissions",
+    "auditLogs": "Journaux d'audit",
+    "systemHealth": "Santé du système",
+    "backups": "Sauvegardes",
+    "integrations": "Intégrations"
+  },
+  "enterprise": {
+    "title": "Entreprise",
+    "sso": "SSO et Sécurité",
+    "adminUsers": "Utilisateurs administrateurs",
+    "companySettings": "Paramètres de l'entreprise",
+    "billing": "Facturation",
+    "usage": "Utilisation",
+    "compliance": "Conformité",
+    "support": "Support"
+  },
+  "gift": {
+    "title": "Offrir ProofOfFit Pro",
+    "subtitle": "Aidez quelqu'un à décrocher son emploi de rêve",
+    "description": "Offrez le cadeau de l'appariement d'emplois basé sur des preuves. Aidez un chercheur d'emploi à obtenir des CV sur mesure, des lettres de motivation et une analyse de correspondance qui mène à plus d'entretiens.",
+    "recipientInfo": "Informations du destinataire",
+    "senderInfo": "Vos informations",
+    "giftSummary": "Résumé du cadeau",
+    "purchaseGift": "Acheter le cadeau",
+    "securityNotice": "Votre paiement est sécurisé et chiffré. Le destinataire recevra son cadeau par e-mail dans les 24 heures suivant l'achat.",
+    "success": {
+      "title": "Cadeau envoyé avec succès ! 🎉",
+      "subtitle": "Vous avez offert {months} mois de ProofOfFit Pro à {recipient}",
+      "description": "Ils recevront un e-mail avec leur code cadeau et les instructions pour commencer.",
+      "giftDetails": "Détails du cadeau",
+      "shareGift": "Partager votre cadeau",
+      "copyCode": "Copier le code cadeau",
+      "sendEmail": "Envoyer par e-mail",
+      "shareSocial": "Partager sur les réseaux sociaux",
+      "impact": "L'impact de votre cadeau",
+      "helpMore": "Voulez-vous aider plus de gens ?",
+      "sendAnother": "Envoyer un autre cadeau"
+    }
+  },
+  "fitSimple": {
+    "title": "Recherche d'emploi et évaluation de correspondance",
+    "subtitle": "Trouvez votre rôle parfait avec un appariement basé sur des preuves",
+    "searchJobs": "Rechercher des emplois",
+    "assessFitness": "Évaluer la correspondance",
+    "tailorResume": "Adapter le CV",
+    "generateCoverLetter": "Générer une lettre de motivation",
+    "applyWithConfidence": "Postuler avec confiance",
+    "jobSearch": {
+      "title": "Recherche d'emploi",
+      "description": "Recherchez des emplois qui correspondent à vos compétences et expérience",
+      "searchPlaceholder": "Recherchez des emplois par titre, entreprise ou localisation...",
+      "filters": "Filtres",
+      "location": "Localisation",
+      "workType": "Type de travail",
+      "salary": "Fourchette de salaire",
+      "experience": "Niveau d'expérience",
+      "company": "Entreprise",
+      "industry": "Industrie"
+    },
+    "fitnessAssessment": {
+      "title": "Évaluation de correspondance",
+      "description": "Obtenez une analyse détaillée de votre correspondance avec ce rôle",
+      "fitScore": "Score de correspondance",
+      "strengths": "Forces",
+      "gaps": "Lacunes",
+      "recommendations": "Recommandations",
+      "evidence": "Preuves",
+      "matchReason": "Pourquoi vous correspondez",
+      "improvementAreas": "Domaines d'amélioration"
+    },
+    "resumeTailoring": {
+      "title": "Adaptation du CV",
+      "description": "Obtenez un CV sur mesure optimisé pour ce rôle spécifique",
+      "originalResume": "CV original",
+      "tailoredResume": "CV sur mesure",
+      "changes": "Modifications apportées",
+      "download": "Télécharger le CV",
+      "preview": "Aperçu du CV"
+    },
+    "coverLetter": {
+      "title": "Génération de lettre de motivation",
+      "description": "Générez une lettre de motivation personnalisée pour cette candidature",
+      "generate": "Générer une lettre de motivation",
+      "preview": "Aperçu de la lettre de motivation",
+      "download": "Télécharger la lettre de motivation",
+      "edit": "Modifier la lettre de motivation"
+    }
+  },
+  "onboarding": {
+    "title": "Bienvenue sur ProofOfFit",
+    "subtitle": "Configurons-vous pour le succès",
+    "step1": {
+      "title": "Choisissez votre chemin",
+      "description": "Cherchez-vous un emploi ou recrutez-vous des talents ?",
+      "seeker": "Je cherche un emploi",
+      "employer": "Je recrute des talents"
+    },
+    "step2": {
+      "title": "Parlez-nous de vous",
+      "description": "Aidez-nous à comprendre votre parcours et vos objectifs",
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "phone": "Numéro de téléphone",
+      "location": "Localisation",
+      "experience": "Années d'expérience",
+      "industry": "Industrie",
+      "skills": "Compétences clés",
+      "goals": "Objectifs de carrière"
+    },
+    "step3": {
+      "title": "Téléchargez votre CV",
+      "description": "Téléchargez votre CV pour commencer l'appariement d'emplois",
+      "upload": "Télécharger le CV",
+      "dragDrop": "Glissez-déposez votre CV ici, ou cliquez pour parcourir",
+      "supportedFormats": "Formats supportés : PDF, DOC, DOCX",
+      "maxSize": "Taille maximale du fichier : 10 Mo"
+    },
+    "step4": {
+      "title": "Complétez votre profil",
+      "description": "Ajoutez des informations supplémentaires pour améliorer vos correspondances",
+      "education": "Éducation",
+      "certifications": "Certifications",
+      "languages": "Langues",
+      "availability": "Disponibilité",
+      "salaryExpectations": "Attentes salariales",
+      "workPreferences": "Préférences de travail"
+    },
+    "complete": {
+      "title": "Vous êtes prêt !",
+      "description": "Votre profil est complet et prêt pour l'appariement d'emplois",
+      "startSearching": "Commencer la recherche d'emploi",
+      "viewProfile": "Voir le profil",
+      "editProfile": "Modifier le profil"
+    }
+  },
+  "errors": {
+    "generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "network": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "unauthorized": "Vous n'êtes pas autorisé à accéder à cette ressource.",
+    "forbidden": "Accès refusé.",
+    "notFound": "La ressource demandée n'a pas été trouvée.",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard.",
+    "validation": "Veuillez vérifier votre saisie et réessayer.",
+    "fileUpload": "Échec du téléchargement de fichier. Veuillez réessayer.",
+    "email": "Veuillez entrer une adresse e-mail valide.",
+    "password": "Le mot de passe doit contenir au moins 8 caractères.",
+    "required": "Ce champ est obligatoire.",
+    "minLength": "Doit contenir au moins {min} caractères.",
+    "maxLength": "Ne doit pas dépasser {max} caractères.",
+    "invalidFormat": "Format invalide."
+  },
+  "success": {
+    "profileUpdated": "Profil mis à jour avec succès",
+    "jobCreated": "Emploi créé avec succès",
+    "applicationSubmitted": "Candidature soumise avec succès",
+    "resumeUploaded": "CV téléchargé avec succès",
+    "settingsSaved": "Paramètres enregistrés avec succès",
+    "passwordChanged": "Mot de passe modifié avec succès",
+    "emailSent": "E-mail envoyé avec succès",
+    "fileUploaded": "Fichier téléchargé avec succès",
+    "dataExported": "Données exportées avec succès",
+    "invitationSent": "Invitation envoyée avec succès"
+  }
+}

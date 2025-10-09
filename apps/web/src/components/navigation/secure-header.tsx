@@ -7,6 +7,7 @@ import { useState } from 'react'
 // import { useAuth } from '@/components/auth/auth-guard'
 import { SecureSignOutButton } from '@/components/auth/secure-sign-out-button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@proof-of-fit/ui'
+import { LogoSymbol } from '@/components/branding/logo-symbol'
 
 export function SecureHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -37,9 +38,7 @@ export function SecureHeader() {
             className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1"
             aria-label="ProofOfFit - Go to homepage"
           >
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">PF</span>
-            </div>
+            <LogoSymbol className="h-8 w-8" />
             <span className="font-bold text-xl">ProofOfFit</span>
           </Link>
         </div>

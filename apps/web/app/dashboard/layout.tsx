@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { SecureSignOutButton } from '@/components/auth/secure-sign-out-button'
 import { BusinessHubMenu } from '@/components/dashboard/business-hub-menu'
+import { LogoSymbol } from '@/components/branding/logo-symbol'
 
 export default async function DashboardLayout({
   children,
@@ -23,9 +24,7 @@ export default async function DashboardLayout({
       <header className="border-b">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">PF</span>
-            </div>
+            <LogoSymbol className="h-8 w-8" />
             <span className="font-bold text-xl">ProofOfFit</span>
           </div>
           <div className="flex items-center space-x-4">

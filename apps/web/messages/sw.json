@@ -1,0 +1,423 @@
+{
+  "common": {
+    "loading": "Inapakia...",
+    "error": "Hitilafu",
+    "success": "Mafanikio",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "delete": "Futa",
+    "edit": "Hariri",
+    "view": "Ona",
+    "back": "Rudi",
+    "next": "Ifuatayo",
+    "previous": "Iliyotangulia",
+    "submit": "Wasilisha",
+    "search": "Tafuta",
+    "filter": "Chuja",
+    "clear": "Futa",
+    "close": "Funga",
+    "open": "Fungua",
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "ok": "Sawa",
+    "continue": "Endelea",
+    "skip": "Ruka",
+    "finish": "Maliza",
+    "getStarted": "Anza",
+    "learnMore": "Jifunze zaidi",
+    "signIn": "Ingia",
+    "signUp": "Jisajili",
+    "signOut": "Ondoka",
+    "profile": "Wasifu",
+    "settings": "Mipangilio",
+    "help": "Msaada",
+    "support": "Unga mkono",
+    "contact": "Wasiliana",
+    "about": "Kuhusu",
+    "privacy": "Faragha",
+    "terms": "Masharti",
+    "security": "Usalama",
+    "status": "Hali"
+  },
+  "navigation": {
+    "home": "Nyumbani",
+    "dashboard": "Dashibodi",
+    "jobs": "Kazi",
+    "candidates": "Wagombea",
+    "matches": "Mechi",
+    "applications": "Maombi",
+    "analytics": "Uchambuzi",
+    "admin": "Msimamizi",
+    "enterprise": "Biashara",
+    "pricing": "Bei",
+    "features": "Vipengele",
+    "blog": "Blogu",
+    "careers": "Kazi",
+    "press": "Vyombo vya habari"
+  },
+  "auth": {
+    "signIn": "Ingia",
+    "signUp": "Jisajili",
+    "signOut": "Ondoka",
+    "email": "Barua pepe",
+    "password": "Nywila",
+    "confirmPassword": "Thibitisha nywila",
+    "forgotPassword": "Umesahau nywila?",
+    "rememberMe": "Nikumbuke",
+    "createAccount": "Unda akaunti",
+    "alreadyHaveAccount": "Una akaunti?",
+    "dontHaveAccount": "Huna akaunti?",
+    "signInWith": "Ingia kwa",
+    "signUpWith": "Jisajili kwa",
+    "or": "au",
+    "continueWithEmail": "Endelea kwa barua pepe",
+    "magicLink": "Nipepeleke kiungo cha kichawi",
+    "passkey": "Tumia ufunguo",
+    "sso": "Ingia kwa SSO ya kampuni",
+    "google": "Endelea kwa Google Workspace",
+    "microsoft": "Endelea kwa Microsoft Entra ID",
+    "hiringTeam": "Timu ya ajira",
+    "jobSeeker": "Mtafuta kazi",
+    "enterWorkEmail": "Tumia barua pepe yako ya kazi. Ikiwa kampuni yako ina SSO imewashwa, tutakuongoza kiotomatiki.",
+    "enterEmail": "Tumia barua pepe yako kupata maombi yako na wasifu. Tutakutumia kiungo cha usalama cha kuingia kwa barua pepe.",
+    "detectedSSO": "Tumegundua {provider} kutoka kwa kikoa chako — unaweza kuendelea au kutumia SSO iliyopendekezwa hapa chini.",
+    "noAccess": "Huna ufikiaji? Omba msimamizi wako akualike kama Mwajiri, Mhakiki, au Msimamizi.",
+    "needHelp": "Unahitaji msaada wa kuingia? Pata msaada.",
+    "noAccountYet": "Bado huna akaunti? Tutaiunda unapoingia na tutaunganisha maombi yako kiotomatiki.",
+    "havingTrouble": "Una matatizo? Msaada wa wagombea.",
+    "agreeToTerms": "Kwa kuendelea, unakubali Masharti na Sera ya Faragha ya ProofOfFit na ahadi yetu ya EEOC. Tunatuma tu barua pepe muhimu za akaunti na usalama."
+  },
+  "homepage": {
+    "hero": {
+      "title": "Kuajiri kulingana na ushahidi kwa pande zote mbili za meza.",
+      "subtitle": "Ikiwa unatafuta kazi yako ijayo au unajenga timu yako, ProofOfFit inatoa mechi ya uwazi, inayoweza kukaguliwa na vikwazo vya kufuata sheria.",
+      "seekingJob": "Ninafuta kazi",
+      "hiring": "Ninaajiri",
+      "noCard": "Hakuna kadi • Dakika 2 hadi Ripoti ya Fit ya kwanza",
+      "trustedBy": "Inaaminika na Makampuni 500+"
+    },
+    "features": {
+      "title": "Mifumo ya AI iliyoundwa",
+      "subtitle": "AI inayohisi kama mbunifu mkuu, si msaidizi wa kelele.",
+      "description": "Tunaunganisha ukaribu na utawala—tunakidhi uwazi wa utulivu wa bidhaa unazopenda, wakati tunathibitisha kila pendekezo.",
+      "explainableFit": {
+        "title": "Ripoti za Fit zinazoweza kufafanuliwa",
+        "description": "Mashine yetu ya hadithi inatafsiri vigezo kuwa ushahidi unaoweza kushiriki na waajiri au timu za kufuata sheria."
+      },
+      "adaptiveAutopilot": {
+        "title": "Autopilot inayojifunza",
+        "description": "Otomatiki zilizoongozwa zinajiandaa CV, mawasiliano, na maelezo ya mahojiano wakati zikikuhifadhi umbali wa kubonyeza kimoja cha idhini."
+      },
+      "biasAware": {
+        "title": "Kupima ubaguzi",
+        "description": "Tunaonyesha mapengo na tunapendekeza ishara mbadala ili orodha yako isimulie hadithi ya haki na uwazi."
+      },
+      "designGrade": {
+        "title": "Matokeo ya kiwango cha muundo",
+        "description": "Kutoka dashibodi hadi Ripoti za Fit, kila skrini imeundwa kuhisi kama ilivyozingatiwa kama maamuzi yanayofuatia."
+      }
+    },
+    "whyProofOfFit": {
+      "title": "Kwa nini ProofOfFit",
+      "subtitle": "Kwa sababu kuajiri inastahili ushahidi—na programu nzuri.",
+      "description": "Mechi ya kwanza ya ushahidi, otomatiki inayojua ubaguzi, na uwazi unaoweza kukaguliwa, imefungwa katika uzoefu wa bidhaa ambao timu zinapenda kuishi.",
+      "explainableMatching": {
+        "title": "Mechi inayoweza kufafanuliwa",
+        "description": "Ona kwa nini unafanana, mstari kwa mstari. Hakuna vichujio vya siri."
+      },
+      "biasReducing": {
+        "title": "Algorithms za kupunguza ubaguzi",
+        "description": "Ishara zilizopangwa na mantiki ya uwazi kusaidia maamuzi ya haki zaidi."
+      },
+      "immutableAudit": {
+        "title": "Njia za ukaguzi zisizobadilika",
+        "description": "Kila uamuzi una URL inayoweza kuthibitishwa—nzuri kwa wahusika na kufuata sheria."
+      },
+      "smartAutomation": {
+        "title": "Otomatiki za akili",
+        "description": "CV na barua za maombi zilizopangwa zinakidhi ushahidi, si majani."
+      }
+    },
+    "workflow": {
+      "title": "Mfumo wa kazi",
+      "subtitle": "Autopilot iliyoongozwa inayokuhifadhi katika udhibiti.",
+      "description": "Kila njia inafuata mwendo huo wa utulivu: kusanya ushahidi, kuweka kwenye vigezo, kutengeneza Ripoti ya Fit, na kushiriki kwa ujasiri.",
+      "step1": {
+        "title": "Jenga ushahidi wako",
+        "description": "Ingiza CV, ongeza miradi, unganisha ushahidi."
+      },
+      "step2": {
+        "title": "Chagua jukumu",
+        "description": "Tunachanganua JD na kuweka kwenye ushahidi wako."
+      },
+      "step3": {
+        "title": "Pata Ripoti yako ya Fit",
+        "description": "Ukurasa wa 1 unaoweza kuambatisha, pamoja na CV/barua iliyopangwa."
+      },
+      "step4": {
+        "title": "Omba kwa ujasiri",
+        "description": "Jua hadithi yako kabla ya simu ya mwajiri."
+      }
+    },
+    "testimonials": {
+      "title": "Maoni",
+      "subtitle": "Inapendwa na wagombea, inaaminika na timu za kuajiri.",
+      "description": "ProofOfFit inafanya mahojiano kuwa ya utulivu kwa wagombea na inawapa wahusika risiti wanaoweza kusimama nyuma.",
+      "testimonial1": {
+        "quote": "Nilisimama kukisia. Baada ya wiki mbili, nilikuwa na mahojiano yaliyorejelea Ripoti yangu ya Fit moja kwa moja.",
+        "author": "Amara B., Mchambuzi wa Data"
+      },
+      "testimonial2": {
+        "quote": "Vipande vilivyopangwa vilikuwa vya ajabu sana. Ikawa script yangu ya awali ya kuchuja.",
+        "author": "Luis R., Meneja wa Bidhaa"
+      }
+    },
+    "cta": {
+      "title": "Uko Tayari Kubadilisha Kuajiri Kwako?",
+      "subtitle": "Jiunge na makampuni elfu yanayotumia ProofOfFit kujenga timu bora zaidi, za haki na uwazi kamili.",
+      "startAsSeeker": "Anza kama Mtafuta Kazi",
+      "startAsEmployer": "Anza kama Mwajiri",
+      "noCardRequired": "Hakuna kadi inayohitajika • Jaribio la siku 14 • Ghairi wakati wowote"
+    },
+    "footer": {
+      "description": "Risiti, si masanduku meusi. Tunachanganya mwonekano wa utulivu, vikwazo vikali, joto la kitaaluma, na AI ya akili kuhifadhi kuajiri kuwa nzuri na kuwajibika.",
+      "product": "Bidhaa",
+      "company": "Kampuni",
+      "trust": "Kiamini na Kisheria",
+      "copyright": "© 2024 ProofOfFit, Inc. Imeundwa kwa uwazi katika Midwest, na haki na uwajibikaji moyoni."
+    }
+  },
+  "dashboard": {
+    "welcome": "Karibu tena",
+    "overview": "Muhtasari",
+    "recentActivity": "Shughuli za hivi karibuni",
+    "quickActions": "Vitendo vya haraka",
+    "stats": {
+      "totalJobs": "Kazi Zote",
+      "activeJobs": "Kazi Zinazofanya Kazi",
+      "totalCandidates": "Wagombea Wote",
+      "matches": "Mechi",
+      "applications": "Maombi",
+      "interviews": "Mahojiano"
+    }
+  },
+  "jobs": {
+    "title": "Kazi",
+    "createJob": "Unda Kazi",
+    "editJob": "Hariri Kazi",
+    "deleteJob": "Futa Kazi",
+    "jobTitle": "Jina la Kazi",
+    "company": "Kampuni",
+    "location": "Mahali",
+    "workType": "Aina ya Kazi",
+    "salary": "Mshahara",
+    "description": "Maelezo",
+    "requirements": "Mahitaji",
+    "mustHave": "Lazima",
+    "preferred": "Inayopendelewa",
+    "postedDate": "Tarehe ya Kutumwa",
+    "status": "Hali",
+    "applications": "Maombi",
+    "matches": "Mechi",
+    "remote": "Mbali",
+    "hybrid": "Mchanganyiko",
+    "onsite": "Mahali pa kazi",
+    "fullTime": "Muda kamili",
+    "partTime": "Muda wa nusu",
+    "contract": "Mkataba",
+    "active": "Inafanya kazi",
+    "inactive": "Haifanyi kazi",
+    "draft": "Rasimu",
+    "closed": "Imefungwa"
+  },
+  "candidates": {
+    "title": "Wagombea",
+    "profile": "Wasifu",
+    "resume": "CV",
+    "coverLetter": "Barua ya Maombi",
+    "experience": "Uzoefu",
+    "education": "Elimu",
+    "skills": "Ujuzi",
+    "languages": "Lugha",
+    "certifications": "Vyeti",
+    "projects": "Miradi",
+    "references": "Marejeleo",
+    "fitScore": "Alama ya Fit",
+    "matchReason": "Sababu ya Mechi",
+    "contact": "Wasiliana",
+    "scheduleInterview": "Panga Mahojiano",
+    "reject": "Kataa",
+    "shortlist": "Orodha fupi"
+  },
+  "admin": {
+    "title": "Utawala",
+    "users": "Watumiaji",
+    "settings": "Mipangilio",
+    "analytics": "Uchambuzi",
+    "reports": "Ripoti",
+    "userManagement": "Usimamizi wa Watumiaji",
+    "roleManagement": "Usimamizi wa Majukumu",
+    "permissions": "Ruhusa",
+    "auditLogs": "Vitabu vya Ukaguzi",
+    "systemHealth": "Afya ya Mfumo",
+    "backups": "Nakala za ziada",
+    "integrations": "Muunganisho"
+  },
+  "enterprise": {
+    "title": "Biashara",
+    "sso": "SSO na Usalama",
+    "adminUsers": "Watumiaji wa Utawala",
+    "companySettings": "Mipangilio ya Kampuni",
+    "billing": "Ulipaji",
+    "usage": "Matumizi",
+    "compliance": "Kufuata sheria",
+    "support": "Msaada"
+  },
+  "gift": {
+    "title": "Zawadi ya ProofOfFit Pro",
+    "subtitle": "Msaada mtu kupata kazi yake ya ndoto",
+    "description": "Toa zawadi ya mechi ya kazi kulingana na ushahidi. Msaada mtafuta kazi kupata CV zilizopangwa, barua za maombi, na uchambuzi wa fit unaoongoza kwa mahojiano zaidi.",
+    "recipientInfo": "Taarifa za Mpokeaji",
+    "senderInfo": "Taarifa Zako",
+    "giftSummary": "Muhtasari wa Zawadi",
+    "purchaseGift": "Nunua Zawadi",
+    "securityNotice": "Malipo yako yana usalama na yamefichwa. Mpokeaji atapokea zawadi yake kwa barua pepe ndani ya masaa 24 baada ya ununuzi.",
+    "success": {
+      "title": "Zawadi Imetumwa Kwa Mafanikio! 🎉",
+      "subtitle": "Umetoa {months} miezi ya ProofOfFit Pro kwa {recipient}",
+      "description": "Watapokea barua pepe na msimbo wao wa zawadi na maagizo ya kuanza.",
+      "giftDetails": "Maelezo ya Zawadi",
+      "shareGift": "Shiriki Zawadi Yako",
+      "copyCode": "Nakili Msimbo wa Zawadi",
+      "sendEmail": "Tuma kwa Barua Pepe",
+      "shareSocial": "Shiriki kwa Jamii",
+      "impact": "Athari ya Zawadi Yako",
+      "helpMore": "Unataka kusaidia watu zaidi?",
+      "sendAnother": "Tuma Zawadi Nyingine"
+    }
+  },
+  "fitSimple": {
+    "title": "Utafutaji wa Kazi na Tathmini ya Fit",
+    "subtitle": "Pata jukumu lako kamili na mechi kulingana na ushahidi",
+    "searchJobs": "Tafuta Kazi",
+    "assessFitness": "Tathmini Fit",
+    "tailorResume": "Panga CV",
+    "generateCoverLetter": "Tengeneza Barua ya Maombi",
+    "applyWithConfidence": "Omba kwa Ujasiri",
+    "jobSearch": {
+      "title": "Utafutaji wa Kazi",
+      "description": "Tafuta kazi zinazofanana na ujuzi wako na uzoefu",
+      "searchPlaceholder": "Tafuta kazi kwa jina, kampuni, au mahali...",
+      "filters": "Vichujio",
+      "location": "Mahali",
+      "workType": "Aina ya Kazi",
+      "salary": "Mpaka wa Mshahara",
+      "experience": "Kiwango cha Uzoefu",
+      "company": "Kampuni",
+      "industry": "Sekta"
+    },
+    "fitnessAssessment": {
+      "title": "Tathmini ya Fit",
+      "description": "Pata uchambuzi wa kina wa jinsi unavyofanana na jukumu hili",
+      "fitScore": "Alama ya Fit",
+      "strengths": "Nguvu",
+      "gaps": "Mapengo",
+      "recommendations": "Mapendekezo",
+      "evidence": "Ushahidi",
+      "matchReason": "Kwa nini unafanana",
+      "improvementAreas": "Maeneo ya Kuboresha"
+    },
+    "resumeTailoring": {
+      "title": "Kupanga CV",
+      "description": "Pata CV iliyopangwa iliyoboreshwa kwa jukumu hili maalum",
+      "originalResume": "CV ya Asili",
+      "tailoredResume": "CV Iliyopangwa",
+      "changes": "Mabadiliko Yaliyofanywa",
+      "download": "Pakua CV",
+      "preview": "Hakiki CV"
+    },
+    "coverLetter": {
+      "title": "Utengenezaji wa Barua ya Maombi",
+      "description": "Tengeneza barua ya maombi ya kibinafsi kwa ombi hili",
+      "generate": "Tengeneza Barua ya Maombi",
+      "preview": "Hakiki Barua ya Maombi",
+      "download": "Pakua Barua ya Maombi",
+      "edit": "Hariri Barua ya Maombi"
+    }
+  },
+  "onboarding": {
+    "title": "Karibu kwa ProofOfFit",
+    "subtitle": "Hebu tukupange kwa mafanikio",
+    "step1": {
+      "title": "Chagua Njia Yako",
+      "description": "Unatafuta kazi au unauajiri talanta?",
+      "seeker": "Ninafuta kazi",
+      "employer": "Ninaajiri talanta"
+    },
+    "step2": {
+      "title": "Tuambie Kuhusu Wewe",
+      "description": "Tusaidie kuelewa historia yako na malengo",
+      "name": "Jina Kamili",
+      "email": "Anwani ya Barua Pepe",
+      "phone": "Nambari ya Simu",
+      "location": "Mahali",
+      "experience": "Miaka ya Uzoefu",
+      "industry": "Sekta",
+      "skills": "Ujuzi Muhimu",
+      "goals": "Malengo ya Kazi"
+    },
+    "step3": {
+      "title": "Pakia CV Yako",
+      "description": "Pakia CV yako kuanza na mechi ya kazi",
+      "upload": "Pakia CV",
+      "dragDrop": "Buruta na uangushe CV yako hapa, au bonyeza kusafiri",
+      "supportedFormats": "Miundo inayosaidiwa: PDF, DOC, DOCX",
+      "maxSize": "Ukubwa wa juu wa faili: 10MB"
+    },
+    "step4": {
+      "title": "Kamilisha Wasifu Wako",
+      "description": "Ongeza taarifa za ziada kuboresha mechi zako",
+      "education": "Elimu",
+      "certifications": "Vyeti",
+      "languages": "Lugha",
+      "availability": "Upatikanaji",
+      "salaryExpectations": "Matarajio ya Mshahara",
+      "workPreferences": "Mapendeleo ya Kazi"
+    },
+    "complete": {
+      "title": "Uko Tayari!",
+      "description": "Wasifu wako umekamilika na uko tayari kwa mechi ya kazi",
+      "startSearching": "Anza Utafutaji wa Kazi",
+      "viewProfile": "Ona Wasifu",
+      "editProfile": "Hariri Wasifu"
+    }
+  },
+  "errors": {
+    "generic": "Kitu kimekwenda vibaya. Tafadhali jaribu tena.",
+    "network": "Hitilafu ya mtandao. Tafadhali angalia muunganisho wako.",
+    "unauthorized": "Huna ruhusa ya kupata rasilimali hii.",
+    "forbidden": "Ufikiaji umekataliwa.",
+    "notFound": "Rasilimali iliyoombwa haijapatikana.",
+    "serverError": "Hitilafu ya seva. Tafadhali jaribu tena baadaye.",
+    "validation": "Tafadhali angalia pembejeo yako na ujaribu tena.",
+    "fileUpload": "Upakiaji wa faili umeshindwa. Tafadhali jaribu tena.",
+    "email": "Tafadhali ingiza anwani ya barua pepe halali.",
+    "password": "Nywila lazima iwe na angalau herufi 8.",
+    "required": "Sehemu hii inahitajika.",
+    "minLength": "Lazima iwe na angalau herufi {min}.",
+    "maxLength": "Haipaswi kuwa zaidi ya herufi {max}.",
+    "invalidFormat": "Muundo si sahihi."
+  },
+  "success": {
+    "profileUpdated": "Wasifu umesasishwa kwa mafanikio",
+    "jobCreated": "Kazi imeundwa kwa mafanikio",
+    "applicationSubmitted": "Ombi limewasilishwa kwa mafanikio",
+    "resumeUploaded": "CV imepakiwa kwa mafanikio",
+    "settingsSaved": "Mipangilio imehifadhiwa kwa mafanikio",
+    "passwordChanged": "Nywila imebadilishwa kwa mafanikio",
+    "emailSent": "Barua pepe imetumwa kwa mafanikio",
+    "fileUploaded": "Faili imepakiwa kwa mafanikio",
+    "dataExported": "Data imesafirishwa kwa mafanikio",
+    "invitationSent": "Mwaliko umetumwa kwa mafanikio"
+  }
+}

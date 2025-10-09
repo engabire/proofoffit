@@ -1,0 +1,423 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "continue": "Continue",
+    "skip": "Skip",
+    "finish": "Finish",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "support": "Support",
+    "contact": "Contact",
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "security": "Security",
+    "status": "Status"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "jobs": "Jobs",
+    "candidates": "Candidates",
+    "matches": "Matches",
+    "applications": "Applications",
+    "analytics": "Analytics",
+    "admin": "Admin",
+    "enterprise": "Enterprise",
+    "pricing": "Pricing",
+    "features": "Features",
+    "blog": "Blog",
+    "careers": "Careers",
+    "press": "Press"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember me",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "signInWith": "Sign in with",
+    "signUpWith": "Sign up with",
+    "or": "or",
+    "continueWithEmail": "Continue with email",
+    "magicLink": "Email me a magic link",
+    "passkey": "Use a Passkey",
+    "sso": "Sign in with Company SSO",
+    "google": "Continue with Google Workspace",
+    "microsoft": "Continue with Microsoft Entra ID",
+    "hiringTeam": "Hiring team",
+    "jobSeeker": "Job seeker",
+    "enterWorkEmail": "Use your work email. If your company has SSO enabled, we'll route you automatically.",
+    "enterEmail": "Use your email to access your applications and profile. We'll email you a secure sign-in link.",
+    "detectedSSO": "Detected {provider} from your domain — you can continue or use the suggested SSO below.",
+    "noAccess": "Don't have access? Ask your admin to invite you as Recruiter, Reviewer, or Admin.",
+    "needHelp": "Need help signing in? Get support.",
+    "noAccountYet": "No account yet? We'll create one as you sign in and connect your applications automatically.",
+    "havingTrouble": "Having trouble? Candidate help.",
+    "agreeToTerms": "By continuing, you agree to ProofOfFit's Terms and Privacy Policy and our EEOC commitment. We only send essential account and security emails."
+  },
+  "homepage": {
+    "hero": {
+      "title": "Evidence-based hiring for both sides of the table.",
+      "subtitle": "Whether you're seeking your next role or building your team, ProofOfFit provides transparent, auditable matching with full compliance guardrails.",
+      "seekingJob": "I am seeking a job",
+      "hiring": "I am hiring",
+      "noCard": "No card • 2 minutes to first Fit Report",
+      "trustedBy": "Trusted by 500+ Companies"
+    },
+    "features": {
+      "title": "Crafted AI workflows",
+      "subtitle": "AI that feels like a senior designer, not a noisy assistant.",
+      "description": "We pair approachability with governance—mirroring the calm clarity of the products you love, while proving every recommendation.",
+      "explainableFit": {
+        "title": "Explainable Fit Reports",
+        "description": "Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams."
+      },
+      "adaptiveAutopilot": {
+        "title": "Adaptive Autopilot",
+        "description": "Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away."
+      },
+      "biasAware": {
+        "title": "Bias-aware Scoring",
+        "description": "We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story."
+      },
+      "designGrade": {
+        "title": "Design-grade outputs",
+        "description": "From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it."
+      }
+    },
+    "whyProofOfFit": {
+      "title": "Why ProofOfFit",
+      "subtitle": "Because hiring deserves evidence—and delightful software.",
+      "description": "Evidence-first matching, bias-aware automation, and audit-ready transparency, wrapped in a product experience that teams love to live in.",
+      "explainableMatching": {
+        "title": "Explainable Matching",
+        "description": "See why you're a match, line by line. No mystery filters."
+      },
+      "biasReducing": {
+        "title": "Bias‑Reducing Algorithms",
+        "description": "Structured signals and transparent logic to support fairer calls."
+      },
+      "immutableAudit": {
+        "title": "Immutable Audit Trails",
+        "description": "Every decision has a verifiable URL—great for stakeholders and compliance."
+      },
+      "smartAutomation": {
+        "title": "Smart Automation",
+        "description": "Tailored resumes and cover letters that echo the evidence, not fluff."
+      }
+    },
+    "workflow": {
+      "title": "Workflow",
+      "subtitle": "A guided autopilot that keeps you in control.",
+      "description": "Every lane follows the same calming rhythm: gather proof, map to criteria, generate the Fit Report, and share with confidence.",
+      "step1": {
+        "title": "Build your proof",
+        "description": "Import resume, add projects, link evidence."
+      },
+      "step2": {
+        "title": "Pick a role",
+        "description": "We parse the JD and map it to your proof."
+      },
+      "step3": {
+        "title": "Get your Fit Report",
+        "description": "A 1‑pager you can attach, plus tailored resume/cover."
+      },
+      "step4": {
+        "title": "Apply with confidence",
+        "description": "Know your story before the recruiter call."
+      }
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "Loved by candidates, trusted by hiring teams.",
+      "description": "ProofOfFit makes interviews calmer for candidates and gives stakeholders receipts they can stand behind.",
+      "testimonial1": {
+        "quote": "I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly.",
+        "author": "Amara B., Data Analyst"
+      },
+      "testimonial2": {
+        "quote": "The tailored bullets were spooky‑good. It became my pre‑screen script.",
+        "author": "Luis R., Product Manager"
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Hiring?",
+      "subtitle": "Join thousands of companies using ProofOfFit to build better, fairer teams with full compliance and transparency.",
+      "startAsSeeker": "Start as Job Seeker",
+      "startAsEmployer": "Start as Employer",
+      "noCardRequired": "No credit card required • 14-day free trial • Cancel anytime"
+    },
+    "footer": {
+      "description": "Receipts, not black boxes. We blend calming polish, robust guardrails, professional warmth, and intuitive AI to keep hiring both beautiful and accountable.",
+      "product": "Product",
+      "company": "Company",
+      "trust": "Trust & Legal",
+      "copyright": "© 2024 ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart."
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "overview": "Overview",
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions",
+    "stats": {
+      "totalJobs": "Total Jobs",
+      "activeJobs": "Active Jobs",
+      "totalCandidates": "Total Candidates",
+      "matches": "Matches",
+      "applications": "Applications",
+      "interviews": "Interviews"
+    }
+  },
+  "jobs": {
+    "title": "Jobs",
+    "createJob": "Create Job",
+    "editJob": "Edit Job",
+    "deleteJob": "Delete Job",
+    "jobTitle": "Job Title",
+    "company": "Company",
+    "location": "Location",
+    "workType": "Work Type",
+    "salary": "Salary",
+    "description": "Description",
+    "requirements": "Requirements",
+    "mustHave": "Must Have",
+    "preferred": "Preferred",
+    "postedDate": "Posted Date",
+    "status": "Status",
+    "applications": "Applications",
+    "matches": "Matches",
+    "remote": "Remote",
+    "hybrid": "Hybrid",
+    "onsite": "On-site",
+    "fullTime": "Full-time",
+    "partTime": "Part-time",
+    "contract": "Contract",
+    "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft",
+    "closed": "Closed"
+  },
+  "candidates": {
+    "title": "Candidates",
+    "profile": "Profile",
+    "resume": "Resume",
+    "coverLetter": "Cover Letter",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "projects": "Projects",
+    "references": "References",
+    "fitScore": "Fit Score",
+    "matchReason": "Match Reason",
+    "contact": "Contact",
+    "scheduleInterview": "Schedule Interview",
+    "reject": "Reject",
+    "shortlist": "Shortlist"
+  },
+  "admin": {
+    "title": "Admin",
+    "users": "Users",
+    "settings": "Settings",
+    "analytics": "Analytics",
+    "reports": "Reports",
+    "userManagement": "User Management",
+    "roleManagement": "Role Management",
+    "permissions": "Permissions",
+    "auditLogs": "Audit Logs",
+    "systemHealth": "System Health",
+    "backups": "Backups",
+    "integrations": "Integrations"
+  },
+  "enterprise": {
+    "title": "Enterprise",
+    "sso": "SSO & Security",
+    "adminUsers": "Admin Users",
+    "companySettings": "Company Settings",
+    "billing": "Billing",
+    "usage": "Usage",
+    "compliance": "Compliance",
+    "support": "Support"
+  },
+  "gift": {
+    "title": "Gift ProofOfFit Pro",
+    "subtitle": "Help someone land their dream job",
+    "description": "Give the gift of evidence-based job matching. Help a job seeker get tailored resumes, cover letters, and fit analysis that leads to more interviews.",
+    "recipientInfo": "Recipient Information",
+    "senderInfo": "Your Information",
+    "giftSummary": "Gift Summary",
+    "purchaseGift": "Purchase Gift",
+    "securityNotice": "Your payment is secure and encrypted. The recipient will receive their gift via email within 24 hours of purchase.",
+    "success": {
+      "title": "Gift Sent Successfully! 🎉",
+      "subtitle": "You've gifted {months} months of ProofOfFit Pro to {recipient}",
+      "description": "They'll receive an email with their gift code and instructions to get started.",
+      "giftDetails": "Gift Details",
+      "shareGift": "Share Your Gift",
+      "copyCode": "Copy Gift Code",
+      "sendEmail": "Send via Email",
+      "shareSocial": "Share on Social",
+      "impact": "The Impact of Your Gift",
+      "helpMore": "Want to help more people?",
+      "sendAnother": "Send Another Gift"
+    }
+  },
+  "fitSimple": {
+    "title": "Job Search & Fit Assessment",
+    "subtitle": "Find your perfect role with evidence-based matching",
+    "searchJobs": "Search Jobs",
+    "assessFitness": "Assess Fitness",
+    "tailorResume": "Tailor Resume",
+    "generateCoverLetter": "Generate Cover Letter",
+    "applyWithConfidence": "Apply with Confidence",
+    "jobSearch": {
+      "title": "Job Search",
+      "description": "Search for jobs that match your skills and experience",
+      "searchPlaceholder": "Search for jobs by title, company, or location...",
+      "filters": "Filters",
+      "location": "Location",
+      "workType": "Work Type",
+      "salary": "Salary Range",
+      "experience": "Experience Level",
+      "company": "Company",
+      "industry": "Industry"
+    },
+    "fitnessAssessment": {
+      "title": "Fitness Assessment",
+      "description": "Get a detailed analysis of how well you match this role",
+      "fitScore": "Fit Score",
+      "strengths": "Strengths",
+      "gaps": "Gaps",
+      "recommendations": "Recommendations",
+      "evidence": "Evidence",
+      "matchReason": "Why you're a match",
+      "improvementAreas": "Areas for improvement"
+    },
+    "resumeTailoring": {
+      "title": "Resume Tailoring",
+      "description": "Get a tailored resume optimized for this specific role",
+      "originalResume": "Original Resume",
+      "tailoredResume": "Tailored Resume",
+      "changes": "Changes Made",
+      "download": "Download Resume",
+      "preview": "Preview Resume"
+    },
+    "coverLetter": {
+      "title": "Cover Letter Generation",
+      "description": "Generate a personalized cover letter for this application",
+      "generate": "Generate Cover Letter",
+      "preview": "Preview Cover Letter",
+      "download": "Download Cover Letter",
+      "edit": "Edit Cover Letter"
+    }
+  },
+  "onboarding": {
+    "title": "Welcome to ProofOfFit",
+    "subtitle": "Let's get you set up for success",
+    "step1": {
+      "title": "Choose Your Path",
+      "description": "Are you looking for a job or hiring talent?",
+      "seeker": "I'm seeking a job",
+      "employer": "I'm hiring talent"
+    },
+    "step2": {
+      "title": "Tell Us About Yourself",
+      "description": "Help us understand your background and goals",
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "location": "Location",
+      "experience": "Years of Experience",
+      "industry": "Industry",
+      "skills": "Key Skills",
+      "goals": "Career Goals"
+    },
+    "step3": {
+      "title": "Upload Your Resume",
+      "description": "Upload your resume to get started with job matching",
+      "upload": "Upload Resume",
+      "dragDrop": "Drag and drop your resume here, or click to browse",
+      "supportedFormats": "Supported formats: PDF, DOC, DOCX",
+      "maxSize": "Maximum file size: 10MB"
+    },
+    "step4": {
+      "title": "Complete Your Profile",
+      "description": "Add additional information to improve your matches",
+      "education": "Education",
+      "certifications": "Certifications",
+      "languages": "Languages",
+      "availability": "Availability",
+      "salaryExpectations": "Salary Expectations",
+      "workPreferences": "Work Preferences"
+    },
+    "complete": {
+      "title": "You're All Set!",
+      "description": "Your profile is complete and ready for job matching",
+      "startSearching": "Start Job Search",
+      "viewProfile": "View Profile",
+      "editProfile": "Edit Profile"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to access this resource.",
+    "forbidden": "Access denied.",
+    "notFound": "The requested resource was not found.",
+    "serverError": "Server error. Please try again later.",
+    "validation": "Please check your input and try again.",
+    "fileUpload": "File upload failed. Please try again.",
+    "email": "Please enter a valid email address.",
+    "password": "Password must be at least 8 characters long.",
+    "required": "This field is required.",
+    "minLength": "Must be at least {min} characters long.",
+    "maxLength": "Must be no more than {max} characters long.",
+    "invalidFormat": "Invalid format."
+  },
+  "success": {
+    "profileUpdated": "Profile updated successfully",
+    "jobCreated": "Job created successfully",
+    "applicationSubmitted": "Application submitted successfully",
+    "resumeUploaded": "Resume uploaded successfully",
+    "settingsSaved": "Settings saved successfully",
+    "passwordChanged": "Password changed successfully",
+    "emailSent": "Email sent successfully",
+    "fileUploaded": "File uploaded successfully",
+    "dataExported": "Data exported successfully",
+    "invitationSent": "Invitation sent successfully"
+  }
+}

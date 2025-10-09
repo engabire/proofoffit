@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { SignOutButton } from '@/components/auth/sign-out-button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { LogoSymbol } from '@/components/branding/logo-symbol'
 
 export default async function CandidateLayout({
   children,
@@ -33,9 +34,7 @@ export default async function CandidateLayout({
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
             <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">PF</span>
-              </div>
+              <LogoSymbol className="h-8 w-8" />
               <span className="font-bold text-xl">ProofOfFit</span>
             </Link>
           </div>

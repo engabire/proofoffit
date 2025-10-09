@@ -1,0 +1,423 @@
+{
+  "common": {
+    "loading": "Birakora...",
+    "error": "Ikosa",
+    "success": "Intsinzi",
+    "save": "Bika",
+    "cancel": "Kuraho",
+    "delete": "Gusiba",
+    "edit": "Guhindura",
+    "view": "Reba",
+    "back": "Subira inyuma",
+    "next": "Ukurikira",
+    "previous": "Ubanza",
+    "submit": "Ohereza",
+    "search": "Shakisha",
+    "filter": "Suzuma",
+    "clear": "Sukura",
+    "close": "Funga",
+    "open": "Fungura",
+    "yes": "Yego",
+    "no": "Oya",
+    "ok": "Sawa",
+    "continue": "Komeza",
+    "skip": "Simbuka",
+    "finish": "Gusozza",
+    "getStarted": "Tangira",
+    "learnMore": "Menya byinshi",
+    "signIn": "Winjira",
+    "signUp": "Kwiyandikisha",
+    "signOut": "Soza",
+    "profile": "Umwirondoro",
+    "settings": "Amagenamiterere",
+    "help": "Ubufasha",
+    "support": "Gushyigikira",
+    "contact": "Kwibaza",
+    "about": "Ibyerekeye",
+    "privacy": "Ubwigenge",
+    "terms": "Amabwiriza",
+    "security": "Umutekano",
+    "status": "Imiterere"
+  },
+  "navigation": {
+    "home": "Urugo",
+    "dashboard": "Ikibaho",
+    "jobs": "Akazi",
+    "candidates": "Abakandida",
+    "matches": "Bihuye",
+    "applications": "Amakandida",
+    "analytics": "Ibisuzumwa",
+    "admin": "Umuyobozi",
+    "enterprise": "Ubucuruzi",
+    "pricing": "Amafaranga",
+    "features": "Ibiranga",
+    "blog": "Inkuru",
+    "careers": "Akazi",
+    "press": "Itangazamakuru"
+  },
+  "auth": {
+    "signIn": "Winjira",
+    "signUp": "Kwiyandikisha",
+    "signOut": "Soza",
+    "email": "Imeyili",
+    "password": "Ijambo ry'ibanga",
+    "confirmPassword": "Emeza ijambo ry'ibanga",
+    "forgotPassword": "Wibagiwe ijambo ry'ibanga?",
+    "rememberMe": "Ntibibagire",
+    "createAccount": "Kora konti",
+    "alreadyHaveAccount": "Ufite konti?",
+    "dontHaveAccount": "Nta konti ufite?",
+    "signInWith": "Winjira ukoresheje",
+    "signUpWith": "Kwiyandikisha ukoresheje",
+    "or": "cyangwa",
+    "continueWithEmail": "Komeza ukoresheje imeyili",
+    "magicLink": "Ntuma imeyili y'urufunguzo",
+    "passkey": "Koresha urufunguzo",
+    "sso": "Winjira ukoresheje SSO y'ikigo",
+    "google": "Komeza ukoresheje Google Workspace",
+    "microsoft": "Komeza ukoresheje Microsoft Entra ID",
+    "hiringTeam": "Itsinda ry'akazi",
+    "jobSeeker": "Umushakisha akazi",
+    "enterWorkEmail": "Koresha imeyili y'akazi. Niba ikigo cyawe gifite SSO, tuzakugana mu buryo bwikora.",
+    "enterEmail": "Koresha imeyili yawe kugira ngo winjire mu makandida yawe n'umwirondoro. Tuzakwohereza imeyili y'urufunguzo rw'umutekano.",
+    "detectedSSO": "Twabonye {provider} kuva mu muryango wawe — urashobora gukomeza cyangwa gukoresha SSO yashyizweho.",
+    "noAccess": "Nta mwanya ufite? Saba umuyobozi wawe akugenera nk'Umukoresha, Umugenzuzi, cyangwa Umuyobozi.",
+    "needHelp": "Ukeneye ubufasha bwo kwinjira? Bona ubufasha.",
+    "noAccountYet": "Nta konti ufite? Tuzayikora ubwinjira kandi tuzahuzanya amakandida yawe mu buryo bwikora.",
+    "havingTrouble": "Ufite ibibazo? Ubufasha bw'abakandida.",
+    "agreeToTerms": "Ukomeje, wemera Amabwiriza n'Ubuyobozi bw'Ubwigenge bwa ProofOfFit n'icyizere cyacu cya EEOC. Turakohereza gusa imeyili z'ibanze z'ikonti n'umutekano."
+  },
+  "homepage": {
+    "hero": {
+      "title": "Gushaka abakozi bishingiye ku bimenyetso ku bantu bose.",
+      "subtitle": "Niba ushakisha akazi kawe gakurikira cyangwa uba ukoze itsinda ryawe, ProofOfFit itanga guhuza ry'umurongo n'ubwigenge, ryashobora gusuzumwa hamwe n'ubwoba bwuzuye.",
+      "seekingJob": "Nshakisha akazi",
+      "hiring": "Nshakisha abakozi",
+      "noCard": "Nta karita • Iminota 2 kugeza ku Raporo ya Fit ya mbere",
+      "trustedBy": "Yizewe n'amakigo 500+"
+    },
+    "features": {
+      "title": "Imikorere ya AI yakoze",
+      "subtitle": "AI ikumva nk'umukoresha mukuru, si umufasha w'urugamba.",
+      "description": "Tuhuza ubwoba n'ubuyobozi—dukurikira ubwoba bw'ubwoba bw'ibicuruzwa ukunda, mugihe dushimangira buri cyohereza.",
+      "explainableFit": {
+        "title": "Raporo z'Ubwoba z'Ubwoba",
+        "description": "Mashini yacu y'inkuru ihindura ibisabwa nk'ibimenyetso urashobora gusangira n'abakoresha cyangwa amatsinda y'ubwoba."
+      },
+      "adaptiveAutopilot": {
+        "title": "Autopilote yihariye",
+        "description": "Imikorere y'ubuyobozi itegura CV, imikorere, n'amakuru y'ubuhanuzi mugihe ikuguma ku gusaba rumwe."
+      },
+      "biasAware": {
+        "title": "Gupima ibimenyetso by'ubwoba",
+        "description": "Turabona ibyago by'ubwoba kandi dushyiraho ibimenyetso byindi kugira ngo urutonde rwawe ruvuge inkuru y'ubwoba n'umurongo."
+      },
+      "designGrade": {
+        "title": "Ibikururwa by'ubwoba",
+        "description": "Kuva ku mabwiriza kugeza ku Raporo za Fit, buri musozi wakoze kugira ngo wumve nk'icyo cyemejwe."
+      }
+    },
+    "whyProofOfFit": {
+      "title": "Kubera iki ProofOfFit",
+      "subtitle": "Kubera ko gushaka abakozi bihagije ibimenyetso—n'ubwoba bwiza.",
+      "description": "Guhuza ry'ibanze ry'ibimenyetso, imikorere y'ubwoba y'ubwoba, n'ubwoba bw'ubwoba bw'ubwoba, byose byuzuye mu buhanga bw'ibicuruzwa amatsinda akunda kuba.",
+      "explainableMatching": {
+        "title": "Guhuza ry'ubwoba",
+        "description": "Reba kuki uhuza, umurongo ku murongo. Nta masuzuma y'ubwoba."
+      },
+      "biasReducing": {
+        "title": "Algoritimi yo kugabanya ubwoba",
+        "description": "Ibimenyetso by'ubwoba n'ubwoba bw'ubwoba bwo gushyigikira ibyemezo by'ubwoba."
+      },
+      "immutableAudit": {
+        "title": "Inzira z'ubwoba z'ubwoba",
+        "description": "Buri cyemezo gifite URL ishimangirwa—ryiza ku bantu b'ibanze n'ubwoba."
+      },
+      "smartAutomation": {
+        "title": "Imikorere y'ubwoba",
+        "description": "CV n'amakuru y'ubwoba y'ubwoba y'ubwoba y'ibimenyetso, si ubwoba."
+      }
+    },
+    "workflow": {
+      "title": "Imikorere",
+      "subtitle": "Autopilote y'ubuyobozi ikuguma mu buyobozi.",
+      "description": "Buri nzira ikurikira umuvuduko umwe w'ubwoba: kusanganya ibimenyetso, gushyira ku bisabwa, gukora Raporo ya Fit, kandi gusangira hamwe n'ubwoba.",
+      "step1": {
+        "title": "Kora ibimenyetso byawe",
+        "description": "Kuzana CV, ongeraho imikorere, huza ibimenyetso."
+      },
+      "step2": {
+        "title": "Hitamo umurimo",
+        "description": "Turabona JD kandi tuyishyira ku bimenyetso byawe."
+      },
+      "step3": {
+        "title": "Bona Raporo yawe ya Fit",
+        "description": "Urupapuro rw'umurongo urashobora guhuza, wongeyeho CV/ubwoba bw'ubwoba."
+      },
+      "step4": {
+        "title": "Kandida hamwe n'ubwoba",
+        "description": "Menya inkuru yawe mbere y'hamagara umukoresha."
+      }
+    },
+    "testimonials": {
+      "title": "Ibyemezo",
+      "subtitle": "Bikundwa n'abakandida, byizewe n'amatsinda y'akazi.",
+      "description": "ProofOfFit ikora ubuhanuzi bw'ubwoba ku bakandida kandi itanga abantu b'ibanze amakuru yashobora gusuzumwa.",
+      "testimonial1": {
+        "quote": "Nahagaritse gusuzuma. Mu bihe by'ibyumweru bibiri, nari mfite ubuhanuzi bwavugaga Raporo yanjye ya Fit mu buryo bwikora.",
+        "author": "Amara B., Umusuzuma w'amakuru"
+      },
+      "testimonial2": {
+        "quote": "Amashyamba y'ubwoba yari yiza cyane. Byahindutse script yanjye y'ubwoba.",
+        "author": "Luis R., Umuyobozi w'ibicuruzwa"
+      }
+    },
+    "cta": {
+      "title": "Witeguye Guhindura Gushaka Abakozi?",
+      "subtitle": "Jya mu makigo y'ibihumbi akoresha ProofOfFit kugira ngo yubake amatsinda meza, y'ubwoba hamwe n'ubwoba bwuzuye n'ubwoba.",
+      "startAsSeeker": "Tangira nk'umushakisha akazi",
+      "startAsEmployer": "Tangira nk'umukoresha",
+      "noCardRequired": "Nta karita ihagije • Igerageza ry'ubwoba ry'ibyumweru 14 • Kuraho igihe icyo ari cyo cyose"
+    },
+    "footer": {
+      "description": "Amakuru, si amashyira y'umukara. Tuhuza ubwoba bw'ubwoba, ubwoba bw'ubwoba, ubwoba bw'ubwoba, n'AI y'ubwoba kugira ngo dukomeze gushaka abakozi byose byiza kandi by'ubwoba.",
+      "product": "Ibicuruzwa",
+      "company": "Ikigo",
+      "trust": "Ubwoba n'Ubwoba",
+      "copyright": "© 2024 ProofOfFit, Inc. Yakoze hamwe n'ubwoba mu Midwest, hamwe n'ubwoba n'ubwoba mu mutima."
+    }
+  },
+  "dashboard": {
+    "welcome": "Murakaza neza",
+    "overview": "Icyerekezo",
+    "recentActivity": "Imikorere ya vuba",
+    "quickActions": "Imikorere yihuse",
+    "stats": {
+      "totalJobs": "Akazi byose",
+      "activeJobs": "Akazi bikora",
+      "totalCandidates": "Abakandida byose",
+      "matches": "Bihuye",
+      "applications": "Amakandida",
+      "interviews": "Ubuhanuzi"
+    }
+  },
+  "jobs": {
+    "title": "Akazi",
+    "createJob": "Kora akazi",
+    "editJob": "Hindura akazi",
+    "deleteJob": "Siba akazi",
+    "jobTitle": "Umutwe w'akazi",
+    "company": "Ikigo",
+    "location": "Aho biherereye",
+    "workType": "Ubwoko bw'akazi",
+    "salary": "Umushahara",
+    "description": "Ibisobanuro",
+    "requirements": "Ibisabwa",
+    "mustHave": "Bihagije",
+    "preferred": "Bishimwa",
+    "postedDate": "Itariki yashyizweho",
+    "status": "Imiterere",
+    "applications": "Amakandida",
+    "matches": "Bihuye",
+    "remote": "Kure",
+    "hybrid": "Byombi",
+    "onsite": "Ku kigo",
+    "fullTime": "Igihe cyuzuye",
+    "partTime": "Igihe gito",
+    "contract": "Amasezerano",
+    "active": "Bikora",
+    "inactive": "Ntibikora",
+    "draft": "Inyandiko",
+    "closed": "Bifunze"
+  },
+  "candidates": {
+    "title": "Abakandida",
+    "profile": "Umwirondoro",
+    "resume": "CV",
+    "coverLetter": "Inyandiko y'ubwoba",
+    "experience": "Ubuhanga",
+    "education": "Uburezi",
+    "skills": "Ubuhanga",
+    "languages": "Indimi",
+    "certifications": "Icyemezo",
+    "projects": "Imikorere",
+    "references": "Ibyerekeye",
+    "fitScore": "Icyiciro cy'ubwoba",
+    "matchReason": "Impamvu y'ubwoba",
+    "contact": "Kwibaza",
+    "scheduleInterview": "Gahunda y'ubuhanuzi",
+    "reject": "Kuraho",
+    "shortlist": "Urutonde ruto"
+  },
+  "admin": {
+    "title": "Ubuyobozi",
+    "users": "Abakoresha",
+    "settings": "Amagenamiterere",
+    "analytics": "Ibisuzumwa",
+    "reports": "Raporo",
+    "userManagement": "Gucunga abakoresha",
+    "roleManagement": "Gucunga imirimo",
+    "permissions": "Uburenganzira",
+    "auditLogs": "Inyandiko z'ubwoba",
+    "systemHealth": "Ubuzima bw'ubwoba",
+    "backups": "Gusubiza",
+    "integrations": "Guhuza"
+  },
+  "enterprise": {
+    "title": "Ubucuruzi",
+    "sso": "SSO n'Umutekano",
+    "adminUsers": "Abakoresha b'ubuyobozi",
+    "companySettings": "Amagenamiterere y'ikigo",
+    "billing": "Kwishyura",
+    "usage": "Gukoresha",
+    "compliance": "Gukurikira",
+    "support": "Gushyigikira"
+  },
+  "gift": {
+    "title": "Gutanga ProofOfFit Pro",
+    "subtitle": "Fasha umuntu kubona akazi ke",
+    "description": "Tanga impano y'ubwoba bw'akazi bishingiye ku bimenyetso. Fasha umushakisha akazi kubona CV z'ubwoba, amakuru y'ubwoba, n'isuzuma ry'ubwoba ryatuma abona ubuhanuzi byinshi.",
+    "recipientInfo": "Amakuru y'uwakiriye",
+    "senderInfo": "Amakuru yawe",
+    "giftSummary": "Icyegeranyo cy'impano",
+    "purchaseGift": "Gura impano",
+    "securityNotice": "Kwishyura kwawe kuri mu mutekano kandi kwijimye. Uwakiriye azakira impano ye mu meyili mu masaha 24 nyuma yo kugura.",
+    "success": {
+      "title": "Impano yoherejwe neza! 🎉",
+      "subtitle": "Watanze {months} amezi ya ProofOfFit Pro kuri {recipient}",
+      "description": "Bazakira imeyili hamwe n'urufunguzo rw'impano n'amabwiriza yo gutangira.",
+      "giftDetails": "Ibyerekeye impano",
+      "shareGift": "Sangira impano yawe",
+      "copyCode": "Kopera urufunguzo rw'impano",
+      "sendEmail": "Ohereza ukoresheje imeyili",
+      "shareSocial": "Sangira ku makoranabuhanga",
+      "impact": "Ingaruka y'impano yawe",
+      "helpMore": "Ushaka gufasha abandi bantu?",
+      "sendAnother": "Ohereza indi impano"
+    }
+  },
+  "fitSimple": {
+    "title": "Gushaka akazi n'isuzuma ry'ubwoba",
+    "subtitle": "Shakisha umurimo wawe w'ubwoba ukoresheje guhuza ry'ubwoba",
+    "searchJobs": "Shakisha akazi",
+    "assessFitness": "Suzuma ubwoba",
+    "tailorResume": "Hindura CV",
+    "generateCoverLetter": "Kora inyandiko y'ubwoba",
+    "applyWithConfidence": "Kandida hamwe n'ubwoba",
+    "jobSearch": {
+      "title": "Gushaka akazi",
+      "description": "Shakisha akazi bihuza ubuhanga bwawe n'ubuhanga",
+      "searchPlaceholder": "Shakisha akazi ku mutwe, ikigo, cyangwa aho biherereye...",
+      "filters": "Amasuzuma",
+      "location": "Aho biherereye",
+      "workType": "Ubwoko bw'akazi",
+      "salary": "Urwego rw'umushahara",
+      "experience": "Urwego rw'ubuhanga",
+      "company": "Ikigo",
+      "industry": "Ubucuruzi"
+    },
+    "fitnessAssessment": {
+      "title": "Isuzuma ry'ubwoba",
+      "description": "Bona isuzuma ry'ubwoba ry'ubwoba w'ubwoba w'ubwoba w'ubwoba",
+      "fitScore": "Icyiciro cy'ubwoba",
+      "strengths": "Imbaraga",
+      "gaps": "Amabanga",
+      "recommendations": "Ibyohereza",
+      "evidence": "Ibimenyetso",
+      "matchReason": "Kubera iki uhuza",
+      "improvementAreas": "Ahantu h'ubwoba"
+    },
+    "resumeTailoring": {
+      "title": "Guhindura CV",
+      "description": "Bona CV y'ubwoba y'ubwoba y'ubwoba y'ubwoba",
+      "originalResume": "CV y'ubwoba",
+      "tailoredResume": "CV y'ubwoba",
+      "changes": "Amahinduka yakoze",
+      "download": "Kuramo CV",
+      "preview": "Reba CV"
+    },
+    "coverLetter": {
+      "title": "Gukora inyandiko y'ubwoba",
+      "description": "Kora inyandiko y'ubwoba y'ubwoba y'ubwoba",
+      "generate": "Kora inyandiko y'ubwoba",
+      "preview": "Reba inyandiko y'ubwoba",
+      "download": "Kuramo inyandiko y'ubwoba",
+      "edit": "Hindura inyandiko y'ubwoba"
+    }
+  },
+  "onboarding": {
+    "title": "Murakaza neza ku ProofOfFit",
+    "subtitle": "Reka dukugenera intsinzi",
+    "step1": {
+      "title": "Hitamo inzira yawe",
+      "description": "Ushakisha akazi cyangwa ushakisha ubuhanga?",
+      "seeker": "Nshakisha akazi",
+      "employer": "Nshakisha ubuhanga"
+    },
+    "step2": {
+      "title": "Duvugire ku wowe",
+      "description": "Dufashe gusobanukirwa ubwoba bwawe n'intego",
+      "name": "Amazina yuzuye",
+      "email": "Aderesi ya meyili",
+      "phone": "Numero ya telefone",
+      "location": "Aho biherereye",
+      "experience": "Imyaka y'ubuhanga",
+      "industry": "Ubucuruzi",
+      "skills": "Ubuhanga bwo mu bwoba",
+      "goals": "Intego z'akazi"
+    },
+    "step3": {
+      "title": "Kuzana CV yawe",
+      "description": "Kuzana CV yawe kugira ngo utangire guhuza akazi",
+      "upload": "Kuzana CV",
+      "dragDrop": "Kurura kandi utsindire CV yawe hano, cyangwa kanda kugira ngo usuzume",
+      "supportedFormats": "Amashusho ashimangiwe: PDF, DOC, DOCX",
+      "maxSize": "Ubunini bw'ubwoba bw'ubwoba: 10MB"
+    },
+    "step4": {
+      "title": "Suzuma umwirondoro wawe",
+      "description": "Ongeraho amakuru yandi kugira ngo uhindure guhuza kwawe",
+      "education": "Uburezi",
+      "certifications": "Icyemezo",
+      "languages": "Indimi",
+      "availability": "Kuboneka",
+      "salaryExpectations": "Icyizere cy'umushahara",
+      "workPreferences": "Ibyishimwa by'akazi"
+    },
+    "complete": {
+      "title": "Witeguye!",
+      "description": "Umwirondoro wawe wuzuye kandi witeguye guhuza akazi",
+      "startSearching": "Tangira gushaka akazi",
+      "viewProfile": "Reba umwirondoro",
+      "editProfile": "Hindura umwirondoro"
+    }
+  },
+  "errors": {
+    "generic": "Ikintu cyabaye nabi. Nyamuneka ugerageze nanone.",
+    "network": "Ikosa ry'ubwoba. Nyamuneka usuzume ubwoba bwawe.",
+    "unauthorized": "Nta mwanya ufite wo kwinjira muri iyo ntego.",
+    "forbidden": "Kwinjira byanze.",
+    "notFound": "Icyo gisabwa ntabwo cyabonye.",
+    "serverError": "Ikosa ry'ubwoba. Nyamuneka ugerageze nanone.",
+    "validation": "Nyamuneka usuzume ibyo winjije kandi ugerageze nanone.",
+    "fileUpload": "Kuzana dosiye byanze. Nyamuneka ugerageze nanone.",
+    "email": "Nyamuneka winjire aderesi ya meyili y'ubwoba.",
+    "password": "Ijambo ry'ibanga rihagije kugira ngo ribe imibare 8.",
+    "required": "Iki gisanduku gihagije.",
+    "minLength": "Rihagije kugira ngo ribe imibare {min}.",
+    "maxLength": "Ntirihagije kugira ngo ribe imibare {max}.",
+    "invalidFormat": "Ishusho ntabwo ari ryo."
+  },
+  "success": {
+    "profileUpdated": "Umwirondoro wavuguruwe neza",
+    "jobCreated": "Akazi kakoze neza",
+    "applicationSubmitted": "Kandida yoherejwe neza",
+    "resumeUploaded": "CV yazanye neza",
+    "settingsSaved": "Amagenamiterere yabikwe neza",
+    "passwordChanged": "Ijambo ry'ibanga ryahinduwe neza",
+    "emailSent": "Meyili yoherejwe neza",
+    "fileUploaded": "Dosiye yazanye neza",
+    "dataExported": "Amakuru yasohotse neza",
+    "invitationSent": "Gutanga ubwoba bwoherejwe neza"
+  }
+}

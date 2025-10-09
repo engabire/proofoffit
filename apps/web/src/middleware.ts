@@ -1,30 +1,17 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import createMiddleware from 'next-intl/middleware'
 
-export function middleware(request: NextRequest) {
-  // Force demo mode if no Supabase env vars are configured
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || 
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    // Set demo mode header for all requests
-    const response = NextResponse.next()
-    response.headers.set('x-demo-mode', 'true')
-    return response
-  }
+export default createMiddleware({
+  // A list of all locales that are supported
+  locales: ['en', 'fr', 'rw', 'sw', 'ln'],
 
-  // Original middleware logic would go here for production
-  // For now, just pass through
-  return NextResponse.next()
-}
+  // Used when no locale matches
+  defaultLocale: 'en',
+
+  // Don't add locale prefix for default locale
+  localePrefix: 'as-needed'
+})
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  // Match only internationalized pathnames
+  matcher: ['/', '/(fr|rw|sw|ln)/:path*']
 }
