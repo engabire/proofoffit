@@ -476,7 +476,7 @@ export default function ApplicationsPage() {
                     </button>
                     {application.documents.portfolio && (
                       <button
-                        onClick={() => handleDownloadDocument(application.documents.portfolio)}
+                        onClick={() => handleDownloadDocument(application.documents.portfolio!)}
                         className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-md hover:bg-purple-200 transition-colors"
                       >
                         <Download className="h-3 w-3 mr-1" />
