@@ -13,6 +13,12 @@ interface ProfileData {
   role?: string
 }
 
+interface PreferencesData {
+  notifications: boolean
+  newsletter: boolean
+  dataSharing: boolean
+}
+
 // Step 1: Welcome & User Type Selection
 function WelcomeStep({ 
   data, 
@@ -234,7 +240,7 @@ function PreferencesStep({
   onUpdate: (data: any) => void
   onNext: () => void
 }) {
-  const [preferences, setPreferences] = React.useState(data || {
+  const [preferences, setPreferences] = React.useState<PreferencesData>(data || {
     notifications: true,
     newsletter: false,
     dataSharing: true
