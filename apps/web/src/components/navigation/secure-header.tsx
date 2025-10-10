@@ -190,7 +190,6 @@ export function SecureHeader() {
                   <SecureSignOutButton 
                     variant="ghost" 
                     className="w-full justify-start"
-                    showConfirmation={true}
                   />
                 </>
               ) : (
