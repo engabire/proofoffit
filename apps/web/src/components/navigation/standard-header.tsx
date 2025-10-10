@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, User, Settings, Shield, LogOut } from 'lucide-react'
+import { Menu, X, User, Settings, Shield, LogOut, ChevronRight } from 'lucide-react'
 import { Navigation, MobileNavigation, type NavItem } from './consistent-nav'
 import { SecureSignOutButton } from '@/components/auth/secure-sign-out-button'
 import { useAuth } from '@/hooks/use-auth'
