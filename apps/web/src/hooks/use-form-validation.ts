@@ -108,9 +108,9 @@ export function useFormValidation<T extends Record<string, any>>({
     try {
       // Mark all fields as touched
       const allTouched = Object.keys(values).reduce((acc, key) => {
-        acc[key] = true
+        acc[key as keyof T] = true
         return acc
-      }, {} as Record<string, boolean>)
+      }, {} as Partial<Record<keyof T, boolean>>)
       setTouched(allTouched)
       
       // Validate all fields
