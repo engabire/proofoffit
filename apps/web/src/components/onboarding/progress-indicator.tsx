@@ -251,7 +251,7 @@ export function LinearProgress({
 }
 
 // Step-by-step wizard component
-interface WizardStep {
+export interface WizardStep {
   id: string
   title: string
   description?: string
