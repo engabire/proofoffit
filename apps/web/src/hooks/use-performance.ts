@@ -40,7 +40,7 @@ export function usePerformance() {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
     if (navigation) {
       newMetrics.loadTime = navigation.loadEventEnd - navigation.loadEventStart
-      newMetrics.timeToInteractive = navigation.domInteractive - navigation.navigationStart
+      newMetrics.timeToInteractive = navigation.domInteractive - navigation.fetchStart
     }
 
     // Paint timing
