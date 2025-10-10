@@ -98,7 +98,6 @@ export function SecureHeader() {
                     variant="ghost" 
                     size="sm" 
                     className="w-full justify-start"
-                    showConfirmation={true}
                   />
                 </DropdownMenuItem>
               </DropdownMenuContent>
