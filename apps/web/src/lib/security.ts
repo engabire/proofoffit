@@ -1,163 +1,239 @@
-import { prisma } from "@/lib/db";
-import crypto from "crypto";
+import { NextRequest, NextResponse } from 'next/server'
+import { createHash, randomBytes } from 'crypto'
 
-export type SecurityEventType = 
-  | "login_attempt"
-  | "failed_login"
-  | "audit_link_created"
-  | "audit_link_accessed"
-  | "data_export"
-  | "data_deletion"
-  | "suspicious_activity";
+// CSRF Token Management
+const CSRF_TOKEN_HEADER = 'x-csrf-token'
+const CSRF_TOKEN_COOKIE = 'csrf-token'
 
-export interface SecurityEvent {
-  eventType: SecurityEventType;
-  userId?: string;
-  targetId?: string;
-  metadata?: Record<string, any>;
-  severity?: "low" | "medium" | "high" | "critical";
+export function generateCSRFToken(): string {
+  return randomBytes(32).toString('hex')
 }
 
-export async function logSecurityEvent(event: SecurityEvent) {
-  try {
-    await prisma.analyticsEvent.create({
-      data: {
-        eventType: event.eventType,
-        userId: event.userId,
-        targetId: event.targetId,
-        metadata: {
-          ...event.metadata,
-          severity: event.severity || "low",
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Failed to log security event:", error);
-    // Don't throw - security logging failures shouldn't break the app
+export function generateCSRFHash(token: string, secret: string): string {
+  return createHash('sha256').update(token + secret).digest('hex')
+}
+
+export function validateCSRFToken(token: string, hash: string, secret: string): boolean {
+  const expectedHash = generateCSRFHash(token, secret)
+  return hash === expectedHash
+}
+
+// Security Headers
+export const securityHeaders = {
+  'X-Frame-Options': 'DENY',
+  'X-Content-Type-Options': 'nosniff',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://*.supabase.co https://*.vercel.app",
+    "frame-src 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests"
+  ].join('; ')
+}
+
+// Apply security headers to response
+export function applySecurityHeaders(response: NextResponse): NextResponse {
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
+
+// CSRF Protection Middleware
+export function csrfProtection(request: NextRequest): NextResponse | null {
+  const method = request.method
+  const secret = process.env.CSRF_SECRET || 'default-secret-change-in-production'
+  
+  // Skip CSRF for safe methods
+  if (['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+    return null
+  }
+  
+  // Skip CSRF for API routes that don't need it (like auth callbacks)
+  const pathname = request.nextUrl.pathname
+  if (pathname.startsWith('/api/auth/') || pathname.startsWith('/api/webhooks/')) {
+    return null
+  }
+  
+  const token = request.headers.get(CSRF_TOKEN_HEADER)
+  const cookieToken = request.cookies.get(CSRF_TOKEN_COOKIE)?.value
+  
+  if (!token || !cookieToken) {
+    return new NextResponse('CSRF token missing', { status: 403 })
+  }
+  
+  // Validate token
+  if (!validateCSRFToken(token, cookieToken, secret)) {
+    return new NextResponse('CSRF token invalid', { status: 403 })
+  }
+  
+  return null
+}
+
+// Rate Limiting
+interface RateLimitConfig {
+  windowMs: number
+  maxRequests: number
+  keyGenerator?: (request: NextRequest) => string
+}
+
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
+
+export function rateLimit(config: RateLimitConfig) {
+  return (request: NextRequest): NextResponse | null => {
+    const key = config.keyGenerator 
+      ? config.keyGenerator(request)
+      : request.ip || 'unknown'
+    
+    const now = Date.now()
+    const windowStart = now - config.windowMs
+    
+    // Clean up expired entries
+    for (const [k, v] of rateLimitStore.entries()) {
+      if (v.resetTime < now) {
+        rateLimitStore.delete(k)
+      }
+    }
+    
+    const current = rateLimitStore.get(key)
+    
+    if (!current || current.resetTime < now) {
+      // First request or window expired
+      rateLimitStore.set(key, {
+        count: 1,
+        resetTime: now + config.windowMs
+      })
+      return null
+    }
+    
+    if (current.count >= config.maxRequests) {
+      return new NextResponse('Rate limit exceeded', { 
+        status: 429,
+        headers: {
+          'Retry-After': Math.ceil((current.resetTime - now) / 1000).toString()
+        }
+      })
+    }
+    
+    current.count++
+    return null
   }
 }
 
-export async function validateAuditLink(token: string) {
-  try {
-    const link = await prisma.auditLink.findUnique({
-      where: { token },
-      include: {
-        target: {
-          include: {
-            weights: {
-              include: {
-                proof: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!link) {
-      return { valid: false, error: "Invalid link" };
-    }
-
-    if (link.isRevoked) {
-      return { valid: false, error: "Link has been revoked" };
-    }
-
-    if (link.expiresAt && link.expiresAt < new Date()) {
-      return { valid: false, error: "Link has expired" };
-    }
-
-    if (link.maxViews && link.viewsCount >= link.maxViews) {
-      return { valid: false, error: "Link has reached maximum views" };
-    }
-
-    // Increment view count
-    await prisma.auditLink.update({
-      where: { id: link.id },
-      data: {
-        viewsCount: link.viewsCount + 1,
-      },
-    });
-
-    // Log the access
-    await logSecurityEvent({
-      eventType: "audit_link_accessed",
-      userId: link.userId,
-      targetId: link.targetId,
-      metadata: {
-        linkId: link.id,
-        viewsCount: link.viewsCount + 1,
-      },
-    });
-
-    return { valid: true, link };
-  } catch (error) {
-    console.error("Error validating audit link:", error);
-    return { valid: false, error: "Internal error" };
-  }
-}
-
-export function generateSecureToken(): string {
-  return crypto.randomBytes(32).toString('hex');
-}
-
-export function hashData(data: string): string {
-  return crypto.createHash('sha256').update(data).digest('hex');
-}
-
-export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
+// Input Sanitization
 export function sanitizeInput(input: string): string {
   return input
-    .trim()
     .replace(/[<>]/g, '') // Remove potential HTML tags
-    .substring(0, 1000); // Limit length
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+=/gi, '') // Remove event handlers
+    .trim()
 }
 
-export async function checkRateLimit(
-  identifier: string, 
-  action: string, 
-  limit: number, 
-  windowMs: number
-): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
-  const key = `${action}:${identifier}`;
-  const now = Date.now();
-  const windowStart = now - windowMs;
+// SQL Injection Prevention (basic)
+export function sanitizeSQL(input: string): string {
+  return input
+    .replace(/['"]/g, '') // Remove quotes
+    .replace(/;/g, '') // Remove semicolons
+    .replace(/--/g, '') // Remove SQL comments
+    .replace(/\/\*/g, '') // Remove block comments
+    .replace(/\*\//g, '')
+}
 
-  // This is a simplified rate limiting implementation
-  // In production, you'd want to use Redis or a proper rate limiting service
-  try {
-    const recentEvents = await prisma.analyticsEvent.count({
-      where: {
-        eventType: action,
-        metadata: {
-          path: ['identifier'],
-          equals: identifier,
-        },
-        createdAt: {
-          gte: new Date(windowStart),
-        },
-      },
-    });
-
-    const remaining = Math.max(0, limit - recentEvents);
-    const resetTime = now + windowMs;
-
-    return {
-      allowed: remaining > 0,
-      remaining,
-      resetTime,
-    };
-  } catch (error) {
-    console.error("Rate limit check failed:", error);
-    // Fail open - allow the request if rate limiting fails
-    return {
-      allowed: true,
-      remaining: limit,
-      resetTime: now + windowMs,
-    };
+// XSS Prevention
+export function escapeHTML(input: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;'
   }
+  
+  return input.replace(/[&<>"'/]/g, (s) => map[s])
+}
+
+// Content Security Policy for specific pages
+export const cspPolicies = {
+  default: securityHeaders['Content-Security-Policy'],
+  auth: [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https://*.supabase.co",
+    "frame-src 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'"
+  ].join('; '),
+  dashboard: [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://*.supabase.co https://*.vercel.app",
+    "frame-src 'self' https://*.supabase.co",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'"
+  ].join('; ')
+}
+
+// Security middleware for Next.js
+export function securityMiddleware(request: NextRequest): NextResponse {
+  let response = NextResponse.next()
+  
+  // Apply security headers
+  response = applySecurityHeaders(response)
+  
+  // CSRF protection
+  const csrfError = csrfProtection(request)
+  if (csrfError) {
+    return csrfError
+  }
+  
+  // Rate limiting for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    const rateLimitError = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      maxRequests: 100, // 100 requests per window
+      keyGenerator: (req) => req.ip || 'unknown'
+    })(request)
+    
+    if (rateLimitError) {
+      return rateLimitError
+    }
+  }
+  
+  // Add CSRF token to response cookies for forms
+  if (request.method === 'GET' && !request.cookies.get(CSRF_TOKEN_COOKIE)) {
+    const token = generateCSRFToken()
+    const secret = process.env.CSRF_SECRET || 'default-secret-change-in-production'
+    const hash = generateCSRFHash(token, secret)
+    
+    response.cookies.set(CSRF_TOKEN_COOKIE, hash, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 // 24 hours
+    })
+  }
+  
+  return response
 }

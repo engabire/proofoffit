@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth'
+import { useCSRFHeaders } from '@/components/security/csrf-provider'
 import { 
   Mail, 
   Lock, 
@@ -65,6 +67,8 @@ export default function EnhancedAuth({
   redirectTo = '/dashboard'
 }: EnhancedAuthProps) {
   const router = useRouter()
+  const { signIn, signUp, sendMagicLink, loading: authLoading, error: authError } = useAuth()
+  const csrfHeaders = useCSRFHeaders()
   const [audience, setAudience] = useState<Audience>(defaultAudience)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -125,37 +129,31 @@ export default function EnhancedAuth({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!isValid) return
+    
     setIsLoading(true)
     setError('')
-
+    
     try {
-      // Simulate authentication
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      let result
       
-      if (isValid) {
-        // Store user in localStorage for demo
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('auth-token', 'demo-token')
-          localStorage.setItem('user', JSON.stringify({ 
-            email, 
-            name: email.split('@')[0],
-            type: audience
-          }))
-        }
-        
-        console.log(mode === 'signin' ? 'Signed in successfully!' : 'Account created successfully!')
-        
-        // Redirect to appropriate page based on user type
-        if (audience === 'hirer') {
-          router.push('/employer/dashboard')
-        } else {
-          router.push(redirectTo)
-        }
+      if (mode === 'signin') {
+        result = await signIn(email, password)
       } else {
-        setError('Fix validation errors before continuing')
+        result = await signUp(email, password, { user_type: audience })
+      }
+      
+      if (!result.success) {
+        setError(result.error || 'Authentication failed. Please try again.')
+        return
+      }
+      
+      // Success - the auth hook will handle redirects
+      if (mode === 'signup' && result.needsConfirmation) {
+        setError('Please check your email for a confirmation link.')
       }
     } catch (error) {
-      console.error('Auth error:', error)
       setError('Authentication failed. Please try again.')
     } finally {
       setIsLoading(false)
@@ -169,12 +167,17 @@ export default function EnhancedAuth({
     }
 
     setIsLoading(true)
+    setError('')
+    
     try {
-      // Simulate magic link sending
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('Magic link sent to:', email)
-      setError('')
-      // In a real app, you'd show a success message
+      const result = await sendMagicLink(email)
+      
+      if (!result.success) {
+        setError(result.error || 'Failed to send magic link. Please try again.')
+        return
+      }
+      
+      setError('Magic link sent! Please check your email.')
     } catch (error) {
       setError('Failed to send magic link. Please try again.')
     } finally {
@@ -293,12 +296,12 @@ export default function EnhancedAuth({
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {error && (
+            {(error || authError) && (
               <div className="bg-red-50 border border-red-200 rounded-md p-4">
                 <div className="flex">
                   <AlertTriangle className="h-5 w-5 text-red-400" />
                   <div className="ml-3">
-                    <p className="text-sm text-red-800">{error}</p>
+                    <p className="text-sm text-red-800">{error || authError}</p>
                   </div>
                 </div>
               </div>
@@ -406,10 +409,10 @@ export default function EnhancedAuth({
             {/* Primary CTA differs by audience */}
             <button
               type="submit"
-              disabled={isLoading || !isValid}
+              disabled={isLoading || authLoading || !isValid}
               className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? (
+              {isLoading || authLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Working…
@@ -439,7 +442,7 @@ export default function EnhancedAuth({
                   <button
                     type="button"
                     onClick={() => handleSSO(suggestedProvider.key)}
-                    disabled={isLoading}
+                    disabled={isLoading || authLoading}
                     className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <ExternalLink className="mr-2 h-4 w-4" /> {suggestedProvider.label}
@@ -450,7 +453,7 @@ export default function EnhancedAuth({
                     key={p.key}
                     type="button"
                     onClick={() => handleSSO(p.key)}
-                    disabled={isLoading}
+                    disabled={isLoading || authLoading}
                     className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <ExternalLink className="mr-2 h-4 w-4" /> {p.label}
@@ -459,7 +462,7 @@ export default function EnhancedAuth({
                 <button
                   type="button"
                   onClick={handleMagicLink}
-                  disabled={isLoading}
+                  disabled={isLoading || authLoading}
                   className="w-full flex justify-center items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Email me a magic link
@@ -467,7 +470,7 @@ export default function EnhancedAuth({
                 <button
                   type="button"
                   onClick={handlePasskey}
-                  disabled={isLoading}
+                  disabled={isLoading || authLoading}
                   className="w-full flex justify-center items-center px-4 py-2 text-gray-600 text-sm font-medium rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <KeyRound className="mr-2 h-4 w-4" /> Sign in with a Passkey
@@ -478,7 +481,7 @@ export default function EnhancedAuth({
                 <button
                   type="button"
                   onClick={handleMagicLink}
-                  disabled={isLoading}
+                  disabled={isLoading || authLoading}
                   className="w-full flex justify-center items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Email me a magic link
@@ -486,7 +489,7 @@ export default function EnhancedAuth({
                 <button
                   type="button"
                   onClick={handlePasskey}
-                  disabled={isLoading}
+                  disabled={isLoading || authLoading}
                   className="w-full flex justify-center items-center px-4 py-2 text-gray-600 text-sm font-medium rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <KeyRound className="mr-2 h-4 w-4" /> Use a Passkey

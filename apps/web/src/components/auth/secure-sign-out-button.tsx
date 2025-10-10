@@ -1,146 +1,61 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@proof-of-fit/ui'
-import { LogOut, Shield, AlertTriangle } from 'lucide-react'
-import { useState } from 'react'
-// Simple toast implementation
-const toast = {
-  success: (message: string) => console.log('Success:', message),
-  error: (message: string) => console.error('Error:', message)
-}
-
-type ButtonVariant = React.ComponentProps<typeof Button>['variant']
-type ButtonSize = React.ComponentProps<typeof Button>['size']
-type SecureSignOutSize = ButtonSize | 'md'
+import { LogOut, Loader2 } from 'lucide-react'
 
 interface SecureSignOutButtonProps {
-  variant?: Extract<ButtonVariant, 'ghost' | 'outline' | 'destructive'>
-  size?: SecureSignOutSize
-  showConfirmation?: boolean
+  variant?: 'default' | 'outline' | 'ghost' | 'link'
+  size?: 'default' | 'sm' | 'lg'
   className?: string
+  children?: React.ReactNode
 }
 
 export function SecureSignOutButton({ 
-  variant = 'ghost', 
-  size = 'sm', 
-  showConfirmation = true,
-  className 
+  variant = 'outline',
+  size = 'default',
+  className,
+  children
 }: SecureSignOutButtonProps) {
-  const supabase = createClientComponentClient()
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const { signOut } = useAuth()
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
-  async function handleSignOut() {
-    if (showConfirmation && !showConfirmDialog) {
-      setShowConfirmDialog(true)
-      return
-    }
-
+  const handleSignOut = async () => {
     try {
-      setIsLoading(true)
+      setIsSigningOut(true)
+      const result = await signOut()
       
-      // Clear any sensitive data from localStorage/sessionStorage
-      if (typeof window !== 'undefined') {
-        // Clear any cached user data
-        localStorage.removeItem('user_preferences')
-        localStorage.removeItem('temp_data')
-        sessionStorage.clear()
-        
-        // Clear any analytics data
-        localStorage.removeItem('analytics_events')
-        localStorage.removeItem('user_analytics')
+      if (!result.success) {
+        console.error('Sign out failed:', result.error)
+        // You might want to show a toast notification here
       }
-
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut()
-      
-      if (error) {
-        console.error('Sign out error:', error)
-        toast.error('Failed to sign out properly. Please try again.')
-        return
-      }
-
-      // Log successful sign out for security audit
-      try {
-        await supabase
-          .from('action_log')
-          .insert({
-            action: 'auth_signout',
-            objType: 'user',
-            payloadHash: 'signout_success'
-          })
-      } catch (logError) {
-        // Don't fail sign out if logging fails
-        console.warn('Failed to log sign out event:', logError)
-      }
-
-      toast.success('Signed out successfully')
-      
-      // Redirect to home page with cache busting
-      router.push('/?signed_out=true&t=' + Date.now())
-      
     } catch (error) {
-      console.error('Unexpected sign out error:', error)
-      toast.error('An unexpected error occurred during sign out')
+      console.error('Sign out error:', error)
     } finally {
-      setIsLoading(false)
-      setShowConfirmDialog(false)
+      setIsSigningOut(false)
     }
   }
-
-  if (showConfirmDialog) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-orange-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">Confirm Sign Out</h3>
-              <p className="text-sm text-gray-600">Are you sure you want to sign out?</p>
-            </div>
-          </div>
-          
-          <div className="flex space-x-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowConfirmDialog(false)}
-              disabled={isLoading}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleSignOut}
-              disabled={isLoading}
-              className="flex-1"
-            >
-              {isLoading ? 'Signing Out...' : 'Sign Out'}
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const resolvedSize: ButtonSize = size === 'md' ? 'default' : size ?? 'default'
 
   return (
-    <Button 
-      variant={variant} 
-      size={resolvedSize} 
-      onClick={handleSignOut}
-      disabled={isLoading}
+    <Button
+      variant={variant}
+      size={size}
       className={className}
-      aria-label="Sign out of your account"
+      onClick={handleSignOut}
+      disabled={isSigningOut}
     >
-      <LogOut className="h-4 w-4 mr-2" />
-      {isLoading ? 'Signing Out...' : 'Sign Out'}
+      {isSigningOut ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          Signing out...
+        </>
+      ) : (
+        <>
+          <LogOut className="h-4 w-4 mr-2" />
+          {children || 'Sign Out'}
+        </>
+      )}
     </Button>
   )
 }
