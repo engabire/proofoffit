@@ -9,7 +9,7 @@ interface ValidationError {
 }
 
 interface UseFormValidationOptions<T> {
-  schema: z.ZodSchema<T>
+  schema: z.ZodObject<any>
   initialValues: T
   validateOnChange?: boolean
   validateOnBlur?: boolean
