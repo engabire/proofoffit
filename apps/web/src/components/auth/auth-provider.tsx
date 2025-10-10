@@ -10,7 +10,7 @@ interface AuthContextType {
   loading: boolean
   error: string | null
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string; user?: User }>
-  signUp: (email: string, password: string, metadata?: any) => Promise<{ success: boolean; error?: string; user?: User; needsConfirmation?: boolean }>
+  signUp: (email: string, password: string, metadata?: any) => Promise<{ success: boolean; error?: string; user?: User | null; needsConfirmation?: boolean }>
   signOut: () => Promise<{ success: boolean; error?: string }>
   sendMagicLink: (email: string) => Promise<{ success: boolean; error?: string }>
   isAuthenticated: boolean
