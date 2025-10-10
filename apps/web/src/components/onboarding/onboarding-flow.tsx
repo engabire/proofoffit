@@ -5,6 +5,14 @@ import { Wizard, type WizardStep } from './progress-indicator'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 
+interface ProfileData {
+  firstName: string
+  lastName: string
+  email: string
+  company?: string
+  role?: string
+}
+
 // Step 1: Welcome & User Type Selection
 function WelcomeStep({ 
   data, 
@@ -104,7 +112,7 @@ function ProfileStep({
   onUpdate: (data: any) => void
   onNext: () => void
 }) {
-  const [profile, setProfile] = React.useState(data || {
+  const [profile, setProfile] = React.useState<ProfileData>(data || {
     firstName: '',
     lastName: '',
     email: '',
