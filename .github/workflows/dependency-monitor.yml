@@ -44,7 +44,7 @@ jobs:
           echo "overall_status=$STATUS" >> $GITHUB_OUTPUT
         env:
           # These will be available if the monitoring endpoint is deployed
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co' }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Check overall status
