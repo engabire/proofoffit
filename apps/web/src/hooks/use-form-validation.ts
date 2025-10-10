@@ -36,7 +36,7 @@ export function useFormValidation<T extends Record<string, any>>({
       return null
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return error.errors[0]?.message || 'Invalid value'
+        return error.issues[0]?.message || 'Invalid value'
       }
       return 'Invalid value'
     }
@@ -52,7 +52,7 @@ export function useFormValidation<T extends Record<string, any>>({
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {}
-        error.errors.forEach((err) => {
+        error.issues.forEach((err) => {
           const fieldName = err.path[0] as string
           newErrors[fieldName] = err.message
         })
