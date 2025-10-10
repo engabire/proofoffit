@@ -47,7 +47,6 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value)
-    props.onChange?.(e)
   }
 
   return (
@@ -181,7 +180,6 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>((
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(e.target.value)
-    props.onChange?.(e)
   }
 
   return (
@@ -272,7 +270,6 @@ export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(({
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange?.(e.target.value)
-    props.onChange?.(e)
   }
 
   return (
