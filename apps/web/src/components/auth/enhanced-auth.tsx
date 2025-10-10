@@ -150,7 +150,7 @@ export default function EnhancedAuth({
       }
       
       // Success - the auth hook will handle redirects
-      if (mode === 'signup' && result.needsConfirmation) {
+      if (mode === 'signup' && 'needsConfirmation' in result && result.needsConfirmation) {
         setError('Please check your email for a confirmation link.')
       }
     } catch (error) {
