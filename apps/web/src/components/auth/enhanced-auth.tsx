@@ -122,37 +122,40 @@ export default function EnhancedAuth({
       setConfirmPasswordError('')
     }
     
-    const baseValid = !!email && !!password && validateEmail(email) && validatePassword(password)
-    const signupValid = mode === 'signup' ? !!confirmPassword && password === confirmPassword : true
-    setIsValid(baseValid && signupValid)
+    // For signup, only need valid email. For signin, need email and password
+    const baseValid = !!email && validateEmail(email)
+    const signinValid = mode === 'signin' ? !!password && validatePassword(password) : true
+    setIsValid(baseValid && signinValid)
   }, [email, password, confirmPassword, mode])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!isValid) return
-    
+
     setIsLoading(true)
     setError('')
-    
+
     try {
-      let result
-      
-      if (mode === 'signin') {
-        result = await signIn(email, password)
-      } else {
-        result = await signUp(email, password, { user_type: audience })
+      // For signup, use magic link instead of password to avoid email confirmation issues
+      if (mode === 'signup') {
+        const result = await sendMagicLink(email)
+        if (!result.success) {
+          setError(result.error || 'Failed to send magic link. Please try again.')
+          return
+        }
+        setError('Magic link sent! Please check your email (including spam folder).')
+        return
       }
-      
+
+      // For signin, use regular password authentication
+      const result = await signIn(email, password)
       if (!result.success) {
         setError(result.error || 'Authentication failed. Please try again.')
         return
       }
-      
+
       // Success - the auth hook will handle redirects
-      if (mode === 'signup' && 'needsConfirmation' in result && result.needsConfirmation) {
-        setError('Please check your email for a confirmation link.')
-      }
     } catch (error) {
       setError('Authentication failed. Please try again.')
     } finally {
@@ -335,7 +338,8 @@ export default function EnhancedAuth({
               )}
             </div>
 
-            {!isHirer && (
+            {/* Password field for sign-in only */}
+            {mode === 'signin' && (
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
@@ -344,7 +348,7 @@ export default function EnhancedAuth({
                   <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
@@ -371,38 +375,12 @@ export default function EnhancedAuth({
               </div>
             )}
 
-            {isSignUp && !isHirer && (
-              <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      confirmPasswordError ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Confirm your password"
-                  />
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
-                    )}
-                  </button>
-                </div>
-                {confirmPasswordError && <p className="text-sm text-red-600">{confirmPasswordError}</p>}
+            {/* Signup info message */}
+            {isSignUp && (
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                <p className="text-sm text-blue-800">
+                  <strong>No password needed!</strong> We'll send you a secure magic link to create your account.
+                </p>
               </div>
             )}
 
@@ -420,7 +398,7 @@ export default function EnhancedAuth({
               ) : (
                 <>
                   <Shield className="mr-2 h-4 w-4" />
-                  {isHirer ? "Continue" : isSignUp ? "Create Account" : "Continue with email"}
+                  {isSignUp ? "Send Magic Link" : (isHirer ? "Continue" : "Continue with email")}
                 </>
               )}
             </button>
