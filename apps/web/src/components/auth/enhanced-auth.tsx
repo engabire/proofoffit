@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { useCSRFHeaders } from '@/components/security/csrf-provider'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { 
   Mail, 
   Lock, 
@@ -69,6 +70,7 @@ export default function EnhancedAuth({
   const router = useRouter()
   const { signIn, signUp, sendMagicLink, loading: authLoading, error: authError } = useAuth()
   const csrfHeaders = useCSRFHeaders()
+  const supabase = createClientComponentClient()
   const [audience, setAudience] = useState<Audience>(defaultAudience)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -191,15 +193,52 @@ export default function EnhancedAuth({
   const handleSSO = async (providerKey: string) => {
     setIsLoading(true)
     try {
-      // Simulate SSO redirect
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('SSO login with:', providerKey)
-      // In a real app, you'd redirect to the SSO provider
-    } catch (error) {
-      setError('SSO authentication failed. Please try again.')
+      // Generate PKCE code verifier and store it
+      const codeVerifier = generateCodeVerifier()
+      sessionStorage.setItem('pkce_code_verifier', codeVerifier)
+      
+      // Map provider keys to Supabase provider names
+      const providerMap: Record<string, string> = {
+        'google': 'google',
+        'microsoft': 'azure',
+        'github': 'github',
+        'sso': 'google' // Default SSO to Google for now
+      }
+      
+      const supabaseProvider = providerMap[providerKey] || 'google'
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: supabaseProvider as any,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
+        }
+      })
+      
+      if (error) {
+        throw error
+      }
+      
+      // The redirect will happen automatically
+    } catch (error: any) {
+      console.error('SSO authentication error:', error)
+      setError(error.message || 'SSO authentication failed. Please try again.')
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Generate PKCE code verifier
+  const generateCodeVerifier = () => {
+    const array = new Uint8Array(32)
+    crypto.getRandomValues(array)
+    return btoa(String.fromCharCode.apply(null, Array.from(array)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '')
   }
 
   const handlePasskey = async () => {

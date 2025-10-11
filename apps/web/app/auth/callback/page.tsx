@@ -54,7 +54,13 @@ function AuthCallbackPageContent() {
         }
         
         if (code) {
-          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+          // Get the code verifier from session storage (set during OAuth initiation)
+          const codeVerifier = sessionStorage.getItem('pkce_code_verifier')
+          
+          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession({
+            authCode: code,
+            codeVerifier: codeVerifier || undefined
+          })
           
           if (exchangeError) {
             throw exchangeError
@@ -74,11 +80,12 @@ function AuthCallbackPageContent() {
 
             try { await import('../../../lib/analytics').then(m => m.track({ name: 'auth_success' })) } catch {}
             
-            // Log successful authentication (optional, fail silently if table doesn't exist)
+            // Log successful authentication (optional, fail silently if API doesn't exist)
             try {
-              await supabase
-                .from('action_log')
-                .insert({
+              await fetch('/api/action_log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                   tenantId: data.user.id,
                   actorType: 'user',
                   actorId: data.user.id,
@@ -87,6 +94,7 @@ function AuthCallbackPageContent() {
                   objId: data.user.id,
                   payloadHash: 'auth_success'
                 })
+              })
             } catch (logError) {
               // Silently handle logging errors - don't break authentication flow
               console.warn('Authentication logging unavailable:', logError)
@@ -106,24 +114,24 @@ function AuthCallbackPageContent() {
         setStatus('error')
         setMessage(err.message || 'Authentication failed')
         
-        // Log failed authentication (optional, fail silently if table doesn't exist)
-        if (supabase) {
-          try {
-            await supabase
-              .from('action_log')
-              .insert({
-                tenantId: 'anonymous',
-                actorType: 'system',
-                actorId: 'auth_callback',
-                action: 'auth_failed',
-                objType: 'user',
-                objId: 'unknown',
-                payloadHash: 'auth_failed'
-              })
-          } catch (logError) {
-            // Silently handle logging errors - don't break error handling flow
-            console.warn('Authentication error logging unavailable:', logError)
-          }
+        // Log failed authentication (optional, fail silently if API doesn't exist)
+        try {
+          await fetch('/api/action_log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tenantId: 'anonymous',
+              actorType: 'system',
+              actorId: 'auth_callback',
+              action: 'auth_failed',
+              objType: 'user',
+              objId: 'unknown',
+              payloadHash: 'auth_failed'
+            })
+          })
+        } catch (logError) {
+          // Silently handle logging errors - don't break error handling flow
+          console.warn('Authentication error logging unavailable:', logError)
         }
         
         setTimeout(() => {
