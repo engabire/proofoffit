@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run build:ui && npm run build:web",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci",
   "ignoreCommand": "node vercel-deployment-guard.js",
