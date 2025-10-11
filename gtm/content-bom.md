@@ -1,9 +1,9 @@
-# Content BOM (Minimum Viable)
+# Content BOM (Minimum Viable) — ProofOfFit
 
-- [x] Homepage hero + product page — **Purpose:** Conversion — **Channel:** Website — **Owner:** Emmanuel — **Due:** Oct 2024
-- [ ] Launch blog + technical deep-dive — **Purpose:** Awareness & trust — **Channel:** Blog — **Owner:** Emmanuel — **Due:** Dec 2024
-- [ ] 90-sec demo video — **Purpose:** Conversion assist — **Channel:** YouTube/Site — **Owner:** Emmanuel — **Due:** Jan 2025
-- [ ] Sales deck + one-pager — **Purpose:** Sales assist — **Channel:** Sales — **Owner:** Emmanuel — **Due:** Jan 2025
-- [ ] Email sequences (announce/nurture/proof) — **Purpose:** Activation — **Channel:** Email — **Owner:** Emmanuel — **Due:** Feb 2025
-- [ ] 2 ads (search + social) — **Purpose:** Acquire demand — **Channel:** Paid — **Owner:** Emmanuel — **Due:** Feb 2025
-- [ ] FAQ + help docs update — **Purpose:** Self-serve success — **Channel:** Docs — **Owner:** Emmanuel — **Due:** Feb 2025
+- [ ] Homepage hero + product page — **Purpose:** Conversion — **Channel:** Website — **Owner:** _(TBD)_ — **Due:** 2025-10-14
+- [ ] Launch blog + technical deep-dive — **Purpose:** Awareness & trust — **Channel:** Blog — **Owner:** _(TBD)_ — **Due:** 2025-10-14
+- [ ] 90-sec demo video — **Purpose:** Conversion assist — **Channel:** YouTube/Site — **Owner:** _(TBD)_ — **Due:** 2025-10-22
+- [ ] Sales deck + one-pager — **Purpose:** Sales assist — **Channel:** Sales — **Owner:** _(TBD)_ — **Due:** 2025-10-22
+- [ ] Email sequence (announce/nurture) — **Purpose:** Activation — **Channel:** Email — **Owner:** _(TBD)_ — **Due:** 2025-10-22
+- [ ] 2 ads (search + social) — **Purpose:** Acquire demand — **Channel:** Paid — **Owner:** _(TBD)_ — **Due:** 2025-10-22
+- [ ] FAQ + help docs update — **Purpose:** Self-serve success — **Channel:** Docs — **Owner:** _(TBD)_ — **Due:** 2025-10-22

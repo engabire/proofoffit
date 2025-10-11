@@ -1,0 +1,20 @@
+name: "GTM Playbook Formatting"
+description: "Keep GTM Markdown files consistent: checklists, tables, headings, and concise copy."
+match: ["gtm/**/*.md", "gtm/*.md"]
+always: false
+autoAttach: true
+instructions: |
+  Style:
+  - Plain language. Short sentences.
+  - Use - [ ] for tasks; tables for owners/dates/KPIs.
+  - Unknowns as _(TBD)_. Suggest how to fill them.
+  Structure by file:
+  - gtm/README.md: entrypoint with quick links, status, next 3 actions.
+  - gtm/launch-checklist.md: phase-based checklist with owners & due dates.
+  - gtm/content-bom.md: assets with purpose/channel/owner/status/link/due.
+  - gtm/runbook.md: T-minus/T-plus schedule.
+  - gtm/pricing-guardrails.md: fences and levers.
+  - gtm/raci.md: RACI table.
+  - gtm/metrics.md: definitions, formulas, targets, dashboard links.
+  - gtm/calendar.md: dated milestones and status.
+  Do not change headings; append if needed.

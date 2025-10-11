@@ -14,4 +14,3 @@
 - Lead→SQL conversion = `SQLs ÷ Leads`
 - Sales velocity = `(opps × win rate × ASP) ÷ sales cycle length`
 - Activation rate = `# users hitting "aha" ÷ signups`
-
