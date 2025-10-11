@@ -1,3 +1,5 @@
+export {}
+
 type QueryBuilderMock = {
   select: jest.Mock<QueryBuilderMock, []>
   insert: jest.Mock<QueryBuilderMock, []>

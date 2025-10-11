@@ -1,4 +1,6 @@
 // Mock Supabase before any imports
+export {}
+
 type QueryBuilderMock = {
   select: jest.Mock<QueryBuilderMock, []>
   insert: jest.Mock<QueryBuilderMock, []>
@@ -234,7 +236,7 @@ describe('Tailor Engine', () => {
       expect(result.citations).toHaveLength(3)
       
       // Check that relevant bullets are included
-      const bulletTexts = result.citations.map(c => c.text)
+      const bulletTexts = result.citations.map((citation: { text: string }) => citation.text)
       expect(bulletTexts).toContain('Led a team of 8 engineers to deliver a React-based healthcare application')
       expect(bulletTexts).toContain('Built advanced TypeScript components with 95% test coverage')
     })
