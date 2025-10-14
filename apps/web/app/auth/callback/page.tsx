@@ -64,10 +64,7 @@ function AuthCallbackPageContent() {
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
 
           const { data, error: exchangeError } = await supabase.auth
-            .exchangeCodeForSession({
-              authCode: code,
-              codeVerifier: codeVerifier || undefined,
-            });
+            .exchangeCodeForSession(code, codeVerifier || undefined);
 
           if (exchangeError) {
             throw exchangeError;
