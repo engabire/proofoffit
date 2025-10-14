@@ -12,6 +12,8 @@
 - [Content BOM](./content-bom.md)
 - [Runbook](./runbook.md)
 - [Pricing guardrails](./pricing-guardrails.md)
+- [Public pricing copy](./pricing-page.md)
+- [Pricing calculator spec](./pricing-calculator-spec.md)
 - [RACI](./raci.md)
 - [Metrics & formulas](./metrics.md)
 - [Launch calendar](./calendar.md)
