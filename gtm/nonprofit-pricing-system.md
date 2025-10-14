@@ -104,27 +104,31 @@
 
 | Epic | Folder(s) | Purpose |
 |---|---|---|
-| E1. Eligibility & Pricing System | apps/web, infra/supabase | Build EIN checker, nonprofit calculator logic, pricing tiers, CRM hooks. |
-| E2. UI & Accessibility | packages/ui, apps/web | Create eligibility widget, calculator cards, accessibility compliance, responsive design. |
+| E1. Eligibility & Pricing System | apps/web/app/api, infra/supabase | Build EIN checker, nonprofit calculator logic, pricing tiers, CRM hooks. |
+| E2. UI & Accessibility | apps/web/app, packages/ui | Create eligibility widget, calculator cards, accessibility compliance, responsive design. |
 | E3. Legal & Security Compliance | legal/, security/ | Finalize Nonprofit Addendum, Donor Agreement, EDHP triggers, SOC 2/DPIA updates. |
 | E4. Infra & Automation | infra/supabase, scripts/ | Database migrations, RLS policies, scheduled revalidation jobs, discount automation. |
 | E5. GTM & Verification Fund | gtm/ | Donor one-pager, pooled credit ledger, marketing copy, transparency reports. |
-| E6. RevOps & Ops Integration | scripts/, apps/web/api, CRM | Billing logic, revalidation workflows, discount guardrails, CS macros. |
-| E7. Comms & Public Launch | apps/web, gtm/ | Nonprofit landing page, PR/blog, press assets, site-level CTAs. |
+| E6. RevOps & Ops Integration | scripts/, apps/web/src, CRM | Billing logic, revalidation workflows, discount guardrails, CS macros. |
+| E7. Comms & Public Launch | apps/web/app, gtm/ | Nonprofit landing page, PR/blog, press assets, site-level CTAs. |
+
+- Execution tracker with owners, due dates, and file references lives in
+  [Nonprofit implementation board](./nonprofit-implementation-board.md).
 
 ## H2) Sprint Breakdown (30/60/90)
 
 ### Sprint 1 — Foundation (Day 0–30)
 
-- **Product/Eng:** Implement `POST /eligibility/check`, `/attach`, `/audit` in
-  `apps/web/api/eligibility`.
-- **Infra:** Create `eligibility_checks` table and triggers in `infra/supabase/migrations`.
-- **UI:** Add “Check Eligibility” card to pricing page at `apps/web/app/(pricing)/page.tsx`.
+- **Product/Eng:** Implement `POST /eligibility/check`, `/attach`, `/audit` via
+  `apps/web/app/api/eligibility/*/route.ts` handlers.
+- **Infra:** Create `eligibility_checks` table and triggers in `infra/supabase/migrations/`.
+- **UI:** Add “Check Eligibility” card to pricing page at `apps/web/app/pricing/page.tsx`.
 - **Legal:** Finalize and publish Nonprofit Addendum & Donor Agreement under `legal/`.
-- **Marketing:** Draft nonprofit landing page in `apps/web/app/(nonprofit)/page.tsx`.
-- **Ops:** Hook eligibility status into billing plan creation flow in `apps/web/api/billing`.
+- **Marketing:** Draft nonprofit landing page in `apps/web/app/nonprofit/page.tsx`.
+- **Ops:** Hook eligibility status into billing plan creation flow via billing helpers in
+  `apps/web/src/components/billing/`.
 - **QA:** Add Playwright coverage for eligibility flow (latency assertion <3s) in
-  `apps/web/tests/eligibility.spec.ts`.
+  `apps/web/src/test/e2e/eligibility.spec.ts`.
 - **Acceptance metrics:** API latency <3s; EIN auto verification success rate >90%; Accessibility
   audit AA pass.
 
@@ -132,17 +136,17 @@
 
 - **Infra:** Automate annual revalidation via Supabase cron (stored proc in
   `infra/supabase/functions/revalidate.sql`) or scheduled GitHub Action in `.github/workflows/`.
-- **RevOps:** Send T-60/T-15 revalidation alerts via email service and in-app banner in
-  `apps/web/app/(dashboard)/notifications`.
+- **RevOps:** Send T-60/T-15 revalidation alerts via email service and in-app banner leveraging
+  `apps/web/src/components/notifications/`.
 - **UI:** Add nonprofit toggle + tier multipliers to pricing calculator component in
-  `apps/web/app/(pricing)/components/calculator.tsx`.
+  `apps/web/app/pricing/components/nonprofit-toggle.tsx`.
 - **Security:** Implement EDHP toggle and audit logging in admin console at
-  `apps/web/app/(admin)/settings/data-protection.tsx`.
+  `apps/web/app/admin/data-protection/page.tsx`.
 - **GTM:** Launch donor portal assets and Verification Credit Fund ledger (tables in
   `infra/supabase/tables/fund_grants.sql`; collateral in `gtm/verification-fund.md`).
 - **Legal:** Update SOC 2 + DPIA documentation (`security/`), publish accessibility statement in
   `legal/accessibility-statement.md`.
-- **Marketing:** Run CTA placement A/B test on pricing page via `apps/web/app/(pricing)/experiments`.
+- **Marketing:** Run CTA placement A/B test on pricing page via `apps/web/app/pricing/experiments/`.
 - **Analytics:** Stand up discount leakage vs margin floors dashboard using Supabase view
   `infra/supabase/views/nonprofit_margin.sql`.
 - **Acceptance metrics:** Revalidation workflow active; 100% add-ons priced separately; accessibility
@@ -153,7 +157,7 @@
 - **GTM:** Publish Impact Transparency Report v0.1 sourced from Supabase analytics view
   `infra/supabase/views/impact_transparency.sql`.
 - **Security:** Upload Ethics Board charter to `security/policies/ethics_board.md`.
-- **Design:** Deliver accessibility polish + localization (5 languages) in `packages/ui`.
+- **Design:** Deliver accessibility polish + localization (5 languages) in `packages/ui/`.
 - **Ops:** Auto-attach Nonprofit Addendum via billing pipeline script in `scripts/apply_addendum.ts`.
 - **Marketing:** Ship press release and donor outreach sequence in `gtm/comms/nonprofit-launch.md`.
 - **Legal:** Enforce Bridge Mode logic through terms update `legal/nonprofit-addendum.md`.
@@ -189,7 +193,7 @@
 
 | Dashboard | Source | Metrics |
 |---|---|---|
-| Nonprofit Impact Dashboard | Supabase views (`infra/supabase/views/impact_transparency.sql`) | IEI, verified placements, donor coverage % |
+| Nonprofit Impact Dashboard | Supabase views (`infra/supabase/views/impact_transparency.sql`) | IEI (placeholder), verified placements, donor coverage % |
 | RevOps Margin Tracker | Billing logs + `scripts/margin_guardrail.ts` | Gross margin post-discount, leakage alerts |
 | Security Audit Dashboard | Logflare / Vercel Analytics | EDHP activations, compliance incidents |
 | Accessibility QA Board | Storybook + Lighthouse CI | WCAG scores per component |
@@ -200,3 +204,5 @@
 - Finance/RevOps to lock N4 multiplier bands and confirm IEI social weighting by 2025-10-21.
 - Security to finalize Enhanced Data Handling Protocol checklist for minors/PHI ingestion.
 - Legal to deliver draft Nonprofit Addendum and Donor Agreement redlines by 2025-10-23.
+- Product/Eng to replace API stubs in `apps/web/app/api/eligibility/*/route.ts` with live logic once
+  Supabase tables are migrated.

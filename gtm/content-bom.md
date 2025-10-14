@@ -1,5 +1,9 @@
 # Content BOM (Minimum Viable) — ProofOfFit
 
+- [x] Nonprofit pricing system SSoT — **Purpose:** Pricing governance — **Channel:** Internal GTM —
+  **Owner:** Emmanuel Ngabire — **Due:** 2025-10-19
+- [x] Nonprofit implementation board — **Purpose:** Cross-team planning — **Channel:** Internal GTM
+  — **Owner:** Emmanuel Ngabire — **Due:** 2025-10-19
 - [x] Pricing page copy (public) — **Purpose:** Conversion — **Channel:** Website — **Owner:**
   Emmanuel Ngabire — **Due:** 2025-10-19
 - [x] In-app pricing calculator spec — **Purpose:** Self-serve sizing — **Channel:** Product —

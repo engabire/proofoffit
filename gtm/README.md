@@ -14,6 +14,8 @@
 - [Pricing guardrails](./pricing-guardrails.md)
 - [Public pricing copy](./pricing-page.md)
 - [Pricing calculator spec](./pricing-calculator-spec.md)
+- [Nonprofit pricing system](./nonprofit-pricing-system.md)
+- [Nonprofit implementation board](./nonprofit-implementation-board.md)
 - [RACI](./raci.md)
 - [Metrics & formulas](./metrics.md)
 - [Launch calendar](./calendar.md)
