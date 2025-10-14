@@ -33,7 +33,11 @@ export const env = {
   // Email configuration (optional)
   email: {
     resendKey: process.env.RESEND_API_KEY || '',
-  }
+  },
+
+  jobs: {
+    rapidApiKey: process.env.RAPIDAPI_KEY || '',
+  },
 }
 
 // Helper functions
