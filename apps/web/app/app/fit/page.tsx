@@ -871,7 +871,7 @@ const mockJobs: JobPosting[] = [
     description: 'We are looking for a senior software engineer to join our team...',
     requirements: ['Python', 'React', 'Cloud', '5+ years experience'],
     benefits: ['Health insurance', '401k', 'Flexible hours'],
-    postedAt: new Date('2024-01-15'),
+    postedAt: new Date(),
     companyLogo: '/logos/techcorp.png',
     companySize: '100-500',
     industry: 'Technology',
@@ -888,7 +888,7 @@ const mockJobs: JobPosting[] = [
     description: 'Join our fast-growing startup as a full stack developer...',
     requirements: ['JavaScript', 'Node.js', 'React', 'MongoDB'],
     benefits: ['Equity', 'Remote work', 'Learning budget'],
-    postedAt: new Date('2024-01-10'),
+    postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     companySize: '10-50',
     industry: 'Technology',
     experienceLevel: 'mid'
@@ -904,7 +904,7 @@ const mockJobs: JobPosting[] = [
     description: 'The Metropolitan Council is seeking a Data Analyst to support regional planning and policy development...',
     requirements: ['SQL', 'Excel', 'Data visualization', 'Statistics'],
     benefits: ['Pension', 'Health insurance', 'Professional development'],
-    postedAt: new Date('2024-01-20'),
+    postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     companySize: '500+',
     industry: 'Government',
     experienceLevel: 'mid'

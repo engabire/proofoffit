@@ -28,6 +28,8 @@ export class CredentialManager {
       'STRIPE_WEBHOOK_SECRET',
       'GOOGLE_CLIENT_ID',
       'GOOGLE_CLIENT_SECRET',
+      'GOOGLE_REDIRECT_URI',
+      'RAPIDAPI_KEY',
       'USAJOBS_API_KEY'
     ]
 

@@ -264,7 +264,7 @@ function getMockJobs(query: string, location: string, workType: string, limit: n
       requirements: ['Bachelor\'s degree in Data Science or related field', '3+ years experience with SQL and Python', 'Experience with data visualization tools'],
       niceToHaves: ['Master\'s degree', 'Experience with transportation planning', 'Knowledge of GIS systems'],
       benefits: ['Health insurance', 'Retirement plan', 'Flexible schedule'],
-      postedAt: new Date('2024-01-15'),
+      postedAt: new Date(),
       companyLogo: undefined,
       companySize: '1000-5000',
       industry: 'Government',
@@ -306,7 +306,7 @@ function getMockJobs(query: string, location: string, workType: string, limit: n
       requirements: ['Bachelor\'s degree in Computer Science', '3+ years experience with React and Node.js', 'Experience with cloud platforms'],
       niceToHaves: ['TypeScript experience', 'DevOps knowledge', 'Open source contributions'],
       benefits: ['Health insurance', 'Stock options', 'Remote work', 'Learning budget'],
-      postedAt: new Date('2024-01-20'),
+      postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       companyLogo: undefined,
       companySize: '100-500',
       industry: 'Technology',
@@ -369,7 +369,7 @@ function getMockJobs(query: string, location: string, workType: string, limit: n
       requirements: ['Master\'s degree in Data Science or related field', '3+ years experience with Python and R', 'Experience with machine learning frameworks'],
       niceToHaves: ['PhD', 'Experience with deep learning', 'Knowledge of cloud platforms'],
       benefits: ['Health insurance', 'Stock options', 'Conference budget'],
-      postedAt: new Date('2024-01-25'),
+      postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
       companyLogo: undefined,
       companySize: '100-500',
       industry: 'Technology',

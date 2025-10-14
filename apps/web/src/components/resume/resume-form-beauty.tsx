@@ -209,72 +209,84 @@ const Table = ({ headers, rows }: { headers: string[]; rows: (string | React.Rea
 // Main component
 // -----------------------------------------------
 export default function ResumeFormBeauty() {
-  const [layout, setLayout] = useState<"ATS" | "Hybrid" | "CaseStudy">("ATS");
-  const [module, setModule] = useState<keyof typeof MODULES>("Accounting");
-  const [paper, setPaper] = useState<"A4" | "Letter">("A4");
-  const [mode, setMode] = useState<"brand" | "ink">("brand");
-  const [accent, setAccent] = useState<string>("#0ea5e9"); // sky-500
-  const [density, setDensity] = useState<"compact" | "standard" | "roomy">("standard");
-  const [radius, setRadius] = useState<number>(16);
-  const [isClient, setIsClient] = useState(false);
+  const [layout, setLayout] = useState<"ATS" | "Hybrid" | "CaseStudy">(() => {
+    if (typeof window === "undefined") return "ATS";
+    const stored = localStorage.getItem("resume_layout");
+    return stored === "Hybrid" || stored === "CaseStudy" || stored === "ATS" ? stored : "ATS";
+  });
+  const [module, setModule] = useState<keyof typeof MODULES>(() => {
+    if (typeof window === "undefined") return "Accounting";
+    const stored = localStorage.getItem("resume_module");
+    return stored && stored in MODULES ? (stored as keyof typeof MODULES) : "Accounting";
+  });
+  const [paper, setPaper] = useState<"A4" | "Letter">(() => {
+    if (typeof window === "undefined") return "A4";
+    const stored = localStorage.getItem("resume_paper");
+    return stored === "Letter" ? "Letter" : "A4";
+  });
+  const [mode, setMode] = useState<"brand" | "ink">(() => {
+    if (typeof window === "undefined") return "brand";
+    const stored = localStorage.getItem("resume_mode");
+    return stored === "ink" ? "ink" : "brand";
+  });
+  const [accent, setAccent] = useState<string>(() => {
+    if (typeof window === "undefined") return "#0ea5e9";
+    return localStorage.getItem("resume_accent") || "#0ea5e9";
+  });
+  const [density, setDensity] = useState<"compact" | "standard" | "roomy">(() => {
+    if (typeof window === "undefined") return "standard";
+    const stored = localStorage.getItem("resume_density");
+    return stored === "compact" || stored === "roomy" ? stored : "standard";
+  });
+  const [radius, setRadius] = useState<number>(() => {
+    if (typeof window === "undefined") return 16;
+    const stored = localStorage.getItem("resume_radius");
+    return stored ? Number(stored) || 16 : 16;
+  });
 
-  // Initialize from localStorage on client side
   useEffect(() => {
-    setIsClient(true);
-    if (typeof window !== 'undefined') {
-      setLayout((localStorage.getItem("resume_layout") as any) || "ATS");
-      setModule((localStorage.getItem("resume_module") as any) || "Accounting");
-      setPaper((localStorage.getItem("resume_paper") as any) || "A4");
-      setMode((localStorage.getItem("resume_mode") as any) || "brand");
-      setAccent(localStorage.getItem("resume_accent") || "#0ea5e9");
-      setDensity((localStorage.getItem("resume_density") as any) || "standard");
-      setRadius(Number(localStorage.getItem("resume_radius")) || 16);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_layout", layout);
     }
-  }, [layout, isClient]);
-  
+  }, [layout]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_module", module);
     }
-  }, [module, isClient]);
-  
+  }, [module]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_paper", paper);
     }
-  }, [paper, isClient]);
-  
+  }, [paper]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_mode", mode);
     }
-  }, [mode, isClient]);
-  
+  }, [mode]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_accent", accent);
     }
-  }, [accent, isClient]);
-  
+  }, [accent]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_density", density);
     }
-  }, [density, isClient]);
-  
+  }, [density]);
+
   useEffect(() => {
-    if (isClient && typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("resume_radius", String(radius));
     }
-  }, [radius, isClient]);
+  }, [radius]);
 
-  const m = MODULES[module];
+  const selectedModule = MODULES[module];
 
   // Dynamic CSS variables
   const densityMap = {
@@ -349,7 +361,7 @@ export default function ResumeFormBeauty() {
           ["Years of Relevant Experience", "15+ years"],
           ["3–4 Strengths (verb + noun)", "standardize reconciliations • launch dashboards • build cashflow models • audit readiness"],
           ["Outcomes You Deliver (metrics)", "close time −3 days • open recon items −70% • forecast accuracy +12%"],
-          ["3–4 Line Summary", MODULES[module].summary],
+          ["3–4 Line Summary", selectedModule.summary],
         ]}
       />
     </SectionCard>
@@ -358,7 +370,7 @@ export default function ResumeFormBeauty() {
   const CompetenciesSection = (
     <SectionCard title="Core Competencies (3‑Column Grid)">
       <div className="grid sm:grid-cols-3 grid-cols-1 gap-[var(--gap)]">
-        {MODULES[module].competencies.map((c, i) => (
+        {selectedModule.competencies.map((c, i) => (
           <div key={i} className="border border-[color:var(--table-border)] rounded-lg px-3 py-2 text-sm bg-white">
             {c}
           </div>
@@ -426,7 +438,7 @@ export default function ResumeFormBeauty() {
   const ModuleBullets = (
     <SectionCard title="Module Bullet Starters">
       <ul className="list-disc pl-6 text-[15px] text-gray-900 space-y-1">
-        {MODULES[module].bullets.map((b, i) => (
+        {selectedModule.bullets.map((b, i) => (
           <li key={i}>{b}</li>
         ))}
       </ul>

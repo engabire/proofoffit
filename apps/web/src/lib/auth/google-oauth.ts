@@ -20,7 +20,7 @@ export const googleOAuthConfig = {
     }
     return credentialManager.getCredential('GOOGLE_CLIENT_SECRET')
   },
-  redirectUri: process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.proofoffit.com'}/auth/callback/google`,
+  redirectUri: process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.proofoffit.com'}/auth/callback`,
   scopes: [
     'openid',
     'email',

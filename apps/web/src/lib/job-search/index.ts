@@ -151,6 +151,8 @@ export class JobSearchService {
       switch (board) {
         case 'remoteok':
           return await this.searchRemoteOk(params);
+        case 'indeed':
+          return await this.searchIndeed(params);
         case 'governmentjobs':
           return await this.searchGovernmentJobs(params);
         default:
@@ -235,6 +237,71 @@ export class JobSearchService {
         jobs: [],
         error: `RemoteOK API error: ${error.message}`,
         source: 'remoteok'
+      };
+    }
+  }
+
+  // Indeed API integration using RapidAPI (requires API key)
+  private async searchIndeed(params: JobSearchParams): Promise<JobBoardResponse> {
+    try {
+      const rapidApiKey = process.env.RAPIDAPI_KEY;
+      if (!rapidApiKey) {
+        return {
+          success: false,
+          jobs: [],
+          error: 'RapidAPI key not configured',
+          source: 'indeed'
+        };
+      }
+
+      const response = await fetch('https://jsearch.p.rapidapi.com/search', {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': rapidApiKey,
+          'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
+        },
+        // Note: This would need proper query parameters for Indeed
+      });
+
+      if (!response.ok) {
+        throw new Error(`Indeed API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Transform Indeed data to our format
+      const transformedJobs = (data.data || []).map((job: any) => ({
+        id: `indeed-${job.job_id}`,
+        title: job.job_title,
+        company: job.employer_name,
+        location: job.job_city + ', ' + job.job_state,
+        salary: job.job_salary,
+        description: job.job_description,
+        url: job.job_apply_link,
+        applyUrl: job.job_apply_link,
+        source: 'indeed' as JobBoardProvider,
+        postedDate: new Date(job.job_posted_at_datetime_utc),
+        isRemote: job.job_is_remote,
+        employmentType: job.job_employment_type,
+        skills: job.job_required_skills || [],
+        benefits: [],
+        companySize: job.employer_company_size,
+        industry: job.job_industry
+      }));
+
+      return {
+        success: true,
+        jobs: transformedJobs,
+        totalFound: transformedJobs.length,
+        source: 'indeed'
+      };
+    } catch (error: any) {
+      console.error('Indeed search error:', error);
+      return {
+        success: false,
+        jobs: [],
+        error: `Indeed API error: ${error.message}`,
+        source: 'indeed'
       };
     }
   }
