@@ -437,7 +437,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-lg z-[100]">
                 <DropdownMenuItem className="inline-flex items-center gap-2">
                   <Globe2 className="h-4 w-4"/> English
                 </DropdownMenuItem>
@@ -457,12 +457,12 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
-                  <HelpCircle className="h-4 w-4" /> 
+                  <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Help</span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-lg z-[100]">
                 <DropdownMenuItem className="inline-flex items-center gap-2">
                   <BookOpen className="h-4 w-4"/> Documentation
                 </DropdownMenuItem>

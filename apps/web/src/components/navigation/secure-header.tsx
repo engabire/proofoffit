@@ -72,7 +72,7 @@ export function SecureHeader() {
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-lg z-[100]">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
