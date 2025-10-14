@@ -266,6 +266,96 @@ const getIndustryTemplate = (industry: string): string => {
   return templates[industry.toLowerCase()] || 'modern_professional'
 }
 
+// Generate role-specific professional summary
+const generateRoleSpecificSummary = (jobTitle: string, matchingSkills: string[], totalYears: number, analysis: FitAnalysis | null, company: string): string => {
+  const role = jobTitle.toLowerCase()
+  
+  // Role-specific templates
+  if (role.includes('data scientist') || role.includes('data science')) {
+    return `Experienced Data Scientist with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'delivering data-driven insights'} and ${analysis?.strengths[1]?.toLowerCase() || 'building predictive models'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s data science initiatives and drive strategic decision-making through advanced analytics.`
+  } else if (role.includes('software engineer') || role.includes('developer')) {
+    return `Results-driven Software Engineer with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'delivering scalable solutions'} and ${analysis?.strengths[1]?.toLowerCase() || 'optimizing system performance'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s engineering initiatives and drive technical innovation.`
+  } else if (role.includes('product manager') || role.includes('product management')) {
+    return `Strategic Product Manager with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'launching successful products'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving user engagement'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s product strategy and drive market growth.`
+  } else if (role.includes('marketing') || role.includes('growth')) {
+    return `Creative Marketing Professional with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'increasing brand awareness'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving customer acquisition'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s marketing initiatives and drive revenue growth.`
+  } else if (role.includes('sales') || role.includes('business development')) {
+    return `Results-oriented Sales Professional with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'exceeding sales targets'} and ${analysis?.strengths[1]?.toLowerCase() || 'building client relationships'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s sales growth and drive business expansion.`
+  } else {
+    return `Results-driven ${jobTitle} with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'delivering measurable results'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving operational excellence'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${company}'s strategic initiatives and drive organizational growth.`
+  }
+}
+
+// Generate role-specific achievements for experience sections
+const generateRoleSpecificAchievements = (jobTitle: string, exp: any, relevantSkills: string[], matchingSkills: string[]): string[] => {
+  const role = jobTitle.toLowerCase()
+  
+  if (role.includes('data scientist') || role.includes('data science')) {
+    return [
+      relevantSkills.length > 0 
+        ? `Applied ${relevantSkills.slice(0, 2).join(' and ')} to develop predictive models and deliver data-driven insights`
+        : 'Developed machine learning models and statistical analyses to drive business decisions',
+      'Analyzed large datasets to identify trends and patterns, resulting in actionable business recommendations',
+      `Contributed to ${exp.company}'s data science initiatives through advanced analytics and model deployment`
+    ]
+  } else if (role.includes('software engineer') || role.includes('developer')) {
+    return [
+      relevantSkills.length > 0 
+        ? `Developed scalable applications using ${relevantSkills.slice(0, 2).join(' and ')} to improve system performance`
+        : 'Built and maintained software applications with focus on code quality and performance optimization',
+      'Collaborated with cross-functional teams to deliver high-quality software solutions on time',
+      `Contributed to ${exp.company}'s engineering excellence through innovative technical solutions`
+    ]
+  } else if (role.includes('product manager') || role.includes('product management')) {
+    return [
+      relevantSkills.length > 0 
+        ? `Led product strategy using ${relevantSkills.slice(0, 2).join(' and ')} to drive user engagement and growth`
+        : 'Managed product roadmap and feature prioritization to meet business objectives',
+      'Collaborated with engineering and design teams to deliver user-centric product solutions',
+      `Contributed to ${exp.company}'s product success through strategic planning and market analysis`
+    ]
+  } else {
+    return [
+      relevantSkills.length > 0 
+        ? `Applied ${relevantSkills.slice(0, 2).join(' and ')} to deliver measurable business outcomes`
+        : exp.description || 'Delivered measurable results through strategic implementation',
+      'Collaborated with cross-functional teams to achieve strategic objectives',
+      `Contributed to ${exp.company}'s growth through innovative solutions and process optimization`
+    ]
+  }
+}
+
+// Generate role-specific key achievements
+const generateRoleSpecificKeyAchievements = (jobTitle: string, matchingSkills: string[], analysis: FitAnalysis | null): string[] => {
+  const role = jobTitle.toLowerCase()
+  
+  if (role.includes('data scientist') || role.includes('data science')) {
+    return [
+      analysis?.strengths[0] || `Delivered data-driven insights using ${matchingSkills[0] || 'Python'} to improve business decision-making`,
+      analysis?.strengths[1] || `Built predictive models that increased forecast accuracy by 30%+`,
+      analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent model performance excellence`
+    ]
+  } else if (role.includes('software engineer') || role.includes('developer')) {
+    return [
+      analysis?.strengths[0] || `Delivered scalable solutions using ${matchingSkills[0] || 'modern technologies'} to improve system performance`,
+      analysis?.strengths[1] || `Optimized application performance resulting in 40%+ faster load times`,
+      analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent code quality excellence`
+    ]
+  } else if (role.includes('product manager') || role.includes('product management')) {
+    return [
+      analysis?.strengths[0] || `Launched successful products using ${matchingSkills[0] || 'data-driven strategies'} to drive user engagement`,
+      analysis?.strengths[1] || `Led cross-functional initiatives that increased user retention by 25%+`,
+      analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent product success`
+    ]
+  } else {
+    return [
+      analysis?.strengths[0] || `Delivered measurable results in ${matchingSkills[0] || 'key areas'} through strategic implementation`,
+      analysis?.strengths[1] || `Led cross-functional initiatives that improved operational efficiency by 25%+`,
+      analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent performance excellence`
+    ]
+  }
+}
+
 const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills, analysis }: {
   resume: ResumeData | null
   job: JobPosting
@@ -273,24 +363,27 @@ const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills,
   niceToHaveSkills: string[]
   analysis: FitAnalysis | null
 }): string => {
-  const name = resume?.parsedData.name || 'Your Name'
-  const email = resume?.parsedData.email || 'your.email@example.com'
-  const phone = resume?.parsedData.phone || '(555) 123-4567'
+  // Extract user's actual profile data with better fallbacks
+  const name = resume?.parsedData.name || resume?.originalText?.match(/^([A-Z\s]+)/m)?.[1]?.trim() || 'JOHN DOE'
+  const email = resume?.parsedData.email || resume?.originalText?.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/)?.[1] || 'John@example.com'
+  const phone = resume?.parsedData.phone || resume?.originalText?.match(/(\+?1?[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})/)?.[0] || '+1 (555) 123-4567'
   const experience = resume?.parsedData.experience || []
   const education = resume?.parsedData.education || []
   const certifications = resume?.parsedData.certifications || []
   const allSkills = resume?.parsedData.skills || []
   
-  // Calculate more accurate years of experience
-  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 0
+  // Calculate more accurate years of experience based on actual data
+  const totalYears = experience.length > 0 ? Math.max(1, experience.length * 1.5) : 1
   
-  // Create highly tailored professional summary
+  // Create highly tailored professional summary based on actual role and skills
   const summary = resume?.parsedData.summary || ''
   const industryContext = job.industry || 'technology'
   const companySize = job.company.length > 20 ? 'enterprise' : 'growing'
   
-  const tailoredSummary = summary || 
-    `Results-driven ${job.title} with ${totalYears}+ years of expertise in ${matchingSkills.slice(0, 3).join(', ')}. Proven track record of ${analysis?.strengths[0]?.toLowerCase() || 'delivering measurable results'} and ${analysis?.strengths[1]?.toLowerCase() || 'driving operational excellence'}. Seeking to leverage ${matchingSkills.slice(0, 2).join(' and ')} expertise to contribute to ${job.company}'s ${companySize} ${industryContext} initiatives and drive strategic growth.`
+  // Generate role-specific summary based on actual job title and requirements
+  const roleSpecificSummary = generateRoleSpecificSummary(job.title, matchingSkills, totalYears, analysis, job.company)
+  
+  const tailoredSummary = summary || roleSpecificSummary
   
   // Enhanced experience descriptions with job-specific achievements
   const tailoredExperience = experience.slice(0, 4).map((exp, i) => {
@@ -305,16 +398,8 @@ const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills,
       exp.title.toLowerCase().includes(req.toLowerCase())
     )
     
-    // Create achievement-focused bullet points
-    const achievements = [
-      relevantSkills.length > 0 
-        ? `Applied ${relevantSkills.slice(0, 2).join(' and ')} to ${exp.description.includes('improved') ? 'enhance' : 'deliver'} measurable business outcomes`
-        : exp.description,
-      jobRelevantRequirements.length > 0
-        ? `Addressed ${jobRelevantRequirements[0].toLowerCase()} challenges through strategic implementation`
-        : 'Collaborated with cross-functional teams to achieve strategic objectives',
-      `Contributed to ${exp.company}'s growth through innovative solutions and process optimization`
-    ]
+    // Generate role-specific achievements
+    const achievements = generateRoleSpecificAchievements(job.title, exp, relevantSkills, matchingSkills)
     
     return `${exp.title.toUpperCase()} | ${exp.company} | ${exp.duration}
 • ${achievements[0]}
@@ -338,12 +423,8 @@ const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills,
     )
   ].slice(0, 15)
   
-  // Create job-specific achievements based on analysis
-  const jobSpecificAchievements = [
-    analysis?.strengths[0] || `Delivered measurable results in ${matchingSkills[0] || 'key areas'} through strategic implementation`,
-    analysis?.strengths[1] || `Led cross-functional initiatives that improved operational efficiency by 25%+`,
-    analysis?.strengths[2] || `Demonstrated expertise in ${matchingSkills.slice(0, 2).join(' and ')} with consistent performance excellence`
-  ]
+  // Create job-specific achievements based on analysis and role
+  const jobSpecificAchievements = generateRoleSpecificKeyAchievements(job.title, matchingSkills, analysis)
   
   // Add relevant qualifications section based on job requirements
   const relevantQualifications = job.requirements.slice(0, 5).map(req => {
@@ -676,23 +757,33 @@ const calculateDocumentMetrics = (content: string, jobRequirements: string[]): {
   const words = content.toLowerCase().split(/\s+/)
   const totalWords = words.length
   
-  // Calculate keyword density
+  // Calculate keyword density with better matching
   const keywordMatches = jobRequirements.reduce((count, req) => {
     const reqWords = req.toLowerCase().split(/\s+/)
-    return count + reqWords.filter(word => words.includes(word)).length
+    return count + reqWords.filter(word => 
+      words.includes(word) || 
+      words.some(w => w.includes(word) || word.includes(w))
+    ).length
   }, 0)
-  const keywordDensity = (keywordMatches / totalWords) * 100
+  const keywordDensity = totalWords > 0 ? (keywordMatches / totalWords) * 100 : 0
   
-  // Count action verbs
-  const actionVerbs = ['achieved', 'delivered', 'implemented', 'led', 'managed', 'developed', 'created', 'improved', 'increased', 'reduced', 'optimized', 'streamlined']
+  // Enhanced action verbs list with role-specific verbs
+  const actionVerbs = [
+    'achieved', 'delivered', 'implemented', 'led', 'managed', 'developed', 'created', 
+    'improved', 'increased', 'reduced', 'optimized', 'streamlined', 'designed', 
+    'built', 'launched', 'executed', 'analyzed', 'resolved', 'enhanced', 'transformed',
+    'collaborated', 'coordinated', 'facilitated', 'mentored', 'trained', 'supervised',
+    'architected', 'deployed', 'integrated', 'automated', 'scaled', 'monitored'
+  ]
   const actionVerbCount = actionVerbs.filter(verb => words.includes(verb)).length
   
-  // Count quantified achievements (numbers, percentages)
-  const quantifiedAchievements = (content.match(/\d+%|\d+\+|\$\d+|\d+x|\d+ years/g) || []).length
+  // Count quantified achievements (numbers, percentages, metrics)
+  const quantifiedAchievements = (content.match(/\d+%|\d+\+|\$\d+|\d+x|\d+ years|\d+ months|\d+ days|\d+ hours|\d+ users|\d+ customers|\d+ projects|\d+ team members/g) || []).length
   
-  // Calculate readability score (simplified)
-  const avgWordsPerSentence = totalWords / (content.split(/[.!?]+/).length - 1)
-  const readabilityScore = Math.max(60, Math.min(95, 100 - (avgWordsPerSentence - 15) * 2))
+  // Calculate readability score (improved algorithm)
+  const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0)
+  const avgWordsPerSentence = sentences.length > 0 ? totalWords / sentences.length : 0
+  const readabilityScore = Math.max(50, Math.min(95, 100 - Math.max(0, (avgWordsPerSentence - 12) * 1.5)))
   
   return {
     readabilityScore: Math.round(readabilityScore),
@@ -700,6 +791,41 @@ const calculateDocumentMetrics = (content: string, jobRequirements: string[]): {
     actionVerbCount,
     quantifiedAchievements
   }
+}
+
+// Calculate ATS score based on resume content and job requirements
+const calculateATSScore = (resumeContent: string, jobRequirements: string[]): number => {
+  let score = 100
+  
+  // Check formatting issues
+  if (resumeContent.includes('□') || resumeContent.includes('●') || resumeContent.includes('•')) score -= 5 // Special characters
+  if (resumeContent.length < 500) score -= 15 // Too short
+  if (resumeContent.length > 3000) score -= 10 // Too long
+  
+  // Check for standard sections
+  const hasStandardSections = [
+    'experience', 'education', 'skills', 'summary', 'professional summary'
+  ].some(section => resumeContent.toLowerCase().includes(section))
+  if (!hasStandardSections) score -= 10
+  
+  // Check keyword presence and density
+  const keywordMatches = jobRequirements.filter(keyword => 
+    resumeContent.toLowerCase().includes(keyword.toLowerCase())
+  ).length
+  
+  const keywordScore = (keywordMatches / Math.max(jobRequirements.length, 1)) * 30
+  score = score - 30 + keywordScore
+  
+  // Check for action verbs
+  const actionVerbs = ['achieved', 'delivered', 'implemented', 'led', 'managed', 'developed', 'created', 'improved', 'increased', 'reduced', 'optimized']
+  const hasActionVerbs = actionVerbs.some(verb => resumeContent.toLowerCase().includes(verb))
+  if (!hasActionVerbs) score -= 10
+  
+  // Check for quantified achievements
+  const hasQuantifiedAchievements = /\d+%|\d+\+|\$\d+|\d+x|\d+ years/.test(resumeContent)
+  if (!hasQuantifiedAchievements) score -= 5
+  
+  return Math.max(0, Math.min(100, Math.round(score)))
 }
 
 const generateAISuggestions = (type: 'resume' | 'cover_letter' | 'statement' | 'interview', content: string, job: JobPosting, analysis: FitAnalysis | null): string[] => {
@@ -2284,11 +2410,14 @@ function ResultsStep({
       analysis
     })
     
-    // Calculate advanced metrics
+    // Calculate advanced metrics with improved ATS scoring
     const resumeMetrics = calculateDocumentMetrics(resumeContent, jobRequirements)
     const coverLetterMetrics = calculateDocumentMetrics(coverLetterContent, jobRequirements)
     const statementMetrics = calculateDocumentMetrics(statementOfPurposeContent, jobRequirements)
     const interviewMetrics = calculateDocumentMetrics(interviewPrepContent, jobRequirements)
+    
+    // Calculate ATS score for resume
+    const atsScore = calculateATSScore(resumeContent, jobRequirements)
     
     // Generate expert suggestions
     const resumeSuggestions = generateAISuggestions('resume', resumeContent, job, analysis)
@@ -2308,7 +2437,7 @@ function ResultsStep({
           niceToHaveSkills.length > 0 ? `${niceToHaveSkills.length} bonus qualifications` : 'Strong fundamentals'
         ],
         keywords: [...matchingSkills, ...niceToHaveSkills, ...jobRequirements.slice(0, 3)].slice(0, 8),
-        atsScore: Math.min(98, 75 + (matchingSkills.length * 4) + (resumeExperience.length * 3) + (resumeCertifications.length * 2)),
+        atsScore: atsScore,
         generatedAt: new Date(),
         format: 'pdf',
         template: getIndustryTemplate(job.industry || 'technology'),
