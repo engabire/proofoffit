@@ -364,9 +364,9 @@ const generateAdvancedResume = ({ resume, job, matchingSkills, niceToHaveSkills,
   analysis: FitAnalysis | null
 }): string => {
   // Extract user's actual profile data with better fallbacks
-  const name = resume?.parsedData.name || resume?.originalText?.match(/^([A-Z\s]+)/m)?.[1]?.trim() || 'JOHN DOE'
-  const email = resume?.parsedData.email || resume?.originalText?.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/)?.[1] || 'John@example.com'
-  const phone = resume?.parsedData.phone || resume?.originalText?.match(/(\+?1?[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})/)?.[0] || '+1 (555) 123-4567'
+  const name = resume?.parsedData.name || resume?.content?.match(/^([A-Z\s]+)/m)?.[1]?.trim() || 'JOHN DOE'
+  const email = resume?.parsedData.email || resume?.content?.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/)?.[1] || 'John@example.com'
+  const phone = resume?.parsedData.phone || resume?.content?.match(/(\+?1?[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})/)?.[0] || '+1 (555) 123-4567'
   const experience = resume?.parsedData.experience || []
   const education = resume?.parsedData.education || []
   const certifications = resume?.parsedData.certifications || []
