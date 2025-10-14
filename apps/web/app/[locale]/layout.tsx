@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+        metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.proofoffit.com'),
     title: titles[locale as keyof typeof titles] || titles.en,
     description: descriptions[locale as keyof typeof descriptions] || descriptions.en,
     keywords: ['hiring', 'recruitment', 'compliance', 'AI', 'candidate matching'],

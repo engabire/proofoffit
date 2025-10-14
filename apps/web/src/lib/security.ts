@@ -90,11 +90,33 @@ interface RateLimitConfig {
 
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
+const getClientIp = (request: NextRequest): string => {
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) {
+    const first = forwarded.split(',')[0]?.trim()
+    if (first) {
+      return first
+    }
+  }
+
+  const realIp = request.headers.get('x-real-ip')
+  if (realIp) {
+    return realIp
+  }
+
+  const cfConnectingIp = request.headers.get('cf-connecting-ip')
+  if (cfConnectingIp) {
+    return cfConnectingIp
+  }
+
+  return 'unknown'
+}
+
 export function rateLimit(config: RateLimitConfig) {
   return (request: NextRequest): NextResponse | null => {
     const key = config.keyGenerator 
       ? config.keyGenerator(request)
-      : request.ip || 'unknown'
+      : getClientIp(request)
     
     const now = Date.now()
     const windowStart = now - config.windowMs
@@ -213,7 +235,7 @@ export function securityMiddleware(request: NextRequest): NextResponse {
     const rateLimitError = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
       maxRequests: 100, // 100 requests per window
-      keyGenerator: (req) => req.ip || 'unknown'
+      keyGenerator: getClientIp
     })(request)
     
     if (rateLimitError) {

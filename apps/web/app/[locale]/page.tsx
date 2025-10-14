@@ -3,6 +3,7 @@ import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, Trend
 import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from '@/components/language-switcher';
 import { StandardHeader } from '@/components/navigation/standard-header';
+import ProofOfFitHeroVb from '@/components/hero/proof-of-fit-hero-vb';
 
 export const dynamic = 'force-dynamic'
 
@@ -24,89 +25,8 @@ export default function HomePage() {
         className="bg-white/80 backdrop-blur-sm"
       />
 
-      {/* Hero Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 mb-4">
-            <Star className="h-3 w-3 mr-1" />
-            Trusted by 500+ Companies
-          </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                {t('homepage.hero.title')}
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                {t('homepage.hero.subtitle')}
-              </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
-              <UserCheck className="mr-2 h-5 w-5" />
-              {t('homepage.hero.seekingJob')}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-            <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
-              <Briefcase className="mr-2 h-5 w-5" />
-              {t('homepage.hero.hiring')}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-          </div>
-          <p className="text-sm text-gray-500 mb-8">
-            No card • 2 minutes to first Fit Report
-          </p>
-          
-          {/* Proof Signals */}
-          <div className="mt-12 p-6 bg-white rounded-lg shadow-lg border max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-6 items-center">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">3.2×</div>
-                <div className="text-sm text-gray-600">Average interview lift</div>
-                <div className="text-xs text-gray-500">After 30 days on ProofOfFit</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">90s</div>
-                <div className="text-sm text-gray-600">Time to tailored resume</div>
-                <div className="text-xs text-gray-500">Expert-guided, human controlled</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">100%</div>
-                <div className="text-sm text-gray-600">Audit-ready trails</div>
-                <div className="text-xs text-gray-500">Cryptographically chained decisions</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Live Fit Report Preview */}
-          <div className="mt-12 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border max-w-4xl mx-auto">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-gray-700">Fit Report</span>
-                <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">Live</span>
-              </div>
-              <div className="text-sm text-gray-500">Audit trail</div>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <div className="text-4xl font-bold text-blue-600 mb-2">78</div>
-                <div className="text-sm text-gray-600 mb-2">DevOps · SOC2 ready</div>
-                <div className="text-xs text-gray-500">
-                  * Signals verified via source-control activity + compliance logs<br/>
-                  * Stretch surfaced: infrastructure-as-code (coachable)<br/>
-                  * Bias guardrails: experience-first, no alma mater
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-medium text-gray-700 mb-2">Proof signals</div>
-                <div className="space-y-1 text-xs text-gray-600">
-                  <div>Portfolio • Audit logs • Peer refs</div>
-                  <div className="text-blue-600 hover:underline cursor-pointer">
-                    https://proofoffit.co/audit/9C2X‑A7Q
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* New Hero Section */}
+      <ProofOfFitHeroVb />
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-white">
