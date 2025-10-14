@@ -1090,7 +1090,7 @@ function FooterTrustBar() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-white/60 pt-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400 md:flex-row md:items-center md:justify-between">
-          <span>© 2024 ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart.</span>
+          <span>© 2024 ProofOfFit, Inc. Crafted with transparency in Buffalo, MN, with fairness and accountability at heart.</span>
           <div className="flex flex-wrap items-center gap-4">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>

@@ -90,7 +90,7 @@ export default function ContactPage() {
       title: "Enterprise Sales",
       description: "Ready to transform your hiring process? Contact our enterprise team for custom solutions.",
       email: "enterprise@proofoffit.com",
-      phone: "+1 (555) 123-4567",
+      phone: "763.339.9276",
       icon: <Building2 className="h-8 w-8" />,
       color: "blue",
       features: ["Custom pricing", "Dedicated support", "Enterprise features", "SLA guarantees"]
@@ -99,7 +99,7 @@ export default function ContactPage() {
       title: "General Support",
       description: "Questions about our platform, features, or need technical assistance?",
       email: "support@proofoffit.com",
-      phone: "+1 (555) 123-4568",
+      phone: "763.339.9276",
       icon: <Headphones className="h-8 w-8" />,
       color: "green",
       features: ["24/7 support", "Technical assistance", "Feature questions", "Account help"]
@@ -108,7 +108,7 @@ export default function ContactPage() {
       title: "Media & Press",
       description: "Press inquiries, media resources, and partnership opportunities.",
       email: "press@proofoffit.com",
-      phone: "+1 (555) 123-4569",
+      phone: "763.339.9276",
       icon: <MessageSquare className="h-8 w-8" />,
       color: "purple",
       features: ["Press kit", "Media interviews", "Partnerships", "Speaking opportunities"]
@@ -117,7 +117,7 @@ export default function ContactPage() {
       title: "Partnerships",
   description: "Interested in partnering with us? Let&apos;s explore collaboration opportunities.",
       email: "partnerships@proofoffit.com",
-      phone: "+1 (555) 123-4570",
+      phone: "763.339.9276",
   // icon: <Handshake className="h-8 w-8" />,
       color: "emerald",
       features: ["Integration partners", "Channel partners", "Technology partners", "Strategic alliances"]
@@ -126,25 +126,11 @@ export default function ContactPage() {
 
   const officeLocations = [
     {
-      city: "San Francisco",
-      address: "123 Market Street, Suite 400",
-      zip: "San Francisco, CA 94105",
-      phone: "+1 (555) 123-4567",
+      city: "Buffalo",
+      address: "P.O. Box 731",
+      zip: "Buffalo, MN 55313",
+      phone: "763.339.9276",
       type: "Headquarters"
-    },
-    {
-      city: "New York",
-      address: "456 Broadway, Floor 12",
-      zip: "New York, NY 10013",
-      phone: "+1 (555) 123-4568",
-      type: "Sales Office"
-    },
-    {
-      city: "Austin",
-      address: "789 Congress Avenue, Suite 200",
-      zip: "Austin, TX 78701",
-      phone: "+1 (555) 123-4569",
-      type: "Engineering Office"
     }
   ]
 
@@ -351,7 +337,7 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4" />
-                      <span className="text-sm">+1 (555) 123-4567</span>
+                      <span className="text-sm">763.339.9276</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4" />
