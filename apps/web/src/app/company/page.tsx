@@ -174,7 +174,7 @@ export default function CompanyPage() {
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Company</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              We're building the future of fair hiring through transparent evidence engines, 
+              We&apos;re building the future of fair hiring through transparent evidence engines, 
               rigorous auditing, and enterprise-grade security. Trusted by 500+ companies worldwide.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -247,7 +247,7 @@ export default function CompanyPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Story</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              From research lab to enterprise platform, here's how we're transforming hiring.
+              From research lab to enterprise platform, here&apos;s how we&apos;re transforming hiring.
             </p>
           </div>
 
@@ -260,13 +260,13 @@ export default function CompanyPage() {
                   firsthand how unconscious bias affected hiring decisions.
                 </p>
                 <p>
-                  Starting with Stanford's advanced analytics lab, we spent two years 
+                  Starting with Stanford&apos;s advanced analytics lab, we spent two years 
                   developing the mathematical foundations for bias-free evaluation. 
-                  Our breakthrough came when we realized that fairness wasn't just about 
+                  Our breakthrough came when we realized that fairness wasn&apos;t just about 
                   removing bias—it was about creating provable, auditable processes.
                 </p>
                 <p>
-                  Today, we're proud to serve over 500 enterprises, from fast-growing 
+                  Today, we&apos;re proud to serve over 500 enterprises, from fast-growing 
                   startups to Fortune 500 companies, helping them make over 1 million 
                   fair hiring decisions every month.
                 </p>
@@ -277,8 +277,8 @@ export default function CompanyPage() {
                 <div className="text-center">
                   <Quote className="h-16 w-16 text-blue-600 mx-auto mb-4" />
                   <blockquote className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">
-                    "We believe technology should be a force for equality, not a perpetuator of bias. 
-                    Every algorithm should be as transparent as it is powerful."
+                    &ldquo;We believe technology should be a force for equality, not a perpetuator of bias. 
+                    Every algorithm should be as transparent as it is powerful.&rdquo;
                   </blockquote>
                   <div className="text-sm text-slate-600 dark:text-slate-400">
                     — Sarah Chen, CEO & Co-Founder
