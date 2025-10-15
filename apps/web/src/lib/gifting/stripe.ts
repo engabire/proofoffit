@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import { env } from '@/lib/env'
 
-const secretKey = env.stripe.secretKey || process.env.STRIPE_SECRET_KEY
+const secretKey = env.stripe().secretKey || process.env.STRIPE_SECRET_KEY
 const stripe = secretKey ? new Stripe(secretKey, { apiVersion: '2023-10-16' }) : null
 
 interface GiftPromotionPayload {
@@ -35,7 +35,7 @@ export class GiftingStripeService {
     if (!stripe) {
       throw new Error('Stripe secret key is not configured')
     }
-    const coupon = await stripe.coupons.create({
+    const coupon = await stripe().coupons.create({
       duration: 'repeating',
       duration_in_months: months,
       percent_off: 100,
@@ -46,7 +46,7 @@ export class GiftingStripeService {
       },
     })
 
-    const promotion = await stripe.promotionCodes.create({
+    const promotion = await stripe().promotionCodes.create({
       coupon: coupon.id,
       code,
       max_redemptions: 1,
@@ -67,7 +67,7 @@ export class GiftingStripeService {
     if (!stripe) {
       throw new Error('Stripe secret key is not configured')
     }
-    const subscriptions = await stripe.subscriptions.list({
+    const subscriptions = await stripe().subscriptions.list({
       customer: customerId,
       status: 'active',
       expand: ['data.items'],
@@ -75,7 +75,7 @@ export class GiftingStripeService {
     })
 
     if (subscriptions.data.length === 0) {
-      return stripe.subscriptions.create({
+      return stripe().subscriptions.create({
         customer: customerId,
         items: [{ price: priceId }],
         promotion_code: promotionCodeId,
@@ -86,7 +86,7 @@ export class GiftingStripeService {
 
     const currentSubscription = subscriptions.data[0]
 
-    return stripe.subscriptions.update(currentSubscription.id, {
+    return stripe().subscriptions.update(currentSubscription.id, {
       promotion_code: promotionCodeId,
       proration_behavior: 'none',
     })
@@ -97,11 +97,11 @@ export class GiftingStripeService {
       throw new Error('Stripe secret key is not configured')
     }
     if (promotionCodeId) {
-      await stripe.promotionCodes.update(promotionCodeId, { active: false })
+      await stripe().promotionCodes.update(promotionCodeId, { active: false })
     }
 
     if (couponId) {
-      await stripe.coupons.update(couponId, {
+      await stripe().coupons.update(couponId, {
         metadata: {
           cancelled_at: new Date().toISOString(),
         },
@@ -121,7 +121,7 @@ export class GiftingStripeService {
       throw new Error('Stripe secret key is not configured')
     }
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripe().checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       customer_email: sponsorEmail,

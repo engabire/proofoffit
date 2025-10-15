@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(
+    event = stripe().webhooks.constructEvent(
       body,
       signature,
       stripeConfig.webhookSecret
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         const customerId = subscription.customer as string
 
         // Get user ID from customer metadata
-        const customer = await stripe.customers.retrieve(customerId)
+        const customer = await stripe().customers.retrieve(customerId)
         const userId = (customer as any).metadata?.userId
 
         if (userId) {
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
         const customerId = subscription.customer as string
 
         // Get user ID from customer metadata
-        const customer = await stripe.customers.retrieve(customerId)
+        const customer = await stripe().customers.retrieve(customerId)
         const userId = (customer as any).metadata?.userId
 
         if (userId) {
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
         const customerId = invoice.customer as string
 
         // Get user ID from customer metadata
-        const customer = await stripe.customers.retrieve(customerId)
+        const customer = await stripe().customers.retrieve(customerId)
         const userId = (customer as any).metadata?.userId
 
         if (userId) {
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
         const customerId = invoice.customer as string
 
         // Get user ID from customer metadata
-        const customer = await stripe.customers.retrieve(customerId)
+        const customer = await stripe().customers.retrieve(customerId)
         const userId = (customer as any).metadata?.userId
 
         if (userId) {
