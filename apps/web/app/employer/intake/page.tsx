@@ -107,7 +107,6 @@ function EmployerIntakePageContent() {
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // eslint-disable-next-line no-console
-      
       console.log('Job intake created:', formData)
       // eslint-disable-next-line no-console
       console.log('Success: Job intake created successfully!')

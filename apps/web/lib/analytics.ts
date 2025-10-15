@@ -61,6 +61,7 @@ export function startTimer(_label: string): number {
 
 export function stopTimer(startTime: number, label: string): number {
   const duration = performance.now() - startTime;
+  // eslint-disable-next-line no-console
   console.log(`${label}: ${duration.toFixed(2)}ms`);
   return duration;
 }
