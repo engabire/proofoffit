@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui';
 import { Badge } from '@proof-of-fit/ui';
 import { Button } from '@proof-of-fit/ui';
@@ -52,9 +52,9 @@ export function ScrapingMonitor() {
     loadData();
     const interval = setInterval(loadData, 30000); // Refresh every 30s
     return () => clearInterval(interval);
-  }, []);
+  }, [loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [jobHistory, slos, scrapingStats] = await Promise.all([
         scrapingClient.getJobHistory(),
@@ -70,7 +70,7 @@ export function ScrapingMonitor() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const triggerScraping = async () => {
     setTriggering(true);

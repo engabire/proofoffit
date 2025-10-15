@@ -1,149 +1,160 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Button } from '@proof-of-fit/ui'
-import { Input } from '@proof-of-fit/ui'
-import { Label } from '@proof-of-fit/ui'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Badge } from '@proof-of-fit/ui'
-import { Alert, AlertDescription } from '@proof-of-fit/ui'
-import { 
-  Shield, 
-  Smartphone, 
-  Mail, 
-  CheckCircle, 
+import { useState } from "react";
+import Image from "next/image";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Button } from "@proof-of-fit/ui";
+import { Input } from "@proof-of-fit/ui";
+import { Label } from "@proof-of-fit/ui";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@proof-of-fit/ui";
+import { Badge } from "@proof-of-fit/ui";
+import { Alert, AlertDescription } from "@proof-of-fit/ui";
+import {
   AlertCircle,
-  Loader2,
+  ArrowLeft,
   ArrowRight,
-  ArrowLeft
-} from 'lucide-react'
+  CheckCircle,
+  Loader2,
+  Mail,
+  Shield,
+  Smartphone,
+} from "lucide-react";
 // Simple toast implementation
 const toast = {
   // eslint-disable-next-line no-console
-  success: (message: string) => console.log('Success:', message),
+  success: (message: string) => console.log("Success:", message),
   // eslint-disable-next-line no-console
-  error: (message: string) => console.error('Error:', message)
-}
-import { isSupabaseConfigured } from '@/lib/env'
+  error: (message: string) => console.error("Error:", message),
+};
+import { isSupabaseConfigured } from "@/lib/env";
 
 interface MFASetupProps {
-  onComplete: () => void
-  onSkip: () => void
-  userEmail: string
+  onComplete: () => void;
+  onSkip: () => void;
+  userEmail: string;
 }
 
 export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
-  const supabase = isSupabaseConfigured() ? createClientComponentClient() : null
-  const [step, setStep] = useState<'choose' | 'sms' | 'email' | 'totp' | 'complete'>('choose')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [smsCode, setSmsCode] = useState('')
-  const [emailCode, setEmailCode] = useState('')
-  const [totpCode, setTotpCode] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [qrCode, setQrCode] = useState('')
-  const [secret, setSecret] = useState('')
+  const supabase = isSupabaseConfigured()
+    ? createClientComponentClient()
+    : null;
+  const [step, setStep] = useState<
+    "choose" | "sms" | "email" | "totp" | "complete"
+  >("choose");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [smsCode, setSmsCode] = useState("");
+  const [emailCode, setEmailCode] = useState("");
+  const [totpCode, setTotpCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [qrCode, setQrCode] = useState("");
+  const [secret, setSecret] = useState("");
 
   const handleSMSSetup = async () => {
     if (!supabase) {
-      toast.error('Authentication not configured')
-      return
+      toast.error("Authentication not configured");
+      return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
       // In a real implementation, you would call Supabase's MFA setup
       // For now, we'll simulate the process
-      toast.success('SMS verification code sent')
-      setStep('sms')
+      toast.success("SMS verification code sent");
+      setStep("sms");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to send SMS code')
+      toast.error(error.message || "Failed to send SMS code");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleEmailSetup = async () => {
     if (!supabase) {
-      toast.error('Authentication not configured')
-      return
+      toast.error("Authentication not configured");
+      return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
       // Simulate email MFA setup
-      toast.success('Email verification code sent')
-      setStep('email')
+      toast.success("Email verification code sent");
+      setStep("email");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to send email code')
+      toast.error(error.message || "Failed to send email code");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleTOTPSetup = async () => {
     if (!supabase) {
-      toast.error('Authentication not configured')
-      return
+      toast.error("Authentication not configured");
+      return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
       // Simulate TOTP setup - in real implementation, generate QR code
-      const mockSecret = 'JBSWY3DPEHPK3PXP'
-      const mockQRCode = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
-      
-      setSecret(mockSecret)
-      setQrCode(mockQRCode)
-      setStep('totp')
+      const mockSecret = "JBSWY3DPEHPK3PXP";
+      const mockQRCode =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+      setSecret(mockSecret);
+      setQrCode(mockQRCode);
+      setStep("totp");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to setup TOTP')
+      toast.error(error.message || "Failed to setup TOTP");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const verifySMSCode = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       // Simulate SMS verification
-      toast.success('SMS verification successful!')
-      setStep('complete')
+      toast.success("SMS verification successful!");
+      setStep("complete");
     } catch (error: any) {
-      toast.error('Invalid SMS code')
+      toast.error("Invalid SMS code");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const verifyEmailCode = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       // Simulate email verification
-      toast.success('Email verification successful!')
-      setStep('complete')
+      toast.success("Email verification successful!");
+      setStep("complete");
     } catch (error: any) {
-      toast.error('Invalid email code')
+      toast.error("Invalid email code");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const verifyTOTPCode = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       // Simulate TOTP verification
-      toast.success('TOTP verification successful!')
-      setStep('complete')
+      toast.success("TOTP verification successful!");
+      setStep("complete");
     } catch (error: any) {
-      toast.error('Invalid TOTP code')
+      toast.error("Invalid TOTP code");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  if (step === 'complete') {
+  if (step === "complete") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 p-4">
         <Card className="w-full max-w-md">
@@ -151,7 +162,9 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
             <div className="flex justify-center mb-4">
               <CheckCircle className="h-12 w-12 text-green-600" />
             </div>
-            <CardTitle className="text-2xl text-green-900">MFA Setup Complete!</CardTitle>
+            <CardTitle className="text-2xl text-green-900">
+              MFA Setup Complete!
+            </CardTitle>
             <CardDescription>
               Your account is now protected with multi-factor authentication
             </CardDescription>
@@ -160,10 +173,13 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
             <div className="bg-green-50 p-4 rounded-lg">
               <div className="flex items-center space-x-2 mb-2">
                 <Shield className="h-5 w-5 text-green-600" />
-                <span className="font-medium text-green-900">Enhanced Security Active</span>
+                <span className="font-medium text-green-900">
+                  Enhanced Security Active
+                </span>
               </div>
               <p className="text-sm text-green-700">
-                Your account now requires additional verification for sensitive operations.
+                Your account now requires additional verification for sensitive
+                operations.
               </p>
             </div>
             <Button onClick={onComplete} className="w-full">
@@ -173,7 +189,7 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -188,14 +204,16 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
             Add an extra layer of security with multi-factor authentication
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
-          {step === 'choose' && (
+          {step === "choose" && (
             <>
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Recommended for enterprise accounts:</strong> Enable MFA to protect your account and comply with security policies.
+                  <strong>Recommended for enterprise accounts:</strong>{" "}
+                  Enable MFA to protect your account and comply with security
+                  policies.
                 </AlertDescription>
               </Alert>
 
@@ -210,7 +228,9 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                     <Smartphone className="h-5 w-5" />
                     <div className="text-left">
                       <div className="font-medium">SMS Verification</div>
-                      <div className="text-sm text-gray-500">Receive codes via text message</div>
+                      <div className="text-sm text-gray-500">
+                        Receive codes via text message
+                      </div>
                     </div>
                   </div>
                 </Button>
@@ -225,7 +245,9 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                     <Mail className="h-5 w-5" />
                     <div className="text-left">
                       <div className="font-medium">Email Verification</div>
-                      <div className="text-sm text-gray-500">Receive codes via email</div>
+                      <div className="text-sm text-gray-500">
+                        Receive codes via email
+                      </div>
                     </div>
                   </div>
                 </Button>
@@ -240,7 +262,9 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                     <Shield className="h-5 w-5" />
                     <div className="text-left">
                       <div className="font-medium">Authenticator App</div>
-                      <div className="text-sm text-gray-500">Use authenticator app or similar</div>
+                      <div className="text-sm text-gray-500">
+                        Use authenticator app or similar
+                      </div>
                     </div>
                   </div>
                 </Button>
@@ -254,7 +278,7 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
             </>
           )}
 
-          {step === 'sms' && (
+          {step === "sms" && (
             <>
               <div className="text-center">
                 <Smartphone className="h-12 w-12 mx-auto text-blue-600 mb-4" />
@@ -276,15 +300,21 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                   />
                 </div>
 
-                <Button onClick={handleSMSSetup} className="w-full" disabled={!phoneNumber || loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Sending Code...
-                    </>
-                  ) : (
-                    'Send Verification Code'
-                  )}
+                <Button
+                  onClick={handleSMSSetup}
+                  className="w-full"
+                  disabled={!phoneNumber || loading}
+                >
+                  {loading
+                    ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Sending Code...
+                      </>
+                    )
+                    : (
+                      "Send Verification Code"
+                    )}
                 </Button>
 
                 <div className="space-y-2">
@@ -299,26 +329,36 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                   />
                 </div>
 
-                <Button onClick={verifySMSCode} className="w-full" disabled={!smsCode || loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    'Verify Code'
-                  )}
+                <Button
+                  onClick={verifySMSCode}
+                  className="w-full"
+                  disabled={!smsCode || loading}
+                >
+                  {loading
+                    ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Verifying...
+                      </>
+                    )
+                    : (
+                      "Verify Code"
+                    )}
                 </Button>
               </div>
 
-              <Button variant="ghost" onClick={() => setStep('choose')} className="w-full">
+              <Button
+                variant="ghost"
+                onClick={() => setStep("choose")}
+                className="w-full"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Options
               </Button>
             </>
           )}
 
-          {step === 'email' && (
+          {step === "email" && (
             <>
               <div className="text-center">
                 <Mail className="h-12 w-12 mx-auto text-blue-600 mb-4" />
@@ -329,15 +369,21 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
               </div>
 
               <div className="space-y-4">
-                <Button onClick={handleEmailSetup} className="w-full" disabled={loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Sending Code...
-                    </>
-                  ) : (
-                    'Send Verification Code'
-                  )}
+                <Button
+                  onClick={handleEmailSetup}
+                  className="w-full"
+                  disabled={loading}
+                >
+                  {loading
+                    ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Sending Code...
+                      </>
+                    )
+                    : (
+                      "Send Verification Code"
+                    )}
                 </Button>
 
                 <div className="space-y-2">
@@ -352,26 +398,36 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                   />
                 </div>
 
-                <Button onClick={verifyEmailCode} className="w-full" disabled={!emailCode || loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    'Verify Code'
-                  )}
+                <Button
+                  onClick={verifyEmailCode}
+                  className="w-full"
+                  disabled={!emailCode || loading}
+                >
+                  {loading
+                    ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Verifying...
+                      </>
+                    )
+                    : (
+                      "Verify Code"
+                    )}
                 </Button>
               </div>
 
-              <Button variant="ghost" onClick={() => setStep('choose')} className="w-full">
+              <Button
+                variant="ghost"
+                onClick={() => setStep("choose")}
+                className="w-full"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Options
               </Button>
             </>
           )}
 
-          {step === 'totp' && (
+          {step === "totp" && (
             <>
               <div className="text-center">
                 <Shield className="h-12 w-12 mx-auto text-blue-600 mb-4" />
@@ -394,7 +450,8 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
-                    Or enter this secret manually: <code className="bg-gray-100 px-1 rounded">{secret}</code>
+                    Or enter this secret manually:{" "}
+                    <code className="bg-gray-100 px-1 rounded">{secret}</code>
                   </p>
                 </div>
 
@@ -410,19 +467,29 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                   />
                 </div>
 
-                <Button onClick={verifyTOTPCode} className="w-full" disabled={!totpCode || loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    'Verify Code'
-                  )}
+                <Button
+                  onClick={verifyTOTPCode}
+                  className="w-full"
+                  disabled={!totpCode || loading}
+                >
+                  {loading
+                    ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Verifying...
+                      </>
+                    )
+                    : (
+                      "Verify Code"
+                    )}
                 </Button>
               </div>
 
-              <Button variant="ghost" onClick={() => setStep('choose')} className="w-full">
+              <Button
+                variant="ghost"
+                onClick={() => setStep("choose")}
+                className="w-full"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Options
               </Button>
@@ -431,5 +498,5 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

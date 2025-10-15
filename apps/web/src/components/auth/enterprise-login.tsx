@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { useCSRFHeaders } from "@/components/security/csrf-provider";
+import Image from "next/image";
 
 function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
@@ -92,10 +93,12 @@ function MarketingImages(
       aria-label="Diverse professional images"
     >
       {images.slice(0, 4).map((img, i) => (
-        <img
+        <Image
           key={`${i}-${img.src}`}
           src={img.src}
           alt={img.alt}
+          width={400}
+          height={160}
           className="h-40 w-full object-cover rounded-2xl shadow-sm"
           loading="lazy"
         />

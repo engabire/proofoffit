@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui';
 import { Badge } from '@proof-of-fit/ui';
 import { Button } from '@proof-of-fit/ui';
@@ -81,9 +81,9 @@ export function AIIntelligenceDashboard() {
     loadData();
     const interval = setInterval(loadData, 30000); // Refresh every 30s
     return () => clearInterval(interval);
-  }, [selectedCategory]);
+  }, [selectedCategory, loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [summaryRes, trendsRes, analysesRes] = await Promise.all([
         fetch('/api/ai/analyze?type=summary'),
@@ -105,7 +105,7 @@ export function AIIntelligenceDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory]);
 
   const triggerAnalysis = async (mode = 'batch', limit = 10) => {
     setProcessing(true);

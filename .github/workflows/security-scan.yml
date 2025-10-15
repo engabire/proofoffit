@@ -128,10 +128,15 @@ jobs:
           echo "🔍 Scanning for potential secrets..."
 
           search_paths="apps packages scripts infra"
-          patterns=('password\s*=' 'api[_-]?key\s*=' 'secret\s*=')
+          # Match assignments of the form "password = 'value'" (ignoring object property access)
+          patterns=(
+            "(^|\\s)password\\s*=\\s*['\"]"
+            "(^|\\s)api[_-]?key\\s*=\\s*['\"]"
+            "(^|\\s)secret\\s*=\\s*['\"]"
+          )
 
           for pattern in "${patterns[@]}"; do
-            if grep -R -i --perl-regexp "$pattern" $search_paths \
+            if grep -R -i -E "$pattern" $search_paths \
               --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist \
               --exclude-dir=.git --exclude='*.test.*' --exclude='*.spec.*' \
               >/dev/null; then

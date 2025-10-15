@@ -1,6 +1,7 @@
 'use client'
 
 import React, { Suspense, lazy, ComponentType } from 'react'
+import Image from 'next/image'
 import { Loader2 } from 'lucide-react'
 
 interface LazyWrapperProps {
@@ -202,7 +203,7 @@ export function LazyImage({
     <div ref={imgRef} className="relative">
       {!loaded && fallback}
       {inView && (
-        <img
+        <Image
           src={src}
           alt={alt}
           onLoad={handleLoad}

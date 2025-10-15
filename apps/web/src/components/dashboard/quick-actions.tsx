@@ -1,77 +1,77 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 // Simple toast implementation
 const toast = {
   // eslint-disable-next-line no-console
-  success: (message: string) => console.log('Success:', message),
+  success: (message: string) => console.log("Success:", message),
   // eslint-disable-next-line no-console
-  error: (message: string) => console.error('Error:', message)
-}
+  error: (message: string) => console.error("Error:", message),
+};
 
 type QuickAction = {
-  label: string
-  href?: string
-  toastMessage?: string
-}
+  label: string;
+  href?: string;
+  toastMessage?: string;
+};
 
 type QuickActionsProps = {
-  role?: 'candidate' | 'employer'
-}
+  role?: "candidate" | "employer";
+};
 
 export function QuickActions({ role }: QuickActionsProps) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const actions: QuickAction[] =
-    role === 'candidate'
-      ? [
-          {
-            label: 'Review my profile',
-            href: '/candidate/profile',
-          },
-          {
-            label: 'View job matches',
-            href: '/candidate/matches',
-          },
-          {
-            label: 'Save weekly snapshot',
-            toastMessage: 'Weekly snapshot saved and queued for delivery.',
-          },
-        ]
-      : role === 'employer'
-      ? [
-          {
-            label: 'Create job intake',
-            href: '/employer/intake',
-          },
-          {
-            label: 'Review candidate slates',
-            href: '/employer/slates',
-          },
-          {
-            label: 'Save hiring plan',
-            toastMessage: 'Hiring plan saved — your team will see the update in analytics.',
-          },
-        ]
-      : []
+  const actions: QuickAction[] = role === "candidate"
+    ? [
+      {
+        label: "Review my profile",
+        href: "/candidate/profile",
+      },
+      {
+        label: "View job matches",
+        href: "/candidate/matches",
+      },
+      {
+        label: "Save weekly snapshot",
+        toastMessage: "Weekly snapshot saved and queued for delivery.",
+      },
+    ]
+    : role === "employer"
+    ? [
+      {
+        label: "Create job intake",
+        href: "/employer/intake",
+      },
+      {
+        label: "Review candidate slates",
+        href: "/employer/slates",
+      },
+      {
+        label: "Save hiring plan",
+        toastMessage:
+          "Hiring plan saved — your team will see the update in analytics.",
+      },
+    ]
+    : [];
 
   if (!role) {
     return (
       <div className="rounded border border-dashed p-3 text-sm text-muted-foreground">
         Set your workspace role to unlock quick actions.
       </div>
-    )
+    );
   }
 
   const handleAction = (action: QuickAction) => {
     if (action.toastMessage) {
-      toast.success(action.toastMessage)
+      toast.success(action.toastMessage);
     }
 
     if (action.href) {
-      router.push(action.href)
+      router.push(action.href);
     }
-  }
+  };
 
   return (
     <div className="space-y-2">
@@ -86,5 +86,5 @@ export function QuickActions({ role }: QuickActionsProps) {
         </button>
       ))}
     </div>
-  )
+  );
 }

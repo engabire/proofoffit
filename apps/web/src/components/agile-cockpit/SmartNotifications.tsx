@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
@@ -52,9 +52,9 @@ export function SmartNotifications() {
     generateSmartNotifications()
     const interval = setInterval(generateSmartNotifications, 30000) // Check every 30 seconds
     return () => clearInterval(interval)
-  }, [])
+  }, [generateSmartNotifications])
 
-  const generateSmartNotifications = () => {
+  const generateSmartNotifications = useCallback(() => {
     const newNotifications: Notification[] = []
 
     // WIP Limit Alerts
@@ -192,7 +192,7 @@ export function SmartNotifications() {
     })
 
     setNotifications(prev => [...newNotifications, ...prev].slice(0, 50)) // Keep last 50 notifications
-  }
+  }, [settings])
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => 
