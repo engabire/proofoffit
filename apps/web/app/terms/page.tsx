@@ -86,7 +86,7 @@ export default function TermsPage() {
               <div>
                 <h3 className="font-medium text-slate-900 dark:text-white mb-2">ProofOfFit Intellectual Property</h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  ProofOfFit's proprietary AI algorithms, platform features, and intellectual property are protected 
+                  ProofOfFit&apos;s proprietary AI algorithms, platform features, and intellectual property are protected 
                   by international copyright, trademark, and patent laws. Our explainable AI technology and audit trail 
                   systems represent significant innovation in the hiring intelligence space.
                 </p>
@@ -116,7 +116,7 @@ export default function TermsPage() {
               </p>
               <p className="text-slate-600 dark:text-slate-400">
                 We maintain enterprise-grade service levels and continuously improve our AI accuracy. However, to the 
-                maximum extent permitted by law, ProofOfFit's liability is limited to the fees paid for the Service 
+                maximum extent permitted by law, ProofOfFit&apos;s liability is limited to the fees paid for the Service 
                 in the 12 months preceding any claim.
               </p>
             </div>
