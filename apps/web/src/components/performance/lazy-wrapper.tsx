@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import React, { Suspense, lazy, ComponentType } from 'react'
-import Image from 'next/image'
-import { Loader2 } from 'lucide-react'
+import React, { ComponentType, lazy, Suspense } from "react";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
 
 interface LazyWrapperProps {
-  fallback?: React.ReactNode
-  delay?: number
+  fallback?: React.ReactNode;
+  delay?: number;
 }
 
 // Default loading fallback
@@ -17,7 +17,7 @@ const DefaultFallback = () => (
       <p className="text-gray-600">Loading...</p>
     </div>
   </div>
-)
+);
 
 // Skeleton loading fallback
 const SkeletonFallback = () => (
@@ -28,7 +28,7 @@ const SkeletonFallback = () => (
       <div className="h-4 bg-gray-200 rounded w-5/6"></div>
     </div>
   </div>
-)
+);
 
 // Card skeleton fallback
 const CardSkeletonFallback = () => (
@@ -47,7 +47,7 @@ const CardSkeletonFallback = () => (
       </div>
     </div>
   </div>
-)
+);
 
 // Table skeleton fallback
 const TableSkeletonFallback = () => (
@@ -71,132 +71,136 @@ const TableSkeletonFallback = () => (
       </div>
     </div>
   </div>
-)
+);
 
 // Higher-order component for lazy loading
 export function withLazyLoading<P extends object>(
   Component: ComponentType<P>,
   fallback?: React.ReactNode,
-  delay?: number
+  delay?: number,
 ) {
   const LazyComponent = lazy(() => {
     if (delay) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(import(`../components/${Component.name}`))
-        }, delay)
-      })
+          resolve(import(`../components/${Component.name}`));
+        }, delay);
+      });
     }
-    return import(`../components/${Component.name}`)
-  })
+    return import(`../components/${Component.name}`);
+  });
 
   return function LazyWrapper(props: P) {
     return (
       <Suspense fallback={fallback || <DefaultFallback />}>
         <LazyComponent {...props} />
       </Suspense>
-    )
-  }
+    );
+  };
 }
 
 // Lazy loading wrapper component
-export function LazyWrapper({ 
-  children, 
+export function LazyWrapper({
+  children,
   fallback = <DefaultFallback />,
-  delay 
+  delay,
 }: LazyWrapperProps & { children: React.ReactNode }) {
-  const [show, setShow] = React.useState(!delay)
+  const [show, setShow] = React.useState(!delay);
 
   React.useEffect(() => {
     if (delay) {
-      const timer = setTimeout(() => setShow(true), delay)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setShow(true), delay);
+      return () => clearTimeout(timer);
     }
-  }, [delay])
+  }, [delay]);
 
   if (!show) {
-    return <>{fallback}</>
+    return <>{fallback}</>;
   }
 
-  return <Suspense fallback={fallback}>{children}</Suspense>
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 }
 
 // Preload component for critical resources
-export function PreloadComponent({ 
-  href, 
-  as = 'script',
-  crossOrigin 
-}: { 
-  href: string
-  as?: 'script' | 'style' | 'image' | 'font'
-  crossOrigin?: string
+export function PreloadComponent({
+  href,
+  as = "script",
+  crossOrigin,
+}: {
+  href: string;
+  as?: "script" | "style" | "image" | "font";
+  crossOrigin?: string;
 }) {
   React.useEffect(() => {
-    const link = document.createElement('link')
-    link.rel = 'preload'
-    link.href = href
-    link.as = as
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.href = href;
+    link.as = as;
     if (crossOrigin) {
-      link.crossOrigin = crossOrigin
+      link.crossOrigin = crossOrigin;
     }
-    document.head.appendChild(link)
+    document.head.appendChild(link);
 
     return () => {
-      document.head.removeChild(link)
-    }
-  }, [href, as, crossOrigin])
+      document.head.removeChild(link);
+    };
+  }, [href, as, crossOrigin]);
 
-  return null
+  return null;
 }
 
 // Image lazy loading component
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  src: string
-  alt: string
-  fallback?: React.ReactNode
-  placeholder?: string
+  src: string;
+  alt: string;
+  fallback?: React.ReactNode;
+  placeholder?: string;
 }
 
-export function LazyImage({ 
-  src, 
-  alt, 
+export function LazyImage({
+  src,
+  alt,
   fallback = <div className="bg-gray-200 animate-pulse rounded" />,
   placeholder,
-  ...props 
+  ...props
 }: LazyImageProps) {
-  const [loaded, setLoaded] = React.useState(false)
-  const [error, setError] = React.useState(false)
-  const [inView, setInView] = React.useState(false)
-  const imgRef = React.useRef<HTMLImageElement>(null)
+  const [loaded, setLoaded] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [inView, setInView] = React.useState(false);
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setInView(true)
-          observer.disconnect()
+          setInView(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.1 }
-    )
+      { threshold: 0.1 },
+    );
 
     if (imgRef.current) {
-      observer.observe(imgRef.current)
+      observer.observe(imgRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   const handleLoad = () => {
-    setLoaded(true)
-  }
+    setLoaded(true);
+  };
 
   const handleError = () => {
-    setError(true)
-  }
+    setError(true);
+  };
 
   if (error) {
-    return <div className="bg-gray-200 rounded flex items-center justify-center text-gray-500">Failed to load</div>
+    return (
+      <div className="bg-gray-200 rounded flex items-center justify-center text-gray-500">
+        Failed to load
+      </div>
+    );
   }
 
   return (
@@ -208,21 +212,21 @@ export function LazyImage({
           alt={alt}
           onLoad={handleLoad}
           onError={handleError}
-          style={{ 
+          style={{
             opacity: loaded ? 1 : 0,
-            transition: 'opacity 0.3s ease-in-out'
+            transition: "opacity 0.3s ease-in-out",
           }}
           {...props}
         />
       )}
     </div>
-  )
+  );
 }
 
 // Export fallback components for reuse
 export {
+  CardSkeletonFallback,
   DefaultFallback,
   SkeletonFallback,
-  CardSkeletonFallback,
-  TableSkeletonFallback
-}
+  TableSkeletonFallback,
+};
