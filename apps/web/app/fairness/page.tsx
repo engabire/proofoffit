@@ -27,7 +27,7 @@ export default function FairnessPage() {
               <h2 className="text-xl font-semibold">Our Commitment to Fairness</h2>
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-4">
-              At ProofOfFit, we've built the industry's most advanced bias-free evidence engine that delivers 
+              At ProofOfFit, we&apos;ve built the industry&apos;s most advanced bias-free evidence engine that delivers 
               transparent, auditable hiring decisions. Our enterprise-grade platform reduces human bias by up to 85% 
               while providing cryptographic proof of every decision, ensuring compliance with EEOC, GDPR, and 
               international equal opportunity regulations.
