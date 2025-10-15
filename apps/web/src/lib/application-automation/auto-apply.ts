@@ -179,7 +179,7 @@ export class ApplicationAutomation {
     const today = new Date().toISOString().split('T')[0]
     const weekStart = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
-    const { data: todayApplications } = await this.supabase
+    const { data: todayApplications } = await this.getSupabaseClient()
       .from('job_applications')
       .select('id')
       .eq('user_id', config.userId)
