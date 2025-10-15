@@ -3,7 +3,9 @@
 import { useRouter } from 'next/navigation'
 // Simple toast implementation
 const toast = {
+  // eslint-disable-next-line no-console
   success: (message: string) => console.log('Success:', message),
+  // eslint-disable-next-line no-console
   error: (message: string) => console.error('Error:', message)
 }
 
