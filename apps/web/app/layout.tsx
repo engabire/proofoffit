@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swa
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.proofoffit.com'),
   title: 'ProofOfFit - Compliance-First Hiring OS',
   description: 'A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; employers get ranked, explainable slates.',
   keywords: ['hiring', 'recruitment', 'compliance', 'AI', 'candidate matching'],

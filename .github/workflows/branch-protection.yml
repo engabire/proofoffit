@@ -65,6 +65,8 @@ jobs:
       pull-requests: write
       statuses: write
       checks: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Checkout repository

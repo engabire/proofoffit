@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
 import { Check, Star, Zap, Building2, User } from 'lucide-react'
 import { subscriptionPlans } from '@/lib/stripe/config'
 import { stripeClient } from '@/lib/stripe/client'
+import { NonprofitToggle } from './components/nonprofit-toggle'
 // import { useAuth } from '@/components/auth/auth-guard'
 import { toast } from 'sonner'
 
@@ -80,6 +82,39 @@ export default function PricingPage() {
                 <Building2 className="w-4 h-4 inline mr-2" />
                 Employers
               </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto mb-12 max-w-4xl">
+          <div className="rounded-xl border border-dashed border-blue-300 bg-white/70 p-6 shadow-sm backdrop-blur">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-3">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Nonprofit pricing: proof-driven hiring for mission-first teams
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Eligible nonprofits receive up to 50% off when pricing indexes to seats, roles, and
+                  verification work. Compliance add-ons remain cost-based so safeguarding never slips.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href="/nonprofit#eligibility"
+                    className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700"
+                  >
+                    Check eligibility
+                  </Link>
+                  <Link
+                    href="/nonprofit"
+                    className="inline-flex items-center justify-center rounded-md border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-50"
+                  >
+                    Explore nonprofit plans
+                  </Link>
+                </div>
+              </div>
+              <div className="w-full lg:max-w-sm">
+                <NonprofitToggle />
+              </div>
             </div>
           </div>
         </div>

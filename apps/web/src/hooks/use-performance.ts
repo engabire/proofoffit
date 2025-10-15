@@ -37,10 +37,10 @@ export function usePerformance() {
     const newMetrics: Partial<PerformanceMetrics> = {}
 
     // Navigation timing
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
     if (navigation) {
       newMetrics.loadTime = navigation.loadEventEnd - navigation.loadEventStart
-      newMetrics.timeToInteractive = navigation.domInteractive - navigation.navigationStart
+      newMetrics.timeToInteractive = navigation.domInteractive - navigation.startTime
     }
 
     // Paint timing
@@ -109,7 +109,8 @@ export function usePerformance() {
   }, [])
 
   const getMetricScore = useCallback((metric: keyof PerformanceMetrics, value: number) => {
-    const thresholds = {
+    const thresholds: Record<keyof PerformanceMetrics, { good: number; poor: number }> = {
+      loadTime: { good: 2000, poor: 4000 },
       firstContentfulPaint: { good: 1800, poor: 3000 },
       largestContentfulPaint: { good: 2500, poor: 4000 },
       firstInputDelay: { good: 100, poor: 300 },
@@ -137,8 +138,9 @@ export function usePerformance() {
     }
 
     // Example: Send to analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', {
+    const globalWindow = typeof window !== 'undefined' ? (window as typeof window & { gtag?: (...args: any[]) => void }) : undefined
+    if (globalWindow?.gtag) {
+      globalWindow.gtag('event', 'web_vitals', {
         event_category: 'Performance',
         event_label: 'Web Vitals',
         value: Math.round(metrics.largestContentfulPaint || 0),
