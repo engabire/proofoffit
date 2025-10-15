@@ -278,7 +278,7 @@ The ProofOfFit Team`;
               The Impact of Your Gift
             </h2>
             <p className="text-gray-600">
-              You're helping someone take control of their job search with
+              You&apos;re helping someone take control of their job search with
               evidence-based tools.
             </p>
           </div>
@@ -292,7 +292,7 @@ The ProofOfFit Team`;
                 Better Targeting
               </h3>
               <p className="text-gray-600 text-sm">
-                They'll apply to jobs that actually match their skills and
+                They&apos;ll apply to jobs that actually match their skills and
                 experience.
               </p>
             </div>
@@ -317,7 +317,7 @@ The ProofOfFit Team`;
                 Confidence Boost
               </h3>
               <p className="text-gray-600 text-sm">
-                They'll feel more confident knowing their applications are
+                They&apos;ll feel more confident knowing their applications are
                 evidence-based.
               </p>
             </div>
