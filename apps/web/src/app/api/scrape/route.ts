@@ -268,6 +268,7 @@ export async function GET(req: NextRequest) {
       }, { status: 423 });
     }
     
+    // eslint-disable-next-line no-console
     console.log('🤖 Starting scraping job', { timestamp: new Date().toISOString() });
     
     // Seed URLs - in production, move to config table
@@ -398,6 +399,7 @@ export async function GET(req: NextRequest) {
     const duration = Date.now() - startTime;
     
     // Structured logging
+    // eslint-disable-next-line no-console
     console.log('✅ Scraping job completed', {
       timestamp: new Date().toISOString(),
       duration_ms: duration,

@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
     }
     
     // eslint-disable-next-line no-console
-    
     console.log('Starting job feed refresh...')
     await jobFeedManager.refreshJobFeeds()
     
