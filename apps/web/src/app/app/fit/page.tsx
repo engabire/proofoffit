@@ -2012,6 +2012,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                   : 'border-l-transparent hover:border-l-blue-300'
               }`}
               onClick={() => {
+                // eslint-disable-next-line no-console
                 console.log('Job selected:', job.title, job.company)
                 setSelectedJob(job)
               }}
@@ -2122,6 +2123,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                       variant={selectedJob?.id === job.id ? "default" : "outline"}
                       onClick={(e) => {
                         e.stopPropagation()
+                        // eslint-disable-next-line no-console
                         console.log('Job selected via button:', job.title, job.company)
                         setSelectedJob(job)
                       }}
@@ -3562,6 +3564,7 @@ export default function FitReportPage() {
   }
 
   const handleJobSelect = (job: JobPosting) => {
+    // eslint-disable-next-line no-console
     console.log('Job selected in main component:', job.title, job.company)
     setSelectedJob(job)
     setCurrentStep(3)
@@ -3725,6 +3728,7 @@ export default function FitReportPage() {
                 variant="outline"
                 onClick={() => {
                   // Reset the form to start over
+                  // eslint-disable-next-line no-console
                   console.log('Starting over - resetting all state');
                   setCurrentStep(1);
                   setResume(null);
@@ -3747,6 +3751,7 @@ export default function FitReportPage() {
               {currentStep < totalSteps && (
                 <Button
                   onClick={() => {
+                    // eslint-disable-next-line no-console
                     console.log('Next Step clicked - currentStep:', currentStep, 'resume:', !!resume, 'selectedJob:', !!selectedJob, 'analysis:', !!analysis)
                     // Navigate to next step if data is available
                     if (currentStep === 1 && resume) {

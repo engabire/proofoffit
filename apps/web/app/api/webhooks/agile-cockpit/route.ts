@@ -46,7 +46,10 @@ export async function POST(req: NextRequest) {
         await handleIssueDemilestoned(supabase, issue, repository)
         break
       default:
-        console.log(`Unhandled webhook action: ${action}`)
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.log(`Unhandled webhook action: ${action}`)
+        }
     }
 
     // Log webhook event
@@ -67,7 +70,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true })
 
   } catch (error) {
-    console.error('Webhook processing error:', error)
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Webhook processing error:', error)
+    }
     return NextResponse.json(
       { error: 'Webhook processing failed' },
       { status: 500 }

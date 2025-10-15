@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import {
   Play,
   Pause,
@@ -62,7 +63,7 @@ export default function DemoPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Interactive Demo</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Experience ProofOfFit's bias-reducing, explainable matching in action. 
+            Experience ProofOfFit&apos;s bias-reducing, explainable matching in action. 
             See how we create fair, transparent hiring decisions with immutable audit trails.
           </p>
         </div>
@@ -518,7 +519,7 @@ export default function DemoPage() {
           <div className="text-center space-y-6">
             <div className="flex justify-center space-x-4">
               <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600" asChild>
-                <a 
+                <Link 
                   href="/app/fit"
                   aria-label="Get your personalized fit report - analyze your job match"
                   rel="noopener"
@@ -526,10 +527,10 @@ export default function DemoPage() {
                 >
                   Get Your Fit Report
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </a>
+                </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a 
+                <Link 
                   href="/app/slate"
                   aria-label="Generate candidate slate - start hiring process"
                   rel="noopener"
@@ -537,7 +538,7 @@ export default function DemoPage() {
                 >
                   Generate Candidate Slate
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </a>
+                </Link>
               </Button>
             </div>
             

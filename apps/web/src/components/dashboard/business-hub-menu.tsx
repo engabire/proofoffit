@@ -69,7 +69,7 @@ export function BusinessHubMenu() {
           <ChevronDown className="h-4 w-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-80" align="end">
+      <DropdownMenuContent className="w-80 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-lg z-[100]" align="end">
         {menuSections.map((section, sectionIndex) => (
           <div key={section.title}>
             <DropdownMenuLabel className="text-xs uppercase tracking-wide text-muted-foreground">

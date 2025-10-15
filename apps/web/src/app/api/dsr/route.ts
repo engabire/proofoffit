@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (insertError) {
+      // eslint-disable-next-line no-console
       console.error('Error creating DSR request:', insertError)
       return NextResponse.json(
         { error: 'Failed to create data request' },
@@ -97,6 +98,7 @@ export async function POST(req: NextRequest) {
     })
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('DSR API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -154,6 +156,7 @@ export async function GET(req: NextRequest) {
     })
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('DSR status check error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -203,6 +206,7 @@ async function sendDSRReceipt(userId: string, ticketId: string, type: string) {
       .single()
 
     if (!user?.email) {
+      // eslint-disable-next-line no-console
       console.error('User email not found for DSR receipt')
       return
     }
@@ -224,9 +228,11 @@ async function sendDSRReceipt(userId: string, ticketId: string, type: string) {
 
     // Implement your email sending logic here
     // await sendEmail(emailData)
+    // eslint-disable-next-line no-console
     console.log('DSR receipt email would be sent:', emailData)
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error sending DSR receipt:', error)
   }
 }

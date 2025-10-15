@@ -20,7 +20,7 @@ export const env = {
     demoMode: process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || 
               !process.env.NEXT_PUBLIC_SUPABASE_URL || 
               !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    url: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+    url: process.env.NEXTAUTH_URL || 'https://www.proofoffit.com',
     secret: process.env.NEXTAUTH_SECRET || '',
   },
   
@@ -33,7 +33,11 @@ export const env = {
   // Email configuration (optional)
   email: {
     resendKey: process.env.RESEND_API_KEY || '',
-  }
+  },
+
+  jobs: {
+    rapidApiKey: process.env.RAPIDAPI_KEY || '',
+  },
 }
 
 // Helper functions

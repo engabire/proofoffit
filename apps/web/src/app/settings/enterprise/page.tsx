@@ -73,7 +73,7 @@ export default async function EnterpriseSettingsPage() {
             <div>
               <CardTitle>Enterprise Account Status</CardTitle>
               <CardDescription>
-                Your account's enterprise configuration and benefits
+                Your account&apos;s enterprise configuration and benefits
               </CardDescription>
             </div>
           </div>
@@ -183,7 +183,7 @@ export default async function EnterpriseSettingsPage() {
                 <div className="space-y-1">
                   <Label className="text-base font-medium">Single Sign-On (SSO)</Label>
                   <p className="text-sm text-gray-600">
-                    Use your company's SSO for secure authentication
+                    Use your company&apos;s SSO for secure authentication
                   </p>
                 </div>
                 <Badge variant="secondary">

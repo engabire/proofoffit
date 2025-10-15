@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
       }
     }
     
+    // eslint-disable-next-line no-console
     console.log('🔄 Cache revalidated', {
       tags: revalidated,
       timestamp: new Date().toISOString()

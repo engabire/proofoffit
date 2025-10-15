@@ -3,14 +3,21 @@
 import React, { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import EnhancedAuth from '@/components/auth/enhanced-auth'
+import EnterpriseLogin from '@/components/auth/enterprise-login'
 
 function SignUpPageContent() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect') || '/onboarding'
   const userType = searchParams.get('type') || 'seeker'
+  const variant = searchParams.get('variant') || 'standard'
   
   // Convert userType to audience format
   const defaultAudience = userType === 'employer' ? 'hirer' : 'seeker'
+
+  // Use enterprise login if variant is 'enterprise'
+  if (variant === 'enterprise') {
+    return <EnterpriseLogin />
+  }
 
   return (
     <EnhancedAuth 
