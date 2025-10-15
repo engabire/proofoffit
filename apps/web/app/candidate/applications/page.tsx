@@ -161,6 +161,7 @@ export default function ApplicationsPage() {
         }
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.error('Auth check failed:', error)
         }
         router.push('/auth/signin?redirect=/candidate/applications&type=seeker')

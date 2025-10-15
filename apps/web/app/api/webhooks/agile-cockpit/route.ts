@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
         break
       default:
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.log(`Unhandled webhook action: ${action}`)
         }
     }
@@ -70,6 +71,7 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error('Webhook processing error:', error)
     }
     return NextResponse.json(

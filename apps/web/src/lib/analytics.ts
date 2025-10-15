@@ -21,6 +21,7 @@ export interface AnalyticsEvent {
 export async function trackEvent(event: AnalyticsEvent) {
   try {
     // For now, just log analytics events
+    // eslint-disable-next-line no-console
     console.log("Analytics event:", event);
     
     // TODO: Implement proper analytics storage when database is ready
@@ -33,6 +34,7 @@ export async function trackEvent(event: AnalyticsEvent) {
     //   },
     // });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Failed to track analytics event:", error);
     // Don't throw - analytics failures shouldn't break the app
   }
@@ -70,6 +72,7 @@ export async function getAnalyticsSummary(_days: number = 30) {
 // Timer functions for performance tracking
 export function startTimer(name: string): number {
   const start = Date.now();
+  // eslint-disable-next-line no-console
   console.log(`Timer ${name} started`);
   return start;
 }
@@ -77,6 +80,7 @@ export function startTimer(name: string): number {
 export function stopTimer(startTime: number, name?: string): number {
   const duration = Date.now() - startTime;
   if (name) {
+    // eslint-disable-next-line no-console
     console.log(`Timer ${name}: ${duration}ms`);
   }
   return duration;
@@ -84,6 +88,7 @@ export function stopTimer(startTime: number, name?: string): number {
 
 // Simple track function for basic analytics
 export function track(event: { name: string; [key: string]: any }): void {
+  // eslint-disable-next-line no-console
   console.log("Track event:", event);
 }
 
@@ -96,12 +101,14 @@ export function setupCtaBridge() {
     const detail = (e as CustomEvent).detail || {};
     
     // Log all CTA events for debugging
+    // eslint-disable-next-line no-console
     console.log('CTA Event:', detail);
     
     try { 
       // Send to Google Analytics if available
       (window as any).gtag?.('event', 'cta_click', detail); 
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to send CTA event to gtag:', error);
     }
     
@@ -115,6 +122,7 @@ export function setupCtaBridge() {
         }
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to track CTA event internally:', error);
     }
     

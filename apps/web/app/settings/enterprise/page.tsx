@@ -157,6 +157,7 @@ export default function EnterpriseSettingsPage() {
           router.push('/auth/signin?redirect=/settings/enterprise&type=employer')
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth check failed:', error)
         router.push('/auth/signin?redirect=/settings/enterprise&type=employer')
       } finally {

@@ -58,6 +58,7 @@ export async function GET(req: NextRequest) {
     // Try USAJOBS API first for government jobs
     if (query.trim()) {
       try {
+        // eslint-disable-next-line no-console
         console.log('Searching USAJOBS API...')
         const searchParams: USAJobsSearchParams = {
           keyword: query,
@@ -111,6 +112,7 @@ export async function GET(req: NextRequest) {
           })
         }
       } catch (usajobsError) {
+        // eslint-disable-next-line no-console
         console.error('USAJOBS API failed, trying enhanced search:', usajobsError)
       }
     }
@@ -118,6 +120,7 @@ export async function GET(req: NextRequest) {
     // Try enhanced job search as fallback
     if (query.trim()) {
       try {
+        // eslint-disable-next-line no-console
         console.log('Using enhanced job search service...')
         const enhancedJobs = await jobSearchService.searchJobs({
           query,
@@ -166,6 +169,7 @@ export async function GET(req: NextRequest) {
           })
         }
       } catch (enhancedError) {
+        // eslint-disable-next-line no-console
         console.error('Enhanced job search failed, falling back:', enhancedError)
       }
     }
@@ -206,6 +210,7 @@ export async function GET(req: NextRequest) {
     const { data: jobs, error } = await supabaseQuery
 
     if (error) {
+      // eslint-disable-next-line no-console
       console.error('Supabase query error:', error)
       // Fallback to mock data
       return NextResponse.json({
@@ -251,6 +256,7 @@ export async function GET(req: NextRequest) {
     })
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error searching jobs:', error)
     // Fallback to mock data on any error
     return NextResponse.json({
@@ -281,6 +287,7 @@ export async function POST(req: NextRequest) {
     })
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating jobs:', error)
     return NextResponse.json(
       { error: 'Failed to create jobs' },

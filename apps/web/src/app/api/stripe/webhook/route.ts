@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       config.webhookSecret,
     );
   } catch (error: any) {
+    // eslint-disable-next-line no-console
     console.error("Webhook signature verification failed:", error.message);
     return NextResponse.json(
       { error: "Invalid signature" },
@@ -177,11 +178,13 @@ export async function POST(request: NextRequest) {
       }
 
       default:
+        // eslint-disable-next-line no-console
         console.log(`Unhandled event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
   } catch (error: any) {
+    // eslint-disable-next-line no-console
     console.error("Webhook processing error:", error);
     return NextResponse.json(
       { error: "Webhook processing failed" },

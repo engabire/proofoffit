@@ -48,7 +48,9 @@ import {
 
 // Simple toast implementation
 const toast = {
+  // eslint-disable-next-line no-console
   error: (message: string) => console.error("Error:", message),
+  // eslint-disable-next-line no-console
   success: (message: string) => console.log("Success:", message),
 };
 
@@ -115,6 +117,7 @@ export default function SimpleFitPage() {
         }
       } catch (error) {
         if (process.env.NODE_ENV !== "production") {
+          // eslint-disable-next-line no-console
           console.error("Auth check failed:", error);
         }
         router.push("/auth/signin?redirect=/app/fit-simple&type=seeker");
@@ -257,6 +260,7 @@ export default function SimpleFitPage() {
       );
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
         console.error("Search error:", error);
       }
       toast.error("Search failed. Please try again.");
@@ -306,6 +310,7 @@ export default function SimpleFitPage() {
       toast.success("Job analysis completed successfully!");
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
         console.error("Analysis error:", error);
       }
       toast.error("Analysis failed. Please try again.");
@@ -391,6 +396,7 @@ John Doe`;
       toast.success("Tailored application materials generated successfully!");
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
         console.error("Generation error:", error);
       }
       toast.error(

@@ -37,6 +37,7 @@ export async function GET(req: NextRequest) {
     );
 
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("🧹 Starting cleanup job", {
         timestamp: new Date().toISOString(),
       });
@@ -129,6 +130,7 @@ export async function GET(req: NextRequest) {
     const totalDeleted = results.reduce((sum, r) => sum + r.deleted_count, 0);
 
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("✅ Cleanup job completed", {
         timestamp: new Date().toISOString(),
         duration_ms: duration,

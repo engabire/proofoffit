@@ -131,6 +131,7 @@ export default function CandidateProfilePage() {
           router.push('/auth/signin?redirect=/candidate/profile&type=seeker')
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth check failed:', error)
         router.push('/auth/signin?redirect=/candidate/profile&type=seeker')
       } finally {

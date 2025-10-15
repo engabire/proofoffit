@@ -63,6 +63,7 @@ export async function GET(req: NextRequest) {
     } catch (error) {
       if (attempt === 1) {
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.error("jobs.search.upstream_timeout", { error });
         }
         return NextResponse.json({ error: "upstream_timeout" }, { status: 504 });
@@ -82,6 +83,7 @@ export async function GET(req: NextRequest) {
 
   if (process.env.NODE_ENV !== 'production') {
 
+    // eslint-disable-next-line no-console
     console.log("jobs.search", {
     q: trimmedQuery,
     loc,

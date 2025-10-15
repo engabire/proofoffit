@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("Starting job feed refresh...");
     }
     await jobFeedManager.refreshJobFeeds();
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.error("Error refreshing job feeds:", error);
     }
     return NextResponse.json(
@@ -69,6 +71,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.error("Error getting job feed status:", error);
     }
     return NextResponse.json(

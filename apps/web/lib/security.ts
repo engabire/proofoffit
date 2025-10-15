@@ -37,12 +37,14 @@ export async function logSecurityEvent(
 ) {
   try {
     // TODO: Implement security event logging when analytics model is available
+    // eslint-disable-next-line no-console
     console.log("Security event:", {
       event: `security_${event}`,
       context,
       metadata,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Failed to log security event:", error);
     // Don't throw - logging failures shouldn't break the app
   }

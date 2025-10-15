@@ -25,6 +25,7 @@ export interface EmailNotificationPayload {
 async function sendResendEmail(to: string, subject: string, html: string) {
   const apiKey = env.email?.resendKey || process.env.RESEND_API_KEY
   if (!apiKey) {
+    // eslint-disable-next-line no-console
     console.warn('Resend API key missing; skipping email send')
     return { success: false, error: 'Email service not configured' }
   }
@@ -46,12 +47,14 @@ async function sendResendEmail(to: string, subject: string, html: string) {
 
     if (!response.ok) {
       const text = await response.text()
+      // eslint-disable-next-line no-console
       console.error('Failed to send Resend email', response.status, text)
       return { success: false, error: `Email service error: ${response.status}` }
     }
 
     return { success: true, messageId: response.headers.get('x-message-id') }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Resend email error', error)
     return { success: false, error: 'Network error' }
   }
@@ -241,6 +244,7 @@ export async function sendEmailNotification(payload: EmailNotificationPayload) {
     const result = await sendResendEmail(userEmail, subject, html)
     
     // Log the notification attempt
+    // eslint-disable-next-line no-console
     console.log(`Email notification sent: ${type} to ${userEmail}`, {
       success: result.success,
       messageId: result.messageId,
@@ -249,6 +253,7 @@ export async function sendEmailNotification(payload: EmailNotificationPayload) {
     
     return result
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(`Failed to send email notification: ${type}`, error)
     return { success: false, error: 'Failed to send notification' }
   }

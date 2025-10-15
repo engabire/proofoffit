@@ -81,6 +81,7 @@ export class CredentialManager {
     ];
 
     // This would be called during build time to scan for hardcoded credentials
+    // eslint-disable-next-line no-console
     console.log("Validating no hardcoded credentials...");
   }
 }

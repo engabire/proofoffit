@@ -254,6 +254,7 @@ export default function EnhancedAuth({
 
       // The redirect will happen automatically
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error("SSO authentication error:", error);
       setError(error.message || "SSO authentication failed. Please try again.");
     } finally {
@@ -289,6 +290,7 @@ export default function EnhancedAuth({
     try {
       // Simulate passkey authentication
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      // eslint-disable-next-line no-console
       console.log("Passkey authentication");
       // In a real app, you'd use WebAuthn API
     } catch (error) {

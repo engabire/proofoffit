@@ -15,6 +15,8 @@ export async function POST(req: NextRequest) {
       )
     }
     
+    // eslint-disable-next-line no-console
+    
     console.log('Starting job feed refresh...')
     await jobFeedManager.refreshJobFeeds()
     
@@ -24,6 +26,7 @@ export async function POST(req: NextRequest) {
     })
     
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error refreshing job feeds:', error)
     return NextResponse.json(
       { error: 'Failed to refresh job feeds' },
@@ -66,6 +69,7 @@ export async function GET(req: NextRequest) {
     })
     
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error getting job feed status:', error)
     return NextResponse.json(
       { error: 'Failed to get job feed status' },

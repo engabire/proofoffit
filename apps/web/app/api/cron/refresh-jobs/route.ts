@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("Starting scheduled job feed refresh...");
     }
 
@@ -22,6 +23,7 @@ export async function GET(req: NextRequest) {
     await jobFeedManager.refreshJobFeeds();
 
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("Scheduled job feed refresh completed");
     }
 

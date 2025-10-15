@@ -118,6 +118,8 @@ export async function POST(req: NextRequest) {
       });
     }
     
+    // eslint-disable-next-line no-console
+    
     console.log(`Processing ${items.length} items for AI analysis`);
     
     // Process items in batches to respect API limits
@@ -153,6 +155,8 @@ export async function POST(req: NextRequest) {
           };
           errors.push(errorInfo);
           
+          // eslint-disable-next-line no-console
+          
           console.error(`❌ Analysis failed for ${item.id}:`, error.message);
           return errorInfo;
         }
@@ -170,8 +174,10 @@ export async function POST(req: NextRequest) {
     let trends: any[] = [];
     try {
       trends = await analyzer.detectTrends();
+      // eslint-disable-next-line no-console
       console.log(`🔍 Detected ${trends.length} trends`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Trend detection failed:', error);
     }
     
@@ -330,6 +336,7 @@ export async function GET(req: NextRequest) {
     }
     
   } catch (error: any) {
+    // eslint-disable-next-line no-console
     console.error('AI analysis GET failed:', error);
     
     return NextResponse.json({

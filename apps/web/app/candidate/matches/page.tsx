@@ -205,6 +205,7 @@ export default function JobMatchesPage() {
           router.push('/auth/signin?redirect=/candidate/matches&type=seeker')
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth check failed:', error)
         router.push('/auth/signin?redirect=/candidate/matches&type=seeker')
       } finally {

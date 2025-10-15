@@ -60,6 +60,7 @@ class IntelligentAnalysisTrigger implements SmartAnalysisTrigger {
     this.processingQueue = true;
     
     try {
+      // eslint-disable-next-line no-console
       console.log(`🧠 Processing ${this.analysisQueue.length} items for AI analysis`);
       
       // Process in batches to respect API limits
@@ -74,6 +75,7 @@ class IntelligentAnalysisTrigger implements SmartAnalysisTrigger {
               await this.analyzer.analyzeContent(item);
               console.log(`✅ Smart-analyzed: ${item.title.substring(0, 50)}...`);
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.error(`❌ Smart analysis failed for ${item.id}:`, error);
             }
           })
@@ -88,8 +90,10 @@ class IntelligentAnalysisTrigger implements SmartAnalysisTrigger {
       // After processing, detect trends
       try {
         const trends = await this.analyzer.detectTrends();
+        // eslint-disable-next-line no-console
         console.log(`🔍 Smart trend detection found ${trends.length} trends`);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Smart trend detection failed:', error);
       }
       
@@ -105,6 +109,7 @@ export const smartAnalysisTrigger = new IntelligentAnalysisTrigger();
 // Helper function to integrate with scraping pipeline
 export async function analyzeNewContent(scrapedItems: any[]): Promise<void> {
   if (!process.env.OPENAI_API_KEY || !process.env.ANTHROPIC_API_KEY) {
+    // eslint-disable-next-line no-console
     console.log('⚠️ AI analysis skipped: API keys not configured');
     return;
   }
@@ -112,6 +117,7 @@ export async function analyzeNewContent(scrapedItems: any[]): Promise<void> {
   try {
     await smartAnalysisTrigger.triggerAnalysis(scrapedItems);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Smart content analysis failed:', error);
   }
 }

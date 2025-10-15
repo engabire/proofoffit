@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
 
     if (insertError) {
       if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
         console.error("Error creating DSR request:", insertError);
       }
       return NextResponse.json(
@@ -111,6 +112,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.error("DSR API error:", error);
     }
     return NextResponse.json(
@@ -169,6 +171,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.error("DSR status check error:", error);
     }
     return NextResponse.json(
@@ -221,6 +224,7 @@ async function sendDSRReceipt(userId: string, ticketId: string, type: string) {
 
     if (!user?.email) {
       if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
         console.error("User email not found for DSR receipt");
       }
       return;
@@ -246,10 +250,12 @@ async function sendDSRReceipt(userId: string, ticketId: string, type: string) {
     // Implement your email sending logic here
     // await sendEmail(emailData)
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.info("DSR receipt email would be sent:", emailData);
     }
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
       console.error("Error sending DSR receipt:", error);
     }
   }

@@ -70,6 +70,7 @@ async function acquireLock(supa: any, name = 'scrape', ttlMin = LOCK_TTL_MINUTES
     return false;
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error('Lock acquisition failed:', error);
     }
     return false;
@@ -81,6 +82,7 @@ async function releaseLock(supa: any, name = 'scrape') {
     await supa.from('job_lock').delete().eq('name', name);
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error('Lock release failed:', error);
     }
   }
@@ -94,6 +96,7 @@ async function isAllowed(url: string): Promise<boolean> {
     // Check domain allowlist first
     if (!ALLOWED_DOMAINS.has(u.hostname)) {
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.warn(`Domain not allowlisted: ${u.hostname}`);
       }
       return false;
@@ -112,6 +115,7 @@ async function isAllowed(url: string): Promise<boolean> {
     return robots.isAllowed(url, UA) !== false;
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error(`Robots.txt check failed for ${url}:`, error);
     }
     return false; // Fail closed
@@ -197,6 +201,7 @@ function canonicalize(raw: string): string {
     return u.toString();
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error('URL canonicalization failed:', error);
     }
     return raw;
@@ -241,6 +246,7 @@ async function withRetry<T>(
       
       const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.log(`Retry attempt ${attempt + 1} after ${delay}ms for: ${error.message}`);
       }
       await new Promise(resolve => setTimeout(resolve, delay));
@@ -274,6 +280,7 @@ export async function GET(req: NextRequest) {
       }, { status: 423 });
     }
     
+    // eslint-disable-next-line no-console
     console.log('🤖 Starting scraping job', { timestamp: new Date().toISOString() });
     
     // Seed URLs - in production, move to config table
@@ -359,6 +366,7 @@ export async function GET(req: NextRequest) {
           
           if (upsertError) {
             if (process.env.NODE_ENV !== 'production') {
+              // eslint-disable-next-line no-console
               console.error('Upsert error:', upsertError);
             }
           }
@@ -389,6 +397,7 @@ export async function GET(req: NextRequest) {
         
       } catch (error: any) {
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.error(`Error processing ${url}:`, error);
         }
         return {
@@ -406,6 +415,7 @@ export async function GET(req: NextRequest) {
     const duration = Date.now() - startTime;
     
     // Structured logging
+    // eslint-disable-next-line no-console
     console.log('✅ Scraping job completed', {
       timestamp: new Date().toISOString(),
       duration_ms: duration,

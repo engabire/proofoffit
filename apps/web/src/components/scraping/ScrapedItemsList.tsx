@@ -20,6 +20,7 @@ export function ScrapedItemsList() {
     
     // Subscribe to real-time updates
     const unsubscribe = scrapingClient.subscribeToUpdates((payload) => {
+      // eslint-disable-next-line no-console
       console.log('Real-time update:', payload);
       if (payload.eventType === 'INSERT') {
         setItems(prev => [payload.new, ...prev]);
@@ -55,6 +56,7 @@ export function ScrapedItemsList() {
       const domainList = await scrapingClient.getDomains();
       setDomains(domainList);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Failed to load domains:', err);
     }
   };

@@ -164,6 +164,7 @@ export function EnhancedEnterpriseLogin({
       }, 2000)
 
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error('Magic link error:', error)
       toast.error(error?.message ?? 'Failed to send magic link')
       setErrors({ general: error?.message ?? 'Failed to send magic link' })
@@ -240,10 +241,12 @@ export function EnhancedEnterpriseLogin({
               payloadHash: 'signin_success'
             })
         } catch (logError) {
+          // eslint-disable-next-line no-console
           console.warn('Failed to log sign in event:', logError)
         }
       }
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error('Password auth error:', error)
       toast.error(error?.message ?? 'Authentication failed')
       setErrors({ general: error?.message ?? 'Authentication failed' })
@@ -271,6 +274,7 @@ export function EnhancedEnterpriseLogin({
 
       if (error) throw error
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error('SSO error:', error)
       toast.error(error?.message ?? `Failed to sign in with ${provider}`)
       setErrors({ general: error?.message ?? `Failed to sign in with ${provider}` })

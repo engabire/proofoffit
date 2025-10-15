@@ -51,6 +51,7 @@ export class USAJobsConnector implements JobFeedConnector {
         totalFound: data.SearchResult?.SearchResultCountAll || 0
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching from USAJOBS:', error)
       return {
         jobs: [],
@@ -247,12 +248,14 @@ export class JobFeedManager {
           }
         })
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error saving job:', error)
       }
     }
   }
   
   async refreshJobFeeds(): Promise<void> {
+    // eslint-disable-next-line no-console
     console.log('Starting job feed refresh...')
     
     const commonSearches = [
@@ -269,9 +272,12 @@ export class JobFeedManager {
         await this.saveJobsToDatabase(results)
         console.log(`Fetched ${results.reduce((sum, r) => sum + r.jobs.length, 0)} jobs for "${search.keywords}"`)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(`Error fetching jobs for "${search.keywords}":`, error)
       }
     }
+    
+    // eslint-disable-next-line no-console
     
     console.log('Job feed refresh completed')
   }

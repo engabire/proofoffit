@@ -59,6 +59,7 @@ function EmployerIntakePageContent() {
 
         setUser(parsedUser)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth check failed:', error)
         router.push('/auth/signin?type=employer')
       } finally {
@@ -105,12 +106,16 @@ function EmployerIntakePageContent() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
       
+      // eslint-disable-next-line no-console
+      
       console.log('Job intake created:', formData)
+      // eslint-disable-next-line no-console
       console.log('Success: Job intake created successfully!')
       
       // Redirect to slates page
       router.push('/employer/slates')
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error('Failed to create job intake:', error)
     } finally {
       setLoading(false)

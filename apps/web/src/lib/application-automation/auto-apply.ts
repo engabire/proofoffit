@@ -85,6 +85,7 @@ export class ApplicationAutomation {
 
       return data;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error fetching auto-apply config:", error);
       return null;
     }
@@ -119,6 +120,7 @@ export class ApplicationAutomation {
 
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error updating auto-apply config:", error);
       return false;
     }
@@ -290,6 +292,7 @@ export class ApplicationAutomation {
 
       return data;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error auto-applying to job:", error);
       return null;
     }
@@ -343,12 +346,14 @@ export class ApplicationAutomation {
       // Send email if enabled
       if (config.notificationSettings.email) {
         // This would integrate with your email system
+        // eslint-disable-next-line no-console
         console.log(
           "Sending email notification for application:",
           application.id,
         );
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error sending application notification:", error);
     }
   }
@@ -370,6 +375,7 @@ export class ApplicationAutomation {
 
       return data || [];
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error fetching application history:", error);
       return [];
     }
@@ -404,6 +410,7 @@ export class ApplicationAutomation {
 
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error updating application status:", error);
       return false;
     }
@@ -462,6 +469,7 @@ export class ApplicationAutomation {
 
       return stats;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error fetching application stats:", error);
       return {
         total: 0,

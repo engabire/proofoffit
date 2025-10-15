@@ -16,8 +16,10 @@ export interface AnalyticsEvent {
 export async function trackEvent(event: AnalyticsEvent) {
   try {
     // TODO: Implement analytics storage when database model is available
+    // eslint-disable-next-line no-console
     console.log("Analytics event:", event);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Failed to track analytics event:", error);
     // Don't throw - analytics failures shouldn't break the app
   }
@@ -65,6 +67,7 @@ export function stopTimer(startTime: number, label: string): number {
 
 // Simple tracking function for client-side events
 export function track(event: { name: string; properties?: Record<string, any> }) {
+  // eslint-disable-next-line no-console
   console.log('Analytics event:', event);
   // In a real implementation, this would send to analytics service
 }

@@ -125,6 +125,7 @@ export function AutoApplyDashboard() {
       
       setStats(data.stats)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching auto-apply data:', error)
       toast.error('Failed to load auto-apply data')
     } finally {
@@ -158,6 +159,7 @@ export function AutoApplyDashboard() {
         toast.error(data.error || 'Failed to save configuration')
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error saving configuration:', error)
       toast.error('Failed to save configuration')
     } finally {
@@ -198,6 +200,7 @@ export function AutoApplyDashboard() {
         setConfig(config)
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error toggling auto-apply:', error)
       toast.error('Failed to update configuration')
       setConfig(config)

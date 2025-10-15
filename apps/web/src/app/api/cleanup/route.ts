@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
       .select('id');
     
     if (rawError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning raw data:', rawError);
     } else {
       results.push({
@@ -60,6 +61,7 @@ export async function GET(req: NextRequest) {
       .select('name');
     
     if (lockError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning expired locks:', lockError);
     } else {
       results.push({
@@ -78,6 +80,7 @@ export async function GET(req: NextRequest) {
       .select('item_url');
     
     if (metaError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning fetch metadata:', metaError);
     } else {
       results.push({
@@ -96,6 +99,7 @@ export async function GET(req: NextRequest) {
       .select('id');
     
     if (itemsError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning old items:', itemsError);
     } else {
       results.push({

@@ -92,6 +92,7 @@ export function SimpleLogin({
         setError('Fix validation errors before continuing')
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Auth error:', error)
       setError('Authentication failed. Please try again.')
     } finally {

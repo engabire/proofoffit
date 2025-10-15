@@ -48,6 +48,7 @@ function EmployerSlatesPageContent() {
 
         setUser(parsedUser)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth check failed:', error)
         router.push('/auth/signin?type=employer')
       } finally {
@@ -69,6 +70,7 @@ function EmployerSlatesPageContent() {
   }
 
   const handleDownloadSlate = (slateId: string) => {
+    // eslint-disable-next-line no-console
     console.log('Download slate', slateId)
   }
 

@@ -2225,6 +2225,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       setFilteredJobs(data.jobs || []);
     } catch (err) {
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.error("Error loading jobs:", err);
       }
       setError("Failed to load jobs. Using sample data.");
@@ -2248,6 +2249,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       setFilteredJobs(data.jobs || []);
     } catch (err) {
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.error("Error searching jobs:", err);
       }
       setError("Search failed. Using sample data.");
@@ -2312,6 +2314,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                 }`}
                 onClick={() => {
                   if (process.env.NODE_ENV !== 'production') {
+                    // eslint-disable-next-line no-console
                     console.log("Job selected:", job.title, job.company);
                   }
                   setSelectedJob(job);
@@ -2359,6 +2362,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                         onClick={(e) => {
                           e.stopPropagation();
                           if (process.env.NODE_ENV !== 'production') {
+                            // eslint-disable-next-line no-console
                             console.log(
                             "Job selected via button:",
                             job.title,
@@ -3338,6 +3342,7 @@ function ResultsStep({
       });
     } catch (error: any) {
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.error("Cover letter submission failed:", error);
       }
       setSubmissionState({
@@ -3423,6 +3428,7 @@ function ResultsStep({
       } catch {}
     } catch (error) {
       if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
         console.error("Download failed:", error);
       }
       // Show user-friendly error message
@@ -3607,6 +3613,7 @@ function ResultsStep({
         });
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.error("Share failed:", error);
         }
       }
@@ -3620,6 +3627,7 @@ function ResultsStep({
         alert("Share link copied to clipboard!");
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.error("Copy failed:", error);
         }
         alert("Share functionality not available");
@@ -4149,6 +4157,7 @@ function FitReportPageContent() {
 
   const handleJobSelect = (job: JobPosting) => {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.log("Job selected in main component:", job.title, job.company);
     }
     setSelectedJob(job);
@@ -4325,6 +4334,7 @@ function FitReportPageContent() {
                 onClick={() => {
                   // Reset the form to start over
                   if (process.env.NODE_ENV !== 'production') {
+                    // eslint-disable-next-line no-console
                     console.log("Starting over - resetting all state");
                   }
                   setCurrentStep(1);
@@ -4353,6 +4363,7 @@ function FitReportPageContent() {
                 <Button
                   onClick={() => {
                     if (process.env.NODE_ENV !== 'production') {
+                      // eslint-disable-next-line no-console
                       console.log(
                       "Next Step clicked - currentStep:",
                       currentStep,

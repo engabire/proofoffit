@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error("Webhook signature verification failed:", error.message);
     }
     return NextResponse.json(
@@ -180,6 +181,7 @@ export async function POST(request: NextRequest) {
 
       default:
         if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
           console.log(`Unhandled event type: ${event.type}`);
         }
     }
@@ -187,6 +189,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error: any) {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.error("Webhook processing error:", error);
     }
     return NextResponse.json(
