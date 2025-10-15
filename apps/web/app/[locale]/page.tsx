@@ -106,7 +106,7 @@ export default function HomePage() {
                 <Target className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="font-semibold mb-2">Explainable Matching</h3>
-              <p className="text-sm text-gray-600">See why you're a match, line by line. No mystery filters.</p>
+              <p className="text-sm text-gray-600">See why you&apos;re a match, line by line. No mystery filters.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -338,7 +338,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <div className="text-sm font-medium text-blue-600 mb-2">Proof in practice</div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  "I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
+                  &ldquo;I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Amara B., Data Analyst
@@ -350,7 +350,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <div className="text-sm font-medium text-green-600 mb-2">Proof in practice</div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  "The tailored bullets were spooky‑good. It became my pre‑screen script."
+                  &ldquo;The tailored bullets were spooky‑good. It became my pre‑screen script.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Luis R., Product Manager

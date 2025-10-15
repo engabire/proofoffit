@@ -591,7 +591,7 @@ John Doe`
                 <div className="text-center">
                   <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Analyzing Job Fit</h3>
-                  <p className="text-gray-600">We're analyzing how well you match this position...</p>
+                  <p className="text-gray-600">We&apos;re analyzing how well you match this position...</p>
                 </div>
               </div>
             ) : analysis ? (
@@ -677,7 +677,7 @@ John Doe`
                   <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Ready to Analyze</h3>
                   <p className="text-gray-600 mb-4">
-                    Click "Analyze Fit" on a job listing to see how well you match the position.
+                    Click &ldquo;Analyze Fit&rdquo; on a job listing to see how well you match the position.
                   </p>
                   <button
                     onClick={() => setActiveTab('search')}
