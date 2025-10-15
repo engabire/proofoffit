@@ -26,18 +26,30 @@ type PlansMap = {
 }
 
 // Stripe configuration - SECURE VERSION
-export const stripeConfig = {
-  apiKey: credentialManager.getCredential('STRIPE_SECRET_KEY'),
-  publishableKey: credentialManager.getCredential('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
-  webhookSecret: credentialManager.getCredential('STRIPE_WEBHOOK_SECRET'),
-  connectAccountId: 'acct_1S83Ea5r3cXmAzLD', // Extracted from your connect URL
+export function getStripeConfig() {
+  return {
+    apiKey: credentialManager.getCredential('STRIPE_SECRET_KEY'),
+    publishableKey: credentialManager.getCredential('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
+    webhookSecret: credentialManager.getCredential('STRIPE_WEBHOOK_SECRET'),
+    connectAccountId: 'acct_1S83Ea5r3cXmAzLD', // Extracted from your connect URL
+  }
 }
 
-// Initialize Stripe instance
-export const stripe = new Stripe(stripeConfig.apiKey, {
-  apiVersion: '2023-10-16',
-  typescript: true,
-})
+// Initialize Stripe instance lazily
+let stripeInstance: Stripe | null = null
+export function getStripe(): Stripe {
+  if (!stripeInstance) {
+    const config = getStripeConfig()
+    stripeInstance = new Stripe(config.apiKey, {
+      apiVersion: '2023-10-16',
+      typescript: true,
+    })
+  }
+  return stripeInstance
+}
+
+// Export stripe getter function instead of instance
+export { getStripe as stripe }
 
 // Subscription plans
 export const subscriptionPlans: PlansMap = {
