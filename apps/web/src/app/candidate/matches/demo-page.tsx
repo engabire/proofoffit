@@ -139,7 +139,7 @@ export default function JobMatchesDemoPage() {
           <p className="text-sm text-blue-700 dark:text-blue-300">
             The system analyzes your profile evidence bullets against job requirements to generate 
             fit scores and explanations. It identifies strengths and areas to highlight, helping 
-            you understand why you're a good match for each position.
+            you understand why you&apos;re a good match for each position.
           </p>
         </CardContent>
       </Card>

@@ -273,7 +273,7 @@ export default function CareersPage() {
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Mission</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              Help us build the future of fair hiring. We're looking for passionate individuals 
+              Help us build the future of fair hiring. We&apos;re looking for passionate individuals 
               who share our commitment to eliminating bias and creating equal opportunities for all.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -300,7 +300,7 @@ export default function CareersPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Culture</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We're building more than a company—we're creating a movement for fair hiring. 
+              We&apos;re building more than a company—we&apos;re creating a movement for fair hiring. 
               Join a team that values diversity, transparency, and making a real impact.
             </p>
           </div>
@@ -323,7 +323,7 @@ export default function CareersPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Benefits & Perks</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We invest in our team's success with comprehensive benefits and unique perks 
+              We invest in our team&apos;s success with comprehensive benefits and unique perks 
               that support both personal and professional growth.
             </p>
           </div>
