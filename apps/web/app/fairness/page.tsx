@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   Award,
   BarChart3,
@@ -483,7 +484,7 @@ export default function FairnessPage() {
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-4">
                   Join leading organizations that have reduced bias, improved
-                  diversity, and accelerated hiring with ProofOfFit's
+                  diversity, and accelerated hiring with ProofOfFit&apos;s
                   enterprise-grade evidence engine platform. Contact our
                   enterprise team for a personalized demo.
                 </p>
@@ -494,12 +495,12 @@ export default function FairnessPage() {
                   >
                     Contact Enterprise Sales
                   </a>
-                  <a
+                  <Link
                     href="/demo"
                     className="inline-flex items-center justify-center px-4 py-2 border border-emerald-600 text-emerald-600 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
                   >
                     Schedule Demo
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
