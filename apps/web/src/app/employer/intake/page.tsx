@@ -18,7 +18,9 @@ import { Checkbox } from '@proof-of-fit/ui'
 import { Plus, Trash2, Save } from 'lucide-react'
 // Simple toast implementation
 const toast = {
+  // eslint-disable-next-line no-console
   success: (message: string) => console.log('Success:', message),
+  // eslint-disable-next-line no-console
   error: (message: string) => console.error('Error:', message)
 }
 

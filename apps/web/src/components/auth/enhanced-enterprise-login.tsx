@@ -22,8 +22,11 @@ import {
 } from 'lucide-react'
 // Simple toast implementation
 const toast = {
+  // eslint-disable-next-line no-console
   success: (message: string) => console.log('Success:', message),
+  // eslint-disable-next-line no-console
   error: (message: string) => console.error('Error:', message),
+  // eslint-disable-next-line no-console
   info: (message: string) => console.log('Info:', message)
 }
 import { isSupabaseConfigured } from '@/lib/env'
