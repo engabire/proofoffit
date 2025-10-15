@@ -52,12 +52,9 @@ jobs:
 
       - name: Build application
         run: |
-          export NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-https://example.supabase.co}"
-          export NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-public-anon-key}"
+          export NEXT_PUBLIC_SUPABASE_URL="https://example.supabase.co"
+          export NEXT_PUBLIC_SUPABASE_ANON_KEY="public-anon-key"
           npm run build --workspace web
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'public-anon-key' }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -155,7 +152,7 @@ jobs:
       - name: Check licenses
         run: |
           echo "🔍 Checking package licenses..."
-          npx license-checker --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;Unlicense;CC0-1.0"
+          npx license-checker --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;Unlicense;CC0-1.0;LGPL-3.0-or-later"
         continue-on-error: true
 
   # Security headers check

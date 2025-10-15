@@ -147,8 +147,8 @@ export function useFormValidation<T extends Record<string, any>>({
       setValue(fieldName, e.target.value)
     },
     onBlur: () => handleBlur(fieldName),
-    error: touched[fieldName] ? errors[fieldName as string] : undefined,
-    hasError: touched[fieldName] && !!errors[fieldName as string]
+    error: touched[fieldName] ? errors[String(fieldName)] : undefined,
+    hasError: touched[fieldName] && !!errors[String(fieldName)]
   }), [values, errors, touched, setValue, handleBlur])
 
   // Update validation state when values change
