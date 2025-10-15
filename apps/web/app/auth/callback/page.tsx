@@ -63,8 +63,12 @@ function AuthCallbackPageContent() {
           // Get the code verifier from session storage (set during OAuth initiation)
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
 
+          if (!codeVerifier) {
+            throw new Error("Missing code verifier for PKCE flow");
+          }
+
           const { data, error: exchangeError } = await supabase.auth
-            .exchangeCodeForSession(code);
+            .exchangeCodeForSession({ code, codeVerifier });
 
           if (exchangeError) {
             throw exchangeError;

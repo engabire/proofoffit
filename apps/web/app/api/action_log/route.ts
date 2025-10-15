@@ -9,6 +9,15 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
     try {
+        // Check if Supabase is properly configured
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+            console.error("Supabase configuration missing");
+            return NextResponse.json(
+                { error: "Service configuration error" },
+                { status: 503 },
+            );
+        }
+
         const body = await req.json();
         const {
             tenantId,
@@ -46,8 +55,9 @@ export async function POST(req: NextRequest) {
 
         if (error) {
             console.error("Error inserting action log:", error);
+            console.error("Error details:", JSON.stringify(error, null, 2));
             return NextResponse.json(
-                { error: "Failed to log action" },
+                { error: "Failed to log action", details: error.message },
                 { status: 500 },
             );
         }
@@ -56,7 +66,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         console.error("Action log API error:", error);
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: "Internal server error", details: error instanceof Error ? error.message : "Unknown error" },
             { status: 500 },
         );
     }
