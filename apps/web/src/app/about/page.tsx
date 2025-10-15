@@ -291,7 +291,7 @@ export default function AboutPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We're building a world where hiring decisions are made on merit alone, 
+              We&apos;re building a world where hiring decisions are made on merit alone, 
               where every algorithm is explainable, and where talent is recognized regardless of background.
             </p>
           </div>
@@ -349,13 +349,13 @@ export default function AboutPage() {
                   could be applied to make hiring more fair and transparent.
                 </p>
                 <p>
-                  Starting with Stanford's advanced analytics lab, we spent two years developing the mathematical foundations 
-                  for bias-free evaluation. Our breakthrough came when we realized that fairness wasn't just 
+                  Starting with Stanford&apos;s advanced analytics lab, we spent two years developing the mathematical foundations 
+                  for bias-free evaluation. Our breakthrough came when we realized that fairness wasn&apos;t just 
                   about removing bias—it was about creating provable, auditable processes that could 
                   earn the trust of candidates, employers, and regulators alike.
                 </p>
                 <p>
-                  Today, we're proud to serve over 500 enterprises, from fast-growing startups to Fortune 500 companies, 
+                  Today, we&apos;re proud to serve over 500 enterprises, from fast-growing startups to Fortune 500 companies, 
                   helping them make over 1 million fair hiring decisions every month.
                 </p>
               </div>
@@ -365,8 +365,8 @@ export default function AboutPage() {
                 <div className="text-center">
                   <Quote className="h-16 w-16 text-blue-600 mx-auto mb-4" />
                   <blockquote className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">
-                    "We believe technology should be a force for equality, not a perpetuator of bias. 
-                    Every algorithm should be as transparent as it is powerful."
+                    &ldquo;We believe technology should be a force for equality, not a perpetuator of bias. 
+                    Every algorithm should be as transparent as it is powerful.&rdquo;
                   </blockquote>
                   <div className="text-sm text-slate-600 dark:text-slate-400">
                     — Sarah Chen, CEO & Co-Founder
