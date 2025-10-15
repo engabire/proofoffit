@@ -185,7 +185,7 @@ export class ApplicationAutomation {
       .eq('user_id', config.userId)
       .gte('applied_at', today)
 
-    const { data: weekApplications } = await this.supabase
+    const { data: weekApplications } = await this.getSupabaseClient()
       .from('job_applications')
       .select('id')
       .eq('user_id', config.userId)
