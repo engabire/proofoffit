@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
     
+    // eslint-disable-next-line no-console
     console.log('🧹 Starting cleanup job', { timestamp: new Date().toISOString() });
     
     const results: any[] = [];
@@ -111,6 +112,7 @@ export async function GET(req: NextRequest) {
     const duration = Date.now() - startTime;
     const totalDeleted = results.reduce((sum, r) => sum + r.deleted_count, 0);
     
+    // eslint-disable-next-line no-console
     console.log('✅ Cleanup job completed', {
       timestamp: new Date().toISOString(),
       duration_ms: duration,
