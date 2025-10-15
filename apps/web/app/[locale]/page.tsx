@@ -1,22 +1,35 @@
 import React from "react";
-import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from "lucide-react";
-import { useTranslations, useLocale } from 'next-intl';
-import Link from 'next/link';
-import LanguageSwitcher from '@/components/language-switcher';
-import { StandardHeader } from '@/components/navigation/standard-header';
-import ProofOfFitHeroVb from '@/components/hero/proof-of-fit-hero-vb';
+import {
+  ArrowRight,
+  Briefcase,
+  Check,
+  Globe,
+  Lock,
+  Shield,
+  Star,
+  Target,
+  TrendingUp,
+  UserCheck,
+  Users,
+  Zap,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import LanguageSwitcher from "@/components/language-switcher";
+import { StandardHeader } from "@/components/navigation/standard-header";
+import ProofOfFitHeroVb from "@/components/hero/proof-of-fit-hero-vb";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const t = useTranslations();
   const locale = useLocale();
   const navigationItems = [
-    { href: '#features', label: 'Features' },
-    { href: '#pricing', label: 'Pricing' },
-    { href: '#about', label: 'About' },
-    { href: '#contact', label: 'Contact' },
-  ]
+    { href: "#features", label: "Features" },
+    { href: "#pricing", label: "Pricing" },
+    { href: "#about", label: "About" },
+    { href: "#contact", label: "Contact" },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -40,64 +53,89 @@ export default function HomePage() {
               AI that feels like a senior designer, not a noisy assistant.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
-              We pair approachability with governance—mirroring the calm clarity of the products you love, while proving every recommendation.
+              We pair approachability with governance—mirroring the calm clarity
+              of the products you love, while proving every recommendation.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <Shield className="h-6 w-6 text-blue-600" />
               </div>
-              <div className="text-sm font-medium text-blue-600 mb-2">Signal</div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Explainable Fit Reports</h3>
+              <div className="text-sm font-medium text-blue-600 mb-2">
+                Signal
+              </div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                Explainable Fit Reports
+              </h3>
               <p className="text-sm text-gray-600">
-                Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams.
+                Our narrative engine translates criteria into evidence you can
+                share with recruiters or compliance teams.
               </p>
             </div>
-            
+
             <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Zap className="h-6 w-6 text-green-600" />
               </div>
-              <div className="text-sm font-medium text-green-600 mb-2">Signal</div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Adaptive Autopilot</h3>
+              <div className="text-sm font-medium text-green-600 mb-2">
+                Signal
+              </div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                Adaptive Autopilot
+              </h3>
               <p className="text-sm text-gray-600">
-                Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away.
+                Guided automations prepare resumes, outreach, and interview
+                briefs while keeping you one approval tap away.
               </p>
             </div>
-            
+
             <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-purple-600" />
               </div>
-              <div className="text-sm font-medium text-purple-600 mb-2">Signal</div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Bias-aware Scoring</h3>
+              <div className="text-sm font-medium text-purple-600 mb-2">
+                Signal
+              </div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                Bias-aware Scoring
+              </h3>
               <p className="text-sm text-gray-600">
-                We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story.
+                We surface blind spots and suggest alternate signals so your
+                slate tells a fair, transparent story.
               </p>
             </div>
-            
+
             <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-orange-600" />
               </div>
-              <div className="text-sm font-medium text-orange-600 mb-2">Signal</div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Design-grade outputs</h3>
+              <div className="text-sm font-medium text-orange-600 mb-2">
+                Signal
+              </div>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                Design-grade outputs
+              </h3>
               <p className="text-sm text-gray-600">
-                From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it.
+                From dashboards to Fit Reports, every screen is crafted to feel
+                as considered as the decisions behind it.
               </p>
             </div>
           </div>
 
           {/* Why ProofOfFit Section */}
           <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Why ProofOfFit</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Why ProofOfFit
+            </h3>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
               Because hiring deserves evidence—and delightful software.
             </p>
             <p className="text-base text-gray-500 max-w-4xl mx-auto">
-              Evidence-first matching, bias-aware automation, and audit-ready transparency, wrapped in a product experience that teams love to live in.
+              Evidence-first matching, bias-aware automation, and audit-ready
+              transparency, wrapped in a product experience that teams love to
+              live in.
             </p>
           </div>
 
@@ -107,28 +145,39 @@ export default function HomePage() {
                 <Target className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="font-semibold mb-2">Explainable Matching</h3>
-              <p className="text-sm text-gray-600">See why you&apos;re a match, line by line. No mystery filters.</p>
+              <p className="text-sm text-gray-600">
+                See why you&apos;re a match, line by line. No mystery filters.
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="font-semibold mb-2">Bias‑Reducing Algorithms</h3>
-              <p className="text-sm text-gray-600">Structured signals and transparent logic to support fairer calls.</p>
+              <p className="text-sm text-gray-600">
+                Structured signals and transparent logic to support fairer
+                calls.
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Lock className="h-8 w-8 text-purple-600" />
               </div>
               <h3 className="font-semibold mb-2">Immutable Audit Trails</h3>
-              <p className="text-sm text-gray-600">Every decision has a verifiable URL—great for stakeholders and compliance.</p>
+              <p className="text-sm text-gray-600">
+                Every decision has a verifiable URL—great for stakeholders and
+                compliance.
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-8 w-8 text-orange-600" />
               </div>
               <h3 className="font-semibold mb-2">Smart Automation</h3>
-              <p className="text-sm text-gray-600">Tailored resumes and cover letters that echo the evidence, not fluff.</p>
+              <p className="text-sm text-gray-600">
+                Tailored resumes and cover letters that echo the evidence, not
+                fluff.
+              </p>
             </div>
           </div>
         </div>
@@ -169,7 +218,9 @@ export default function HomePage() {
               Built for employers and job seekers alike
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Whether you need explainable hiring decisions or a confident job search plan, ProofOfFit keeps every step transparent, auditable, and bias-aware.
+              Whether you need explainable hiring decisions or a confident job
+              search plan, ProofOfFit keeps every step transparent, auditable,
+              and bias-aware.
             </p>
           </div>
 
@@ -180,9 +231,12 @@ export default function HomePage() {
                   <Briefcase className="h-7 w-7" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">For Employers</h3>
+                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                    For Employers
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Evidence-backed shortlists with immutable audit trails and compliance guardrails.
+                    Evidence-backed shortlists with immutable audit trails and
+                    compliance guardrails.
                   </p>
                 </div>
               </div>
@@ -194,14 +248,19 @@ export default function HomePage() {
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-blue-500" />
-                    Guardrails that respect privacy, consent, and EEOC requirements by default.
+                    Guardrails that respect privacy, consent, and EEOC
+                    requirements by default.
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-blue-500" />
-                    Collaboration tools that help hiring managers, compliance, and recruiters stay aligned.
+                    Collaboration tools that help hiring managers, compliance,
+                    and recruiters stay aligned.
                   </li>
                 </ul>
-                <Link href="/contact" className="inline-flex items-center justify-center w-full px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center w-full px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+                >
                   I am hiring
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -214,9 +273,12 @@ export default function HomePage() {
                   <UserCheck className="h-7 w-7" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">For Job Seekers</h3>
+                  <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
+                    For Job Seekers
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Tailored Fit Reports, guided outreach, and receipts you can bring into every conversation.
+                    Tailored Fit Reports, guided outreach, and receipts you can
+                    bring into every conversation.
                   </p>
                 </div>
               </div>
@@ -224,18 +286,24 @@ export default function HomePage() {
                 <ul className="space-y-3 text-left text-sm text-gray-600">
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-purple-500" />
-                    Structured stories that map your experience to each requirement line by line.
+                    Structured stories that map your experience to each
+                    requirement line by line.
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-purple-500" />
-                    Resume, cover letter, and outreach drafts that stay consistent with the evidence.
+                    Resume, cover letter, and outreach drafts that stay
+                    consistent with the evidence.
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="mt-1 h-4 w-4 text-purple-500" />
-                    A shareable audit trail that sets you apart without bending any platform rules.
+                    A shareable audit trail that sets you apart without bending
+                    any platform rules.
                   </li>
                 </ul>
-                <Link href="/app/fit-simple" className="inline-flex items-center justify-center w-full px-8 py-4 border border-purple-200 text-purple-700 text-lg font-medium rounded-md hover:bg-purple-600 hover:text-white transition-colors">
+                <Link
+                  href="/app/fit-simple"
+                  className="inline-flex items-center justify-center w-full px-8 py-4 border border-purple-200 text-purple-700 text-lg font-medium rounded-md hover:bg-purple-600 hover:text-white transition-colors"
+                >
                   I am seeking a job
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -256,10 +324,11 @@ export default function HomePage() {
               A guided autopilot that keeps you in control.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
-              Every lane follows the same calming rhythm: gather proof, map to criteria, generate the Fit Report, and share with confidence.
+              Every lane follows the same calming rhythm: gather proof, map to
+              criteria, generate the Fit Report, and share with confidence.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
@@ -283,7 +352,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-semibold mb-4">Get your Fit Report</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Get your Fit Report
+              </h3>
               <p className="text-gray-600">
                 A 1‑pager you can attach, plus tailored resume/cover.
               </p>
@@ -292,26 +363,34 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
                 4
               </div>
-              <h3 className="text-xl font-semibold mb-4">Apply with confidence</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Apply with confidence
+              </h3>
               <p className="text-gray-600">
                 Know your story before the recruiter call.
               </p>
             </div>
           </div>
-          
-               <div className="text-center mt-12">
-                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                   <Link href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
-                     <UserCheck className="mr-2 h-5 w-5" />
-                     Start as Job Seeker
-                     <ArrowRight className="ml-2 h-4 w-4" />
-                   </Link>
-                   <Link href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-blue-600 text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition-colors">
-                     <Briefcase className="mr-2 h-5 w-5" />
-                     Start as Employer
-                     <ArrowRight className="ml-2 h-4 w-4" />
-                   </Link>
-                 </div>
+
+          <div className="text-center mt-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/auth/signup?type=seeker"
+                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+              >
+                <UserCheck className="mr-2 h-5 w-5" />
+                Start as Job Seeker
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <Link
+                href="/auth/signup?type=employer"
+                className="inline-flex items-center justify-center px-8 py-4 border border-blue-600 text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition-colors"
+              >
+                <Briefcase className="mr-2 h-5 w-5" />
+                Start as Employer
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
             <p className="text-sm text-gray-500 mt-4">
               SOC2-ready • Accessible • Bias-aware by design
             </p>
@@ -330,28 +409,35 @@ export default function HomePage() {
               Loved by candidates, trusted by hiring teams.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
-              ProofOfFit makes interviews calmer for candidates and gives stakeholders receipts they can stand behind.
+              ProofOfFit makes interviews calmer for candidates and gives
+              stakeholders receipts they can stand behind.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="border-0 shadow-lg rounded-lg bg-white p-8">
               <div className="mb-4">
-                <div className="text-sm font-medium text-blue-600 mb-2">Proof in practice</div>
+                <div className="text-sm font-medium text-blue-600 mb-2">
+                  Proof in practice
+                </div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  &ldquo;I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly.&rdquo;
+                  &ldquo;I stopped guessing. Two weeks in, I had interviews that
+                  referenced my Fit Report directly.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Amara B., Data Analyst
                 </div>
               </div>
             </div>
-            
+
             <div className="border-0 shadow-lg rounded-lg bg-white p-8">
               <div className="mb-4">
-                <div className="text-sm font-medium text-green-600 mb-2">Proof in practice</div>
+                <div className="text-sm font-medium text-green-600 mb-2">
+                  Proof in practice
+                </div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  &ldquo;The tailored bullets were spooky‑good. It became my pre‑screen script.&rdquo;
+                  &ldquo;The tailored bullets were spooky‑good. It became my
+                  pre‑screen script.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Luis R., Product Manager
@@ -369,16 +455,22 @@ export default function HomePage() {
             Ready to Transform Your Hiring?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of companies using ProofOfFit to build better, fairer teams 
-            with full compliance and transparency.
+            Join thousands of companies using ProofOfFit to build better, fairer
+            teams with full compliance and transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors">
+            <Link
+              href="/auth/signup?type=seeker"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors"
+            >
               <UserCheck className="mr-2 h-5 w-5" />
               Start as Job Seeker
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-            <Link href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors">
+            <Link
+              href="/auth/signup?type=employer"
+              className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors"
+            >
               <Briefcase className="mr-2 h-5 w-5" />
               Start as Employer
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -400,13 +492,21 @@ export default function HomePage() {
                 <span className="text-xl font-bold">ProofOfFit</span>
               </div>
               <p className="text-gray-400 mb-4">
-                Receipts, not black boxes. We blend calming polish, robust guardrails, professional warmth, and intuitive AI to keep hiring both beautiful and accountable.
+                Receipts, not black boxes. We blend calming polish, robust
+                guardrails, professional warmth, and intuitive AI to keep hiring
+                both beautiful and accountable.
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   <Globe className="h-5 w-5" />
                 </Link>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   <Users className="h-5 w-5" />
                 </Link>
               </div>
@@ -414,39 +514,153 @@ export default function HomePage() {
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="#features" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="#features" className="hover:text-white transition-colors">AI workflows</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="/audit-sample" className="hover:text-white transition-colors">Sample audit</Link></li>
+                <li>
+                  <Link
+                    href="#features"
+                    className="hover:text-white transition-colors"
+                  >
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#features"
+                    className="hover:text-white transition-colors"
+                  >
+                    AI workflows
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/pricing"
+                    className="hover:text-white transition-colors"
+                  >
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/audit-sample"
+                    className="hover:text-white transition-colors"
+                  >
+                    Sample audit
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="#about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link href="#contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-                <li><Link href="/blog" className="hover:text-white transition-colors">Press</Link></li>
+                <li>
+                  <Link
+                    href="#about"
+                    className="hover:text-white transition-colors"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#contact"
+                    className="hover:text-white transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/careers"
+                    className="hover:text-white transition-colors"
+                  >
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/blog"
+                    className="hover:text-white transition-colors"
+                  >
+                    Press
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Trust & Legal</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/fairness" className="hover:text-white transition-colors">Fairness & explainability</Link></li>
-                <li><Link href="/security" className="hover:text-white transition-colors">Security</Link></li>
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
-                <li><Link href="/status" className="hover:text-white transition-colors">Status</Link></li>
+                <li>
+                  <Link
+                    href="/fairness"
+                    className="hover:text-white transition-colors"
+                  >
+                    Fairness & explainability
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/security"
+                    className="hover:text-white transition-colors"
+                  >
+                    Security
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/privacy"
+                    className="hover:text-white transition-colors"
+                  >
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className="hover:text-white transition-colors"
+                  >
+                    Terms
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/status"
+                    className="hover:text-white transition-colors"
+                  >
+                    Status
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart.</p>
+            <p>
+              &copy; 2024 ProofOfFit, Inc. Crafted with transparency in the
+              Midwest, with fairness and accountability at heart.
+            </p>
             <div className="flex justify-center space-x-6 mt-4 text-sm">
-              <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
-              <Link href="/security" className="hover:text-white transition-colors">Security</Link>
-              <Link href="/status" className="hover:text-white transition-colors">Status</Link>
+              <Link
+                href="/privacy"
+                className="hover:text-white transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/terms"
+                className="hover:text-white transition-colors"
+              >
+                Terms
+              </Link>
+              <Link
+                href="/security"
+                className="hover:text-white transition-colors"
+              >
+                Security
+              </Link>
+              <Link
+                href="/status"
+                className="hover:text-white transition-colors"
+              >
+                Status
+              </Link>
             </div>
           </div>
         </div>

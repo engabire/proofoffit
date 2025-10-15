@@ -500,7 +500,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
       >
         <div className="mx-auto max-w-7xl px-6 h-18 flex items-center justify-between">
           {/* Logo Section */}
-          <a
+          <Link
             href="/"
             className="group flex items-center gap-3 text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-90 transition-all duration-200"
           >
@@ -514,7 +514,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
               ProofOfFit
             </span>
-          </a>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
@@ -539,20 +539,20 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
               <DollarSign className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
               <span>Pricing</span>
             </a>
-            <a
+            <Link
               href="/gift"
               className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200"
             >
               <Gift className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
               <span>Sponsor</span>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/fairness"
               className="group relative px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200"
             >
               <ShieldCheck className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
               <span>Fairness</span>
-            </a>
+            </Link>
           </nav>
 
           {/* Right Section */}
@@ -641,13 +641,13 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                 asChild
                 className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200"
               >
-                <a
+                <Link
                   href="/auth/signin"
                   aria-label="Sign in to your ProofOfFit account"
                   rel="noopener"
                 >
                   Sign in
-                </a>
+                </Link>
               </Button>
               <Button
                 asChild
@@ -658,7 +658,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                     : "from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
                 }`}
               >
-                <a
+                <Link
                   href={lane === "seeker" ? "/app/fit" : "/app/slate"}
                   aria-label={`Get started with ProofOfFit - ${
                     lane === "seeker"
@@ -668,7 +668,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                   rel="noopener"
                 >
                   Get Started
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -813,20 +813,20 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
 
                   <div className="flex gap-2 pt-2">
                     <Button variant="outline" asChild className="w-1/2">
-                      <a
+                      <Link
                         href="/auth/signin"
                         onClick={() => setOpen(false)}
                         aria-label="Sign in to your account"
                         rel="noopener"
                       >
                         Sign in
-                      </a>
+                      </Link>
                     </Button>
                     <Button
                       asChild
                       className="w-1/2 bg-gradient-to-r from-sky-600 to-indigo-600 text-white"
                     >
-                      <a
+                      <Link
                         href={lane === "seeker" ? "/app/fit" : "/app/slate"}
                         onClick={() => setOpen(false)}
                         aria-label={`Get started - ${
@@ -837,7 +837,7 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                         rel="noopener"
                       >
                         Get Started
-                      </a>
+                      </Link>
                     </Button>
                   </div>
                 </div>
@@ -1156,24 +1156,24 @@ function HowItWorks(
           {lane === "seeker"
             ? (
               <Button size="lg" asChild data-evt="cta_how">
-                <a
+                <Link
                   href="/app/fit"
                   aria-label="Get your personalized fit report"
                   rel="noopener"
                 >
                   Get My Fit Report
-                </a>
+                </Link>
               </Button>
             )
             : (
               <Button size="lg" asChild data-evt="cta_how">
-                <a
+                <Link
                   href="/app/slate"
                   aria-label="Generate a candidate slate"
                   rel="noopener"
                 >
                   Generate a Candidate Slate
-                </a>
+                </Link>
               </Button>
             )}
           <span className="text-sm text-slate-500 dark:text-slate-400">
@@ -1256,7 +1256,7 @@ function Pricing({ lane }: { lane: Lane }) {
                     data-plan={p.name}
                     asChild
                   >
-                    <a
+                    <Link
                       href={lane === "seeker"
                         ? `/auth/signup?plan=${p.name.toLowerCase()}`
                         : `/auth/signup?plan=${
@@ -1266,7 +1266,7 @@ function Pricing({ lane }: { lane: Lane }) {
                       rel="noopener"
                     >
                       {p.cta}
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

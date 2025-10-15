@@ -2224,7 +2224,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       const data = await response.json();
       setFilteredJobs(data.jobs || []);
     } catch (err) {
-      console.error("Error loading jobs:", err);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error("Error loading jobs:", err);
+      }
       setError("Failed to load jobs. Using sample data.");
       // Fallback to mock data
       setFilteredJobs(mockJobs);
@@ -2245,7 +2247,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       const data = await response.json();
       setFilteredJobs(data.jobs || []);
     } catch (err) {
-      console.error("Error searching jobs:", err);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error("Error searching jobs:", err);
+      }
       setError("Search failed. Using sample data.");
       // Fallback to mock data with local filtering
       const searchLower = query.toLowerCase();
@@ -2307,7 +2311,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                   selectedJob?.id === job.id ? "ring-2 ring-blue-500" : ""
                 }`}
                 onClick={() => {
-                  console.log("Job selected:", job.title, job.company);
+                  if (process.env.NODE_ENV !== 'production') {
+                    console.log("Job selected:", job.title, job.company);
+                  }
                   setSelectedJob(job);
                 }}
               >
@@ -2352,11 +2358,13 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
                           : "outline"}
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log(
+                          if (process.env.NODE_ENV !== 'production') {
+                            console.log(
                             "Job selected via button:",
                             job.title,
                             job.company,
                           );
+                          }
                           setSelectedJob(job);
                         }}
                       >
@@ -3329,7 +3337,9 @@ function ResultsStep({
         message: "Cover letter submitted successfully.",
       });
     } catch (error: any) {
-      console.error("Cover letter submission failed:", error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error("Cover letter submission failed:", error);
+      }
       setSubmissionState({
         status: "error",
         message: error?.message ||
@@ -3412,7 +3422,9 @@ function ResultsStep({
         );
       } catch {}
     } catch (error) {
-      console.error("Download failed:", error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error("Download failed:", error);
+      }
       // Show user-friendly error message
       alert(
         "Download failed. Please try again or contact support if the issue persists.",
@@ -3594,7 +3606,9 @@ function ResultsStep({
           url: window.location.href,
         });
       } catch (error) {
-        console.error("Share failed:", error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error("Share failed:", error);
+        }
       }
     } else {
       // Fallback: copy to clipboard
@@ -3605,7 +3619,9 @@ function ResultsStep({
         await navigator.clipboard.writeText(shareText);
         alert("Share link copied to clipboard!");
       } catch (error) {
-        console.error("Copy failed:", error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error("Copy failed:", error);
+        }
         alert("Share functionality not available");
       }
     }
@@ -4132,7 +4148,9 @@ function FitReportPageContent() {
   };
 
   const handleJobSelect = (job: JobPosting) => {
-    console.log("Job selected in main component:", job.title, job.company);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("Job selected in main component:", job.title, job.company);
+    }
     setSelectedJob(job);
     setCurrentStep(3);
   };
@@ -4306,7 +4324,9 @@ function FitReportPageContent() {
                 variant="outline"
                 onClick={() => {
                   // Reset the form to start over
-                  console.log("Starting over - resetting all state");
+                  if (process.env.NODE_ENV !== 'production') {
+                    console.log("Starting over - resetting all state");
+                  }
                   setCurrentStep(1);
                   setResume(null);
                   setSelectedJob(null);
@@ -4332,7 +4352,8 @@ function FitReportPageContent() {
               {currentStep < totalSteps && (
                 <Button
                   onClick={() => {
-                    console.log(
+                    if (process.env.NODE_ENV !== 'production') {
+                      console.log(
                       "Next Step clicked - currentStep:",
                       currentStep,
                       "resume:",
@@ -4342,6 +4363,7 @@ function FitReportPageContent() {
                       "analysis:",
                       !!analysis,
                     );
+                    }
                     // Navigate to next step if data is available
                     if (currentStep === 1 && resume) {
                       setCurrentStep(2);

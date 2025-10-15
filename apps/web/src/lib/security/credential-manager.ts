@@ -16,7 +16,10 @@ export class CredentialManager {
 
   private loadCredentials(): void {
     // Skip credential loading during build time
-    if (typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build') {
+    if (
+      typeof window === "undefined" &&
+      process.env.NEXT_PHASE === "phase-production-build"
+    ) {
       return;
     }
 

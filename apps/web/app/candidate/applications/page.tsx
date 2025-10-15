@@ -160,7 +160,9 @@ export default function ApplicationsPage() {
           router.push('/auth/signin?redirect=/candidate/applications&type=seeker')
         }
       } catch (error) {
-        console.error('Auth check failed:', error)
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Auth check failed:', error)
+        }
         router.push('/auth/signin?redirect=/candidate/applications&type=seeker')
       } finally {
         setIsCheckingAuth(false)

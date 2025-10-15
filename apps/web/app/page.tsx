@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from "lucide-react";
 
 export const dynamic = 'force-dynamic'
@@ -21,12 +22,18 @@ export default function HomePage() {
               <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
             </nav>
             <div className="flex space-x-4">
-              <a href="/auth/signin" className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              <Link
+                href="/auth/signin"
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
                 Sign In
-              </a>
-              <a href="/auth/signup" className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
                 Get Started
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -48,16 +55,22 @@ export default function HomePage() {
             Whether you're seeking your next role or building your team, ProofOfFit provides transparent, auditable matching with full compliance guardrails.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+            <Link
+              href="/auth/signup?type=seeker"
+              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+            >
               <UserCheck className="mr-2 h-5 w-5" />
               I am seeking a job
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-            <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
+            </Link>
+            <Link
+              href="/auth/signup?type=employer"
+              className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors"
+            >
               <Briefcase className="mr-2 h-5 w-5" />
               I am hiring
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </Link>
           </div>
           <p className="text-sm text-gray-500 mb-8">
             No card • 2 minutes to first Fit Report
@@ -290,10 +303,13 @@ export default function HomePage() {
                     Collaboration tools that help hiring managers, compliance, and recruiters stay aligned.
                   </li>
                 </ul>
-                <a href="/contact" className="inline-flex items-center justify-center w-full px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center w-full px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+                >
                   I am hiring
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -324,10 +340,13 @@ export default function HomePage() {
                     A shareable audit trail that sets you apart without bending any platform rules.
                   </li>
                 </ul>
-                <a href="/app/fit-simple" className="inline-flex items-center justify-center w-full px-8 py-4 border border-purple-200 text-purple-700 text-lg font-medium rounded-md hover:bg-purple-600 hover:text-white transition-colors">
+                <Link
+                  href="/app/fit-simple"
+                  className="inline-flex items-center justify-center w-full px-8 py-4 border border-purple-200 text-purple-700 text-lg font-medium rounded-md hover:bg-purple-600 hover:text-white transition-colors"
+                >
                   I am seeking a job
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -390,16 +409,22 @@ export default function HomePage() {
           
                <div className="text-center mt-12">
                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                   <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+                   <Link
+                     href="/auth/signup?type=seeker"
+                     className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+                   >
                      <UserCheck className="mr-2 h-5 w-5" />
                      Start as Job Seeker
                      <ArrowRight className="ml-2 h-4 w-4" />
-                   </a>
-                   <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-blue-600 text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition-colors">
+                   </Link>
+                   <Link
+                     href="/auth/signup?type=employer"
+                     className="inline-flex items-center justify-center px-8 py-4 border border-blue-600 text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition-colors"
+                   >
                      <Briefcase className="mr-2 h-5 w-5" />
                      Start as Employer
                      <ArrowRight className="ml-2 h-4 w-4" />
-                   </a>
+                   </Link>
                  </div>
             <p className="text-sm text-gray-500 mt-4">
               SOC2-ready • Accessible • Bias-aware by design
@@ -440,7 +465,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <div className="text-sm font-medium text-green-600 mb-2">Proof in practice</div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  "The tailored bullets were spooky‑good. It became my pre‑screen script."
+                  &ldquo;The tailored bullets were spooky‑good. It became my pre‑screen script.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Luis R., Product Manager
@@ -462,16 +487,22 @@ export default function HomePage() {
             with full compliance and transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors">
+            <Link
+              href="/auth/signup?type=seeker"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-gray-100 transition-colors"
+            >
               <UserCheck className="mr-2 h-5 w-5" />
               Start as Job Seeker
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-            <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors">
+            </Link>
+            <Link
+              href="/auth/signup?type=employer"
+              className="inline-flex items-center justify-center px-8 py-4 border border-white text-white text-lg font-medium rounded-md hover:bg-white hover:text-blue-600 transition-colors"
+            >
               <Briefcase className="mr-2 h-5 w-5" />
               Start as Employer
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </Link>
           </div>
           <p className="text-blue-200 text-sm mt-4">
             No credit card required • 14-day free trial • Cancel anytime
@@ -505,8 +536,8 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#features" className="hover:text-white transition-colors">AI workflows</a></li>
-                <li><a href="/pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="/audit-sample" className="hover:text-white transition-colors">Sample audit</a></li>
+                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/audit-sample" className="hover:text-white transition-colors">Sample audit</Link></li>
               </ul>
             </div>
             <div>
@@ -514,28 +545,28 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
                 <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="/careers" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Press</a></li>
+                <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+                <li><Link href="/blog" className="hover:text-white transition-colors">Press</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Trust & Legal</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="/fairness" className="hover:text-white transition-colors">Fairness & explainability</a></li>
-                <li><a href="/security" className="hover:text-white transition-colors">Security</a></li>
-                <li><a href="/privacy" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="/terms" className="hover:text-white transition-colors">Terms</a></li>
-                <li><a href="/status" className="hover:text-white transition-colors">Status</a></li>
+                <li><Link href="/fairness" className="hover:text-white transition-colors">Fairness &amp; explainability</Link></li>
+                <li><Link href="/security" className="hover:text-white transition-colors">Security</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                <li><Link href="/status" className="hover:text-white transition-colors">Status</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2024 ProofOfFit, Inc. Crafted with transparency in the Midwest, with fairness and accountability at heart.</p>
             <div className="flex justify-center space-x-6 mt-4 text-sm">
-              <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
-              <a href="/terms" className="hover:text-white transition-colors">Terms</a>
-              <a href="/security" className="hover:text-white transition-colors">Security</a>
-              <a href="/status" className="hover:text-white transition-colors">Status</a>
+              <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+              <Link href="/security" className="hover:text-white transition-colors">Security</Link>
+              <Link href="/status" className="hover:text-white transition-colors">Status</Link>
             </div>
           </div>
         </div>

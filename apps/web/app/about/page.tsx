@@ -1,77 +1,77 @@
-"use client"
+"use client";
 
-import React from "react"
+import React from "react";
 import {
-  Heart,
-  Users,
-  Award,
-  Target,
-  Globe,
-  Shield,
-  Scale,
-  Sparkles,
-  TrendingUp,
-  Building2,
-  GraduationCap,
-  Briefcase,
-  Star,
-  ChevronRight,
-  ExternalLink,
-  Linkedin,
-  Twitter,
-  Github,
-  MapPin,
-  Calendar,
-  Zap,
-  BookOpen,
-  Lightbulb,
-  Compass,
-  Layers,
-  Eye,
-  Lock,
-  CheckCircle,
   ArrowRight,
-  Quote,
+  Award,
+  BarChart3,
+  BookOpen,
   Brain,
-  Rocket,
+  Briefcase,
+  Building2,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  Compass,
   // Handshake, // Not available in this version of lucide-react
   DollarSign,
-  BarChart3,
-  Clock,
+  ExternalLink,
+  Eye,
+  Flag,
+  Github,
+  Globe,
+  GraduationCap,
+  Heart,
+  Layers,
+  Lightbulb,
+  Linkedin,
+  Lock,
+  MapPin,
+  Quote,
+  Rocket,
+  Scale,
+  Shield,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
   Trophy,
-  Flag
-} from "lucide-react"
+  Twitter,
+  Users,
+  Zap,
+} from "lucide-react";
 import {
+  Badge,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Badge,
-  Button
-} from "@proof-of-fit/ui"
+} from "@proof-of-fit/ui";
 
 interface TeamMember {
-  name: string
-  role: string
-  bio: string
-  image: string
-  linkedin?: string
-  twitter?: string
-  background: string[]
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  linkedin?: string;
+  twitter?: string;
+  background: string[];
 }
 
 interface Investor {
-  name: string
-  type: 'fund' | 'angel' | 'strategic'
-  logo: string
-  description: string
+  name: string;
+  type: "fund" | "angel" | "strategic";
+  logo: string;
+  description: string;
 }
 
 interface Milestone {
-  year: string
-  title: string
-  description: string
-  icon: React.ReactNode
+  year: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
 }
 
 export default function AboutPage() {
@@ -79,160 +79,236 @@ export default function AboutPage() {
     {
       name: "Sarah Chen",
       role: "CEO & Co-Founder",
-      bio: "Former VP of Engineering at Palantir, where she led the development of bias-detection algorithms for government applications. PhD in Computer Science from Stanford.",
+      bio:
+        "Former VP of Engineering at Palantir, where she led the development of bias-detection algorithms for government applications. PhD in Computer Science from Stanford.",
       image: "/team/sarah-chen.jpg",
       linkedin: "https://linkedin.com/in/sarahchen",
-      background: ["Stanford PhD CS", "Ex-Palantir VP", "Ethics Researcher", "Y Combinator Alumna"]
+      background: [
+        "Stanford PhD CS",
+        "Ex-Palantir VP",
+        "Ethics Researcher",
+        "Y Combinator Alumna",
+      ],
     },
     {
       name: "Marcus Rodriguez",
       role: "CTO & Co-Founder",
-      bio: "Former Staff Engineer at major tech companies, specializing in large-scale ML systems. Led teams that built diversity analytics platforms for internal hiring.",
+      bio:
+        "Former Staff Engineer at major tech companies, specializing in large-scale ML systems. Led teams that built diversity analytics platforms for internal hiring.",
       image: "/team/marcus-rodriguez.jpg",
       linkedin: "https://linkedin.com/in/marcusrodriguez",
-      background: ["Ex-Major Tech Staff", "ML Systems Expert", "MIT Graduate", "Open Source Contributor"]
+      background: [
+        "Ex-Major Tech Staff",
+        "ML Systems Expert",
+        "MIT Graduate",
+        "Open Source Contributor",
+      ],
     },
     {
       name: "Dr. Amara Okafor",
       role: "Chief Science Officer",
-      bio: "Leading researcher in algorithmic fairness and bias mitigation. Former Principal Scientist at Microsoft Research, with 50+ peer-reviewed publications.",
+      bio:
+        "Leading researcher in algorithmic fairness and bias mitigation. Former Principal Scientist at Microsoft Research, with 50+ peer-reviewed publications.",
       image: "/team/amara-okafor.jpg",
       linkedin: "https://linkedin.com/in/amaraokafor",
-      background: ["Ex-Microsoft Research", "50+ Publications", "PhD Carnegie Mellon", "IEEE Fellow"]
+      background: [
+        "Ex-Microsoft Research",
+        "50+ Publications",
+        "PhD Carnegie Mellon",
+        "IEEE Fellow",
+      ],
     },
     {
       name: "David Kim",
       role: "VP of Product",
-      bio: "Former Product Lead at Workday HCM, where he built enterprise-grade HR analytics tools used by Fortune 500 companies worldwide.",
+      bio:
+        "Former Product Lead at Workday HCM, where he built enterprise-grade HR analytics tools used by Fortune 500 companies worldwide.",
       image: "/team/david-kim.jpg",
       linkedin: "https://linkedin.com/in/davidkim",
-      background: ["Ex-Workday Product", "Enterprise SaaS", "UC Berkeley MBA", "Design Thinking Expert"]
+      background: [
+        "Ex-Workday Product",
+        "Enterprise SaaS",
+        "UC Berkeley MBA",
+        "Design Thinking Expert",
+      ],
     },
     {
       name: "Lisa Zhang",
       role: "VP of Engineering",
-      bio: "Former Engineering Manager at Stripe, where she scaled payment systems to handle billions of transactions. Expert in distributed systems and security.",
+      bio:
+        "Former Engineering Manager at Stripe, where she scaled payment systems to handle billions of transactions. Expert in distributed systems and security.",
       image: "/team/lisa-zhang.jpg",
       linkedin: "https://linkedin.com/in/lisazhang",
-      background: ["Ex-Stripe Engineering", "Distributed Systems", "Caltech Graduate", "Security Expert"]
+      background: [
+        "Ex-Stripe Engineering",
+        "Distributed Systems",
+        "Caltech Graduate",
+        "Security Expert",
+      ],
     },
     {
       name: "Jordan Taylor",
       role: "Head of Compliance",
-      bio: "Former Legal Counsel at major professional networks, specializing in employment law and privacy regulations. JD from Harvard Law, expert in GDPR and EEOC compliance.",
+      bio:
+        "Former Legal Counsel at major professional networks, specializing in employment law and privacy regulations. JD from Harvard Law, expert in GDPR and EEOC compliance.",
       image: "/team/jordan-taylor.jpg",
       linkedin: "https://linkedin.com/in/jordantaylor",
-      background: ["Ex-Major Network Legal", "Harvard Law JD", "GDPR Expert", "Employment Law Specialist"]
-    }
-  ]
+      background: [
+        "Ex-Major Network Legal",
+        "Harvard Law JD",
+        "GDPR Expert",
+        "Employment Law Specialist",
+      ],
+    },
+  ];
 
   const investors: Investor[] = [
     {
       name: "Andreessen Horowitz",
       type: "fund",
       logo: "/investors/a16z.png",
-      description: "Leading the Series A with deep expertise in advanced analytics and future of work"
+      description:
+        "Leading the Series A with deep expertise in advanced analytics and future of work",
     },
     {
       name: "First Round Capital",
-      type: "fund", 
+      type: "fund",
       logo: "/investors/first-round.png",
-      description: "Seed investor with strong track record in HR tech and enterprise SaaS"
+      description:
+        "Seed investor with strong track record in HR tech and enterprise SaaS",
     },
     {
       name: "Reid Hoffman",
       type: "angel",
       logo: "/investors/reid-hoffman.png",
-      description: "Professional network Co-founder and Partner at Greylock, advisor on scaling professional networks"
+      description:
+        "Professional network Co-founder and Partner at Greylock, advisor on scaling professional networks",
     },
     {
       name: "Melinda French Gates",
       type: "angel",
       logo: "/investors/melinda-gates.png",
-      description: "Champion of workplace equity and diversity through Pivotal Ventures"
+      description:
+        "Champion of workplace equity and diversity through Pivotal Ventures",
     },
     {
       name: "Workday Ventures",
       type: "strategic",
       logo: "/investors/workday.png",
-      description: "Strategic partnership for enterprise HCM platform integration"
+      description:
+        "Strategic partnership for enterprise HCM platform integration",
     },
     {
       name: "Box",
       type: "strategic",
       logo: "/investors/box.png",
-      description: "Security and compliance expertise for enterprise content management"
-    }
-  ]
+      description:
+        "Security and compliance expertise for enterprise content management",
+    },
+  ];
 
   const milestones: Milestone[] = [
     {
       year: "2021",
       title: "Company Founded",
-      description: "Started by expert researchers from Stanford and major tech companies to solve bias in hiring",
-      icon: <Rocket className="h-6 w-6" />
+      description:
+        "Started by expert researchers from Stanford and major tech companies to solve bias in hiring",
+      icon: <Rocket className="h-6 w-6" />,
     },
     {
-      year: "2022", 
+      year: "2022",
       title: "Seed Funding",
-      description: "$3M seed round led by First Round Capital, launched beta with 50 companies",
-      icon: <DollarSign className="h-6 w-6" />
+      description:
+        "$3M seed round led by First Round Capital, launched beta with 50 companies",
+      icon: <DollarSign className="h-6 w-6" />,
     },
     {
       year: "2023",
       title: "Series A",
-      description: "$15M Series A led by a16z, achieved SOC 2 certification and 500+ customers",
-      icon: <TrendingUp className="h-6 w-6" />
+      description:
+        "$15M Series A led by a16z, achieved SOC 2 certification and 500+ customers",
+      icon: <TrendingUp className="h-6 w-6" />,
     },
     {
       year: "2024",
       title: "Enterprise Scale",
-      description: "Serving Fortune 500 companies, processing 1M+ evaluations monthly",
-      icon: <Building2 className="h-6 w-6" />
-    }
-  ]
+      description:
+        "Serving Fortune 500 companies, processing 1M+ evaluations monthly",
+      icon: <Building2 className="h-6 w-6" />,
+    },
+  ];
 
   const values = [
     {
       icon: <Scale className="h-8 w-8" />,
       title: "Fairness First",
-      description: "Every decision must be explainable, auditable, and free from bias. We believe technology should level the playing field, not perpetuate inequality."
+      description:
+        "Every decision must be explainable, auditable, and free from bias. We believe technology should level the playing field, not perpetuate inequality.",
     },
     {
       icon: <Eye className="h-8 w-8" />,
-      title: "Radical Transparency", 
-      description: "We open our algorithms to scrutiny, publish our bias testing methodologies, and provide complete audit trails for every hiring decision."
+      title: "Radical Transparency",
+      description:
+        "We open our algorithms to scrutiny, publish our bias testing methodologies, and provide complete audit trails for every hiring decision.",
     },
     {
       icon: <Brain className="h-8 w-8" />,
       title: "Scientific Rigor",
-      description: "Our methods are peer-reviewed, our algorithms are validated, and our claims are backed by rigorous statistical analysis and real-world testing."
+      description:
+        "Our methods are peer-reviewed, our algorithms are validated, and our claims are backed by rigorous statistical analysis and real-world testing.",
     },
     {
       icon: <Shield className="h-8 w-8" />,
       title: "Security by Design",
-      description: "Enterprise-grade security isn't added later—it's built into every line of code, every data flow, and every user interaction from day one."
+      description:
+        "Enterprise-grade security isn't added later—it's built into every line of code, every data flow, and every user interaction from day one.",
     },
     {
       icon: <Users className="h-8 w-8" />,
       title: "Human-Centered Automation",
-      description: "Advanced analytics should augment human judgment, not replace it. We build tools that empower recruiters and candidates while maintaining human dignity."
+      description:
+        "Advanced analytics should augment human judgment, not replace it. We build tools that empower recruiters and candidates while maintaining human dignity.",
     },
     {
       icon: <Compass className="h-8 w-8" />,
       title: "Continuous Learning",
-      description: "We actively seek feedback, admit our mistakes, iterate rapidly, and never stop improving our understanding of fairness and bias."
-    }
-  ]
+      description:
+        "We actively seek feedback, admit our mistakes, iterate rapidly, and never stop improving our understanding of fairness and bias.",
+    },
+  ];
 
   const achievements = [
-    { metric: "1M+", label: "Evaluations Processed", icon: <BarChart3 className="h-5 w-5" /> },
-    { metric: "500+", label: "Enterprise Customers", icon: <Building2 className="h-5 w-5" /> },
-    { metric: "97%", label: "Bias Detection Accuracy", icon: <Target className="h-5 w-5" /> },
-    { metric: "99.9%", label: "Uptime SLA", icon: <Shield className="h-5 w-5" /> },
-    { metric: "< 2hrs", label: "Support Response Time", icon: <Clock className="h-5 w-5" /> },
-    { metric: "25+", label: "Countries Served", icon: <Globe className="h-5 w-5" /> }
-  ]
+    {
+      metric: "1M+",
+      label: "Evaluations Processed",
+      icon: <BarChart3 className="h-5 w-5" />,
+    },
+    {
+      metric: "500+",
+      label: "Enterprise Customers",
+      icon: <Building2 className="h-5 w-5" />,
+    },
+    {
+      metric: "97%",
+      label: "Bias Detection Accuracy",
+      icon: <Target className="h-5 w-5" />,
+    },
+    {
+      metric: "99.9%",
+      label: "Uptime SLA",
+      icon: <Shield className="h-5 w-5" />,
+    },
+    {
+      metric: "< 2hrs",
+      label: "Support Response Time",
+      icon: <Clock className="h-5 w-5" />,
+    },
+    {
+      metric: "25+",
+      label: "Countries Served",
+      icon: <Globe className="h-5 w-5" />,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
@@ -242,13 +318,16 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-24">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-6">
-              Building the Future of 
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Fair Hiring</span>
+              Building the Future of
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Fair Hiring
+              </span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              ProofOfFit is on a mission to eliminate bias from hiring decisions through transparent evidence engines, 
-              rigorous auditing, and enterprise-grade security. We believe every candidate deserves 
-              a fair chance to prove their fit.
+              ProofOfFit is on a mission to eliminate bias from hiring decisions
+              through transparent evidence engines, rigorous auditing, and
+              enterprise-grade security. We believe every candidate deserves a
+              fair chance to prove their fit.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
@@ -264,7 +343,7 @@ export default function AboutPage() {
                 Forbes 30 Under 30
               </Badge>
             </div>
-            
+
             {/* Achievement Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-5xl mx-auto">
               {achievements.map((achievement, index) => (
@@ -289,10 +368,13 @@ export default function AboutPage() {
         {/* Mission Statement */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Our Mission
+            </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We&apos;re building a world where hiring decisions are made on merit alone, 
-              where every algorithm is explainable, and where talent is recognized regardless of background.
+              We&apos;re building a world where hiring decisions are made on
+              merit alone, where every algorithm is explainable, and where
+              talent is recognized regardless of background.
             </p>
           </div>
 
@@ -302,8 +384,9 @@ export default function AboutPage() {
                 <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Eliminate Bias</h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Use advanced analytics to detect and prevent bias across all protected characteristics, 
-                  ensuring fair evaluation for every candidate.
+                  Use advanced analytics to detect and prevent bias across all
+                  protected characteristics, ensuring fair evaluation for every
+                  candidate.
                 </p>
               </CardContent>
             </Card>
@@ -311,10 +394,12 @@ export default function AboutPage() {
             <Card className="text-center border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20">
               <CardContent className="p-8">
                 <Eye className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Ensure Transparency</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Ensure Transparency
+                </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Provide complete audit trails and explainable decisions, 
-                  so every hiring choice can be understood and justified.
+                  Provide complete audit trails and explainable decisions, so
+                  every hiring choice can be understood and justified.
                 </p>
               </CardContent>
             </Card>
@@ -324,8 +409,9 @@ export default function AboutPage() {
                 <Rocket className="h-12 w-12 text-purple-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Scale Excellence</h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Enable enterprises to make better hiring decisions at scale 
-                  while maintaining the highest standards of fairness and compliance.
+                  Enable enterprises to make better hiring decisions at scale
+                  while maintaining the highest standards of fairness and
+                  compliance.
                 </p>
               </CardContent>
             </Card>
@@ -336,27 +422,36 @@ export default function AboutPage() {
         <section>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Our Story</h2>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
+                Our Story
+              </h2>
               <div className="space-y-4 text-slate-600 dark:text-slate-300">
                 <p>
-                  ProofOfFit was born from a simple observation: despite decades of progress in diversity and inclusion, 
-                  hiring decisions were still influenced by unconscious bias. Traditional recruiting relied on 
-                  gut feelings and pattern matching that perpetuated inequality.
+                  ProofOfFit was born from a simple observation: despite decades
+                  of progress in diversity and inclusion, hiring decisions were
+                  still influenced by unconscious bias. Traditional recruiting
+                  relied on gut feelings and pattern matching that perpetuated
+                  inequality.
                 </p>
                 <p>
-                  Our founders, Sarah and Marcus, experienced this firsthand while building advanced analytics systems at major tech companies. 
-                  They saw how the same evidence-based methods that could detect bias in criminal justice and lending 
-                  could be applied to make hiring more fair and transparent.
+                  Our founders, Sarah and Marcus, experienced this firsthand
+                  while building advanced analytics systems at major tech
+                  companies. They saw how the same evidence-based methods that
+                  could detect bias in criminal justice and lending could be
+                  applied to make hiring more fair and transparent.
                 </p>
                 <p>
-                  Starting with Stanford&apos;s advanced analytics lab, we spent two years developing the mathematical foundations 
-                  for bias-free evaluation. Our breakthrough came when we realized that fairness wasn&apos;t just 
-                  about removing bias—it was about creating provable, auditable processes that could 
-                  earn the trust of candidates, employers, and regulators alike.
+                  Starting with Stanford&apos;s advanced analytics lab, we spent
+                  two years developing the mathematical foundations for
+                  bias-free evaluation. Our breakthrough came when we realized
+                  that fairness wasn&apos;t just about removing bias—it was
+                  about creating provable, auditable processes that could earn
+                  the trust of candidates, employers, and regulators alike.
                 </p>
                 <p>
-                  Today, we&apos;re proud to serve over 500 enterprises, from fast-growing startups to Fortune 500 companies, 
-                  helping them make over 1 million fair hiring decisions every month.
+                  Today, we&apos;re proud to serve over 500 enterprises, from
+                  fast-growing startups to Fortune 500 companies, helping them
+                  make over 1 million fair hiring decisions every month.
                 </p>
               </div>
             </div>
@@ -365,8 +460,9 @@ export default function AboutPage() {
                 <div className="text-center">
                   <Quote className="h-16 w-16 text-blue-600 mx-auto mb-4" />
                   <blockquote className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">
-                    &ldquo;We believe technology should be a force for equality, not a perpetuator of bias. 
-                    Every algorithm should be as transparent as it is powerful.&rdquo;
+                    &ldquo;We believe technology should be a force for equality,
+                    not a perpetuator of bias. Every algorithm should be as
+                    transparent as it is powerful.&rdquo;
                   </blockquote>
                   <div className="text-sm text-slate-600 dark:text-slate-400">
                     — Sarah Chen, CEO & Co-Founder
@@ -380,9 +476,12 @@ export default function AboutPage() {
         {/* Values */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Values</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Our Values
+            </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              These principles guide every decision we make, from product development to customer relationships.
+              These principles guide every decision we make, from product
+              development to customer relationships.
             </p>
           </div>
 
@@ -392,7 +491,9 @@ export default function AboutPage() {
                 <CardContent className="p-6">
                   <div className="text-blue-600 mb-4">{value.icon}</div>
                   <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-300">{value.description}</p>
+                  <p className="text-slate-600 dark:text-slate-300">
+                    {value.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -402,9 +503,12 @@ export default function AboutPage() {
         {/* Timeline */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Journey</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Our Journey
+            </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              From research lab to enterprise platform, here&apos;s how we&apos;ve grown.
+              From research lab to enterprise platform, here&apos;s how
+              we&apos;ve grown.
             </p>
           </div>
 
@@ -421,7 +525,9 @@ export default function AboutPage() {
                     <Badge variant="outline">{milestone.year}</Badge>
                     <h3 className="text-xl font-semibold">{milestone.title}</h3>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-300">{milestone.description}</p>
+                  <p className="text-slate-600 dark:text-slate-300">
+                    {milestone.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -431,15 +537,21 @@ export default function AboutPage() {
         {/* Team */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Leadership Team</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Leadership Team
+            </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              World-class experts in advanced analytics, fairness, enterprise software, and compliance.
+              World-class experts in advanced analytics, fairness, enterprise
+              software, and compliance.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="overflow-hidden hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
@@ -455,7 +567,9 @@ export default function AboutPage() {
                       </Button>
                     )}
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{member.bio}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                    {member.bio}
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {member.background.map((item, idx) => (
                       <Badge key={idx} variant="secondary" className="text-xs">
@@ -472,9 +586,12 @@ export default function AboutPage() {
         {/* Investors */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Backed by Industry Leaders</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Backed by Industry Leaders
+            </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              Supported by investors who believe in the future of fair hiring and enterprise automation.
+              Supported by investors who believe in the future of fair hiring
+              and enterprise automation.
             </p>
           </div>
 
@@ -489,12 +606,17 @@ export default function AboutPage() {
                     <div>
                       <h3 className="font-semibold">{investor.name}</h3>
                       <Badge variant="outline" className="text-xs">
-                        {investor.type === 'fund' ? 'Investment Fund' : 
-                         investor.type === 'angel' ? 'Angel Investor' : 'Strategic Partner'}
+                        {investor.type === "fund"
+                          ? "Investment Fund"
+                          : investor.type === "angel"
+                          ? "Angel Investor"
+                          : "Strategic Partner"}
                       </Badge>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">{investor.description}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    {investor.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -507,15 +629,20 @@ export default function AboutPage() {
             <CardContent className="p-12">
               <h2 className="text-3xl font-bold mb-4">Join Our Mission</h2>
               <p className="text-xl mb-8 opacity-90">
-                Ready to build the future of fair hiring? We&apos;re always looking for exceptional talent 
-                who share our passion for equality and excellence.
+                Ready to build the future of fair hiring? We&apos;re always
+                looking for exceptional talent who share our passion for
+                equality and excellence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" variant="secondary">
                   <Users className="h-5 w-5 mr-2" />
                   View Open Positions
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-blue-600"
+                >
                   <Heart className="h-5 w-5 mr-2" />
                   Learn About Our Culture
                 </Button>
@@ -525,24 +652,24 @@ export default function AboutPage() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 
 // Placeholder component for team member images
 function User({ className }: { className?: string }) {
   return (
-    <svg 
-      className={className} 
-      fill="none" 
-      stroke="currentColor" 
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
       viewBox="0 0 24 24"
     >
-      <path 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        strokeWidth={2} 
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
       />
     </svg>
-  )
+  );
 }

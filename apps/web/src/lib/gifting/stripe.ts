@@ -1,49 +1,49 @@
-import Stripe from 'stripe'
-import { getStripeConfig } from '@/lib/stripe/config'
+import Stripe from "stripe";
+import { getStripeConfig } from "@/lib/stripe/config";
 
 function getStripe(): Stripe | null {
   try {
-    const config = getStripeConfig()
-    return new Stripe(config.apiKey, { apiVersion: '2023-10-16' })
+    const config = getStripeConfig();
+    return new Stripe(config.apiKey, { apiVersion: "2023-10-16" });
   } catch {
-    return null
+    return null;
   }
 }
 
 interface GiftPromotionPayload {
-  code: string
-  months: number
-  metadata?: Record<string, string>
+  code: string;
+  months: number;
+  metadata?: Record<string, string>;
 }
 
 interface AttachGiftPromotionPayload {
-  customerId: string
-  promotionCodeId: string
-  priceId: string
+  customerId: string;
+  promotionCodeId: string;
+  priceId: string;
 }
 
 interface CancelGiftPromotionPayload {
-  promotionCodeId?: string | null
-  couponId?: string | null
+  promotionCodeId?: string | null;
+  couponId?: string | null;
 }
 
 interface GiftCheckoutPayload {
-  amountCents: number
-  currency: string
-  sponsorEmail: string
-  successUrl: string
-  cancelUrl: string
-  metadata: Record<string, string>
+  amountCents: number;
+  currency: string;
+  sponsorEmail: string;
+  successUrl: string;
+  cancelUrl: string;
+  metadata: Record<string, string>;
 }
 
 export class GiftingStripeService {
   async createGiftPromotion({ code, months, metadata }: GiftPromotionPayload) {
-    const stripe = getStripe()
+    const stripe = getStripe();
     if (!stripe) {
-      throw new Error('Stripe secret key is not configured')
+      throw new Error("Stripe secret key is not configured");
     }
     const coupon = await stripe.coupons.create({
-      duration: 'repeating',
+      duration: "repeating",
       duration_in_months: months,
       percent_off: 100,
       name: `Gift for ${code}`,
@@ -51,7 +51,7 @@ export class GiftingStripeService {
         gift_code: code,
         ...(metadata || {}),
       },
-    })
+    });
 
     const promotion = await stripe.promotionCodes.create({
       coupon: coupon.id,
@@ -62,51 +62,55 @@ export class GiftingStripeService {
         gift_code: code,
         ...(metadata || {}),
       },
-    })
+    });
 
     return {
       couponId: coupon.id,
       promotionCodeId: promotion.id,
-    }
+    };
   }
 
-  async attachGiftPromotion({ customerId, promotionCodeId, priceId }: AttachGiftPromotionPayload) {
-    const stripe = getStripe()
+  async attachGiftPromotion(
+    { customerId, promotionCodeId, priceId }: AttachGiftPromotionPayload,
+  ) {
+    const stripe = getStripe();
     if (!stripe) {
-      throw new Error('Stripe secret key is not configured')
+      throw new Error("Stripe secret key is not configured");
     }
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
-      status: 'active',
-      expand: ['data.items'],
+      status: "active",
+      expand: ["data.items"],
       limit: 1,
-    })
+    });
 
     if (subscriptions.data.length === 0) {
       return stripe.subscriptions.create({
         customer: customerId,
         items: [{ price: priceId }],
         promotion_code: promotionCodeId,
-        collection_method: 'charge_automatically',
-        payment_behavior: 'allow_incomplete',
-      })
+        collection_method: "charge_automatically",
+        payment_behavior: "allow_incomplete",
+      });
     }
 
-    const currentSubscription = subscriptions.data[0]
+    const currentSubscription = subscriptions.data[0];
 
     return stripe.subscriptions.update(currentSubscription.id, {
       promotion_code: promotionCodeId,
-      proration_behavior: 'none',
-    })
+      proration_behavior: "none",
+    });
   }
 
-  async cancelGiftPromotion({ promotionCodeId, couponId }: CancelGiftPromotionPayload) {
-    const stripe = getStripe()
+  async cancelGiftPromotion(
+    { promotionCodeId, couponId }: CancelGiftPromotionPayload,
+  ) {
+    const stripe = getStripe();
     if (!stripe) {
-      throw new Error('Stripe secret key is not configured')
+      throw new Error("Stripe secret key is not configured");
     }
     if (promotionCodeId) {
-      await stripe.promotionCodes.update(promotionCodeId, { active: false })
+      await stripe.promotionCodes.update(promotionCodeId, { active: false });
     }
 
     if (couponId) {
@@ -114,7 +118,7 @@ export class GiftingStripeService {
         metadata: {
           cancelled_at: new Date().toISOString(),
         },
-      })
+      });
     }
   }
 
@@ -126,14 +130,14 @@ export class GiftingStripeService {
     cancelUrl,
     metadata,
   }: GiftCheckoutPayload) {
-    const stripe = getStripe()
+    const stripe = getStripe();
     if (!stripe) {
-      throw new Error('Stripe secret key is not configured')
+      throw new Error("Stripe secret key is not configured");
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
+      payment_method_types: ["card"],
+      mode: "payment",
       customer_email: sponsorEmail,
       line_items: [
         {
@@ -141,8 +145,8 @@ export class GiftingStripeService {
             currency,
             unit_amount: amountCents,
             product_data: {
-              name: 'ProofOfFit Pro Gift',
-              description: 'Sponsor months of ProofOfFit Pro access',
+              name: "ProofOfFit Pro Gift",
+              description: "Sponsor months of ProofOfFit Pro access",
             },
           },
           quantity: 1,
@@ -151,13 +155,13 @@ export class GiftingStripeService {
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata,
-    })
+    });
 
     return {
       id: session.id,
       url: session.url,
-    }
+    };
   }
 }
 
-export const giftingStripe = new GiftingStripeService()
+export const giftingStripe = new GiftingStripeService();

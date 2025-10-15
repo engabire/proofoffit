@@ -62,7 +62,9 @@ export async function GET(req: NextRequest) {
       if (response.ok) break;
     } catch (error) {
       if (attempt === 1) {
-        console.error("jobs.search.upstream_timeout", { error });
+        if (process.env.NODE_ENV !== 'production') {
+          console.error("jobs.search.upstream_timeout", { error });
+        }
         return NextResponse.json({ error: "upstream_timeout" }, { status: 504 });
       }
     }
@@ -78,13 +80,17 @@ export async function GET(req: NextRequest) {
     sortByPostedDesc,
   );
 
-  console.log("jobs.search", {
+  if (process.env.NODE_ENV !== 'production') {
+
+    console.log("jobs.search", {
     q: trimmedQuery,
     loc,
     recency,
     page,
     count: items.length,
   });
+
+  }
 
   return NextResponse.json({ items, page, recency, count: items.length });
 }

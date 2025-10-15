@@ -18,7 +18,9 @@ export async function GET(req: NextRequest) {
     // Try USAJOBS API first for government jobs
     if (query.trim()) {
       try {
-        console.log("Searching USAJOBS API...");
+        if (process.env.NODE_ENV !== 'production') {
+          console.log("Searching USAJOBS API...");
+        }
         const searchParams: USAJobsSearchParams = {
           keyword: query,
           location: location,
@@ -81,17 +83,21 @@ export async function GET(req: NextRequest) {
           });
         }
       } catch (usajobsError) {
-        console.error(
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(
           "USAJOBS API failed, trying enhanced search:",
           usajobsError,
         );
+        }
       }
     }
 
     // Try enhanced job search as fallback
     if (query.trim()) {
       try {
-        console.log("Using enhanced job search service...");
+        if (process.env.NODE_ENV !== 'production') {
+          console.log("Using enhanced job search service...");
+        }
         const enhancedJobs = await jobSearchService.searchJobs({
           query,
           location,
@@ -145,10 +151,12 @@ export async function GET(req: NextRequest) {
           });
         }
       } catch (enhancedError) {
-        console.error(
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(
           "Enhanced job search failed, falling back:",
           enhancedError,
         );
+        }
       }
     }
 
@@ -190,7 +198,9 @@ export async function GET(req: NextRequest) {
     const { data: jobs, error } = await supabaseQuery;
 
     if (error) {
-      console.error("Supabase query error:", error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error("Supabase query error:", error);
+      }
       // Fallback to mock data
       return NextResponse.json({
         jobs: getMockJobs(query, location, workType, limit),
@@ -236,7 +246,9 @@ export async function GET(req: NextRequest) {
       source: "supabase",
     });
   } catch (error) {
-    console.error("Error searching jobs:", error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error("Error searching jobs:", error);
+    }
     // Fallback to mock data on any error
     return NextResponse.json({
       jobs: getMockJobs("", "", "", 20),
@@ -265,7 +277,9 @@ export async function POST(req: NextRequest) {
       jobs: jobs,
     });
   } catch (error) {
-    console.error("Error creating jobs:", error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error("Error creating jobs:", error);
+    }
     return NextResponse.json(
       { error: "Failed to create jobs" },
       { status: 500 },
