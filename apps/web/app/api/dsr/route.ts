@@ -3,10 +3,16 @@ import { createClient } from '@supabase/supabase-js'
 import { headers } from 'next/headers'
 
 // Initialize Supabase client with service role key
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Supabase configuration missing")
+  }
+  
+  return createClient(supabaseUrl, supabaseKey)
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -47,7 +53,7 @@ export async function POST(req: NextRequest) {
     const ticketId = `DSR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
     // Create DSR request record
-    const { data: dsrRequest, error: insertError } = await supabase
+    const { data: dsrRequest, error: insertError } = await getSupabaseClient()
       .from('dsr_requests')
       .insert({
         ticket_id: ticketId,
@@ -71,7 +77,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Log the DSR request for audit purposes
-    await supabase
+    await getSupabaseClient()
       .from('audit_events')
       .insert({
         event_type: 'dsr_request',
@@ -129,7 +135,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch DSR request status
-    const { data: dsrRequest, error } = await supabase
+    const { data: dsrRequest, error } = await getSupabaseClient()
       .from('dsr_requests')
       .select('*')
       .eq('ticket_id', ticketId)
@@ -196,7 +202,7 @@ function getRequestDescription(type: string): string {
 async function sendDSRReceipt(userId: string, ticketId: string, type: string) {
   try {
     // Get user email from Supabase
-    const { data: user } = await supabase
+    const { data: user } = await getSupabaseClient()
       .from('profiles')
       .select('email')
       .eq('id', userId)
