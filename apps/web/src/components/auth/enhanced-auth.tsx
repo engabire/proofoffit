@@ -245,8 +245,6 @@ export default function EnhancedAuth({
             access_type: "offline",
             prompt: "consent",
           },
-          codeChallenge: await generateCodeChallenge(codeVerifier),
-          codeChallengeMethod: "S256",
         },
       });
 
@@ -278,7 +276,9 @@ export default function EnhancedAuth({
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const digest = await crypto.subtle.digest("SHA-256", data);
-    return btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(digest))))
+    return btoa(
+      String.fromCharCode.apply(null, Array.from(new Uint8Array(digest))),
+    )
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=/g, "");

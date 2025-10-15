@@ -68,7 +68,7 @@ function AuthCallbackPageContent() {
           }
 
           const { data, error: exchangeError } = await supabase.auth
-            .exchangeCodeForSession({ code, codeVerifier });
+            .exchangeCodeForSession(code);
 
           if (exchangeError) {
             throw exchangeError;

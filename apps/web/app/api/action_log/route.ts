@@ -10,7 +10,10 @@ const supabase = createClient(
 export async function POST(req: NextRequest) {
     try {
         // Check if Supabase is properly configured
-        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        if (
+            !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+            !process.env.SUPABASE_SERVICE_ROLE_KEY
+        ) {
             console.error("Supabase configuration missing");
             return NextResponse.json(
                 { error: "Service configuration error" },
@@ -66,7 +69,12 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         console.error("Action log API error:", error);
         return NextResponse.json(
-            { error: "Internal server error", details: error instanceof Error ? error.message : "Unknown error" },
+            {
+                error: "Internal server error",
+                details: error instanceof Error
+                    ? error.message
+                    : "Unknown error",
+            },
             { status: 500 },
         );
     }
