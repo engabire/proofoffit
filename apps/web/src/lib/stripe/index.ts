@@ -1,10 +1,11 @@
 import Stripe from 'stripe'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { isSupabaseConfigured } from '../env'
+import { getStripe } from './config'
 
-const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!, {
-  apiVersion: '2023-10-16',
-})
+function getStripeClient(): Stripe {
+  return getStripe()
+}
 
 export interface SubscriptionPlan {
   id: string
@@ -156,7 +157,7 @@ export class StripeService {
         throw new Error('Invalid plan ID')
       }
 
-      const session = await stripe().checkout.sessions.create({
+      const session = await getStripeClient().checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
           {
@@ -198,7 +199,7 @@ export class StripeService {
    */
   async createPortalSession(customerId: string, returnUrl: string): Promise<{ url: string }> {
     try {
-      const session = await stripe().billingPortal.sessions.create({
+      const session = await getStripeClient().billingPortal.sessions.create({
         customer: customerId,
         return_url: returnUrl,
       })
@@ -215,14 +216,14 @@ export class StripeService {
    */
   async getCustomer(customerId: string): Promise<Customer | null> {
     try {
-      const customer = await stripe().customers.retrieve(customerId)
+      const customer = await getStripeClient().customers.retrieve(customerId)
       
       if (customer.deleted) {
         return null
       }
 
       // Get active subscription
-      const subscriptions = await stripe().subscriptions.list({
+      const subscriptions = await getStripeClient().subscriptions.list({
         customer: customerId,
         status: 'active',
         limit: 1,
