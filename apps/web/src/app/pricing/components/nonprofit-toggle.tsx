@@ -45,8 +45,8 @@ export function NonprofitToggle({ selectedTier, onSelect }: Props) {
           Nonprofit multipliers (applied to base price + unit costs)
         </h3>
         <p className="text-xs text-blue-700/80">
-          Discounts lock automatically after eligibility. Compliance add-ons remain cost-based
-          so safeguarding never slips.
+          Discounts lock automatically after eligibility. Compliance add-ons remain cost-based so
+          safeguarding never slips.
         </p>
         {selectedTier && (
           <button

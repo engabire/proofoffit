@@ -2,6 +2,29 @@ import Stripe from 'stripe'
 
 import { credentialManager } from '@/lib/security/credential-manager'
 
+type BillingMode = 'subscription' | 'quote'
+export type PlanInterval = 'month' | 'year'
+
+export type PlanDefinition = {
+  id: string
+  name: string
+  price: number | null
+  interval?: PlanInterval
+  features: string[]
+  limits?: Record<string, number>
+  billing: BillingMode
+  cta?: string
+  priceLead?: string
+  priceNote?: string
+  nonprofitEligible?: boolean
+  nonprofitSummary?: string
+}
+
+type PlansMap = {
+  candidate: Record<string, PlanDefinition>
+  employer: Record<string, PlanDefinition>
+}
+
 // Stripe configuration - SECURE VERSION
 export const stripeConfig = {
   apiKey: credentialManager.getCredential('STRIPE_SECRET_KEY'),
@@ -17,108 +40,121 @@ export const stripe = new Stripe(stripeConfig.apiKey, {
 })
 
 // Subscription plans
-export const subscriptionPlans = {
+export const subscriptionPlans: PlansMap = {
   candidate: {
     free: {
       id: 'candidate_free',
       name: 'Free',
       price: 0,
       interval: 'month',
+      billing: 'subscription',
       features: [
-        'Basic job search',
+        'Basic job discovery',
         '5 applications per month',
-        'Basic resume matching',
-        'Email support'
+        'Resume parsing + fit guidance',
+        'Email support',
       ],
       limits: {
         applications: 5,
         searches: 50,
-        resumeDownloads: 1
-      }
+        resumeDownloads: 1,
+      },
     },
     pro: {
       id: 'candidate_pro',
       name: 'Pro',
       price: 29.99,
       interval: 'month',
+      billing: 'subscription',
       features: [
-        'Unlimited job search',
-        'Unlimited applications',
-        'AI-powered resume tailoring',
-        'Priority support',
-        'Advanced analytics',
-        'Cover letter generation'
+        'Unlimited applications & outreach',
+        'AI resume & cover letter tailoring',
+        'Interview prep library',
+        'Priority matching notifications',
+        'Advanced analytics & benchmarks',
       ],
       limits: {
-        applications: -1, // unlimited
+        applications: -1,
         searches: -1,
-        resumeDownloads: -1
-      }
-    }
+        resumeDownloads: -1,
+      },
+    },
   },
   employer: {
     starter: {
       id: 'employer_starter',
       name: 'Starter',
-      price: 99.99,
+      price: 149,
       interval: 'month',
+      billing: 'subscription',
+      nonprofitEligible: true,
+      nonprofitSummary: 'N1 nonprofits pay $74.50/mo (50% off).',
       features: [
-        'Post up to 5 jobs',
-        'Basic candidate matching',
-        'Email notifications',
-        'Basic analytics'
+        '2 recruiter seats + 3 active roles',
+        '100 talent reach units & 25 verification credits monthly',
+        'Core ProofLayers™ matching + interview scheduling',
+        'Email support & in-app onboarding guides',
       ],
       limits: {
-        jobPosts: 5,
-        candidateViews: 100,
-        teamMembers: 2
-      }
+        jobPosts: 3,
+        candidateViews: 200,
+        teamMembers: 2,
+      },
+      priceNote: 'Best for emerging teams validating hiring motion.',
     },
-    professional: {
-      id: 'employer_professional',
-      name: 'Professional',
-      price: 299.99,
+    growth: {
+      id: 'employer_growth',
+      name: 'Growth',
+      price: 699,
       interval: 'month',
+      billing: 'subscription',
+      nonprofitEligible: true,
+      nonprofitSummary: 'N2 nonprofits pay $454.35/mo (35% off).',
       features: [
-        'Unlimited job posts',
-        'Advanced candidate ranking',
-        'Team collaboration',
-        'Advanced analytics',
-        'API access',
-        'Priority support'
+        '5 recruiter seats + 10 active roles',
+        '600 reach units & 150 verification credits monthly',
+        'ATS sync (Greenhouse/Lever/Workable) & role collaboration',
+        'SSO-lite, audit trails, and SLA-backed support',
+        'Eligibility + revalidation workflows surfaced in CRM',
       ],
       limits: {
-        jobPosts: -1,
+        jobPosts: 10,
         candidateViews: -1,
-        teamMembers: 10
-      }
+        teamMembers: 10,
+      },
+      priceNote: 'Designed for multi-team hiring with governance needs.',
     },
     enterprise: {
       id: 'employer_enterprise',
       name: 'Enterprise',
-      price: 999.99,
-      interval: 'month',
+      price: 48000,
+      interval: 'year',
+      billing: 'quote',
+      nonprofitEligible: true,
+      nonprofitSummary: 'N3 nonprofits start at $36k/yr (25% off).',
       features: [
-        'Everything in Professional',
-        'Custom integrations',
-        'Dedicated support',
-        'Custom branding',
-        'Advanced compliance tools',
-        'Unlimited team members'
+        'Pooled seats & roles with regional workspaces',
+        'Unlimited verification pipelines + advanced ProofLayers™ controls',
+        'SCIM/SSO, data residency packs, private networking, SOC 2 portal',
+        'Dedicated TAM, 99.9% SLO, bespoke integrations',
+        'Granular spend controls + donor-backed credit orchestration',
       ],
       limits: {
         jobPosts: -1,
         candidateViews: -1,
-        teamMembers: -1
-      }
-    }
-  }
+        teamMembers: -1,
+      },
+      priceLead: 'Starts at',
+      priceNote: 'Volume-tiered pricing modeled with RevOps; talk to sales for quotes.',
+      cta: 'Talk to sales',
+    },
+  },
 }
 
 // Helper function to get plan by ID
-export function getPlanById(planId: string) {
-  for (const userType of Object.keys(subscriptionPlans)) {
-    for (const plan of Object.values(subscriptionPlans[userType as keyof typeof subscriptionPlans])) {
+export function getPlanById(planId: string): (PlanDefinition & { userType: 'candidate' | 'employer' }) | null {
+  for (const userType of Object.keys(subscriptionPlans) as Array<'candidate' | 'employer'>) {
+    for (const plan of Object.values(subscriptionPlans[userType])) {
       if (plan.id === planId) {
         return { ...plan, userType }
       }
@@ -128,6 +164,6 @@ export function getPlanById(planId: string) {
 }
 
 // Helper function to get plans by user type
-export function getPlansByUserType(userType: 'candidate' | 'employer') {
+export function getPlansByUserType(userType: 'candidate' | 'employer'): Record<string, PlanDefinition> {
   return subscriptionPlans[userType]
 }

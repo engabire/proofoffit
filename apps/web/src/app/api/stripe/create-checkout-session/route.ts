@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, subscriptionPlans, getPlanById } from '@/lib/stripe/config'
+import { stripe, getPlanById } from '@/lib/stripe/config'
 import { createClient } from '@supabase/supabase-js'
 
 export async function POST(request: NextRequest) {
@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
     if (!plan) {
       return NextResponse.json(
         { error: 'Invalid plan ID' },
+        { status: 400 }
+      )
+    }
+
+    if (plan.billing !== 'subscription' || typeof plan.price !== 'number') {
+      return NextResponse.json(
+        { error: 'Plan requires a sales-assisted quote' },
         { status: 400 }
       )
     }
@@ -86,7 +93,7 @@ export async function POST(request: NextRequest) {
 
         const price = await stripe.prices.create({
           product: product.id,
-          unit_amount: Math.round(plan.price * 100), // Convert to cents
+          unit_amount: Math.round((plan.price || 0) * 100), // Convert to cents
           currency: 'usd',
           recurring: {
             interval: plan.interval as 'month' | 'year',
