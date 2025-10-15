@@ -53,19 +53,21 @@ export interface AutoApplyConfig {
 }
 
 export class ApplicationAutomation {
-  private supabase: any
-
-  constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+  private getSupabaseClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Supabase configuration missing");
+    }
+    
+    return createClient(supabaseUrl, supabaseKey);
   }
 
   // Get user's auto-apply configuration
   async getAutoApplyConfig(userId: string): Promise<AutoApplyConfig | null> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabaseClient()
         .from('auto_apply_configs')
         .select('*')
         .eq('user_id', userId)
@@ -85,7 +87,7 @@ export class ApplicationAutomation {
   // Update user's auto-apply configuration
   async updateAutoApplyConfig(config: AutoApplyConfig): Promise<boolean> {
     try {
-      const { error } = await this.supabase
+      const { error } = await this.getSupabaseClient()
         .from('auto_apply_configs')
         .upsert({
           user_id: config.userId,
@@ -100,7 +102,7 @@ export class ApplicationAutomation {
       if (error) throw error
 
       // Log the configuration update
-      await this.supabase
+      await this.getSupabaseClient()
         .from('action_log')
         .insert({
           action: 'auto_apply_config_updated',
@@ -229,7 +231,7 @@ export class ApplicationAutomation {
         }
       }
 
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabaseClient()
         .from('job_applications')
         .insert(application)
         .select()
@@ -238,7 +240,7 @@ export class ApplicationAutomation {
       if (error) throw error
 
       // Log the application
-      await this.supabase
+      await this.getSupabaseClient()
         .from('action_log')
         .insert({
           action: 'auto_apply_submitted',
@@ -292,7 +294,7 @@ export class ApplicationAutomation {
         created_at: new Date().toISOString()
       }
 
-      await this.supabase
+      await this.getSupabaseClient()
         .from('notifications')
         .insert(notification)
 
@@ -309,7 +311,7 @@ export class ApplicationAutomation {
   // Get user's application history
   async getApplicationHistory(userId: string, limit: number = 50): Promise<JobApplication[]> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabaseClient()
         .from('job_applications')
         .select('*')
         .eq('user_id', userId)
@@ -328,7 +330,7 @@ export class ApplicationAutomation {
   // Update application status
   async updateApplicationStatus(applicationId: string, status: string, source: string = 'manual'): Promise<boolean> {
     try {
-      const { error } = await this.supabase
+      const { error } = await this.getSupabaseClient()
         .from('job_applications')
         .update({
           status,
@@ -368,7 +370,7 @@ export class ApplicationAutomation {
     thisMonth: number
   }> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabaseClient()
         .from('job_applications')
         .select('status, applied_at')
         .eq('user_id', userId)

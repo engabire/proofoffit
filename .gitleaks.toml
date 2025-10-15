@@ -10,41 +10,49 @@ use_default = true
 
 # Custom rules for ProofOfFit specific patterns
 [[rules]]
+id = "proofoffit-api-keys"
 description = "ProofOfFit API Keys"
 regex = '''(?i)(proofoffit|proof-of-fit).*?(api[_-]?key|secret|token)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["proofoffit", "api-key"]
 
 [[rules]]
+id = "supabase-keys"
 description = "Supabase Keys"
 regex = '''(?i)(supabase).*?(anon[_-]?key|service[_-]?role[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["supabase", "api-key"]
 
 [[rules]]
+id = "stripe-keys"
 description = "Stripe Keys"
 regex = '''(?i)(stripe).*?(secret[_-]?key|publishable[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["stripe", "api-key"]
 
 [[rules]]
+id = "vercel-tokens"
 description = "Vercel Tokens"
 regex = '''(?i)(vercel).*?(token|api[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["vercel", "api-key"]
 
 [[rules]]
+id = "github-tokens"
 description = "GitHub Tokens"
 regex = '''(?i)(github).*?(token|api[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["github", "api-key"]
 
 [[rules]]
+id = "database-urls"
 description = "Database URLs"
 regex = '''(?i)(database[_-]?url|db[_-]?url|connection[_-]?string)['":\s]*[a-zA-Z0-9+_\-\.]+://[a-zA-Z0-9+_\-\.]+:[a-zA-Z0-9+_\-\.]+@[a-zA-Z0-9+_\-\.]+:[0-9]+/[a-zA-Z0-9+_\-\.]+'''
 tags = ["database", "connection-string"]
 
 [[rules]]
+id = "jwt-secrets"
 description = "JWT Secrets"
 regex = '''(?i)(jwt[_-]?secret|json[_-]?web[_-]?token[_-]?secret)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["jwt", "secret"]
 
 [[rules]]
+id = "encryption-keys"
 description = "Encryption Keys"
 regex = '''(?i)(encryption[_-]?key|cipher[_-]?key|aes[_-]?key)['":\s]*[a-zA-Z0-9]{20,}'''
 tags = ["encryption", "key"]

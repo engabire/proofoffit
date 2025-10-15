@@ -37,7 +37,7 @@ export default async function AdminUsersPage() {
           <CardContent className="text-center py-12">
             <Shield className="h-12 w-12 mx-auto text-red-500 mb-4" />
             <h3 className="text-lg font-medium mb-2">Access Denied</h3>
-            <p className="text-gray-600">You don't have permission to access this page.</p>
+            <p className="text-gray-600">You don’t have permission to access this page.</p>
           </CardContent>
         </Card>
       </div>

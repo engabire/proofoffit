@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -1510,16 +1511,16 @@ function FooterTrustBar() {
             </h3>
             <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
               <li>
-                <a href="#why">Features</a>
+                <Link href="#why">Features</Link>
               </li>
               <li>
-                <a href="#design">AI workflows</a>
+                <Link href="#design">AI workflows</Link>
               </li>
               <li>
-                <a href="#pricing">Pricing</a>
+                <Link href="#pricing">Pricing</Link>
               </li>
               <li>
-                <a href="/audit-sample">Sample audit</a>
+                <Link href="/audit-sample">Sample audit</Link>
               </li>
             </ul>
           </div>
@@ -1530,16 +1531,16 @@ function FooterTrustBar() {
             </h3>
             <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
               <li>
-                <a href="/about">About</a>
+                <Link href="/about">About</Link>
               </li>
               <li>
-                <a href="/contact">Contact</a>
+                <Link href="/contact">Contact</Link>
               </li>
               <li>
-                <a href="/careers">Careers</a>
+                <Link href="/careers">Careers</Link>
               </li>
               <li>
-                <a href="/press">Press</a>
+                <Link href="/press">Press</Link>
               </li>
             </ul>
           </div>
@@ -1550,19 +1551,19 @@ function FooterTrustBar() {
             </h3>
             <ul className={`mt-3 space-y-2 text-sm ${subtle}`}>
               <li>
-                <a href="/fairness">Fairness & explainability</a>
+                <Link href="/fairness">Fairness &amp; explainability</Link>
               </li>
               <li>
-                <a href="/security">Security</a>
+                <Link href="/security">Security</Link>
               </li>
               <li>
-                <a href="/privacy">Privacy</a>
+                <Link href="/privacy">Privacy</Link>
               </li>
               <li>
-                <a href="/terms">Terms</a>
+                <Link href="/terms">Terms</Link>
               </li>
               <li>
-                <a href="/status">Status</a>
+                <Link href="/status">Status</Link>
               </li>
             </ul>
           </div>
@@ -1574,10 +1575,10 @@ function FooterTrustBar() {
             with fairness and accountability at heart.
           </span>
           <div className="flex flex-wrap items-center gap-4">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-            <a href="/security">Security</a>
-            <a href="/status">Status</a>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/security">Security</Link>
+            <Link href="/status">Status</Link>
           </div>
         </div>
       </div>
