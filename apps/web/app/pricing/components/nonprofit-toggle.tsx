@@ -86,5 +86,7 @@ export function NonprofitToggle({ selectedTier, onSelect }: Props) {
 }
 
 export const nonprofitMultipliers = Object.fromEntries(
-  Object.entries(tierDetails).map(([key, value]) => [key, value.multiplier])
+  (Object.entries(tierDetails) as Array<[NonprofitTier, (typeof tierDetails)[NonprofitTier]]>).map(
+    ([key, value]) => [key, value.multiplier]
+  )
 ) as Record<NonprofitTier, number>

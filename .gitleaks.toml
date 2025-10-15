@@ -66,23 +66,13 @@ regex = '''.*\.md$'''
 description = "Exclude configuration files with examples"
 regex = '''.*\.config\.(js|ts|json)$'''
 
-# Allow specific patterns that are safe
-[[allowlist]]
-description = "Allow environment variable names"
-regex = '''NEXT_PUBLIC_.*'''
-
-[[allowlist]]
-description = "Allow example values"
-regex = '''example\.supabase\.co'''
-
-[[allowlist]]
-description = "Allow placeholder values"
-regex = '''your-.*-here'''
-
 # Global exclusions
 [allowlist]
 description = "Global allowlist for safe patterns"
 regexes = [
+  '''NEXT_PUBLIC_.*''',
+  '''example\.supabase\.co''',
+  '''your-.*-here''',
   '''^.*\.md$''',
   '''^.*\.txt$''',
   '''^.*\.example$''',
