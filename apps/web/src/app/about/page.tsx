@@ -507,7 +507,7 @@ export default function AboutPage() {
               Our Journey
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              From research lab to enterprise platform, here's how we've grown.
+              From research lab to enterprise platform, here&apos;s how we&apos;ve grown.
             </p>
           </div>
 
@@ -824,7 +824,7 @@ export default function AboutPage() {
             <CardContent className="p-12">
               <h2 className="text-3xl font-bold mb-4">Join Our Mission</h2>
               <p className="text-xl mb-8 opacity-90">
-                Ready to build the future of fair hiring? We're always looking
+                Ready to build the future of fair hiring? We&apos;re always looking
                 for exceptional talent who share our passion for equality and
                 excellence.
               </p>
