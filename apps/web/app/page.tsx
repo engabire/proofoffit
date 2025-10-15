@@ -16,10 +16,10 @@ export default function HomePage() {
               <span className="text-2xl font-bold text-gray-900">ProofOfFit</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-              <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+              <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
+              <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
+              <Link href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">About</Link>
+              <Link href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
             </nav>
             <div className="flex space-x-4">
               <Link
@@ -52,7 +52,7 @@ export default function HomePage() {
             <span className="text-blue-600">both sides of the table.</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Whether you're seeking your next role or building your team, ProofOfFit provides transparent, auditable matching with full compliance guardrails.
+            Whether you&apos;re seeking your next role or building your team, ProofOfFit provides transparent, auditable matching with full compliance guardrails.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link
@@ -209,7 +209,7 @@ export default function HomePage() {
                 <Target className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="font-semibold mb-2">Explainable Matching</h3>
-              <p className="text-sm text-gray-600">See why you're a match, line by line. No mystery filters.</p>
+              <p className="text-sm text-gray-600">See why you&apos;re a match, line by line. No mystery filters.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -453,7 +453,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <div className="text-sm font-medium text-blue-600 mb-2">Proof in practice</div>
                 <blockquote className="text-lg text-gray-700 italic mb-4">
-                  "I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
+                  &ldquo;I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly.&rdquo;
                 </blockquote>
                 <div className="text-sm text-gray-600">
                   — Amara B., Data Analyst
