@@ -724,21 +724,21 @@ function Header({ lane, setLane }: { lane: Lane; setLane: (l: Lane) => void }) {
                   >
                     <DollarSign className={`h-4 w-4 ${lanePrimary}`} /> Pricing
                   </a>
-                  <a
+                  <Link
                     href="/gift"
                     onClick={() => setOpen(false)}
                     className="py-1 inline-flex items-center gap-2"
                   >
                     <Gift className={`h-4 w-4 ${lanePrimary}`} /> Sponsor
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="/fairness"
                     onClick={() => setOpen(false)}
                     className="py-1 inline-flex items-center gap-2"
                   >
                     <ShieldCheck className={`h-4 w-4 ${lanePrimary}`} />{" "}
                     Fairness
-                  </a>
+                  </Link>
 
                   {/* Language */}
                   <div className="pt-2">
@@ -1449,13 +1449,13 @@ function GiftSponsorPanel() {
             asChild
             data-evt="sponsor_click"
           >
-            <a
+            <Link
               href="/gift"
               aria-label="Sponsor a candidate - Give a month of Pro access"
               rel="noopener"
             >
               Give a month ($12)
-            </a>
+            </Link>
           </Button>
         </div>
       </CardContent>
@@ -1469,12 +1469,12 @@ function FooterTrustBar() {
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.6fr),repeat(3,minmax(0,1fr))]">
           <div className="space-y-4">
-            <a
+            <Link
               href="/"
               className="text-lg font-semibold text-slate-900 dark:text-white"
             >
               ProofOfFit
-            </a>
+            </Link>
             <p className={`text-sm ${subtle}`}>
               Receipts, not black boxes. We blend calming polish, robust
               guardrails, professional warmth, and intuitive AI to keep hiring
