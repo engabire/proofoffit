@@ -1,8 +1,10 @@
-import { stripe, stripeConfig } from './config'
+import { stripe, getStripeConfig } from './config'
 
 // Client-side Stripe instance (for frontend)
 export const stripeClient = {
-  publishableKey: stripeConfig.publishableKey,
+  get publishableKey() {
+    return getStripeConfig().publishableKey
+  },
   
   // Create checkout session
   async createCheckoutSession(planId: string, userId: string, userEmail: string) {
@@ -60,7 +62,7 @@ export const stripeClient = {
 export const stripeServer = {
   // Create or retrieve customer
   async getOrCreateCustomer(email: string, userId: string) {
-    const customers = await stripe.customers.list({
+    const customers = await stripe().customers.list({
       email: email,
       limit: 1,
     })
@@ -69,7 +71,7 @@ export const stripeServer = {
       return customers.data[0]
     }
 
-    return await stripe.customers.create({
+    return await stripe().customers.create({
       email: email,
       metadata: {
         userId: userId,
@@ -79,7 +81,7 @@ export const stripeServer = {
 
   // Create subscription
   async createSubscription(customerId: string, priceId: string) {
-    return await stripe.subscriptions.create({
+    return await stripe().subscriptions.create({
       customer: customerId,
       items: [{ price: priceId }],
       payment_behavior: 'default_incomplete',
@@ -90,14 +92,14 @@ export const stripeServer = {
 
   // Cancel subscription
   async cancelSubscription(subscriptionId: string) {
-    return await stripe.subscriptions.cancel(subscriptionId)
+    return await stripe().subscriptions.cancel(subscriptionId)
   },
 
   // Update subscription
   async updateSubscription(subscriptionId: string, newPriceId: string) {
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    const subscription = await stripe().subscriptions.retrieve(subscriptionId)
     
-    return await stripe.subscriptions.update(subscriptionId, {
+    return await stripe().subscriptions.update(subscriptionId, {
       items: [{
         id: subscription.items.data[0].id,
         price: newPriceId,
@@ -108,12 +110,12 @@ export const stripeServer = {
 
   // Get subscription
   async getSubscription(subscriptionId: string) {
-    return await stripe.subscriptions.retrieve(subscriptionId)
+    return await stripe().subscriptions.retrieve(subscriptionId)
   },
 
   // List customer subscriptions
   async getCustomerSubscriptions(customerId: string) {
-    return await stripe.subscriptions.list({
+    return await stripe().subscriptions.list({
       customer: customerId,
       status: 'all',
     })

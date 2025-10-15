@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get or create Stripe customer
-    const existingCustomers = await stripe.customers.list({
+    const existingCustomers = await stripe().customers.list({
       email: userEmail,
       limit: 1,
     });
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (existingCustomers.data.length > 0) {
       customer = existingCustomers.data[0];
     } else {
-      customer = await stripe.customers.create({
+      customer = await stripe().customers.create({
         email: userEmail,
         metadata: { userId },
       });
@@ -49,20 +49,20 @@ export async function POST(request: NextRequest) {
     let priceId: string;
     if (plan.price === 0) {
       // Free plan - create a $0 price
-      const prices = await stripe.prices.list({
+      const prices = await stripe().prices.list({
         product: plan.id,
         active: true,
         limit: 1,
       });
 
       if (prices.data.length === 0) {
-        const product = await stripe.products.create({
+        const product = await stripe().products.create({
           id: plan.id,
           name: plan.name,
           description: `ProofOfFit ${plan.name} Plan`,
         });
 
-        const price = await stripe.prices.create({
+        const price = await stripe().prices.create({
           product: product.id,
           unit_amount: 0,
           currency: "usd",
@@ -77,20 +77,20 @@ export async function POST(request: NextRequest) {
       }
     } else {
       // Paid plan - create price
-      const prices = await stripe.prices.list({
+      const prices = await stripe().prices.list({
         product: plan.id,
         active: true,
         limit: 1,
       });
 
       if (prices.data.length === 0) {
-        const product = await stripe.products.create({
+        const product = await stripe().products.create({
           id: plan.id,
           name: plan.name,
           description: `ProofOfFit ${plan.name} Plan`,
         });
 
-        const price = await stripe.prices.create({
+        const price = await stripe().prices.create({
           product: product.id,
           unit_amount: Math.round((plan.price || 0) * 100), // Convert to cents
           currency: "usd",
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripe().checkout.sessions.create({
       customer: customer.id,
       payment_method_types: ["card"],
       line_items: [
