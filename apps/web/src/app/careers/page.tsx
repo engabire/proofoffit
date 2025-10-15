@@ -433,7 +433,7 @@ export default function CareersPage() {
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
               Find your next role and help us build the future of fair hiring.
-              We're always looking for exceptional talent who share our mission.
+              We&apos;re always looking for exceptional talent who share our mission.
             </p>
           </div>
 
@@ -658,10 +658,10 @@ export default function CareersPage() {
         <section className="text-center">
           <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
             <CardContent className="p-12">
-              <h2 className="text-3xl font-bold mb-4">Don't See Your Role?</h2>
+              <h2 className="text-3xl font-bold mb-4">Don&apos;t See Your Role?</h2>
               <p className="text-xl mb-8 opacity-90">
-                We're always looking for exceptional talent. Send us your resume
-                and tell us how you'd like to contribute to our mission.
+                We&apos;re always looking for exceptional talent. Send us your resume
+                and tell us how you&apos;d like to contribute to our mission.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" variant="secondary">
