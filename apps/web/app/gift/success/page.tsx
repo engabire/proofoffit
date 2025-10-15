@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { 
   CheckCircle, 
   Gift, 
@@ -97,9 +98,9 @@ The ProofOfFit Team`
               <span className="text-2xl font-bold text-gray-900">ProofOfFit</span>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
                 Back to Home
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -115,10 +116,10 @@ The ProofOfFit Team`
             Gift Sent Successfully! 🎉
           </h1>
           <p className="text-xl text-gray-600 mb-6">
-            You've gifted <span className="font-semibold text-blue-600">{months} months</span> of ProofOfFit Pro to <span className="font-semibold">{recipient}</span>
+            You&apos;ve gifted <span className="font-semibold text-blue-600">{months} months</span> of ProofOfFit Pro to <span className="font-semibold">{recipient}</span>
           </p>
           <p className="text-gray-600">
-            They'll receive an email with their gift code and instructions to get started.
+            They&apos;ll receive an email with their gift code and instructions to get started.
           </p>
         </div>
 
@@ -143,7 +144,7 @@ The ProofOfFit Team`
               </div>
               
               <div className="space-y-3">
-                <h3 className="font-medium text-gray-900">What they'll get:</h3>
+                <h3 className="font-medium text-gray-900">What they&apos;ll get:</h3>
                 <ul className="space-y-2">
                   <li className="flex items-center text-sm text-gray-600">
                     <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
