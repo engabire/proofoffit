@@ -11,7 +11,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">
-            Get in touch with our team. We'll get back to you soon.
+            Get in touch with our team. We&apos;ll get back to you soon.
           </p>
           <div className="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
             <h2 className="text-2xl font-semibold mb-4">Enterprise Sales</h2>
