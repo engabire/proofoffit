@@ -54,12 +54,6 @@ export function ScrapingMonitor() {
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
 
-  useEffect(() => {
-    loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30s
-    return () => clearInterval(interval);
-  }, [loadData]);
-
   const loadData = useCallback(async () => {
     try {
       const [jobHistory, slos, scrapingStats] = await Promise.all([
@@ -77,6 +71,12 @@ export function ScrapingMonitor() {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, 30000); // Refresh every 30s
+    return () => clearInterval(interval);
+  }, [loadData]);
 
   const triggerScraping = async () => {
     setTriggering(true);
