@@ -1,10 +1,23 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Badge } from '@proof-of-fit/ui'
-import { Button } from '@proof-of-fit/ui'
-import { Progress } from '@proof-of-fit/ui'
-import { MapPin, Building, DollarSign, Clock, Target, CheckCircle } from 'lucide-react'
-import Link from 'next/link'
-import { demoMatches } from '@/lib/demo-data'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@proof-of-fit/ui";
+import { Badge } from "@proof-of-fit/ui";
+import { Button } from "@proof-of-fit/ui";
+import { Progress } from "@proof-of-fit/ui";
+import {
+  Building,
+  CheckCircle,
+  Clock,
+  DollarSign,
+  MapPin,
+  Target,
+} from "lucide-react";
+import Link from "next/link";
+import { demoMatches } from "@/lib/demo-data";
 
 export default function JobMatchesDemoPage() {
   return (
@@ -41,13 +54,15 @@ export default function JobMatchesDemoPage() {
                 <div className="text-right">
                   <div className="flex items-center space-x-2 mb-2">
                     <Target className="h-4 w-4 text-primary" />
-                    <span className="text-2xl font-bold text-primary">{match.fitScore}%</span>
+                    <span className="text-2xl font-bold text-primary">
+                      {match.fitScore}%
+                    </span>
                   </div>
                   <Progress value={match.fitScore} className="w-24" />
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground line-clamp-2">
@@ -64,9 +79,14 @@ export default function JobMatchesDemoPage() {
                   </h4>
                   <div className="space-y-2">
                     {match.explanations.map((explanation, idx) => (
-                      <div key={idx} className="p-2 bg-green-50 dark:bg-green-950 rounded">
+                      <div
+                        key={idx}
+                        className="p-2 bg-green-50 dark:bg-green-950 rounded"
+                      >
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium">{explanation.criterion}</span>
+                          <span className="text-sm font-medium">
+                            {explanation.criterion}
+                          </span>
                           <Badge variant="secondary" className="text-xs">
                             {explanation.score}%
                           </Badge>
@@ -82,23 +102,29 @@ export default function JobMatchesDemoPage() {
                 {/* Strengths & Gaps */}
                 <div className="space-y-3">
                   <div>
-                    <h4 className="font-medium mb-2 text-green-600">Strengths</h4>
+                    <h4 className="font-medium mb-2 text-green-600">
+                      Strengths
+                    </h4>
                     <div className="space-y-1">
                       {match.strengths.map((strength, idx) => (
                         <div key={idx} className="flex items-center space-x-2">
-                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full">
+                          </div>
                           <span className="text-sm">{strength}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                  
+
                   <div>
-                    <h4 className="font-medium mb-2 text-amber-600">Areas to Highlight</h4>
+                    <h4 className="font-medium mb-2 text-amber-600">
+                      Areas to Highlight
+                    </h4>
                     <div className="space-y-1">
                       {match.gaps.map((gap, idx) => (
                         <div key={idx} className="flex items-center space-x-2">
-                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full">
+                          </div>
                           <span className="text-sm">{gap}</span>
                         </div>
                       ))}
@@ -130,19 +156,22 @@ export default function JobMatchesDemoPage() {
       {/* Demo Notice */}
       <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950">
         <CardHeader>
-          <CardTitle className="text-blue-800 dark:text-blue-200">AI-Powered Matching</CardTitle>
+          <CardTitle className="text-blue-800 dark:text-blue-200">
+            AI-Powered Matching
+          </CardTitle>
           <CardDescription className="text-blue-600 dark:text-blue-300">
             This demonstrates the ProofOfFit job matching algorithm
           </CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-blue-700 dark:text-blue-300">
-            The system analyzes your profile evidence bullets against job requirements to generate 
-            fit scores and explanations. It identifies strengths and areas to highlight, helping 
-            you understand why you&apos;re a good match for each position.
+            The system analyzes your profile evidence bullets against job
+            requirements to generate fit scores and explanations. It identifies
+            strengths and areas to highlight, helping you understand why
+            you&apos;re a good match for each position.
           </p>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
