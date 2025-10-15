@@ -210,13 +210,15 @@ export function LazyImage({
         <Image
           src={src}
           alt={alt}
+          width={typeof props.width === 'string' ? parseInt(props.width) : props.width || 400}
+          height={typeof props.height === 'string' ? parseInt(props.height) : props.height || 300}
           onLoad={handleLoad}
           onError={handleError}
           style={{
             opacity: loaded ? 1 : 0,
             transition: "opacity 0.3s ease-in-out",
           }}
-          {...props}
+          {...(props as any)}
         />
       )}
     </div>
