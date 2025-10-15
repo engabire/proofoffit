@@ -14,11 +14,13 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    // eslint-disable-next-line no-console
     console.log('Starting scheduled job feed refresh...')
     
     // Refresh job feeds
     await jobFeedManager.refreshJobFeeds()
     
+    // eslint-disable-next-line no-console
     console.log('Scheduled job feed refresh completed')
     
     return NextResponse.json({
@@ -28,6 +30,7 @@ export async function GET(req: NextRequest) {
     })
     
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error in scheduled job refresh:', error)
     return NextResponse.json(
       { error: 'Failed to refresh job feeds' },

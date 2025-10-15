@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 echo "🔍 Checking external dependencies..."
 
@@ -11,9 +12,9 @@ check_service_status() {
     echo "Checking $service_name status..."
     
     # Try to get JSON response first
-    response=$(curl -s -L "$api_url" 2>/dev/null)
+    response=$(curl --fail --silent --location "$api_url" 2>/dev/null || true)
     
-    if echo "$response" | jq -e '.status.indicator' >/dev/null 2>&1; then
+    if command -v jq >/dev/null 2>&1 && echo "$response" | jq -e '.status.indicator' >/dev/null 2>&1; then
         # Valid JSON response
         status=$(echo "$response" | jq -r '.status.indicator')
     elif echo "$response" | grep -q "All Systems Operational\|Operational\|Healthy" 2>/dev/null; then
@@ -60,19 +61,20 @@ echo "Overall:  $OVERALL_STATUS"
 echo ""
 
 # Log to our monitoring endpoint (if available)
-BASE_URL="https://www.proofoffit.com"
+BASE_URL=${DEPENDENCY_LOG_ENDPOINT:-"https://www.proofoffit.com"}
 
-if command -v curl >/dev/null 2>&1; then
+if [[ -n "$BASE_URL" ]]; then
     echo "📝 Logging dependency status..."
-    curl -X POST "$BASE_URL/api/monitoring/dependencies" \
+    curl --fail --silent --show-error --location \
+        -X POST "$BASE_URL/api/monitoring/dependencies" \
         -H "Content-Type: application/json" \
         -d "{
-            \"supabase_status\": \"$SUPABASE_STATUS\",
-            \"vercel_status\": \"$VERCEL_STATUS\",
-            \"stripe_status\": \"$STRIPE_STATUS\",
-            \"overall_status\": \"$OVERALL_STATUS\",
-            \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
-        }" 2>/dev/null || echo "⚠️  Failed to log dependency status (endpoint may not exist yet)"
+          \"supabase_status\": \"$SUPABASE_STATUS\",
+          \"vercel_status\": \"$VERCEL_STATUS\",
+          \"stripe_status\": \"$STRIPE_STATUS\",
+          \"overall_status\": \"$OVERALL_STATUS\",
+          \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+        }" >/dev/null || echo "⚠️  Failed to log dependency status (endpoint may not exist yet)"
 fi
 
 echo "✅ Dependency check complete!"

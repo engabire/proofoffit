@@ -31,6 +31,7 @@ export function useAuth() {
       const { data: { session }, error } = await supabase.auth.getSession()
       
       if (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth initialization error:', error)
         setState(prev => ({ ...prev, error: error.message, loading: false }))
         return
@@ -43,6 +44,7 @@ export function useAuth() {
         loading: false
       }))
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Auth initialization failed:', error)
       setState(prev => ({
         ...prev,
@@ -170,6 +172,7 @@ export function useAuth() {
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        // eslint-disable-next-line no-console
         console.log('Auth state changed:', event, session?.user?.email)
         
         setState(prev => ({

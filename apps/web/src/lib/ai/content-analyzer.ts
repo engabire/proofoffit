@@ -100,6 +100,7 @@ class ContentAnalyzer {
       return analysis;
       
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Content analysis failed:', error);
       throw new Error(`Analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -150,6 +151,7 @@ Focus on job market, career, and professional context.`;
         confidence: Math.min(Math.max(result.confidence, 0), 1)
       };
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Sentiment analysis failed:', error);
       // Fallback to neutral sentiment
       return { sentiment: 'neutral', confidence: 0.5 };
@@ -199,6 +201,7 @@ Focus on professional skills, technologies, industries, and job roles.`;
         keywords: Array.isArray(result.keywords) ? result.keywords.slice(0, 10) : []
       };
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Topic extraction failed:', error);
       return {
         primary_category: 'General',
@@ -283,6 +286,7 @@ Focus on career relevance and professional value.`;
         insights: Array.isArray(result.insights) ? result.insights.slice(0, 3) : []
       };
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Summary generation failed:', error);
       return {
         summary: '',
@@ -406,6 +410,7 @@ Focus on career relevance and professional value.`;
         });
 
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Embedding generation failed:', error);
       // Continue without embeddings - not critical for basic functionality
     }
@@ -439,6 +444,7 @@ Focus on career relevance and professional value.`;
         throw new Error(`Database storage failed: ${error.message}`);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to store analysis:', error);
       throw error;
     }
@@ -534,6 +540,7 @@ Focus on career relevance and professional value.`;
       return trends.sort((a, b) => b.trend_strength - a.trend_strength);
       
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Trend detection failed:', error);
       return [];
     }
@@ -552,6 +559,7 @@ Focus on career relevance and professional value.`;
             await this.analyzeContent(item);
             console.log(`Analyzed content: ${item.title.substring(0, 50)}...`);
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(`Failed to analyze item ${item.id}:`, error);
           }
         })

@@ -1,43 +1,49 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { jobFeedManager } from '@/lib/job-feeds'
+import { NextRequest, NextResponse } from "next/server";
+import { jobFeedManager } from "@/lib/job-feeds";
 
 export async function GET(req: NextRequest) {
   try {
     // Verify this is a legitimate cron request
-    const authHeader = req.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET || 'default-secret'
-    
+    const authHeader = req.headers.get("authorization");
+    const cronSecret = process.env.CRON_SECRET || "default-secret";
+
     if (authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
     }
 
-    console.log('Starting scheduled job feed refresh...')
-    
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.info("Starting scheduled job feed refresh...");
+    }
+
     // Refresh job feeds
-    await jobFeedManager.refreshJobFeeds()
-    
-    console.log('Scheduled job feed refresh completed')
-    
+    await jobFeedManager.refreshJobFeeds();
+
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.info("Scheduled job feed refresh completed");
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'Job feeds refreshed successfully',
-      timestamp: new Date().toISOString()
-    })
-    
+      message: "Job feeds refreshed successfully",
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
-    console.error('Error in scheduled job refresh:', error)
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in scheduled job refresh:", error);
+    }
     return NextResponse.json(
-      { error: 'Failed to refresh job feeds' },
-      { status: 500 }
-    )
+      { error: "Failed to refresh job feeds" },
+      { status: 500 },
+    );
   }
 }
 
 // Also support POST for webhook-style calls
 export async function POST(req: NextRequest) {
-  return GET(req)
+  return GET(req);
 }
-

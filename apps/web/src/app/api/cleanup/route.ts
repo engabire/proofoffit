@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
     
+    // eslint-disable-next-line no-console
     console.log('🧹 Starting cleanup job', { timestamp: new Date().toISOString() });
     
     const results: any[] = [];
@@ -44,6 +45,7 @@ export async function GET(req: NextRequest) {
       .select('id');
     
     if (rawError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning raw data:', rawError);
     } else {
       results.push({
@@ -60,6 +62,7 @@ export async function GET(req: NextRequest) {
       .select('name');
     
     if (lockError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning expired locks:', lockError);
     } else {
       results.push({
@@ -78,6 +81,7 @@ export async function GET(req: NextRequest) {
       .select('item_url');
     
     if (metaError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning fetch metadata:', metaError);
     } else {
       results.push({
@@ -96,6 +100,7 @@ export async function GET(req: NextRequest) {
       .select('id');
     
     if (itemsError) {
+      // eslint-disable-next-line no-console
       console.error('Error cleaning old items:', itemsError);
     } else {
       results.push({
@@ -107,6 +112,7 @@ export async function GET(req: NextRequest) {
     const duration = Date.now() - startTime;
     const totalDeleted = results.reduce((sum, r) => sum + r.deleted_count, 0);
     
+    // eslint-disable-next-line no-console
     console.log('✅ Cleanup job completed', {
       timestamp: new Date().toISOString(),
       duration_ms: duration,

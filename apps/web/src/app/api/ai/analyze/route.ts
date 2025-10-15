@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     
     const analyzer = new ContentAnalyzer();
     
+    // eslint-disable-next-line no-console
     console.log('🧠 Starting AI content analysis', { 
       mode, 
       limit, 
@@ -118,6 +119,7 @@ export async function POST(req: NextRequest) {
       });
     }
     
+    // eslint-disable-next-line no-console
     console.log(`Processing ${items.length} items for AI analysis`);
     
     // Process items in batches to respect API limits
@@ -131,6 +133,7 @@ export async function POST(req: NextRequest) {
           const analysis = await analyzer.analyzeContent(item);
           processedCount++;
           
+          // eslint-disable-next-line no-console
           console.log(`✅ Analyzed: ${item.title.substring(0, 50)}... (${analysis.sentiment}, priority: ${analysis.priority_score})`);
           
           return {
@@ -153,6 +156,8 @@ export async function POST(req: NextRequest) {
           };
           errors.push(errorInfo);
           
+          // eslint-disable-next-line no-console
+          
           console.error(`❌ Analysis failed for ${item.id}:`, error.message);
           return errorInfo;
         }
@@ -170,14 +175,17 @@ export async function POST(req: NextRequest) {
     let trends: any[] = [];
     try {
       trends = await analyzer.detectTrends();
+      // eslint-disable-next-line no-console
       console.log(`🔍 Detected ${trends.length} trends`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Trend detection failed:', error);
     }
     
     const duration = Date.now() - startTime;
     const successRate = items.length > 0 ? (processedCount / items.length) * 100 : 0;
     
+    // eslint-disable-next-line no-console
     console.log('✅ AI analysis completed', {
       total_items: items.length,
       processed: processedCount,
@@ -330,6 +338,7 @@ export async function GET(req: NextRequest) {
     }
     
   } catch (error: any) {
+    // eslint-disable-next-line no-console
     console.error('AI analysis GET failed:', error);
     
     return NextResponse.json({
