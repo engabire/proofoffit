@@ -54,6 +54,7 @@ jobs:
         run: |
           export NEXT_PUBLIC_SUPABASE_URL="https://example.supabase.co"
           export NEXT_PUBLIC_SUPABASE_ANON_KEY="public-anon-key"
+          npm run build --workspace packages/ui
           npm run build --workspace web
 
       - name: Perform CodeQL Analysis
@@ -98,6 +99,9 @@ jobs:
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
 
     steps:
       - name: Checkout repository
