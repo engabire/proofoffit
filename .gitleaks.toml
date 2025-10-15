@@ -154,7 +154,6 @@ regexes = [
 ]
 
 # File exclusions
-[allowlist]
 files = [
   '''^.*\.md$''',
   '''^.*\.txt$''',
@@ -237,7 +236,6 @@ files = [
 ]
 
 # Commit exclusions
-[allowlist]
 commits = [
   '''^.*initial.*commit.*$''',
   '''^.*setup.*$''',
