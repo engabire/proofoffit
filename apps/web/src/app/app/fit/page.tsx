@@ -1640,7 +1640,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     loadJobs()
     loadRecommendations()
     loadSearchHistory()
-  }, [])
+  }, [loadJobs, loadRecommendations, loadSearchHistory])
 
   // Search jobs when search term or filters change
   useEffect(() => {
@@ -1654,9 +1654,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     }, 500) // Increased debounce for better UX
 
     return () => clearTimeout(timeoutId)
-  }, [searchTerm, filters])
+  }, [searchTerm, filters, addToSearchHistory, loadJobs, searchJobs])
 
-  const loadJobs = async () => {
+  const loadJobs = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
@@ -1679,9 +1679,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters.location, filters.workType, filters.remote])
 
-  const searchJobs = async (query: string) => {
+  const searchJobs = useCallback(async (query: string) => {
     setLoading(true)
     setError(null)
     try {
@@ -1725,9 +1725,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters.location, filters.workType, filters.remote])
 
-  const loadRecommendations = async () => {
+  const loadRecommendations = useCallback(async () => {
     try {
       // In a real app, this would analyze the user's resume/profile
       const response = await fetch('/api/jobs/recommendations?limit=5')
@@ -1738,9 +1738,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } catch (err) {
       console.error('Error loading recommendations:', err)
     }
-  }
+  }, [])
 
-  const loadSearchHistory = () => {
+  const loadSearchHistory = useCallback(() => {
     try {
       const history = localStorage.getItem('jobSearchHistory')
       if (history) {
@@ -1749,9 +1749,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } catch (err) {
       console.error('Error loading search history:', err)
     }
-  }
+  }, [])
 
-  const addToSearchHistory = (query: string) => {
+  const addToSearchHistory = useCallback((query: string) => {
     if (!query.trim()) return
     
     const newHistory = [query, ...searchHistory.filter(item => item !== query)].slice(0, 10)
@@ -1762,7 +1762,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
     } catch (err) {
       console.error('Error saving search history:', err)
     }
-  }
+  }, [searchHistory])
 
   const toggleSavedJob = (jobId: string) => {
     const newSavedJobs = new Set(savedJobs)
