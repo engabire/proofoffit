@@ -60,23 +60,28 @@ function AuthCallbackPageContent() {
         }
 
         if (code) {
-          // Get the code verifier from session storage (set during OAuth initiation)
+          // Check if this is a PKCE flow (OAuth) or magic link flow
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
-
-          if (!codeVerifier) {
-            throw new Error("Missing code verifier for PKCE flow");
-          }
-
-          const { data, error: exchangeError } = await supabase.auth
-            .exchangeCodeForSession(code, codeVerifier);
-
-          if (exchangeError) {
-            throw exchangeError;
-          }
-
-          // Clear the verifier once it has been used successfully
+          
           if (codeVerifier) {
+            // This is a PKCE OAuth flow - the code verifier is handled internally by Supabase
+            const { data, error: exchangeError } = await supabase.auth
+              .exchangeCodeForSession(code);
+
+            if (exchangeError) {
+              throw exchangeError;
+            }
+
+            // Clear the verifier once it has been used successfully
             sessionStorage.removeItem("pkce_code_verifier");
+          } else {
+            // This is a magic link flow - no code verifier needed
+            const { data, error: exchangeError } = await supabase.auth
+              .exchangeCodeForSession(code);
+
+            if (exchangeError) {
+              throw exchangeError;
+            }
           }
 
           if (data.user) {
