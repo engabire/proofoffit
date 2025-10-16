@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { Check, Shield, Users, Zap, ArrowRight, Star, Globe, Lock, Target, TrendingUp, Briefcase, UserCheck } from 'lucide-react'
 
 interface HeroSectionProps {
@@ -23,16 +24,16 @@ export default function HeroSection({ locale, translations }: HeroSectionProps) 
           {translations.homepage?.hero?.subtitle || 'Streamline your hiring process with AI-powered matching, compliance checks, and explainable slates. Reduce bias, save time, and hire the best talent.'}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <a href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
+          <Link href="/auth/signup?type=seeker" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors">
             <UserCheck className="mr-2 h-5 w-5" />
             {translations.homepage?.hero?.seekingJob || 'I am seeking a job'}
             <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
-          <a href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
+          </Link>
+          <Link href="/auth/signup?type=employer" className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors">
             <Briefcase className="mr-2 h-5 w-5" />
             {translations.homepage?.hero?.hiring || 'I am hiring'}
             <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
+          </Link>
         </div>
         <p className="text-sm text-gray-500 mb-8">
           No card • 2 minutes to first Fit Report
