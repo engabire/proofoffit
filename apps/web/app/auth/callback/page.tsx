@@ -260,3 +260,5 @@ export default function AuthCallbackPage() {
     </Suspense>
   );
 }
+
+// Build fix: Ensure latest commit is used (f78eb5f)
