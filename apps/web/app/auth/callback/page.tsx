@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import type { User } from "@supabase/supabase-js";
 import { isSupabaseConfigured } from "@/lib/env";
 import { detectEnterpriseDomain } from "@/lib/enterprise-domains";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
@@ -59,6 +60,18 @@ function AuthCallbackPageContent() {
           }
         }
 
+        const hashParams = typeof window !== "undefined" && window.location.hash
+          ? new URLSearchParams(window.location.hash.replace(/^#/, ""))
+          : null;
+
+        const hashError = hashParams?.get("error_description")
+          || hashParams?.get("error");
+        if (hashError) {
+          throw new Error(`Authentication error: ${hashError}`);
+        }
+
+        let user: User | null = null;
+
         if (code) {
           // Check if this is a PKCE flow (OAuth) or magic link flow
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
@@ -75,54 +88,79 @@ function AuthCallbackPageContent() {
             sessionStorage.removeItem("pkce_code_verifier");
           }
 
-          const user = sessionData?.user;
+          user = sessionData?.user ?? null;
+        }
 
-          if (user) {
-            setUserEmail(user.email || null);
+        if (!user && hashParams) {
+          const accessToken = hashParams.get("access_token");
+          const refreshToken = hashParams.get("refresh_token");
 
-            // Check if this is an enterprise user
-            if (user.email) {
-              const enterprise = detectEnterpriseDomain(user.email);
-              setIsEnterprise(!!enterprise);
-            }
-
-            setStatus("success");
-            setMessage("Authentication successful!");
-
-            try {
-              await import("../../../lib/analytics").then((m) =>
-                m.track({ name: "auth_success" })
-              );
-            } catch {}
-
-            // Log successful authentication (optional, fail silently if API doesn't exist)
-            try {
-              await fetch("/api/action_log", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  tenantId: user.id,
-                  actorType: "user",
-                  actorId: user.id,
-                  action: "auth_success",
-                  objType: "user",
-                  objId: user.id,
-                  payloadHash: "auth_success",
-                }),
+          if (accessToken && refreshToken) {
+            const { data: sessionData, error: sessionError } =
+              await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken,
               });
-            } catch (logError) {
-              // Silently handle logging errors - don't break authentication flow
-              console.warn("Authentication logging unavailable:", logError);
+
+            if (sessionError) {
+              throw sessionError;
             }
 
-            setTimeout(() => {
-              router.replace("/dashboard");
-            }, 2000);
-          } else {
-            throw new Error("No user data received");
+            user = sessionData.user ?? null;
           }
+        }
+
+        if (typeof window !== "undefined" && window.location.hash) {
+          window.history.replaceState(
+            null,
+            document.title,
+            window.location.pathname + window.location.search,
+          );
+        }
+
+        if (user) {
+          setUserEmail(user.email || null);
+
+          // Check if this is an enterprise user
+          if (user.email) {
+            const enterprise = detectEnterpriseDomain(user.email);
+            setIsEnterprise(!!enterprise);
+          }
+
+          setStatus("success");
+          setMessage("Authentication successful!");
+
+          try {
+            await import("../../../lib/analytics").then((m) =>
+              m.track({ name: "auth_success" })
+            );
+          } catch {}
+
+          // Log successful authentication (optional, fail silently if API doesn't exist)
+          try {
+            await fetch("/api/action_log", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                tenantId: user.id,
+                actorType: "user",
+                actorId: user.id,
+                action: "auth_success",
+                objType: "user",
+                objId: user.id,
+                payloadHash: "auth_success",
+              }),
+            });
+          } catch (logError) {
+            // Silently handle logging errors - don't break authentication flow
+            console.warn("Authentication logging unavailable:", logError);
+          }
+
+          setTimeout(() => {
+            router.replace("/dashboard");
+          }, 2000);
         } else {
-          throw new Error("No authentication code provided");
+          throw new Error("No authentication credentials provided");
         }
       } catch (err: any) {
         console.error("Auth callback error:", err);
