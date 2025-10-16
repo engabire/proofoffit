@@ -325,7 +325,8 @@ export default function EnterpriseLogin() {
                 ? (
                   <>
                     <p>
-                      Don&apos;t have access? Ask your admin to invite you as{" "}
+                      Don&apos;t have access? Ask your admin to invite you as
+                      {" "}
                       <span className="font-medium">Recruiter</span>,{" "}
                       <span className="font-medium">Reviewer</span>, or{" "}
                       <span className="font-medium">Admin</span>.

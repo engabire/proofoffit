@@ -50,9 +50,9 @@ export function SecurityAudit({
       const interval = setInterval(runSecurityAudit, refreshInterval)
       return () => clearInterval(interval)
     }
-  }, [autoRefresh, refreshInterval])
+  }, [autoRefresh, refreshInterval, runSecurityAudit])
 
-  const runSecurityAudit = async () => {
+  const runSecurityAudit = useCallback(async () => {
     setIsLoading(true)
     
     try {
@@ -190,7 +190,7 @@ export function SecurityAudit({
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [onIssueFound])
 
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -32,9 +32,9 @@ export function ScrapedItemsList() {
     });
     
     return unsubscribe;
-  }, []);
+  }, [loadItems]);
 
-  const loadItems = async () => {
+  const loadItems = useCallback(async () => {
     try {
       setLoading(true);
       const result = await scrapingClient.getLatestItems({
@@ -49,7 +49,7 @@ export function ScrapedItemsList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDomain, search]);
 
   const loadDomains = async () => {
     try {

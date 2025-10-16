@@ -270,6 +270,7 @@ export class JobFeedManager {
       try {
         const results = await this.fetchAllJobs(search)
         await this.saveJobsToDatabase(results)
+        // eslint-disable-next-line no-console
         console.log(`Fetched ${results.reduce((sum, r) => sum + r.jobs.length, 0)} jobs for "${search.keywords}"`)
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -279,6 +280,7 @@ export class JobFeedManager {
     
     // eslint-disable-next-line no-console
     
+    // eslint-disable-next-line no-console
     console.log('Job feed refresh completed')
   }
 }

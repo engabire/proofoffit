@@ -1,63 +1,63 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Mail, 
-  Clock, 
-  Shield, 
-  CheckCircle, 
-  AlertCircle, 
-  RefreshCw,
-  ExternalLink,
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertCircle,
+  Check,
+  CheckCircle,
+  Clock,
   Copy,
-  Check
-} from 'lucide-react'
+  ExternalLink,
+  Mail,
+  RefreshCw,
+  Shield,
+} from "lucide-react";
 // Simple toast implementation
 const toast = {
   // eslint-disable-next-line no-console
-  success: (message: string) => console.log('Success:', message),
+  success: (message: string) => console.log("Success:", message),
   // eslint-disable-next-line no-console
-  error: (message: string) => console.error('Error:', message)
-}
+  error: (message: string) => console.error("Error:", message),
+};
 
 interface EmailVerificationGuidanceProps {
-  email: string
-  emailSentType: 'magic' | 'verification'
-  onResendEmail: () => void
-  isResending?: boolean
-  resendCooldown?: number
+  email: string;
+  emailSentType: "magic" | "verification";
+  onResendEmail: () => void;
+  isResending?: boolean;
+  resendCooldown?: number;
 }
 
-export function EmailVerificationGuidance({ 
-  email, 
-  emailSentType, 
-  onResendEmail, 
+export function EmailVerificationGuidance({
+  email,
+  emailSentType,
+  onResendEmail,
   isResending = false,
-  resendCooldown = 60
+  resendCooldown = 60,
 }: EmailVerificationGuidanceProps) {
-  const [timeLeft, setTimeLeft] = useState(resendCooldown)
-  const [copied, setCopied] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(resendCooldown);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [timeLeft])
+  }, [timeLeft]);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email)
-    setCopied(true)
-    toast.success('Email address copied to clipboard')
-    setTimeout(() => setCopied(false), 2000)
-  }
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    toast.success("Email address copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleResend = () => {
-    if (timeLeft > 0) return
-    onResendEmail()
-    setTimeLeft(resendCooldown)
-  }
+    if (timeLeft > 0) return;
+    onResendEmail();
+    setTimeLeft(resendCooldown);
+  };
 
   return (
     <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/30">
@@ -68,16 +68,24 @@ export function EmailVerificationGuidance({
           </div>
           <div>
             <CardTitle className="text-blue-900 dark:text-blue-100 text-lg">
-              {emailSentType === 'magic' ? 'Magic Link Sent!' : 'Verification Email Sent!'}
+              {emailSentType === "magic"
+                ? "Magic Link Sent!"
+                : "Verification Email Sent!"}
             </CardTitle>
             <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">
-              We&apos;ve sent {emailSentType === 'magic' ? 'a magic link' : 'a verification link'} to:
+              We&apos;ve sent{" "}
+              {emailSentType === "magic"
+                ? "a magic link"
+                : "a verification link"} to:
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2 mt-3">
-          <Badge variant="outline" className="bg-white border-blue-300 text-blue-800">
+          <Badge
+            variant="outline"
+            className="bg-white border-blue-300 text-blue-800"
+          >
             {email}
           </Badge>
           <Button
@@ -86,7 +94,9 @@ export function EmailVerificationGuidance({
             onClick={handleCopyEmail}
             className="h-6 w-6 p-0"
           >
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied
+              ? <Check className="h-3 w-3" />
+              : <Copy className="h-3 w-3" />}
           </Button>
         </div>
       </CardHeader>
@@ -98,16 +108,20 @@ export function EmailVerificationGuidance({
             <CheckCircle className="h-4 w-4" />
             Next Steps
           </h4>
-          
+
           <div className="space-y-3">
             <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-blue-200">
               <div className="rounded-full bg-blue-500 text-white text-xs font-bold w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">
                 1
               </div>
               <div>
-                <p className="font-medium text-gray-900">Check your email inbox</p>
+                <p className="font-medium text-gray-900">
+                  Check your email inbox
+                </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  Look for an email from <strong>ProofOfFit</strong> with the subject line containing &ldquo;verification&rdquo; or &ldquo;magic link&rdquo;
+                  Look for an email from <strong>ProofOfFit</strong>{" "}
+                  with the subject line containing &ldquo;verification&rdquo; or
+                  &ldquo;magic link&rdquo;
                 </p>
               </div>
             </div>
@@ -117,9 +131,12 @@ export function EmailVerificationGuidance({
                 2
               </div>
               <div>
-                <p className="font-medium text-gray-900">Click the verification link</p>
+                <p className="font-medium text-gray-900">
+                  Click the verification link
+                </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  The link will automatically log you in and redirect you to your dashboard
+                  The link will automatically log you in and redirect you to
+                  your dashboard
                 </p>
               </div>
             </div>
@@ -129,9 +146,12 @@ export function EmailVerificationGuidance({
                 3
               </div>
               <div>
-                <p className="font-medium text-gray-900">Start using ProofOfFit</p>
+                <p className="font-medium text-gray-900">
+                  Start using ProofOfFit
+                </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  You&apos;ll be redirected to your personalized dashboard where you can begin your journey
+                  You&apos;ll be redirected to your personalized dashboard where
+                  you can begin your journey
                 </p>
               </div>
             </div>
@@ -178,13 +198,11 @@ export function EmailVerificationGuidance({
         <div className="flex items-center justify-between pt-4 border-t border-blue-200">
           <div className="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-200">
             <Clock className="h-4 w-4" />
-            {timeLeft > 0 ? (
-              <span>Resend available in {timeLeft}s</span>
-            ) : (
-              <span>Ready to resend</span>
-            )}
+            {timeLeft > 0
+              ? <span>Resend available in {timeLeft}s</span>
+              : <span>Ready to resend</span>}
           </div>
-          
+
           <Button
             onClick={handleResend}
             disabled={timeLeft > 0 || isResending}
@@ -192,26 +210,28 @@ export function EmailVerificationGuidance({
             size="sm"
             className="border-blue-300 text-blue-700 hover:bg-blue-100"
           >
-            {isResending ? (
-              <>
-                <RefreshCw className="h-3 w-3 mr-2 animate-spin" />
-                Sending...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="h-3 w-3 mr-2" />
-                Resend Email
-              </>
-            )}
+            {isResending
+              ? (
+                <>
+                  <RefreshCw className="h-3 w-3 mr-2 animate-spin" />
+                  Sending...
+                </>
+              )
+              : (
+                <>
+                  <RefreshCw className="h-3 w-3 mr-2" />
+                  Resend Email
+                </>
+              )}
           </Button>
         </div>
 
         {/* Support link */}
         <div className="text-center pt-2">
           <p className="text-xs text-blue-600 dark:text-blue-300">
-            Still having trouble?{' '}
-            <a 
-              href="mailto:support@proofoffit.com" 
+            Still having trouble?{" "}
+            <a
+              href="mailto:support@proofoffit.com"
               className="underline hover:no-underline flex items-center gap-1 justify-center"
             >
               Contact Support
@@ -221,5 +241,5 @@ export function EmailVerificationGuidance({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -55,9 +55,9 @@ export function BusinessIntelligence() {
 
   useEffect(() => {
     fetchBusinessData()
-  }, [selectedPeriod])
+  }, [selectedPeriod, fetchBusinessData])
 
-  const fetchBusinessData = async () => {
+  const fetchBusinessData = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -198,7 +198,7 @@ export function BusinessIntelligence() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedPeriod])
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

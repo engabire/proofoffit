@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useMemo, useState } from "react";
 
 /**
@@ -445,66 +446,66 @@ export default function ResumeFormBeauty() {
     </SectionCard>
   );
 
-  // Layout renderers
-  const ATSLayout = (
-    <div className="space-y-[var(--gap)]">
-      {HeaderSection}
-      {SummarySection}
-      {CompetenciesSection}
-      {ExperienceSection}
-      {EducationSection}
-      {TechStackSection}
-      {CivicSection}
-      {BulletBank}
-      {ModuleBullets}
-    </div>
-  );
 
-  const HybridLayout = (
-    <div className="grid grid-cols-12 gap-[var(--gap)]">
-      <div className="col-span-12">{HeaderSection}</div>
-      <div className="col-span-12 lg:col-span-8 space-y-[var(--gap)]">
+  const LayoutViewport = useMemo(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    const ATSLayout = (
+      <div className="space-y-[var(--gap)]">
+        {HeaderSection}
         {SummarySection}
-        {ExperienceSection}
-        {ProjectsSection}
-      </div>
-      <div className="col-span-12 lg:col-span-4 space-y-[var(--gap)]">
         {CompetenciesSection}
-        {TechStackSection}
+        {ExperienceSection}
         {EducationSection}
+        {TechStackSection}
         {CivicSection}
+        {BulletBank}
         {ModuleBullets}
       </div>
-    </div>
-  );
+    );
 
-  const CaseStudyLayout = (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs text-[color:var(--muted)] mb-2">Page 1</div>
-        <div className="space-y-[var(--gap)]">
-          {HeaderSection}
+    const HybridLayout = (
+      <div className="grid grid-cols-12 gap-[var(--gap)]">
+        <div className="col-span-12">{HeaderSection}</div>
+        <div className="col-span-12 lg:col-span-8 space-y-[var(--gap)]">
           {SummarySection}
-          {CompetenciesSection}
           {ExperienceSection}
+          {ProjectsSection}
+        </div>
+        <div className="col-span-12 lg:col-span-4 space-y-[var(--gap)]">
+          {CompetenciesSection}
+          {TechStackSection}
           {EducationSection}
+          {CivicSection}
+          {ModuleBullets}
         </div>
       </div>
-      <div className="border-t pt-6 page-break-before">
-        <div className="text-xs text-[color:var(--muted)] mb-2">Page 2 — Case Studies</div>
-        <SectionCard title="Case Studies (Problem → Approach → Result)">
-          <Table headers={["#", "Problem", "Approach", "Result"]} rows={[["1", "Variance narratives inconsistent", "Built standardized variance pack", "review time −40%"], ["2", "Reconciling items backlog", "Checklist + tie‑outs + ownership", "open items −70%"], ["3", "Cashflow visibility low", "Driver‑based model & dashboard", "forecast accuracy +12%"]]} />
-        </SectionCard>
-        {ModuleBullets}
-      </div>
-    </div>
-  );
+    );
 
-  const LayoutViewport = useMemo(() => {
+    const CaseStudyLayout = (
+      <div className="space-y-8">
+        <div>
+          <div className="text-xs text-[color:var(--muted)] mb-2">Page 1</div>
+          <div className="space-y-[var(--gap)]">
+            {HeaderSection}
+            {SummarySection}
+            {CompetenciesSection}
+            {ExperienceSection}
+            {EducationSection}
+          </div>
+        </div>
+        <div className="border-t pt-6 page-break-before">
+          <div className="text-xs text-[color:var(--muted)] mb-2">Page 2 — Case Studies</div>
+          <SectionCard title="Case Studies (Problem → Approach → Result)">
+            <Table headers={["#", "Problem", "Approach", "Result"]} rows={[["1", "Variance narratives inconsistent", "Built standardized variance pack", "review time −40%"], ["2", "Reconciling items backlog", "Checklist + tie‑outs + ownership", "open items −70%"], ["3", "Cashflow visibility low", "Driver‑based model & dashboard", "forecast accuracy +12%"]]} />
+          </SectionCard>
+          {ModuleBullets}
+        </div>
+      </div>
+    );
+
     if (layout === "Hybrid") return HybridLayout;
     if (layout === "CaseStudy") return CaseStudyLayout;
     return ATSLayout;
-  }, [layout, module, density, radius, mode, accent]);
+  }, [layout, HeaderSection, SummarySection, CompetenciesSection, ExperienceSection, EducationSection, TechStackSection, CivicSection, BulletBank, ModuleBullets, ProjectsSection]);
 
   return (
     <div className="min-h-[100vh] bg-gradient-to-b from-gray-50 to-white py-8" style={vars}>

@@ -1,21 +1,41 @@
-import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge } from '@proof-of-fit/ui'
-import { CheckCircle, Gift, Share2, Calendar, Download, ExternalLink, Users, Trophy, Sparkles } from 'lucide-react'
-import GiftCodeClipboard from './use-copy'
-import { PageNav } from '@/components/system/page-nav'
-import ShareGiftButtons from './share-gift'
+import Link from "next/link";
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@proof-of-fit/ui";
+import {
+  Calendar,
+  CheckCircle,
+  Download,
+  ExternalLink,
+  Gift,
+  Share2,
+  Sparkles,
+  Trophy,
+  Users,
+} from "lucide-react";
+import GiftCodeClipboard from "./use-copy";
+import { PageNav } from "@/components/system/page-nav";
+import ShareGiftButtons from "./share-gift";
 
 interface GiftSuccessPageProps {
   searchParams: {
-    code?: string
-    months?: string
-  }
+    code?: string;
+    months?: string;
+  };
 }
 
-export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) {
-  const code = searchParams.code ?? ''
-  const months = Number.parseInt(searchParams.months || '0', 10)
-  const giftValue = months * 29 // Assuming $29/month
+export default function GiftSuccessPage(
+  { searchParams }: GiftSuccessPageProps,
+) {
+  const code = searchParams.code ?? "";
+  const months = Number.parseInt(searchParams.months || "0", 10);
+  const giftValue = months * 29; // Assuming $29/month
 
   return (
     <div className="mx-auto flex min-h-[70vh] w-full max-w-4xl flex-col gap-8 px-4 py-8 md:py-16">
@@ -28,7 +48,10 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
           🎉 Gift Sent Successfully!
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Your {months}-month ProofOfFit gift worth <span className="font-semibold text-emerald-600">${giftValue}</span> is ready to share.
+          Your {months}-month ProofOfFit gift worth{" "}
+          <span className="font-semibold text-emerald-600">${giftValue}</span>
+          {" "}
+          is ready to share.
         </p>
       </div>
 
@@ -38,31 +61,42 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
             <div className="flex items-center gap-3">
               <CheckCircle className="h-8 w-8 text-emerald-500" />
               <div>
-                <CardTitle className="text-xl">Gift checkout complete</CardTitle>
+                <CardTitle className="text-xl">
+                  Gift checkout complete
+                </CardTitle>
                 <CardDescription className="text-base mt-1">
-                  We emailed your receipt and gift code. Share it with your candidate when you&apos;re ready.
+                  We emailed your receipt and gift code. Share it with your
+                  candidate when you&apos;re ready.
                 </CardDescription>
               </div>
             </div>
-            <Badge variant="outline" className="bg-white border-emerald-200 text-emerald-700">
+            <Badge
+              variant="outline"
+              className="bg-white border-emerald-200 text-emerald-700"
+            >
               <Trophy className="h-3 w-3 mr-1" />
               Premium Gift
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {code ? (
-            <GiftCodeClipboard code={code} months={months} />
-          ) : (
-            <div className="rounded-lg bg-amber-50 border border-amber-200 p-4">
-              <p className="text-sm text-amber-800">
-                <strong>Gift code not detected:</strong> We couldn&apos;t find a gift code in this link, but your email receipt includes it. 
-                <Link href="/contact" className="text-amber-600 hover:underline ml-1">
-                  Contact support if needed.
-                </Link>
-              </p>
-            </div>
-          )}
+          {code
+            ? <GiftCodeClipboard code={code} months={months} />
+            : (
+              <div className="rounded-lg bg-amber-50 border border-amber-200 p-4">
+                <p className="text-sm text-amber-800">
+                  <strong>Gift code not detected:</strong>{" "}
+                  We couldn&apos;t find a gift code in this link, but your email
+                  receipt includes it.
+                  <Link
+                    href="/contact"
+                    className="text-amber-600 hover:underline ml-1"
+                  >
+                    Contact support if needed.
+                  </Link>
+                </p>
+              </div>
+            )}
 
           {/* Share Gift Section */}
           {code && (
@@ -72,7 +106,11 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
                   <Share2 className="h-5 w-5 mr-2 text-emerald-600" />
                   Share Your Gift
                 </h3>
-                <ShareGiftButtons code={code} months={months} giftValue={giftValue} />
+                <ShareGiftButtons
+                  code={code}
+                  months={months}
+                  giftValue={giftValue}
+                />
               </div>
             </div>
           )}
@@ -83,21 +121,27 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-emerald-900">No card required</h4>
+                  <h4 className="font-semibold text-emerald-900">
+                    No card required
+                  </h4>
                   <p className="text-sm text-emerald-700 mt-1">
-                    Recipients can unlock their sponsored months from the dashboard without storing payment details.
+                    Recipients can unlock their sponsored months from the
+                    dashboard without storing payment details.
                   </p>
                 </div>
               </div>
             </div>
-            
+
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
               <div className="flex items-start gap-3">
                 <Calendar className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-blue-900">No auto-renewal</h4>
+                  <h4 className="font-semibold text-blue-900">
+                    No auto-renewal
+                  </h4>
                   <p className="text-sm text-blue-700 mt-1">
-                    We never auto-charge after a gift ends. Recipients can manually renew if they&apos;d like to continue.
+                    We never auto-charge after a gift ends. Recipients can
+                    manually renew if they&apos;d like to continue.
                   </p>
                 </div>
               </div>
@@ -144,7 +188,11 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
-            <Button size="lg" asChild className="bg-gradient-to-r from-emerald-600 to-teal-600">
+            <Button
+              size="lg"
+              asChild
+              className="bg-gradient-to-r from-emerald-600 to-teal-600"
+            >
               <Link href="/gift">
                 <Gift className="mr-2 h-4 w-4" /> Send another gift
               </Link>
@@ -170,16 +218,27 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
               For Recipients
             </h3>
             <p className="text-blue-700 text-sm mb-4">
-              Help your gift recipient get the most out of their ProofOfFit experience.
+              Help your gift recipient get the most out of their ProofOfFit
+              experience.
             </p>
             <div className="space-y-2">
-              <Button variant="outline" size="sm" asChild className="w-full border-blue-300 text-blue-700 hover:bg-blue-100">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="w-full border-blue-300 text-blue-700 hover:bg-blue-100"
+              >
                 <Link href="/help/getting-started">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Getting Started Guide
                 </Link>
               </Button>
-              <Button variant="outline" size="sm" asChild className="w-full border-blue-300 text-blue-700 hover:bg-blue-100">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="w-full border-blue-300 text-blue-700 hover:bg-blue-100"
+              >
                 <Link href="/help/gift-redemption">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Gift Redemption Help
@@ -196,16 +255,27 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
               For Employers
             </h3>
             <p className="text-purple-700 text-sm mb-4">
-              Discover how ProofOfFit can help you find better candidates faster.
+              Discover how ProofOfFit can help you find better candidates
+              faster.
             </p>
             <div className="space-y-2">
-              <Button variant="outline" size="sm" asChild className="w-full border-purple-300 text-purple-700 hover:bg-purple-100">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="w-full border-purple-300 text-purple-700 hover:bg-purple-100"
+              >
                 <Link href="/app/slate">
                   <Users className="h-4 w-4 mr-2" />
                   Find Candidates
                 </Link>
               </Button>
-              <Button variant="outline" size="sm" asChild className="w-full border-purple-300 text-purple-700 hover:bg-purple-100">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="w-full border-purple-300 text-purple-700 hover:bg-purple-100"
+              >
                 <Link href="/about">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Learn About ProofOfFit
@@ -216,7 +286,10 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
         </Card>
       </div>
 
-      <PageNav prev={{ href: '/gift', label: 'Gift' }} next={{ href: '/', label: 'Home' }} />
+      <PageNav
+        prev={{ href: "/gift", label: "Gift" }}
+        next={{ href: "/", label: "Home" }}
+      />
     </div>
-  )
+  );
 }

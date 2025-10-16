@@ -31,7 +31,7 @@ export function useToast() {
     }
 
     return id
-  }, [])
+  }, [removeToast])
 
   const removeToast = useCallback((id: string) => {
     setToasts(prev => prev.filter(toast => toast.id !== id))
@@ -54,8 +54,9 @@ export function useToast() {
 
   // Cleanup timeouts on unmount
   useEffect(() => {
+    const timeouts = timeoutsRef.current
     return () => {
-      timeoutsRef.current.forEach(timeout => clearTimeout(timeout))
+      timeouts.forEach(timeout => clearTimeout(timeout))
     }
   }, [])
 

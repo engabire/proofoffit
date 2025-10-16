@@ -2358,7 +2358,9 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
               {" "}
               found
             </span>
-            {searchTerm && <Badge variant="outline">for &ldquo;{searchTerm}&rdquo;</Badge>}
+            {searchTerm && (
+              <Badge variant="outline">for &ldquo;{searchTerm}&rdquo;</Badge>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
@@ -3869,7 +3871,7 @@ function ResultsStep({
           <div className="grid md:grid-cols-2 gap-6">
             {documents.map((doc) => {
               const allSuggestionsApplied = doc.aiSuggestions.every(
-                (suggestion) => appliedSuggestions.includes(suggestion)
+                (suggestion) => appliedSuggestions.includes(suggestion),
               );
               const suggestionSwitchId = `allow-suggestions-${doc.id}`;
 

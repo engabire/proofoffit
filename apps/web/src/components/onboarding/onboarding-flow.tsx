@@ -1,39 +1,39 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { Wizard, type WizardStep } from './progress-indicator'
-import { useAuth } from '@/hooks/use-auth'
-import { useRouter } from 'next/navigation'
+import React from "react";
+import { Wizard, type WizardStep } from "./progress-indicator";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 interface ProfileData {
-  firstName: string
-  lastName: string
-  email: string
-  company?: string
-  role?: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  company?: string;
+  role?: string;
 }
 
 interface PreferencesData {
-  notifications: boolean
-  newsletter: boolean
-  dataSharing: boolean
+  notifications: boolean;
+  newsletter: boolean;
+  dataSharing: boolean;
 }
 
 // Step 1: Welcome & User Type Selection
-function WelcomeStep({ 
-  data, 
-  onUpdate, 
-  onNext 
-}: { 
-  data: any
-  onUpdate: (data: any) => void
-  onNext: () => void
+function WelcomeStep({
+  data,
+  onUpdate,
+  onNext,
+}: {
+  data: any;
+  onUpdate: (data: any) => void;
+  onNext: () => void;
 }) {
-  const [userType, setUserType] = React.useState(data?.userType || '')
+  const [userType, setUserType] = React.useState(data?.userType || "");
 
   React.useEffect(() => {
-    onUpdate({ userType })
-  }, [userType, onUpdate])
+    onUpdate({ userType });
+  }, [userType, onUpdate]);
 
   return (
     <div className="space-y-6">
@@ -48,47 +48,75 @@ function WelcomeStep({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <button
-          onClick={() => setUserType('candidate')}
+          onClick={() => setUserType("candidate")}
           className={`
             p-6 border-2 rounded-lg text-left transition-all
-            ${userType === 'candidate' 
-              ? 'border-blue-500 bg-blue-50' 
-              : 'border-gray-200 hover:border-gray-300'
-            }
+            ${
+            userType === "candidate"
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-200 hover:border-gray-300"
+          }
           `}
         >
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <svg
+                className="w-6 h-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
               </svg>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900">I&apos;m looking for a job</h4>
-              <p className="text-sm text-gray-600">Find opportunities that match your skills and goals</p>
+              <h4 className="font-medium text-gray-900">
+                I&apos;m looking for a job
+              </h4>
+              <p className="text-sm text-gray-600">
+                Find opportunities that match your skills and goals
+              </p>
             </div>
           </div>
         </button>
 
         <button
-          onClick={() => setUserType('employer')}
+          onClick={() => setUserType("employer")}
           className={`
             p-6 border-2 rounded-lg text-left transition-all
-            ${userType === 'employer' 
-              ? 'border-blue-500 bg-blue-50' 
-              : 'border-gray-200 hover:border-gray-300'
-            }
+            ${
+            userType === "employer"
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-200 hover:border-gray-300"
+          }
           `}
         >
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6"
+                />
               </svg>
             </div>
             <div>
               <h4 className="font-medium text-gray-900">I&apos;m hiring</h4>
-              <p className="text-sm text-gray-600">Find the best candidates for your team</p>
+              <p className="text-sm text-gray-600">
+                Find the best candidates for your team
+              </p>
             </div>
           </div>
         </button>
@@ -105,32 +133,34 @@ function WelcomeStep({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Step 2: Profile Setup
-function ProfileStep({ 
-  data, 
-  onUpdate, 
-  onNext 
-}: { 
-  data: any
-  onUpdate: (data: any) => void
-  onNext: () => void
+function ProfileStep({
+  data,
+  onUpdate,
+  onNext,
+}: {
+  data: any;
+  onUpdate: (data: any) => void;
+  onNext: () => void;
 }) {
-  const [profile, setProfile] = React.useState<ProfileData>(data || {
-    firstName: '',
-    lastName: '',
-    email: '',
-    company: '',
-    role: ''
-  })
+  const [profile, setProfile] = React.useState<ProfileData>(
+    data || {
+      firstName: "",
+      lastName: "",
+      email: "",
+      company: "",
+      role: "",
+    },
+  );
 
   React.useEffect(() => {
-    onUpdate(profile)
-  }, [profile, onUpdate])
+    onUpdate(profile);
+  }, [profile, onUpdate]);
 
-  const isEmployer = data?.userType === 'employer'
+  const isEmployer = data?.userType === "employer";
 
   return (
     <div className="space-y-6">
@@ -151,7 +181,8 @@ function ProfileStep({
           <input
             type="text"
             value={profile.firstName}
-            onChange={(e) => setProfile(prev => ({ ...prev, firstName: e.target.value }))}
+            onChange={(e) =>
+              setProfile((prev) => ({ ...prev, firstName: e.target.value }))}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your first name"
           />
@@ -163,7 +194,8 @@ function ProfileStep({
           <input
             type="text"
             value={profile.lastName}
-            onChange={(e) => setProfile(prev => ({ ...prev, lastName: e.target.value }))}
+            onChange={(e) =>
+              setProfile((prev) => ({ ...prev, lastName: e.target.value }))}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your last name"
           />
@@ -177,7 +209,8 @@ function ProfileStep({
         <input
           type="email"
           value={profile.email}
-          onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))}
+          onChange={(e) =>
+            setProfile((prev) => ({ ...prev, email: e.target.value }))}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Enter your email address"
         />
@@ -192,7 +225,8 @@ function ProfileStep({
             <input
               type="text"
               value={profile.company}
-              onChange={(e) => setProfile(prev => ({ ...prev, company: e.target.value }))}
+              onChange={(e) =>
+                setProfile((prev) => ({ ...prev, company: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your company name"
             />
@@ -203,7 +237,8 @@ function ProfileStep({
             </label>
             <select
               value={profile.role}
-              onChange={(e) => setProfile(prev => ({ ...prev, role: e.target.value }))}
+              onChange={(e) =>
+                setProfile((prev) => ({ ...prev, role: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select your role</option>
@@ -227,30 +262,32 @@ function ProfileStep({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 // Step 3: Preferences
-function PreferencesStep({ 
-  data, 
-  onUpdate, 
-  onNext 
-}: { 
-  data: any
-  onUpdate: (data: any) => void
-  onNext: () => void
+function PreferencesStep({
+  data,
+  onUpdate,
+  onNext,
+}: {
+  data: any;
+  onUpdate: (data: any) => void;
+  onNext: () => void;
 }) {
-  const [preferences, setPreferences] = React.useState<PreferencesData>(data || {
-    notifications: true,
-    newsletter: false,
-    dataSharing: true
-  })
+  const [preferences, setPreferences] = React.useState<PreferencesData>(
+    data || {
+      notifications: true,
+      newsletter: false,
+      dataSharing: true,
+    },
+  );
 
   React.useEffect(() => {
-    onUpdate(preferences)
-  }, [preferences, onUpdate])
+    onUpdate(preferences);
+  }, [preferences, onUpdate]);
 
-  const isEmployer = data?.userType === 'employer'
+  const isEmployer = data?.userType === "employer";
 
   return (
     <div className="space-y-6">
@@ -268,20 +305,24 @@ function PreferencesStep({
           <div>
             <h4 className="font-medium text-gray-900">Email Notifications</h4>
             <p className="text-sm text-gray-600">
-              {isEmployer 
-                ? 'Get notified about new candidates and application updates'
-                : 'Get notified about new job matches and application status'
-              }
+              {isEmployer
+                ? "Get notified about new candidates and application updates"
+                : "Get notified about new job matches and application status"}
             </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               checked={preferences.notifications}
-              onChange={(e) => setPreferences(prev => ({ ...prev, notifications: e.target.checked }))}
+              onChange={(e) =>
+                setPreferences((prev) => ({
+                  ...prev,
+                  notifications: e.target.checked,
+                }))}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+            </div>
           </label>
         </div>
 
@@ -296,10 +337,15 @@ function PreferencesStep({
             <input
               type="checkbox"
               checked={preferences.newsletter}
-              onChange={(e) => setPreferences(prev => ({ ...prev, newsletter: e.target.checked }))}
+              onChange={(e) =>
+                setPreferences((prev) => ({
+                  ...prev,
+                  newsletter: e.target.checked,
+                }))}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+            </div>
           </label>
         </div>
 
@@ -314,10 +360,15 @@ function PreferencesStep({
             <input
               type="checkbox"
               checked={preferences.dataSharing}
-              onChange={(e) => setPreferences(prev => ({ ...prev, dataSharing: e.target.checked }))}
+              onChange={(e) =>
+                setPreferences((prev) => ({
+                  ...prev,
+                  dataSharing: e.target.checked,
+                }))}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+            </div>
           </label>
         </div>
       </div>
@@ -331,34 +382,44 @@ function PreferencesStep({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 // Step 4: Completion
-function CompletionStep({ 
-  data, 
-  onNext 
-}: { 
-  data: any
-  onNext: () => void
+function CompletionStep({
+  data,
+  onNext,
+}: {
+  data: any;
+  onNext: () => void;
 }) {
-  const router = useRouter()
-  const { user } = useAuth()
+  const router = useRouter();
+  const { user } = useAuth();
 
   const handleComplete = () => {
     // Redirect based on user type
-    if (data?.userType === 'employer') {
-      router.push('/employer/dashboard')
+    if (data?.userType === "employer") {
+      router.push("/employer/dashboard");
     } else {
-      router.push('/dashboard')
+      router.push("/dashboard");
     }
-  }
+  };
 
   return (
     <div className="text-center space-y-6">
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-        <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        <svg
+          className="w-8 h-8 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 13l4 4L19 7"
+          />
         </svg>
       </div>
 
@@ -367,26 +428,29 @@ function CompletionStep({
           Welcome to ProofOfFit!
         </h3>
         <p className="text-gray-600 max-w-md mx-auto">
-          Your account is set up and ready to go. You can always update your preferences in settings.
+          Your account is set up and ready to go. You can always update your
+          preferences in settings.
         </p>
       </div>
 
       <div className="bg-gray-50 rounded-lg p-6 max-w-md mx-auto">
         <h4 className="font-medium text-gray-900 mb-3">What&apos;s next?</h4>
         <ul className="text-sm text-gray-600 space-y-2 text-left">
-          {data?.userType === 'employer' ? (
-            <>
-              <li>• Create your first job posting</li>
-              <li>• Set up your team and permissions</li>
-              <li>• Configure your hiring workflow</li>
-            </>
-          ) : (
-            <>
-              <li>• Complete your profile</li>
-              <li>• Upload your resume</li>
-              <li>• Start browsing job opportunities</li>
-            </>
-          )}
+          {data?.userType === "employer"
+            ? (
+              <>
+                <li>• Create your first job posting</li>
+                <li>• Set up your team and permissions</li>
+                <li>• Configure your hiring workflow</li>
+              </>
+            )
+            : (
+              <>
+                <li>• Complete your profile</li>
+                <li>• Upload your resume</li>
+                <li>• Start browsing job opportunities</li>
+              </>
+            )}
         </ul>
       </div>
 
@@ -397,70 +461,70 @@ function CompletionStep({
         Get Started
       </button>
     </div>
-  )
+  );
 }
 
 // Main Onboarding Flow Component
 interface OnboardingFlowProps {
-  className?: string
+  className?: string;
 }
 
 export function OnboardingFlow({ className }: OnboardingFlowProps) {
-  const router = useRouter()
-  const { user } = useAuth()
+  const router = useRouter();
+  const { user } = useAuth();
 
   const steps: WizardStep[] = [
     {
-      id: 'welcome',
-      title: 'Welcome',
-      description: 'Choose your user type',
+      id: "welcome",
+      title: "Welcome",
+      description: "Choose your user type",
       component: WelcomeStep,
       validation: () => {
         // Validation will be handled in the component
-        return true
-      }
+        return true;
+      },
     },
     {
-      id: 'profile',
-      title: 'Profile',
-      description: 'Tell us about yourself',
+      id: "profile",
+      title: "Profile",
+      description: "Tell us about yourself",
       component: ProfileStep,
       validation: () => {
         // Validation will be handled in the component
-        return true
-      }
+        return true;
+      },
     },
     {
-      id: 'preferences',
-      title: 'Preferences',
-      description: 'Set your preferences',
-      component: PreferencesStep
+      id: "preferences",
+      title: "Preferences",
+      description: "Set your preferences",
+      component: PreferencesStep,
     },
     {
-      id: 'complete',
-      title: 'Complete',
-      description: 'You\'re all set!',
-      component: CompletionStep
-    }
-  ]
+      id: "complete",
+      title: "Complete",
+      description: "You're all set!",
+      component: CompletionStep,
+    },
+  ];
 
   const handleComplete = (data: any) => {
     // eslint-disable-next-line no-console
-    console.log('Onboarding completed with data:', data)
+    console.log("Onboarding completed with data:", data);
     // Here you would typically save the onboarding data to your backend
-  }
+  };
 
   const handleStepChange = (stepId: string, data: any) => {
     // eslint-disable-next-line no-console
-    console.log('Step changed to:', stepId, 'with data:', data)
-  }
+    console.log("Step changed to:", stepId, "with data:", data);
+  };
 
   // Redirect if user is already authenticated and has completed onboarding
   React.useEffect(() => {
     if (user && user.user_metadata?.onboarding_completed) {
-      router.push('/dashboard')
+      router.push("/dashboard");
     }
-  }, [user, router])
+  }, [user, router]);
 
   return (
     <div className={`min-h-screen bg-gray-50 py-12 ${className}`}>
@@ -483,5 +547,5 @@ export function OnboardingFlow({ className }: OnboardingFlowProps) {
         />
       </div>
     </div>
-  )
+  );
 }

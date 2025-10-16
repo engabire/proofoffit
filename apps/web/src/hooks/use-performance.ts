@@ -29,7 +29,7 @@ export function usePerformance() {
       setIsSupported(true)
       collectMetrics()
     }
-  }, [])
+  }, [collectMetrics])
 
   const collectMetrics = useCallback(() => {
     if (typeof window === 'undefined') return
@@ -152,6 +152,7 @@ export function usePerformance() {
       })
     }
 
+    // eslint-disable-next-line no-console
     console.log('Performance metrics:', analyticsData)
   }, [metrics])
 

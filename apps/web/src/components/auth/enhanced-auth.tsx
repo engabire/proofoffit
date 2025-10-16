@@ -490,7 +490,8 @@ export default function EnhancedAuth({
               <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                 <p className="text-sm text-blue-800">
                   <strong>No password needed!</strong>{" "}
-                  We&apos;ll send you a secure magic link to create your account.
+                  We&apos;ll send you a secure magic link to create your
+                  account.
                 </p>
               </div>
             )}
@@ -618,8 +619,8 @@ export default function EnhancedAuth({
               : (
                 <>
                   <p>
-                    No account yet? We&apos;ll create one as you sign in and connect
-                    your applications automatically.
+                    No account yet? We&apos;ll create one as you sign in and
+                    connect your applications automatically.
                   </p>
                   <p>
                     Having trouble?{" "}
@@ -634,12 +635,15 @@ export default function EnhancedAuth({
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="text-[11px] leading-relaxed text-gray-500">
               By continuing, you agree to ProofOfFit&apos;s{" "}
-              <Link className="underline" href="/legal/terms">Terms</Link> and{" "}
-              <Link className="underline" href="/legal/privacy">Privacy Policy</Link>
+              <Link className="underline" href="/legal/terms">Terms</Link> and
               {" "}
+              <Link className="underline" href="/legal/privacy">
+                Privacy Policy
+              </Link>{" "}
               and our{" "}
-              <Link className="underline" href="/legal/eeoc">EEOC commitment</Link>.
-              We only send essential account and security emails.
+              <Link className="underline" href="/legal/eeoc">
+                EEOC commitment
+              </Link>. We only send essential account and security emails.
             </div>
           </div>
         </div>

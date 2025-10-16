@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
@@ -74,7 +74,7 @@ interface ApplicationStats {
 
 export function AutoApplyDashboard() {
   // const { user } = useAuth()
-  const user = { id: 'demo-user', email: 'demo@example.com' }
+  const user = useMemo(() => ({ id: 'demo-user', email: 'demo@example.com' }), [])
   const [config, setConfig] = useState<AutoApplyConfig | null>(null)
   const [stats, setStats] = useState<ApplicationStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -85,9 +85,9 @@ export function AutoApplyDashboard() {
     if (user) {
       fetchAutoApplyData()
     }
-  }, [user])
+  }, [user, fetchAutoApplyData])
 
-  const fetchAutoApplyData = async () => {
+  const fetchAutoApplyData = useCallback(async () => {
     try {
       const response = await fetch(`/api/applications/auto-apply?userId=${user?.id}`)
       const data = await response.json()
@@ -133,7 +133,7 @@ export function AutoApplyDashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   const saveConfiguration = async () => {
     if (!config) return

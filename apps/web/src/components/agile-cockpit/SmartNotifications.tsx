@@ -465,10 +465,11 @@ export function SmartNotifications() {
                 <input
                   type="checkbox"
                   checked={settings.emailNotifications}
-                  onChange={(e) => setSettings((prev) => ({
-                    ...prev,
-                    emailNotifications: e.target.checked,
-                  }))}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      emailNotifications: e.target.checked,
+                    }))}
                   className="rounded border-gray-300"
                 />
                 <span className="text-sm">Email Notifications</span>
@@ -478,10 +479,11 @@ export function SmartNotifications() {
                 <input
                   type="checkbox"
                   checked={settings.slackNotifications}
-                  onChange={(e) => setSettings((prev) => ({
-                    ...prev,
-                    slackNotifications: e.target.checked,
-                  }))}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      slackNotifications: e.target.checked,
+                    }))}
                   className="rounded border-gray-300"
                 />
                 <span className="text-sm">Slack Notifications</span>
@@ -493,10 +495,11 @@ export function SmartNotifications() {
                 </label>
                 <select
                   value={settings.frequency}
-                  onChange={(e) => setSettings((prev) => ({
-                    ...prev,
-                    frequency: e.target.value as any,
-                  }))}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      frequency: e.target.value as any,
+                    }))}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 >
                   <option value="immediate">Immediate</option>

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
 import { Badge } from '@proof-of-fit/ui'
 import { Button } from '@proof-of-fit/ui'
@@ -255,9 +256,11 @@ export function RealTimeCollaboration() {
             <div className={`max-w-[70%] ${message.userId === currentUser.id ? 'order-2' : 'order-1'}`}>
               {message.userId !== currentUser.id && (
                 <div className="flex items-center space-x-2 mb-1">
-                  <img
+                  <Image
                     src={message.userAvatar}
                     alt={message.userName}
+                    width={24}
+                    height={24}
                     className="w-6 h-6 rounded-full"
                   />
                   <span className="text-sm font-medium">{message.userName}</span>
@@ -416,9 +419,11 @@ export function RealTimeCollaboration() {
               <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center space-x-3">
                   <div className="relative">
-                    <img
+                    <Image
                       src={user.avatar}
                       alt={user.name}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 rounded-full"
                     />
                     <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(user.status)}`}></div>
