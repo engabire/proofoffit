@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Briefcase,
   Building2,
@@ -331,12 +332,12 @@ export default function EnterpriseLogin() {
                     </p>
                     <p>
                       Need help signing in?{" "}
-                      <a
+                      <Link
                         href="/help/sign-in"
                         className="underline text-blue-600 hover:text-blue-800"
                       >
                         Get support
-                      </a>.
+                      </Link>.
                     </p>
                   </>
                 )
@@ -348,12 +349,12 @@ export default function EnterpriseLogin() {
                     </p>
                     <p>
                       Having trouble?{" "}
-                      <a
+                      <Link
                         href="/help/candidates"
                         className="underline text-blue-600 hover:text-blue-800"
                       >
                         Candidate help
-                      </a>.
+                      </Link>.
                     </p>
                   </>
                 )}

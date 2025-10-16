@@ -13,6 +13,7 @@ import { Label } from "@proof-of-fit/ui";
 import { Separator } from "@proof-of-fit/ui";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { isSupabaseConfigured } from '@/lib/env';
 import { detectEnterpriseDomain } from '@/lib/enterprise-domains';
@@ -372,12 +373,12 @@ export default function EnhancedEnterpriseLoginV2({
               {isHirer ? (
                 <>
                   <p>Don't have access? Ask your admin to invite you as <span className="font-medium">Recruiter</span>, <span className="font-medium">Reviewer</span>, or <span className="font-medium">Admin</span>.</p>
-                  <p>Need help signing in? <a href="/help/sign-in" className="underline">Get support</a>.</p>
+                  <p>Need help signing in? <Link href="/help/sign-in" className="underline">Get support</Link>.</p>
                 </>
               ) : (
                 <>
                   <p>No account yet? We'll create one as you sign in and connect your applications automatically.</p>
-                  <p>Having trouble? <a href="/help/candidates" className="underline">Candidate help</a>.</p>
+                  <p>Having trouble? <Link href="/help/candidates" className="underline">Candidate help</Link>.</p>
                 </>
               )}
             </div>

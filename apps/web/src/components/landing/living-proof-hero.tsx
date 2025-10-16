@@ -1,4 +1,5 @@
 import React from "react"
+import Link from "next/link"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { Card, CardContent, ReusableButton } from "@proof-of-fit/ui"
 import { ArrowUpRight, Check, Copy } from "lucide-react"
@@ -313,7 +314,7 @@ export default function LivingProofHero({ highlights = [], trusted = [], lane = 
             >
               {lane === "seeker" ? "Get my Fit Report" : "Generate a slate"}
             </a>
-            <a
+            <Link
               href="/demo"
               className={`inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-${theme.accent} focus-visible:ring-offset-2 ${
                 lane === "seeker" 
@@ -323,7 +324,7 @@ export default function LivingProofHero({ highlights = [], trusted = [], lane = 
               aria-label="Try interactive demo"
             >
               {lane === "seeker" ? "Try interactive demo" : "See how it works"}
-            </a>
+            </Link>
             <span className={`text-sm ${theme.mutedText} ml-2`}>
               {lane === "seeker" ? "No card • 2 minutes to first Fit Report" : "No setup • 5 minutes to first slate"}
             </span>

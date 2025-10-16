@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { useCSRFHeaders } from "@/components/security/csrf-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -608,9 +609,9 @@ export default function EnhancedAuth({
                   </p>
                   <p>
                     Need help signing in?{" "}
-                    <a href="/help/sign-in" className="underline">
+                    <Link href="/help/sign-in" className="underline">
                       Get support
-                    </a>.
+                    </Link>.
                   </p>
                 </>
               )
@@ -622,9 +623,9 @@ export default function EnhancedAuth({
                   </p>
                   <p>
                     Having trouble?{" "}
-                    <a href="/help/candidates" className="underline">
+                    <Link href="/help/candidates" className="underline">
                       Candidate help
-                    </a>.
+                    </Link>.
                   </p>
                 </>
               )}
@@ -632,12 +633,12 @@ export default function EnhancedAuth({
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="text-[11px] leading-relaxed text-gray-500">
-              By continuing, you agree to ProofOfFit's{" "}
-              <a className="underline" href="/legal/terms">Terms</a> and{" "}
-              <a className="underline" href="/legal/privacy">Privacy Policy</a>
+              By continuing, you agree to ProofOfFit&apos;s{" "}
+              <Link className="underline" href="/legal/terms">Terms</Link> and{" "}
+              <Link className="underline" href="/legal/privacy">Privacy Policy</Link>
               {" "}
               and our{" "}
-              <a className="underline" href="/legal/eeoc">EEOC commitment</a>.
+              <Link className="underline" href="/legal/eeoc">EEOC commitment</Link>.
               We only send essential account and security emails.
             </div>
           </div>
