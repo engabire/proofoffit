@@ -490,7 +490,7 @@ export default function EnhancedAuth({
               <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                 <p className="text-sm text-blue-800">
                   <strong>No password needed!</strong>{" "}
-                  We'll send you a secure magic link to create your account.
+                  We&apos;ll send you a secure magic link to create your account.
                 </p>
               </div>
             )}
@@ -602,7 +602,7 @@ export default function EnhancedAuth({
               ? (
                 <>
                   <p>
-                    Don't have access? Ask your admin to invite you as{" "}
+                    Don&apos;t have access? Ask your admin to invite you as{" "}
                     <span className="font-medium">Recruiter</span>,{" "}
                     <span className="font-medium">Reviewer</span>, or{" "}
                     <span className="font-medium">Admin</span>.

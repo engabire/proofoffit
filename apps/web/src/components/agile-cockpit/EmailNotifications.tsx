@@ -513,7 +513,7 @@ Agile Cockpit`,
               </div>
               <div>
                 <h4 className="font-medium">Configure SMTP Settings</h4>
-                <p className="text-sm text-gray-600">Set up your email provider's SMTP settings (Gmail, Outlook, etc.)</p>
+                <p className="text-sm text-gray-600">Set up your email provider&apos;s SMTP settings (Gmail, Outlook, etc.)</p>
               </div>
             </div>
             
@@ -523,7 +523,7 @@ Agile Cockpit`,
               </div>
               <div>
                 <h4 className="font-medium">Customize Email Templates</h4>
-                <p className="text-sm text-gray-600">Edit the email templates to match your team's communication style</p>
+                <p className="text-sm text-gray-600">Edit the email templates to match your team&apos;s communication style</p>
               </div>
             </div>
             

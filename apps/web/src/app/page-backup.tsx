@@ -82,7 +82,7 @@ export default function HomePage() {
                 <div className="text-4xl mb-4">🎯</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Explainable AI Matching</h3>
                 <p className="text-gray-600">
-                  Every job match comes with detailed explanations of why you're a good fit, 
+                  Every job match comes with detailed explanations of why you&apos;re a good fit, 
                   based on evidence from your profile.
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Apply with Confidence</h3>
                 <p className="text-gray-600">
                   Get tailored resumes and cover letters, then apply knowing 
-                  exactly why you're a great match for each position.
+                  exactly why you&apos;re a great match for each position.
                 </p>
               </div>
             </div>

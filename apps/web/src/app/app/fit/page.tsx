@@ -3516,7 +3516,6 @@ function ResultsStep({
       });
     }
   }, [
-    allowSuggestionIntegration,
     coverLetterDraft,
     coverLetterSignature,
     ensureSignature,

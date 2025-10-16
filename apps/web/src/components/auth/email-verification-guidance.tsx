@@ -71,7 +71,7 @@ export function EmailVerificationGuidance({
               {emailSentType === 'magic' ? 'Magic Link Sent!' : 'Verification Email Sent!'}
             </CardTitle>
             <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">
-              We've sent {emailSentType === 'magic' ? 'a magic link' : 'a verification link'} to:
+              We&apos;ve sent {emailSentType === 'magic' ? 'a magic link' : 'a verification link'} to:
             </p>
           </div>
         </div>
@@ -107,7 +107,7 @@ export function EmailVerificationGuidance({
               <div>
                 <p className="font-medium text-gray-900">Check your email inbox</p>
                 <p className="text-sm text-gray-600 mt-1">
-                  Look for an email from <strong>ProofOfFit</strong> with the subject line containing "verification" or "magic link"
+                  Look for an email from <strong>ProofOfFit</strong> with the subject line containing &ldquo;verification&rdquo; or &ldquo;magic link&rdquo;
                 </p>
               </div>
             </div>
@@ -131,7 +131,7 @@ export function EmailVerificationGuidance({
               <div>
                 <p className="font-medium text-gray-900">Start using ProofOfFit</p>
                 <p className="text-sm text-gray-600 mt-1">
-                  You'll be redirected to your personalized dashboard where you can begin your journey
+                  You&apos;ll be redirected to your personalized dashboard where you can begin your journey
                 </p>
               </div>
             </div>

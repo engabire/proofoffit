@@ -349,7 +349,7 @@ export function SmartNotifications() {
                   No notifications
                 </h3>
                 <p className="text-gray-600">
-                  You're all caught up! Check back later for updates.
+                  You&apos;re all caught up! Check back later for updates.
                 </p>
               </CardContent>
             </Card>
