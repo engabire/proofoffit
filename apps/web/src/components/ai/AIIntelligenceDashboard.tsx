@@ -83,12 +83,6 @@ export function AIIntelligenceDashboard() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [lastProcessed, setLastProcessed] = useState<any>(null);
 
-  useEffect(() => {
-    loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30s
-    return () => clearInterval(interval);
-  }, [selectedCategory, loadData]);
-
   const loadData = useCallback(async () => {
     try {
       const [summaryRes, trendsRes, analysesRes] = await Promise.all([
@@ -120,6 +114,12 @@ export function AIIntelligenceDashboard() {
       setLoading(false);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, 30000); // Refresh every 30s
+    return () => clearInterval(interval);
+  }, [selectedCategory, loadData]);
 
   const triggerAnalysis = async (mode = "batch", limit = 10) => {
     setProcessing(true);

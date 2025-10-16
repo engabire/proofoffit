@@ -67,7 +67,8 @@ function AuthCallbackPageContent() {
             throw new Error("Missing code verifier for PKCE flow");
           }
 
-          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          const { data, error: exchangeError } = await supabase.auth
+            .exchangeCodeForSession(code, codeVerifier);
 
           if (exchangeError) {
             throw exchangeError;
