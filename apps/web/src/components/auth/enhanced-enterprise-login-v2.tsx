@@ -372,12 +372,12 @@ export default function EnhancedEnterpriseLoginV2({
             <div className="mt-6 space-y-2 text-xs text-neutral-600">
               {isHirer ? (
                 <>
-                  <p>Don't have access? Ask your admin to invite you as <span className="font-medium">Recruiter</span>, <span className="font-medium">Reviewer</span>, or <span className="font-medium">Admin</span>.</p>
+                  <p>Don&apos;t have access? Ask your admin to invite you as <span className="font-medium">Recruiter</span>, <span className="font-medium">Reviewer</span>, or <span className="font-medium">Admin</span>.</p>
                   <p>Need help signing in? <Link href="/help/sign-in" className="underline">Get support</Link>.</p>
                 </>
               ) : (
                 <>
-                  <p>No account yet? We'll create one as you sign in and connect your applications automatically.</p>
+                  <p>No account yet? We&apos;ll create one as you sign in and connect your applications automatically.</p>
                   <p>Having trouble? <Link href="/help/candidates" className="underline">Candidate help</Link>.</p>
                 </>
               )}
@@ -386,7 +386,7 @@ export default function EnhancedEnterpriseLoginV2({
             <Separator className="my-6" />
 
             <div className="text-[11px] leading-relaxed text-neutral-500">
-              By continuing, you agree to ProofOfFit's <a className="underline" href={legalLinks.terms}>Terms</a> and <a className="underline" href={legalLinks.privacy}>Privacy Policy</a>
+              By continuing, you agree to ProofOfFit&apos;s <a className="underline" href={legalLinks.terms}>Terms</a> and <a className="underline" href={legalLinks.privacy}>Privacy Policy</a>
               {legalLinks.eeoc ? (<> and our <a className="underline" href={legalLinks.eeoc}>EEOC commitment</a>.</>) : "."}
               We only send essential account and security emails.
             </div>

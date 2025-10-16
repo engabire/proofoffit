@@ -284,7 +284,7 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                 <Smartphone className="h-12 w-12 mx-auto text-blue-600 mb-4" />
                 <h3 className="text-lg font-medium">SMS Verification</h3>
                 <p className="text-sm text-gray-600 mt-2">
-                  We'll send a verification code to your phone number
+                  We&apos;ll send a verification code to your phone number
                 </p>
               </div>
 
@@ -364,7 +364,7 @@ export function MFASetup({ onComplete, onSkip, userEmail }: MFASetupProps) {
                 <Mail className="h-12 w-12 mx-auto text-blue-600 mb-4" />
                 <h3 className="text-lg font-medium">Email Verification</h3>
                 <p className="text-sm text-gray-600 mt-2">
-                  We'll send a verification code to {userEmail}
+                  We&apos;ll send a verification code to {userEmail}
                 </p>
               </div>
 
