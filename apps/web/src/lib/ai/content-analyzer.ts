@@ -557,6 +557,7 @@ Focus on career relevance and professional value.`;
         batch.map(async (item) => {
           try {
             await this.analyzeContent(item);
+            // eslint-disable-next-line no-console
             console.log(`Analyzed content: ${item.title.substring(0, 50)}...`);
           } catch (error) {
             // eslint-disable-next-line no-console

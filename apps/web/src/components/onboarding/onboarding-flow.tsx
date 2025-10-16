@@ -42,7 +42,7 @@ function WelcomeStep({
           Welcome to ProofOfFit!
         </h3>
         <p className="text-gray-600">
-          Let's get you set up. First, tell us what brings you here.
+          Let&apos;s get you set up. First, tell us what brings you here.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ function WelcomeStep({
               </svg>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900">I'm looking for a job</h4>
+              <h4 className="font-medium text-gray-900">I&apos;m looking for a job</h4>
               <p className="text-sm text-gray-600">Find opportunities that match your skills and goals</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ function WelcomeStep({
               </svg>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900">I'm hiring</h4>
+              <h4 className="font-medium text-gray-900">I&apos;m hiring</h4>
               <p className="text-sm text-gray-600">Find the best candidates for your team</p>
             </div>
           </div>
@@ -445,11 +445,13 @@ export function OnboardingFlow({ className }: OnboardingFlowProps) {
   ]
 
   const handleComplete = (data: any) => {
+    // eslint-disable-next-line no-console
     console.log('Onboarding completed with data:', data)
     // Here you would typically save the onboarding data to your backend
   }
 
   const handleStepChange = (stepId: string, data: any) => {
+    // eslint-disable-next-line no-console
     console.log('Step changed to:', stepId, 'with data:', data)
   }
 

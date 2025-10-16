@@ -327,7 +327,7 @@ export function EnhancedEnterpriseLogin({
                 </div>
                 
                 <div className="text-sm text-gray-600">
-                  <p>Can't find the email? Check your spam folder or try again.</p>
+                  <p>Can&apos;t find the email? Check your spam folder or try again.</p>
                 </div>
                 
                 <div className="flex space-x-3">

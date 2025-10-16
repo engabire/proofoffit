@@ -618,7 +618,7 @@ export default function EnhancedAuth({
               : (
                 <>
                   <p>
-                    No account yet? We'll create one as you sign in and connect
+                    No account yet? We&apos;ll create one as you sign in and connect
                     your applications automatically.
                   </p>
                   <p>

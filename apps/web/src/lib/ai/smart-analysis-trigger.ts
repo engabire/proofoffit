@@ -73,6 +73,7 @@ class IntelligentAnalysisTrigger implements SmartAnalysisTrigger {
           batch.map(async (item) => {
             try {
               await this.analyzer.analyzeContent(item);
+              // eslint-disable-next-line no-console
               console.log(`✅ Smart-analyzed: ${item.title.substring(0, 50)}...`);
             } catch (error) {
               // eslint-disable-next-line no-console
