@@ -259,7 +259,7 @@ function PreferencesStep({
           Set your preferences
         </h3>
         <p className="text-gray-600">
-          Choose how you'd like to receive updates and notifications.
+          Choose how you&apos;d like to receive updates and notifications.
         </p>
       </div>
 
@@ -372,7 +372,7 @@ function CompletionStep({
       </div>
 
       <div className="bg-gray-50 rounded-lg p-6 max-w-md mx-auto">
-        <h4 className="font-medium text-gray-900 mb-3">What's next?</h4>
+        <h4 className="font-medium text-gray-900 mb-3">What&apos;s next?</h4>
         <ul className="text-sm text-gray-600 space-y-2 text-left">
           {data?.userType === 'employer' ? (
             <>
@@ -470,7 +470,7 @@ export function OnboardingFlow({ className }: OnboardingFlowProps) {
             Welcome to ProofOfFit
           </h1>
           <p className="text-gray-600">
-            Let's get you set up in just a few steps
+            Let&apos;s get you set up in just a few steps
           </p>
         </div>
 
