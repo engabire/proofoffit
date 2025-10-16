@@ -68,7 +68,7 @@ export function csrfProtection(request: NextRequest): NextResponse | null {
   // Skip CSRF for API routes that don't need it (like auth callbacks and CSRF token endpoint)
   const pathname = request.nextUrl.pathname;
   if (
-    pathname.startsWith("/api/auth/") || 
+    pathname.startsWith("/api/auth/") ||
     pathname.startsWith("/api/webhooks/") ||
     pathname === "/api/csrf-token"
   ) {

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { 
   Plus, 
   Trash2, 
@@ -10,7 +11,9 @@ import {
   LogOut,
   Building2,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  ChevronRight,
+  Home
 } from 'lucide-react'
 
 function EmployerIntakePageContent() {
@@ -175,12 +178,36 @@ function EmployerIntakePageContent() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
+        {/* Enhanced Page Header with Breadcrumbs */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Create Job Intake</h1>
-          <p className="text-gray-600 mt-2">
-            Define your hiring requirements to generate evidence-based candidate slates
-          </p>
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center space-x-1 text-sm text-gray-500 mb-4">
+            <Link
+              href="/"
+              className="flex items-center space-x-1 hover:text-gray-700 transition-colors"
+            >
+              <Home className="h-4 w-4" />
+              <span>Home</span>
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link
+              href="/employer/dashboard"
+              className="hover:text-gray-700 transition-colors"
+            >
+              Employer Dashboard
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-gray-900 font-medium" aria-current="page">
+              Create Job Intake
+            </span>
+          </nav>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-gray-900">Create Job Intake</h1>
+            <p className="text-gray-600 text-lg">
+              Define your hiring requirements to generate evidence-based candidate slates
+            </p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

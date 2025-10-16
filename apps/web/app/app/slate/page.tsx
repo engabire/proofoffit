@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import {
   AlertCircle,
   ArrowRight,
@@ -21,6 +22,7 @@ import {
   MapPin,
   MessageSquare,
   Plus,
+  RotateCcw,
   Search,
   Share2,
   Shield,
@@ -2434,10 +2436,142 @@ export default function CandidateSlatePage() {
     setSlate(slateData);
   };
 
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentStep < totalSteps && job) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleStartOver = () => {
+    setCurrentStep(1);
+    setJob(null);
+    setSlate(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const progressSteps = [
+    {
+      id: 'job-description',
+      title: 'Job Description',
+      description: 'Define the role requirements',
+      completed: currentStep > 1,
+      current: currentStep === 1
+    },
+    {
+      id: 'slate-generation',
+      title: 'Generate Slate',
+      description: 'Create candidate recommendations',
+      completed: currentStep > 2,
+      current: currentStep === 2
+    }
+  ];
+
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/dashboard' },
+    { label: 'Candidate Slate', current: true }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Enhanced Page Header */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-start justify-between">
+            <div className="space-y-4 flex-1">
+              {/* Breadcrumbs */}
+              <nav className="flex items-center space-x-1 text-sm text-muted-foreground">
+                {breadcrumbItems.map((item, index) => (
+                  <React.Fragment key={index}>
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        className="flex items-center space-x-1 hover:text-foreground transition-colors"
+                      >
+                        <span>{item.label}</span>
+                      </Link>
+                    ) : (
+                      <span className="text-foreground font-medium" aria-current="page">
+                        {item.label}
+                      </span>
+                    )}
+                    {index < breadcrumbItems.length - 1 && (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </nav>
+
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold text-foreground">Create Candidate Slate</h1>
+                <p className="text-muted-foreground text-lg">
+                  Define job requirements and generate a diverse, qualified candidate slate
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
-        <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+        {/* Enhanced Progress Indicator */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            {progressSteps.map((step, index) => {
+              const stepNumber = index + 1;
+              const isCompleted = step.completed;
+              const isCurrent = step.current;
+
+              return (
+                <div key={step.id} className="flex items-center">
+                  <div className="flex items-center">
+                    <div
+                      className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors ${
+                        isCompleted
+                          ? 'bg-green-500 border-green-500 text-white'
+                          : isCurrent
+                          ? 'bg-blue-500 border-blue-500 text-white'
+                          : 'bg-white border-gray-300 text-gray-600'
+                      }`}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle className="w-5 h-5" />
+                      ) : (
+                        <span className="text-sm font-medium">{stepNumber}</span>
+                      )}
+                    </div>
+                    
+                    {index < progressSteps.length - 1 && (
+                      <div
+                        className={`w-16 h-0.5 ml-2 transition-colors ${
+                          isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
+                  </div>
+                  
+                  <div className="ml-3 text-center">
+                    <div
+                      className={`text-sm font-medium transition-colors ${
+                        isCurrent ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-600'
+                      }`}
+                    >
+                      {step.title}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {step.description}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         <AnimatePresence mode="wait">
           {currentStep === 1 && (
@@ -2467,6 +2601,57 @@ export default function CandidateSlatePage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Enhanced Navigation Buttons */}
+        <div className="mt-8 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentStep === 1}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Previous Step
+            </Button>
+            
+            <Button
+              variant="ghost"
+              onClick={handleStartOver}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Start Over
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600">
+              Step {currentStep} of {totalSteps}
+            </div>
+            
+            {currentStep < totalSteps && (
+              <Button
+                onClick={handleNext}
+                disabled={!job}
+                className="flex items-center gap-2"
+              >
+                Next Step
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            )}
+            
+            {currentStep === totalSteps && slate && (
+              <Button
+                onClick={() => window.location.href = '/dashboard'}
+                className="flex items-center gap-2"
+              >
+                View Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

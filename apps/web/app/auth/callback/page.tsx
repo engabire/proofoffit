@@ -62,34 +62,27 @@ function AuthCallbackPageContent() {
         if (code) {
           // Check if this is a PKCE flow (OAuth) or magic link flow
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
-          
-          if (codeVerifier) {
-            // This is a PKCE OAuth flow - the code verifier is handled internally by Supabase
-            const { data, error: exchangeError } = await supabase.auth
-              .exchangeCodeForSession(code);
 
-            if (exchangeError) {
-              throw exchangeError;
-            }
+          const { data: sessionData, error: exchangeError } =
+            await supabase.auth.exchangeCodeForSession(code);
 
-            // Clear the verifier once it has been used successfully
-            sessionStorage.removeItem("pkce_code_verifier");
-          } else {
-            // This is a magic link flow - no code verifier needed
-            const { data, error: exchangeError } = await supabase.auth
-              .exchangeCodeForSession(code);
-
-            if (exchangeError) {
-              throw exchangeError;
-            }
+          if (exchangeError) {
+            throw exchangeError;
           }
 
-          if (data.user) {
-            setUserEmail(data.user.email || null);
+          if (codeVerifier) {
+            // Clear the verifier once it has been used successfully
+            sessionStorage.removeItem("pkce_code_verifier");
+          }
+
+          const user = sessionData?.user;
+
+          if (user) {
+            setUserEmail(user.email || null);
 
             // Check if this is an enterprise user
-            if (data.user.email) {
-              const enterprise = detectEnterpriseDomain(data.user.email);
+            if (user.email) {
+              const enterprise = detectEnterpriseDomain(user.email);
               setIsEnterprise(!!enterprise);
             }
 
@@ -108,12 +101,12 @@ function AuthCallbackPageContent() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  tenantId: data.user.id,
+                  tenantId: user.id,
                   actorType: "user",
-                  actorId: data.user.id,
+                  actorId: user.id,
                   action: "auth_success",
                   objType: "user",
-                  objId: data.user.id,
+                  objId: user.id,
                   payloadHash: "auth_success",
                 }),
               });

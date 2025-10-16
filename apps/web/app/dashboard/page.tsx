@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { 
   Users, 
   Briefcase, 
@@ -21,7 +22,9 @@ import {
   Calendar,
   BarChart3,
   Settings,
-  LogOut
+  LogOut,
+  Home,
+  ChevronRight
 } from 'lucide-react'
 
 function DashboardPageContent() {
@@ -137,12 +140,27 @@ function DashboardPageContent() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb Navigation */}
+        <nav className="flex items-center space-x-1 text-sm text-gray-500 mb-6">
+          <Link
+            href="/"
+            className="flex items-center space-x-1 hover:text-gray-700 transition-colors"
+          >
+            <Home className="h-4 w-4" />
+            <span>Home</span>
+          </Link>
+          <ChevronRight className="h-4 w-4" />
+          <span className="text-gray-900 font-medium" aria-current="page">
+            {isEmployer ? 'Employer Dashboard' : 'Job Seeker Dashboard'}
+          </span>
+        </nav>
+
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {user.name}!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg">
             {isEmployer 
               ? 'Here\'s your hiring dashboard with candidate insights and team collaboration tools.'
               : 'Here\'s your job search dashboard with fit reports and application tracking.'
