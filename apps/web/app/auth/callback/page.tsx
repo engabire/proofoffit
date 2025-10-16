@@ -63,8 +63,8 @@ function AuthCallbackPageContent() {
           // Check if this is a PKCE flow (OAuth) or magic link flow
           const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
 
-          const { data: sessionData, error: exchangeError } =
-            await supabase.auth.exchangeCodeForSession(code);
+          const { data: sessionData, error: exchangeError } = await supabase
+            .auth.exchangeCodeForSession(code);
 
           if (exchangeError) {
             throw exchangeError;
