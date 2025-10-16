@@ -37,7 +37,7 @@ export function EnhancedBreadcrumb({
   separator = <ChevronRight className="h-4 w-4" />
 }: EnhancedBreadcrumbProps) {
   const allItems = showHome 
-    ? [{ label: 'Home', href: '/', icon: <Home className="h-4 w-4" /> }, ...items]
+    ? [{ label: 'Home', href: '/', icon: <Home className="h-4 w-4" />, current: false }, ...items]
     : items
 
   return (
