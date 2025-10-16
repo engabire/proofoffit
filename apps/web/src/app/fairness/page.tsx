@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Scale, Eye, Shield, Users, Target, CheckCircle, TrendingUp, Award, BarChart3, DollarSign } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default function FairnessPage() {
               <h2 className="text-xl font-semibold">Our Commitment to Fairness</h2>
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-4">
-              At ProofOfFit, we've built the industry's most advanced bias-free evidence engine that delivers 
+              At ProofOfFit, we&apos;ve built the industry&apos;s most advanced bias-free evidence engine that delivers 
               transparent, auditable hiring decisions. Our enterprise-grade platform reduces human bias by up to 85% 
               while providing cryptographic proof of every decision, ensuring compliance with EEOC, GDPR, and 
               international equal opportunity regulations.
@@ -314,7 +315,7 @@ export default function FairnessPage() {
                 <h3 className="font-medium text-slate-900 dark:text-white mb-3">Ready to Transform Your Hiring Process?</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-4">
                   Join leading organizations that have reduced bias, improved diversity, and accelerated hiring 
-                  with ProofOfFit's enterprise-grade evidence engine platform. Contact our enterprise team for a personalized demo.
+                  with ProofOfFit&apos;s enterprise-grade evidence engine platform. Contact our enterprise team for a personalized demo.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a 
@@ -323,12 +324,12 @@ export default function FairnessPage() {
                   >
                     Contact Enterprise Sales
                   </a>
-                  <a 
+                  <Link 
                     href="/demo" 
                     className="inline-flex items-center justify-center px-4 py-2 border border-emerald-600 text-emerald-600 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
                   >
                     Schedule Demo
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

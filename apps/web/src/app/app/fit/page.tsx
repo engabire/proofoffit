@@ -2358,7 +2358,7 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
               {" "}
               found
             </span>
-            {searchTerm && <Badge variant="outline">for "{searchTerm}"</Badge>}
+            {searchTerm && <Badge variant="outline">for &ldquo;{searchTerm}&rdquo;</Badge>}
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
@@ -3520,10 +3520,6 @@ function ResultsStep({
     coverLetterDraft,
     coverLetterSignature,
     ensureSignature,
-    job.company,
-    job.id,
-    job.title,
-    supabase,
   ]);
 
   const downloadDocument = async (

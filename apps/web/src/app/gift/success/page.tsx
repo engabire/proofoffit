@@ -40,7 +40,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
               <div>
                 <CardTitle className="text-xl">Gift checkout complete</CardTitle>
                 <CardDescription className="text-base mt-1">
-                  We emailed your receipt and gift code. Share it with your candidate when you're ready.
+                  We emailed your receipt and gift code. Share it with your candidate when you&apos;re ready.
                 </CardDescription>
               </div>
             </div>
@@ -56,7 +56,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
           ) : (
             <div className="rounded-lg bg-amber-50 border border-amber-200 p-4">
               <p className="text-sm text-amber-800">
-                <strong>Gift code not detected:</strong> We couldn't find a gift code in this link, but your email receipt includes it. 
+                <strong>Gift code not detected:</strong> We couldn&apos;t find a gift code in this link, but your email receipt includes it. 
                 <Link href="/contact" className="text-amber-600 hover:underline ml-1">
                   Contact support if needed.
                 </Link>
@@ -97,7 +97,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
                 <div>
                   <h4 className="font-semibold text-blue-900">No auto-renewal</h4>
                   <p className="text-sm text-blue-700 mt-1">
-                    We never auto-charge after a gift ends. Recipients can manually renew if they'd like to continue.
+                    We never auto-charge after a gift ends. Recipients can manually renew if they&apos;d like to continue.
                   </p>
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default function GiftSuccessPage({ searchParams }: GiftSuccessPageProps) 
           <div className="rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 p-6">
             <h3 className="text-lg font-semibold text-purple-900 mb-4 flex items-center">
               <Sparkles className="h-5 w-5 mr-2" />
-              What's included in this {months}-month gift
+              What&apos;s included in this {months}-month gift
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-3">
