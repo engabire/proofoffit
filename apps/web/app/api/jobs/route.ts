@@ -9,6 +9,7 @@ import {
   sortByPostedDesc,
   isValidJob,
 } from "./helpers";
+import { limitJobSearch, toRateLimitHeaders } from "@/lib/ratelimit";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -29,17 +30,41 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const rateLimitResult = await limitJobSearch(req);
+  const headers = new Headers(toRateLimitHeaders(rateLimitResult));
+
+  if (rateLimitResult && !rateLimitResult.success) {
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+    );
+    headers.set("Retry-After", String(retryAfterSeconds));
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers,
+      },
+    );
+  }
+
   let rapidApiKey: string;
   try {
     rapidApiKey = ensureRapidApiKey();
   } catch {
-    return NextResponse.json({ error: "missing_key" }, { status: 500 });
+    return NextResponse.json(
+      { error: "missing_key" },
+      { status: 500, headers },
+    );
   }
   const { q, loc, recency, page } = parsed.data;
   const trimmedQuery = q.trim();
 
   if (!trimmedQuery) {
-    return NextResponse.json({ items: [], page, recency, count: 0 });
+    return NextResponse.json(
+      { items: [], page, recency, count: 0 },
+      { headers },
+    );
   }
 
   const composed = trimmedQuery + (loc ? ` in ${loc}` : "");
@@ -66,13 +91,19 @@ export async function GET(req: NextRequest) {
           // eslint-disable-next-line no-console
           console.error("jobs.search.upstream_timeout", { error });
         }
-        return NextResponse.json({ error: "upstream_timeout" }, { status: 504 });
+        return NextResponse.json(
+          { error: "upstream_timeout" },
+          { status: 504, headers },
+        );
       }
     }
   }
 
   if (!response || !response.ok) {
-    return NextResponse.json({ error: "upstream_error" }, { status: 502 });
+    return NextResponse.json(
+      { error: "upstream_error" },
+      { status: 502, headers },
+    );
   }
 
   const json = await response.json().catch(() => ({}));
@@ -94,5 +125,8 @@ export async function GET(req: NextRequest) {
 
   }
 
-  return NextResponse.json({ items, page, recency, count: items.length });
+  return NextResponse.json(
+    { items, page, recency, count: items.length },
+    { headers },
+  );
 }

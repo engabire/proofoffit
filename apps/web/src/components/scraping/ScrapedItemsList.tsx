@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -25,6 +25,23 @@ export function ScrapedItemsList() {
   const [selectedDomain, setSelectedDomain] = useState<string>("");
   const [domains, setDomains] = useState<string[]>([]);
 
+  const loadItems = useCallback(async () => {
+    try {
+      setLoading(true);
+      const result = await scrapingClient.getLatestItems({
+        domain: selectedDomain || undefined,
+        search: search || undefined,
+        limit: 50,
+      });
+      setItems(result.items);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load items");
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedDomain, search]);
+
   useEffect(() => {
     loadItems();
     loadDomains();
@@ -44,23 +61,6 @@ export function ScrapedItemsList() {
 
     return unsubscribe;
   }, [loadItems]);
-
-  const loadItems = useCallback(async () => {
-    try {
-      setLoading(true);
-      const result = await scrapingClient.getLatestItems({
-        domain: selectedDomain || undefined,
-        search: search || undefined,
-        limit: 50,
-      });
-      setItems(result.items);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load items");
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedDomain, search]);
 
   const loadDomains = async () => {
     try {

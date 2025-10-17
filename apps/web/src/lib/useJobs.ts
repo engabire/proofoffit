@@ -34,13 +34,51 @@ const INITIAL_STATE: FetchState = {
   count: 0,
 };
 
-async function fetchJobs(url: string, signal: AbortSignal): Promise<JobsResponse> {
+async function fetchJobs(
+  url: string,
+  signal: AbortSignal,
+): Promise<JobsResponse> {
   const response = await fetch(url, { cache: "no-store", signal });
-  if (!response.ok) {
-    const message = await response.text().catch(() => "");
-    throw new Error(`HTTP ${response.status} ${message || response.statusText}`);
+
+  if (response.ok) {
+    return response.json();
   }
-  return response.json();
+
+  let detail = "";
+  let retryAfterSeconds: number | null = null;
+
+  try {
+    const payload = await response.clone().json();
+
+    if (payload?.error === "rate_limited") {
+      const retryAfterHeader = response.headers.get("Retry-After");
+      if (retryAfterHeader) {
+        const parsed = Number.parseInt(retryAfterHeader, 10);
+        if (Number.isFinite(parsed)) {
+          retryAfterSeconds = parsed;
+        }
+      }
+      const waitMessage = retryAfterSeconds
+        ? `Please wait ${retryAfterSeconds} seconds and try again.`
+        : "Please try again shortly.";
+      detail = `Rate limit exceeded. ${waitMessage}`;
+    } else if (typeof payload?.error === "string") {
+      detail = payload.error;
+    } else if (typeof payload?.message === "string") {
+      detail = payload.message;
+    }
+  } catch {
+    // ignore parsing errors; fallback to text below
+  }
+
+  if (!detail) {
+    detail = (await response.text().catch(() => "")) || response.statusText;
+  } else {
+    await response.text().catch(() => "");
+  }
+
+  const message = `HTTP ${response.status} ${detail}`.trim();
+  throw new Error(message);
 }
 
 export function useJobs(

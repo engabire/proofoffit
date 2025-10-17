@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Button } from "@proof-of-fit/ui";
 import { Badge } from "@proof-of-fit/ui";
@@ -84,12 +84,6 @@ export function AutoApplyDashboard() {
   const [saving, setSaving] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      fetchAutoApplyData();
-    }
-  }, [user, fetchAutoApplyData]);
-
   const fetchAutoApplyData = useCallback(async () => {
     try {
       const response = await fetch(
@@ -139,6 +133,12 @@ export function AutoApplyDashboard() {
       setLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchAutoApplyData();
+    }
+  }, [user, fetchAutoApplyData]);
 
   const saveConfiguration = async () => {
     if (!config) return;

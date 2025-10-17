@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Badge } from "@proof-of-fit/ui";
 import { Button } from "@proof-of-fit/ui";
@@ -47,15 +47,6 @@ export function SecurityAudit({
   const [checks, setChecks] = useState<SecurityCheck[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastAudit, setLastAudit] = useState<Date | null>(null);
-
-  useEffect(() => {
-    runSecurityAudit();
-
-    if (autoRefresh) {
-      const interval = setInterval(runSecurityAudit, refreshInterval);
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, refreshInterval, runSecurityAudit]);
 
   const runSecurityAudit = useCallback(async () => {
     setIsLoading(true);
@@ -200,6 +191,15 @@ export function SecurityAudit({
       setIsLoading(false);
     }
   }, [onIssueFound]);
+
+  useEffect(() => {
+    runSecurityAudit();
+
+    if (autoRefresh) {
+      const interval = setInterval(runSecurityAudit, refreshInterval);
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh, refreshInterval, runSecurityAudit]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

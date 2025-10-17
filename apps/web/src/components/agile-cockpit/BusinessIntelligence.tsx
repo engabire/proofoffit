@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Badge } from "@proof-of-fit/ui";
 import { Button } from "@proof-of-fit/ui";
@@ -54,10 +54,6 @@ export function BusinessIntelligence() {
     "week" | "month" | "quarter" | "year"
   >("month");
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchBusinessData();
-  }, [selectedPeriod, fetchBusinessData]);
 
   const fetchBusinessData = useCallback(async () => {
     try {
@@ -200,6 +196,10 @@ export function BusinessIntelligence() {
       setLoading(false);
     }
   }, [selectedPeriod]);
+
+  useEffect(() => {
+    fetchBusinessData();
+  }, [selectedPeriod, fetchBusinessData]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

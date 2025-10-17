@@ -23,14 +23,6 @@ export function usePerformance() {
   const [metrics, setMetrics] = useState<Partial<PerformanceMetrics>>({});
   const [isSupported, setIsSupported] = useState(false);
 
-  useEffect(() => {
-    // Check if Performance Observer is supported
-    if (typeof window !== "undefined" && "PerformanceObserver" in window) {
-      setIsSupported(true);
-      collectMetrics();
-    }
-  }, [collectMetrics]);
-
   const collectMetrics = useCallback(() => {
     if (typeof window === "undefined") return;
 
@@ -89,6 +81,14 @@ export function usePerformance() {
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    // Check if Performance Observer is supported
+    if (typeof window !== "undefined" && "PerformanceObserver" in window) {
+      setIsSupported(true);
+      collectMetrics();
+    }
+  }, [collectMetrics]);
 
   const measureCustomMetric = useCallback(
     (name: string, startMark: string, endMark?: string) => {

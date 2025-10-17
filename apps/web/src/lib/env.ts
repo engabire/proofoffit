@@ -37,6 +37,15 @@ export const env = {
 
   jobs: {
     rapidApiKey: process.env.RAPIDAPI_KEY || '',
+    rateLimitPerMinute: Number.parseInt(
+      process.env.JOBS_RATE_LIMIT_PER_MINUTE || '30',
+      10,
+    ),
+  },
+
+  upstash: {
+    redisUrl: process.env.UPSTASH_REDIS_REST_URL || '',
+    redisToken: process.env.UPSTASH_REDIS_REST_TOKEN || '',
   },
 }
 
