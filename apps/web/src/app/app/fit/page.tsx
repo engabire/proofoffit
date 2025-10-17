@@ -1946,27 +1946,6 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
   const [recommendedJobs, setRecommendedJobs] = useState<JobPosting[]>([]);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
-  // Load initial jobs and recommendations
-  useEffect(() => {
-    loadJobs();
-    loadRecommendations();
-    loadSearchHistory();
-  }, [loadJobs, loadRecommendations, loadSearchHistory]);
-
-  // Search jobs when search term or filters change
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchTerm.trim()) {
-        searchJobs(searchTerm.trim());
-        addToSearchHistory(searchTerm.trim());
-      } else {
-        loadJobs();
-      }
-    }, 500); // Increased debounce for better UX
-
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm, filters, addToSearchHistory, loadJobs, searchJobs]);
-
   const loadJobs = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -2080,6 +2059,27 @@ function JobSearchStep({ onSelect }: { onSelect: (job: JobPosting) => void }) {
       console.error("Error saving search history:", err);
     }
   }, [searchHistory]);
+
+  // Load initial jobs and recommendations
+  useEffect(() => {
+    loadJobs();
+    loadRecommendations();
+    loadSearchHistory();
+  }, [loadJobs, loadRecommendations, loadSearchHistory]);
+
+  // Search jobs when search term or filters change
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm.trim()) {
+        searchJobs(searchTerm.trim());
+        addToSearchHistory(searchTerm.trim());
+      } else {
+        loadJobs();
+      }
+    }, 500); // Increased debounce for better UX
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, filters, addToSearchHistory, loadJobs, searchJobs]);
 
   const toggleSavedJob = (jobId: string) => {
     const newSavedJobs = new Set(savedJobs);
