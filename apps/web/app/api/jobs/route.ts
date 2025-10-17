@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limitJobSearch, toRateLimitHeaders } from "@/lib/ratelimit";
 import {
   QuerySchema,
   dedupe,
@@ -9,7 +10,6 @@ import {
   sortByPostedDesc,
   isValidJob,
 } from "./helpers";
-import { limitJobSearch, toRateLimitHeaders } from "@/lib/ratelimit";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
       if (response.ok) break;
     } catch (error) {
       if (attempt === 1) {
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV !== "production") {
           // eslint-disable-next-line no-console
           console.error("jobs.search.upstream_timeout", { error });
         }
@@ -112,17 +112,15 @@ export async function GET(req: NextRequest) {
     sortByPostedDesc,
   );
 
-  if (process.env.NODE_ENV !== 'production') {
-
+  if (process.env.NODE_ENV !== "production") {
     // eslint-disable-next-line no-console
     console.log("jobs.search", {
-    q: trimmedQuery,
-    loc,
-    recency,
-    page,
-    count: items.length,
-  });
-
+      q: trimmedQuery,
+      loc,
+      recency,
+      page,
+      count: items.length,
+    });
   }
 
   return NextResponse.json(

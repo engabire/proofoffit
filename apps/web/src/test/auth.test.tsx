@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import SignInPage from '@/app/auth/signin/page'
-import SignUpPage from '@/app/auth/signup/page'
+import SignInPage from '../../app/auth/signin/page'
+import SignUpPage from '../../app/auth/signup/page'
 
 // Mock the auth helpers
 jest.mock('@/lib/auth-helpers', () => ({

@@ -109,9 +109,7 @@ function getJobsLimiter(): RateLimiter | null {
 }
 
 export function resolveClientIdentifier(request: NextRequest): string {
-  if (request.ip) {
-    return request.ip;
-  }
+  // Note: request.ip is not available in NextRequest, we'll use headers instead
 
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
@@ -146,8 +144,15 @@ export async function limitJobSearch(
   }
 }
 
-export function toRateLimitHeaders(result: RateLimitState | null) {
-  if (!result) return {};
+export function toRateLimitHeaders(result: RateLimitState | null): Record<string, string> {
+  if (!result) {
+    return {
+      "X-RateLimit-Limit": "0",
+      "X-RateLimit-Remaining": "0", 
+      "X-RateLimit-Reset": "0",
+    };
+  }
+  
   const resetSeconds = Math.max(
     0,
     Math.ceil((result.reset - Date.now()) / 1000),

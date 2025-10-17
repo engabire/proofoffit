@@ -4,7 +4,7 @@ import {
   isValidJob,
   normalizeJob,
   sortByPostedDesc,
-} from "@/app/api/jobs/helpers";
+} from "../../app/api/jobs/helpers";
 
 describe("normalizeJob helpers", () => {
   it("prefers datetime_utc when present", () => {
