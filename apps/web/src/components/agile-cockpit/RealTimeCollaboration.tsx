@@ -1,212 +1,219 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
-import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Badge } from '@proof-of-fit/ui'
-import { Button } from '@proof-of-fit/ui'
-import { 
-  Users, 
-  MessageCircle, 
-  Video, 
-  Mic, 
-  MicOff, 
-  VideoOff,
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
+import { Badge } from "@proof-of-fit/ui";
+import { Button } from "@proof-of-fit/ui";
+import {
+  Bell,
+  BellOff,
+  MessageCircle,
+  Mic,
+  MicOff,
+  MoreVertical,
+  Paperclip,
   Phone,
   PhoneOff,
-  Share,
   ScreenShare,
-  Settings,
-  MoreVertical,
   Send,
-  Paperclip,
+  Settings,
+  Share,
   Smile,
-  Bell,
-  BellOff
-} from 'lucide-react'
+  Users,
+  Video,
+  VideoOff,
+} from "lucide-react";
 
 interface User {
-  id: string
-  name: string
-  avatar: string
-  status: 'online' | 'away' | 'busy' | 'offline'
-  role: 'admin' | 'member' | 'viewer'
-  isTyping?: boolean
-  currentActivity?: string
+  id: string;
+  name: string;
+  avatar: string;
+  status: "online" | "away" | "busy" | "offline";
+  role: "admin" | "member" | "viewer";
+  isTyping?: boolean;
+  currentActivity?: string;
 }
 
 interface Message {
-  id: string
-  userId: string
-  userName: string
-  userAvatar: string
-  content: string
-  timestamp: Date
-  type: 'text' | 'system' | 'file' | 'emoji'
-  reactions?: { emoji: string; users: string[] }[]
-  isEdited?: boolean
-  replyTo?: string
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  content: string;
+  timestamp: Date;
+  type: "text" | "system" | "file" | "emoji";
+  reactions?: { emoji: string; users: string[] }[];
+  isEdited?: boolean;
+  replyTo?: string;
 }
 
 interface Meeting {
-  id: string
-  title: string
-  participants: User[]
-  startTime: Date
-  duration: number
-  status: 'scheduled' | 'active' | 'ended'
-  agenda: string[]
-  recording?: boolean
+  id: string;
+  title: string;
+  participants: User[];
+  startTime: Date;
+  duration: number;
+  status: "scheduled" | "active" | "ended";
+  agenda: string[];
+  recording?: boolean;
 }
 
 export function RealTimeCollaboration() {
-  const [users, setUsers] = useState<User[]>([])
-  const [messages, setMessages] = useState<Message[]>([])
-  const [meetings, setMeetings] = useState<Meeting[]>([])
-  const [activeTab, setActiveTab] = useState<'chat' | 'meetings' | 'presence'>('chat')
-  const [newMessage, setNewMessage] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const [currentUser] = useState({ id: 'current-user', name: 'You', avatar: '/avatars/you.jpg' })
-  const [isVideoOn, setIsVideoOn] = useState(false)
-  const [isAudioOn, setIsAudioOn] = useState(false)
-  const [isScreenSharing, setIsScreenSharing] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [users, setUsers] = useState<User[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [activeTab, setActiveTab] = useState<"chat" | "meetings" | "presence">(
+    "chat",
+  );
+  const [newMessage, setNewMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentUser] = useState({
+    id: "current-user",
+    name: "You",
+    avatar: "/avatars/you.jpg",
+  });
+  const [isVideoOn, setIsVideoOn] = useState(false);
+  const [isAudioOn, setIsAudioOn] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    loadCollaborationData()
-    scrollToBottom()
-  }, [messages])
+    loadCollaborationData();
+    scrollToBottom();
+  }, [messages]);
 
   const loadCollaborationData = () => {
     // Mock users
     const mockUsers: User[] = [
       {
-        id: '1',
-        name: 'Sarah Johnson',
-        avatar: '/avatars/sarah.jpg',
-        status: 'online',
-        role: 'admin',
-        currentActivity: 'Working on sprint planning'
+        id: "1",
+        name: "Sarah Johnson",
+        avatar: "/avatars/sarah.jpg",
+        status: "online",
+        role: "admin",
+        currentActivity: "Working on sprint planning",
       },
       {
-        id: '2',
-        name: 'Mike Chen',
-        avatar: '/avatars/mike.jpg',
-        status: 'online',
-        role: 'member',
-        currentActivity: 'Reviewing pull requests'
+        id: "2",
+        name: "Mike Chen",
+        avatar: "/avatars/mike.jpg",
+        status: "online",
+        role: "member",
+        currentActivity: "Reviewing pull requests",
       },
       {
-        id: '3',
-        name: 'Lisa Wang',
-        avatar: '/avatars/lisa.jpg',
-        status: 'away',
-        role: 'member',
-        currentActivity: 'In a meeting'
+        id: "3",
+        name: "Lisa Wang",
+        avatar: "/avatars/lisa.jpg",
+        status: "away",
+        role: "member",
+        currentActivity: "In a meeting",
       },
       {
-        id: '4',
-        name: 'Alex Rodriguez',
-        avatar: '/avatars/alex.jpg',
-        status: 'busy',
-        role: 'member',
-        currentActivity: 'Focus time - do not disturb'
+        id: "4",
+        name: "Alex Rodriguez",
+        avatar: "/avatars/alex.jpg",
+        status: "busy",
+        role: "member",
+        currentActivity: "Focus time - do not disturb",
       },
       {
-        id: '5',
-        name: 'Emma Davis',
-        avatar: '/avatars/emma.jpg',
-        status: 'offline',
-        role: 'viewer'
-      }
-    ]
+        id: "5",
+        name: "Emma Davis",
+        avatar: "/avatars/emma.jpg",
+        status: "offline",
+        role: "viewer",
+      },
+    ];
 
     // Mock messages
     const mockMessages: Message[] = [
       {
-        id: '1',
-        userId: '1',
-        userName: 'Sarah Johnson',
-        userAvatar: '/avatars/sarah.jpg',
-        content: 'Good morning team! Ready for our sprint planning?',
+        id: "1",
+        userId: "1",
+        userName: "Sarah Johnson",
+        userAvatar: "/avatars/sarah.jpg",
+        content: "Good morning team! Ready for our sprint planning?",
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        type: 'text'
+        type: "text",
       },
       {
-        id: '2',
-        userId: '2',
-        userName: 'Mike Chen',
-        userAvatar: '/avatars/mike.jpg',
-        content: 'Morning Sarah! I\'ve reviewed the backlog and have some suggestions.',
+        id: "2",
+        userId: "2",
+        userName: "Mike Chen",
+        userAvatar: "/avatars/mike.jpg",
+        content:
+          "Morning Sarah! I've reviewed the backlog and have some suggestions.",
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000 + 5 * 60 * 1000),
-        type: 'text'
+        type: "text",
       },
       {
-        id: '3',
-        userId: 'current-user',
-        userName: 'You',
-        userAvatar: '/avatars/you.jpg',
-        content: 'Perfect! I\'ve prepared the velocity data from last sprint.',
+        id: "3",
+        userId: "current-user",
+        userName: "You",
+        userAvatar: "/avatars/you.jpg",
+        content: "Perfect! I've prepared the velocity data from last sprint.",
         timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
-        type: 'text'
+        type: "text",
       },
       {
-        id: '4',
-        userId: '1',
-        userName: 'Sarah Johnson',
-        userAvatar: '/avatars/sarah.jpg',
-        content: 'Great! Let\'s start with the high-priority items first.',
+        id: "4",
+        userId: "1",
+        userName: "Sarah Johnson",
+        userAvatar: "/avatars/sarah.jpg",
+        content: "Great! Let's start with the high-priority items first.",
         timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000 + 10 * 60 * 1000),
-        type: 'text',
+        type: "text",
         reactions: [
-          { emoji: '👍', users: ['2', 'current-user'] },
-          { emoji: '🚀', users: ['2'] }
-        ]
-      }
-    ]
+          { emoji: "👍", users: ["2", "current-user"] },
+          { emoji: "🚀", users: ["2"] },
+        ],
+      },
+    ];
 
     // Mock meetings
     const mockMeetings: Meeting[] = [
       {
-        id: '1',
-        title: 'Sprint Planning Meeting',
+        id: "1",
+        title: "Sprint Planning Meeting",
         participants: mockUsers.slice(0, 4),
         startTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
         duration: 60,
-        status: 'scheduled',
+        status: "scheduled",
         agenda: [
-          'Review last sprint results',
-          'Plan current sprint goals',
-          'Estimate story points',
-          'Assign tasks'
-        ]
+          "Review last sprint results",
+          "Plan current sprint goals",
+          "Estimate story points",
+          "Assign tasks",
+        ],
       },
       {
-        id: '2',
-        title: 'Daily Standup',
+        id: "2",
+        title: "Daily Standup",
         participants: mockUsers.slice(0, 3),
         startTime: new Date(Date.now() - 30 * 60 * 1000),
         duration: 15,
-        status: 'active',
+        status: "active",
         agenda: [
-          'What did you do yesterday?',
-          'What will you do today?',
-          'Any blockers?'
-        ]
-      }
-    ]
+          "What did you do yesterday?",
+          "What will you do today?",
+          "Any blockers?",
+        ],
+      },
+    ];
 
-    setUsers(mockUsers)
-    setMessages(mockMessages)
-    setMeetings(mockMeetings)
-  }
+    setUsers(mockUsers);
+    setMessages(mockMessages);
+    setMeetings(mockMeetings);
+  };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const sendMessage = () => {
-    if (!newMessage.trim()) return
+    if (!newMessage.trim()) return;
 
     const message: Message = {
       id: Date.now().toString(),
@@ -215,45 +222,58 @@ export function RealTimeCollaboration() {
       userAvatar: currentUser.avatar,
       content: newMessage,
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    };
 
-    setMessages(prev => [...prev, message])
-    setNewMessage('')
-    setIsTyping(false)
-  }
+    setMessages((prev) => [...prev, message]);
+    setNewMessage("");
+    setIsTyping(false);
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'bg-green-500'
-      case 'away': return 'bg-yellow-500'
-      case 'busy': return 'bg-red-500'
-      case 'offline': return 'bg-gray-400'
-      default: return 'bg-gray-400'
+      case "online":
+        return "bg-green-500";
+      case "away":
+        return "bg-yellow-500";
+      case "busy":
+        return "bg-red-500";
+      case "offline":
+        return "bg-gray-400";
+      default:
+        return "bg-gray-400";
     }
-  }
+  };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  }
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
 
   const renderChat = () => (
     <div className="flex flex-col h-[600px]">
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map(message => (
+        {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.userId === currentUser.id ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${
+              message.userId === currentUser.id
+                ? "justify-end"
+                : "justify-start"
+            }`}
           >
-            <div className={`max-w-[70%] ${message.userId === currentUser.id ? 'order-2' : 'order-1'}`}>
+            <div
+              className={`max-w-[70%] ${
+                message.userId === currentUser.id ? "order-2" : "order-1"
+              }`}
+            >
               {message.userId !== currentUser.id && (
                 <div className="flex items-center space-x-2 mb-1">
                   <Image
@@ -263,20 +283,24 @@ export function RealTimeCollaboration() {
                     height={24}
                     className="w-6 h-6 rounded-full"
                   />
-                  <span className="text-sm font-medium">{message.userName}</span>
-                  <span className="text-xs text-gray-500">{formatTime(message.timestamp)}</span>
+                  <span className="text-sm font-medium">
+                    {message.userName}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {formatTime(message.timestamp)}
+                  </span>
                 </div>
               )}
-              
+
               <div
                 className={`p-3 rounded-lg ${
                   message.userId === currentUser.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-900'
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 text-gray-900"
                 }`}
               >
                 <p className="text-sm">{message.content}</p>
-                
+
                 {message.reactions && message.reactions.length > 0 && (
                   <div className="flex space-x-1 mt-2">
                     {message.reactions.map((reaction, index) => (
@@ -290,7 +314,7 @@ export function RealTimeCollaboration() {
                   </div>
                 )}
               </div>
-              
+
               {message.userId === currentUser.id && (
                 <div className="text-xs text-gray-500 mt-1 text-right">
                   {formatTime(message.timestamp)}
@@ -313,8 +337,8 @@ export function RealTimeCollaboration() {
               type="text"
               value={newMessage}
               onChange={(e) => {
-                setNewMessage(e.target.value)
-                setIsTyping(e.target.value.length > 0)
+                setNewMessage(e.target.value);
+                setIsTyping(e.target.value.length > 0);
               }}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
@@ -334,11 +358,11 @@ export function RealTimeCollaboration() {
         </div>
       </div>
     </div>
-  )
+  );
 
   const renderMeetings = () => (
     <div className="space-y-4">
-      {meetings.map(meeting => (
+      {meetings.map((meeting) => (
         <Card key={meeting.id}>
           <CardContent className="p-4">
             <div className="flex items-start justify-between mb-3">
@@ -346,11 +370,15 @@ export function RealTimeCollaboration() {
                 <div className="flex items-center space-x-3 mb-2">
                   <Video className="w-5 h-5 text-gray-500" />
                   <h3 className="font-medium">{meeting.title}</h3>
-                  <Badge variant={meeting.status === 'active' ? 'default' : 'secondary'}>
+                  <Badge
+                    variant={meeting.status === "active"
+                      ? "default"
+                      : "secondary"}
+                  >
                     {meeting.status}
                   </Badge>
                 </div>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500 mb-3">
                   <div>
                     <span className="font-medium">Start:</span>
@@ -366,12 +394,14 @@ export function RealTimeCollaboration() {
                   </div>
                   <div>
                     <span className="font-medium">Recording:</span>
-                    <div>{meeting.recording ? 'Enabled' : 'Disabled'}</div>
+                    <div>{meeting.recording ? "Enabled" : "Disabled"}</div>
                   </div>
                 </div>
-                
+
                 <div>
-                  <span className="font-medium text-sm mb-2 block">Agenda:</span>
+                  <span className="font-medium text-sm mb-2 block">
+                    Agenda:
+                  </span>
                   <ul className="text-sm text-gray-600 space-y-1">
                     {meeting.agenda.map((item, index) => (
                       <li key={index} className="flex items-center space-x-2">
@@ -382,30 +412,32 @@ export function RealTimeCollaboration() {
                   </ul>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2">
-                {meeting.status === 'active' ? (
-                  <>
-                    <Button variant="outline" size="sm">
-                      <PhoneOff className="w-4 h-4" />
+                {meeting.status === "active"
+                  ? (
+                    <>
+                      <Button variant="outline" size="sm">
+                        <PhoneOff className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <ScreenShare className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )
+                  : (
+                    <Button>
+                      <Phone className="w-4 h-4 mr-2" />
+                      Join
                     </Button>
-                    <Button variant="outline" size="sm">
-                      <ScreenShare className="w-4 h-4" />
-                    </Button>
-                  </>
-                ) : (
-                  <Button>
-                    <Phone className="w-4 h-4 mr-2" />
-                    Join
-                  </Button>
-                )}
+                  )}
               </div>
             </div>
           </CardContent>
         </Card>
       ))}
     </div>
-  )
+  );
 
   const renderPresence = () => (
     <div className="space-y-4">
@@ -415,8 +447,11 @@ export function RealTimeCollaboration() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {users.map(user => (
-              <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            {users.map((user) => (
+              <div
+                key={user.id}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
                 <div className="flex items-center space-x-3">
                   <div className="relative">
                     <Image
@@ -426,14 +461,21 @@ export function RealTimeCollaboration() {
                       height={40}
                       className="w-10 h-10 rounded-full"
                     />
-                    <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(user.status)}`}></div>
+                    <div
+                      className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                        getStatusColor(user.status)
+                      }`}
+                    >
+                    </div>
                   </div>
                   <div>
                     <div className="font-medium">{user.name}</div>
-                    <div className="text-sm text-gray-600">{user.currentActivity}</div>
+                    <div className="text-sm text-gray-600">
+                      {user.currentActivity}
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline">{user.role}</Badge>
                   <Button variant="outline" size="sm">
@@ -446,7 +488,7 @@ export function RealTimeCollaboration() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 
   return (
     <div className="space-y-6">
@@ -454,7 +496,9 @@ export function RealTimeCollaboration() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold">Real-Time Collaboration</h2>
-          <p className="text-gray-600">Chat, meetings, and team presence in one place</p>
+          <p className="text-gray-600">
+            Chat, meetings, and team presence in one place
+          </p>
         </div>
         <div className="flex items-center space-x-2">
           <Button variant="outline">
@@ -479,14 +523,18 @@ export function RealTimeCollaboration() {
                   size="sm"
                   onClick={() => setIsAudioOn(!isAudioOn)}
                 >
-                  {isAudioOn ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                  {isAudioOn
+                    ? <Mic className="w-4 h-4" />
+                    : <MicOff className="w-4 h-4" />}
                 </Button>
                 <Button
                   variant={isVideoOn ? "default" : "outline"}
                   size="sm"
                   onClick={() => setIsVideoOn(!isVideoOn)}
                 >
-                  {isVideoOn ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
+                  {isVideoOn
+                    ? <Video className="w-4 h-4" />
+                    : <VideoOff className="w-4 h-4" />}
                 </Button>
                 <Button
                   variant={isScreenSharing ? "default" : "outline"}
@@ -496,12 +544,12 @@ export function RealTimeCollaboration() {
                   <ScreenShare className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="text-sm text-gray-600">
                 Daily Standup • 3 participants • 15 min remaining
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4" />
@@ -517,17 +565,29 @@ export function RealTimeCollaboration() {
       {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
         {[
-          { key: 'chat', label: 'Chat', icon: <MessageCircle className="w-4 h-4" /> },
-          { key: 'meetings', label: 'Meetings', icon: <Video className="w-4 h-4" /> },
-          { key: 'presence', label: 'Presence', icon: <Users className="w-4 h-4" /> }
-        ].map(tab => (
+          {
+            key: "chat",
+            label: "Chat",
+            icon: <MessageCircle className="w-4 h-4" />,
+          },
+          {
+            key: "meetings",
+            label: "Meetings",
+            icon: <Video className="w-4 h-4" />,
+          },
+          {
+            key: "presence",
+            label: "Presence",
+            icon: <Users className="w-4 h-4" />,
+          },
+        ].map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
             className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === tab.key
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
             }`}
           >
             {tab.icon}
@@ -537,9 +597,9 @@ export function RealTimeCollaboration() {
       </div>
 
       {/* Content */}
-      {activeTab === 'chat' && renderChat()}
-      {activeTab === 'meetings' && renderMeetings()}
-      {activeTab === 'presence' && renderPresence()}
+      {activeTab === "chat" && renderChat()}
+      {activeTab === "meetings" && renderMeetings()}
+      {activeTab === "presence" && renderPresence()}
     </div>
-  )
+  );
 }

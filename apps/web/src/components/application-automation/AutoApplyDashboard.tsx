@@ -1,220 +1,227 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Button } from '@proof-of-fit/ui'
-import { Badge } from '@proof-of-fit/ui'
-import { Switch } from '@proof-of-fit/ui'
-import { Input } from '@proof-of-fit/ui'
-import { Label } from '@proof-of-fit/ui'
-import { 
-  Settings, 
-  Play, 
-  Pause, 
-  BarChart3, 
-  Clock, 
-  CheckCircle, 
-  XCircle,
+import React, { useEffect, useMemo, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
+import { Button } from "@proof-of-fit/ui";
+import { Badge } from "@proof-of-fit/ui";
+import { Switch } from "@proof-of-fit/ui";
+import { Input } from "@proof-of-fit/ui";
+import { Label } from "@proof-of-fit/ui";
+import {
   AlertCircle,
-  TrendingUp,
-  Target,
-  MapPin,
+  BarChart3,
+  CheckCircle,
+  Clock,
   DollarSign,
-  Filter
-} from 'lucide-react'
+  Filter,
+  MapPin,
+  Pause,
+  Play,
+  Settings,
+  Target,
+  TrendingUp,
+  XCircle,
+} from "lucide-react";
 // import { useAuth } from '@/components/auth/auth-guard'
 // Simple toast implementation
 const toast = {
   // eslint-disable-next-line no-console
-  success: (message: string) => console.log('Success:', message),
+  success: (message: string) => console.log("Success:", message),
   // eslint-disable-next-line no-console
-  error: (message: string) => console.error('Error:', message)
-}
+  error: (message: string) => console.error("Error:", message),
+};
 
 interface AutoApplyConfig {
-  userId: string
-  enabled: boolean
+  userId: string;
+  enabled: boolean;
   preferences: {
-    jobTypes: string[]
-    locations: string[]
-    salaryMin?: number
-    salaryMax?: number
-    remoteOnly: boolean
-    keywords: string[]
-    excludeKeywords: string[]
-    maxApplicationsPerDay: number
-    maxApplicationsPerWeek: number
-  }
+    jobTypes: string[];
+    locations: string[];
+    salaryMin?: number;
+    salaryMax?: number;
+    remoteOnly: boolean;
+    keywords: string[];
+    excludeKeywords: string[];
+    maxApplicationsPerDay: number;
+    maxApplicationsPerWeek: number;
+  };
   resumeTemplate: {
-    id: string
-    customizations: Record<string, any>
-  }
+    id: string;
+    customizations: Record<string, any>;
+  };
   coverLetterTemplate: {
-    id: string
-    customizations: Record<string, any>
-  }
+    id: string;
+    customizations: Record<string, any>;
+  };
   notificationSettings: {
-    email: boolean
-    inApp: boolean
-    dailySummary: boolean
-  }
+    email: boolean;
+    inApp: boolean;
+    dailySummary: boolean;
+  };
 }
 
 interface ApplicationStats {
-  total: number
-  pending: number
-  submitted: number
-  reviewed: number
-  interview: number
-  rejected: number
-  accepted: number
-  thisWeek: number
-  thisMonth: number
+  total: number;
+  pending: number;
+  submitted: number;
+  reviewed: number;
+  interview: number;
+  rejected: number;
+  accepted: number;
+  thisWeek: number;
+  thisMonth: number;
 }
 
 export function AutoApplyDashboard() {
   // const { user } = useAuth()
-  const user = useMemo(() => ({ id: 'demo-user', email: 'demo@example.com' }), [])
-  const [config, setConfig] = useState<AutoApplyConfig | null>(null)
-  const [stats, setStats] = useState<ApplicationStats | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
+  const user = useMemo(
+    () => ({ id: "demo-user", email: "demo@example.com" }),
+    [],
+  );
+  const [config, setConfig] = useState<AutoApplyConfig | null>(null);
+  const [stats, setStats] = useState<ApplicationStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (user) {
-      fetchAutoApplyData()
+      fetchAutoApplyData();
     }
-  }, [user, fetchAutoApplyData])
+  }, [user, fetchAutoApplyData]);
 
   const fetchAutoApplyData = useCallback(async () => {
     try {
-      const response = await fetch(`/api/applications/auto-apply?userId=${user?.id}`)
-      const data = await response.json()
-      
+      const response = await fetch(
+        `/api/applications/auto-apply?userId=${user?.id}`,
+      );
+      const data = await response.json();
+
       if (data.config) {
-        setConfig(data.config)
+        setConfig(data.config);
       } else {
         // Create default configuration
         const defaultConfig: AutoApplyConfig = {
-          userId: user?.id || '',
+          userId: user?.id || "",
           enabled: false,
           preferences: {
-            jobTypes: ['full-time'],
+            jobTypes: ["full-time"],
             locations: [],
             remoteOnly: false,
             keywords: [],
             excludeKeywords: [],
             maxApplicationsPerDay: 5,
-            maxApplicationsPerWeek: 20
+            maxApplicationsPerWeek: 20,
           },
           resumeTemplate: {
-            id: 'default',
-            customizations: {}
+            id: "default",
+            customizations: {},
           },
           coverLetterTemplate: {
-            id: 'default',
-            customizations: {}
+            id: "default",
+            customizations: {},
           },
           notificationSettings: {
             email: true,
             inApp: true,
-            dailySummary: true
-          }
-        }
-        setConfig(defaultConfig)
+            dailySummary: true,
+          },
+        };
+        setConfig(defaultConfig);
       }
-      
-      setStats(data.stats)
+
+      setStats(data.stats);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error('Error fetching auto-apply data:', error)
-      toast.error('Failed to load auto-apply data')
+      console.error("Error fetching auto-apply data:", error);
+      toast.error("Failed to load auto-apply data");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [user])
+  }, [user]);
 
   const saveConfiguration = async () => {
-    if (!config) return
+    if (!config) return;
 
-    setSaving(true)
+    setSaving(true);
     try {
-      const response = await fetch('/api/applications/auto-apply', {
-        method: 'POST',
+      const response = await fetch("/api/applications/auto-apply", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: 'update_config',
+          action: "update_config",
           userId: user?.id,
-          config
-        })
-      })
+          config,
+        }),
+      });
 
-      const data = await response.json()
-      
+      const data = await response.json();
+
       if (data.success) {
-        toast.success('Auto-apply configuration saved successfully')
-        setShowSettings(false)
+        toast.success("Auto-apply configuration saved successfully");
+        setShowSettings(false);
       } else {
-        toast.error(data.error || 'Failed to save configuration')
+        toast.error(data.error || "Failed to save configuration");
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error('Error saving configuration:', error)
-      toast.error('Failed to save configuration')
+      console.error("Error saving configuration:", error);
+      toast.error("Failed to save configuration");
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const toggleAutoApply = async () => {
-    if (!config) return
+    if (!config) return;
 
     const updatedConfig = {
       ...config,
-      enabled: !config.enabled
-    }
-    
-    setConfig(updatedConfig)
-    
+      enabled: !config.enabled,
+    };
+
+    setConfig(updatedConfig);
+
     try {
-      const response = await fetch('/api/applications/auto-apply', {
-        method: 'POST',
+      const response = await fetch("/api/applications/auto-apply", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: 'update_config',
+          action: "update_config",
           userId: user?.id,
-          config: updatedConfig
-        })
-      })
+          config: updatedConfig,
+        }),
+      });
 
-      const data = await response.json()
-      
+      const data = await response.json();
+
       if (data.success) {
-        toast.success(`Auto-apply ${updatedConfig.enabled ? 'enabled' : 'disabled'}`)
+        toast.success(
+          `Auto-apply ${updatedConfig.enabled ? "enabled" : "disabled"}`,
+        );
       } else {
-        toast.error(data.error || 'Failed to update configuration')
+        toast.error(data.error || "Failed to update configuration");
         // Revert the change
-        setConfig(config)
+        setConfig(config);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error('Error toggling auto-apply:', error)
-      toast.error('Failed to update configuration')
-      setConfig(config)
+      console.error("Error toggling auto-apply:", error);
+      toast.error("Failed to update configuration");
+      setConfig(config);
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
-    )
+    );
   }
 
   if (!config) {
@@ -222,7 +229,7 @@ export function AutoApplyDashboard() {
       <div className="text-center p-8">
         <p className="text-gray-600">Failed to load auto-apply configuration</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -231,7 +238,9 @@ export function AutoApplyDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Application Automation</h2>
-          <p className="text-gray-600">Automatically apply to jobs that match your criteria</p>
+          <p className="text-gray-600">
+            Automatically apply to jobs that match your criteria
+          </p>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
@@ -240,7 +249,7 @@ export function AutoApplyDashboard() {
               onCheckedChange={toggleAutoApply}
             />
             <Label className="text-sm font-medium">
-              {config.enabled ? 'Enabled' : 'Disabled'}
+              {config.enabled ? "Enabled" : "Disabled"}
             </Label>
           </div>
           <Button
@@ -276,7 +285,9 @@ export function AutoApplyDashboard() {
                 <CheckCircle className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{stats?.submitted || 0}</div>
+                <div className="text-2xl font-bold">
+                  {stats?.submitted || 0}
+                </div>
                 <div className="text-sm text-gray-600">Submitted</div>
               </div>
             </div>
@@ -304,7 +315,9 @@ export function AutoApplyDashboard() {
                 <TrendingUp className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{stats?.thisMonth || 0}</div>
+                <div className="text-2xl font-bold">
+                  {stats?.thisMonth || 0}
+                </div>
                 <div className="text-sm text-gray-600">This Month</div>
               </div>
             </div>
@@ -322,38 +335,44 @@ export function AutoApplyDashboard() {
             {/* Job Preferences */}
             <div className="space-y-4">
               <h3 className="font-semibold">Job Preferences</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="salaryMin">Minimum Salary</Label>
                   <Input
                     id="salaryMin"
                     type="number"
-                    value={config.preferences.salaryMin || ''}
-                    onChange={(e) => setConfig({
-                      ...config,
-                      preferences: {
-                        ...config.preferences,
-                        salaryMin: e.target.value ? parseInt(e.target.value) : undefined
-                      }
-                    })}
+                    value={config.preferences.salaryMin || ""}
+                    onChange={(e) =>
+                      setConfig({
+                        ...config,
+                        preferences: {
+                          ...config.preferences,
+                          salaryMin: e.target.value
+                            ? parseInt(e.target.value)
+                            : undefined,
+                        },
+                      })}
                     placeholder="e.g., 50000"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="salaryMax">Maximum Salary</Label>
                   <Input
                     id="salaryMax"
                     type="number"
-                    value={config.preferences.salaryMax || ''}
-                    onChange={(e) => setConfig({
-                      ...config,
-                      preferences: {
-                        ...config.preferences,
-                        salaryMax: e.target.value ? parseInt(e.target.value) : undefined
-                      }
-                    })}
+                    value={config.preferences.salaryMax || ""}
+                    onChange={(e) =>
+                      setConfig({
+                        ...config,
+                        preferences: {
+                          ...config.preferences,
+                          salaryMax: e.target.value
+                            ? parseInt(e.target.value)
+                            : undefined,
+                        },
+                      })}
                     placeholder="e.g., 100000"
                   />
                 </div>
@@ -362,13 +381,14 @@ export function AutoApplyDashboard() {
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={config.preferences.remoteOnly}
-                  onCheckedChange={(checked) => setConfig({
-                    ...config,
-                    preferences: {
-                      ...config.preferences,
-                      remoteOnly: checked
-                    }
-                  })}
+                  onCheckedChange={(checked) =>
+                    setConfig({
+                      ...config,
+                      preferences: {
+                        ...config.preferences,
+                        remoteOnly: checked,
+                      },
+                    })}
                 />
                 <Label>Remote jobs only</Label>
               </div>
@@ -377,7 +397,7 @@ export function AutoApplyDashboard() {
             {/* Application Limits */}
             <div className="space-y-4">
               <h3 className="font-semibold">Application Limits</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="maxDaily">Max Applications Per Day</Label>
@@ -385,31 +405,33 @@ export function AutoApplyDashboard() {
                     id="maxDaily"
                     type="number"
                     value={config.preferences.maxApplicationsPerDay}
-                    onChange={(e) => setConfig({
-                      ...config,
-                      preferences: {
-                        ...config.preferences,
-                        maxApplicationsPerDay: parseInt(e.target.value)
-                      }
-                    })}
+                    onChange={(e) =>
+                      setConfig({
+                        ...config,
+                        preferences: {
+                          ...config.preferences,
+                          maxApplicationsPerDay: parseInt(e.target.value),
+                        },
+                      })}
                     min="1"
                     max="20"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="maxWeekly">Max Applications Per Week</Label>
                   <Input
                     id="maxWeekly"
                     type="number"
                     value={config.preferences.maxApplicationsPerWeek}
-                    onChange={(e) => setConfig({
-                      ...config,
-                      preferences: {
-                        ...config.preferences,
-                        maxApplicationsPerWeek: parseInt(e.target.value)
-                      }
-                    })}
+                    onChange={(e) =>
+                      setConfig({
+                        ...config,
+                        preferences: {
+                          ...config.preferences,
+                          maxApplicationsPerWeek: parseInt(e.target.value),
+                        },
+                      })}
                     min="1"
                     max="100"
                   />
@@ -420,46 +442,49 @@ export function AutoApplyDashboard() {
             {/* Notification Settings */}
             <div className="space-y-4">
               <h3 className="font-semibold">Notifications</h3>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={config.notificationSettings.email}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      notificationSettings: {
-                        ...config.notificationSettings,
-                        email: checked
-                      }
-                    })}
+                    onCheckedChange={(checked) =>
+                      setConfig({
+                        ...config,
+                        notificationSettings: {
+                          ...config.notificationSettings,
+                          email: checked,
+                        },
+                      })}
                   />
                   <Label>Email notifications</Label>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={config.notificationSettings.inApp}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      notificationSettings: {
-                        ...config.notificationSettings,
-                        inApp: checked
-                      }
-                    })}
+                    onCheckedChange={(checked) =>
+                      setConfig({
+                        ...config,
+                        notificationSettings: {
+                          ...config.notificationSettings,
+                          inApp: checked,
+                        },
+                      })}
                   />
                   <Label>In-app notifications</Label>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={config.notificationSettings.dailySummary}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      notificationSettings: {
-                        ...config.notificationSettings,
-                        dailySummary: checked
-                      }
-                    })}
+                    onCheckedChange={(checked) =>
+                      setConfig({
+                        ...config,
+                        notificationSettings: {
+                          ...config.notificationSettings,
+                          dailySummary: checked,
+                        },
+                      })}
                   />
                   <Label>Daily summary</Label>
                 </div>
@@ -478,7 +503,7 @@ export function AutoApplyDashboard() {
                 onClick={saveConfiguration}
                 disabled={saving}
               >
-                {saving ? 'Saving...' : 'Save Settings'}
+                {saving ? "Saving..." : "Save Settings"}
               </Button>
             </div>
           </CardContent>
@@ -493,35 +518,35 @@ export function AutoApplyDashboard() {
         <CardContent>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              {config.enabled ? (
-                <Play className="w-5 h-5 text-green-600" />
-              ) : (
-                <Pause className="w-5 h-5 text-gray-400" />
-              )}
+              {config.enabled
+                ? <Play className="w-5 h-5 text-green-600" />
+                : <Pause className="w-5 h-5 text-gray-400" />}
               <span className="font-medium">
-                Auto-apply is {config.enabled ? 'active' : 'inactive'}
+                Auto-apply is {config.enabled ? "active" : "inactive"}
               </span>
             </div>
-            
+
             {config.enabled && (
               <div className="flex items-center space-x-4 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
                   <MapPin className="w-4 h-4" />
                   <span>
-                    {config.preferences.remoteOnly ? 'Remote only' : 'All locations'}
+                    {config.preferences.remoteOnly
+                      ? "Remote only"
+                      : "All locations"}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center space-x-1">
                   <DollarSign className="w-4 h-4" />
                   <span>
-                    {config.preferences.salaryMin && config.preferences.salaryMax
+                    {config.preferences.salaryMin &&
+                        config.preferences.salaryMax
                       ? `$${config.preferences.salaryMin.toLocaleString()} - $${config.preferences.salaryMax.toLocaleString()}`
-                      : 'Any salary'
-                    }
+                      : "Any salary"}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center space-x-1">
                   <Filter className="w-4 h-4" />
                   <span>
@@ -534,5 +559,5 @@ export function AutoApplyDashboard() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
