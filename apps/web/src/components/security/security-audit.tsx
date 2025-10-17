@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Badge } from "@proof-of-fit/ui";
 import { Button } from "@proof-of-fit/ui";

@@ -6,7 +6,8 @@ import { env } from "@/lib/env";
 
 const WINDOW_MS = 60_000;
 const DEFAULT_LIMIT =
-  Number.isFinite(env.jobs.rateLimitPerMinute) && env.jobs.rateLimitPerMinute > 0
+  Number.isFinite(env.jobs.rateLimitPerMinute) &&
+    env.jobs.rateLimitPerMinute > 0
     ? env.jobs.rateLimitPerMinute
     : 30;
 
@@ -144,15 +145,17 @@ export async function limitJobSearch(
   }
 }
 
-export function toRateLimitHeaders(result: RateLimitState | null): Record<string, string> {
+export function toRateLimitHeaders(
+  result: RateLimitState | null,
+): Record<string, string> {
   if (!result) {
     return {
       "X-RateLimit-Limit": "0",
-      "X-RateLimit-Remaining": "0", 
+      "X-RateLimit-Remaining": "0",
       "X-RateLimit-Reset": "0",
     };
   }
-  
+
   const resetSeconds = Math.max(
     0,
     Math.ceil((result.reset - Date.now()) / 1000),
