@@ -174,8 +174,8 @@ export function rateLimit(config: RateLimitConfig) {
           "X-RateLimit-Limit": config.maxRequests.toString(),
           "X-RateLimit-Remaining": "0",
           "X-RateLimit-Reset": new Date(current.resetTime).toISOString(),
-        },
-      });
+      },
+    });
     }
 
     current.count++;
@@ -349,8 +349,8 @@ export function validatePassword(password: string): {
   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
     errors.push("Password must contain at least one special character");
   }
-  
-  return {
+
+    return {
     isValid: errors.length === 0,
     errors,
   };
@@ -383,8 +383,10 @@ export function logSecurityEvent(
   // In production, send to your logging service
   if (process.env.NODE_ENV === "production") {
     // Send to logging service (e.g., Sentry, LogRocket, etc.)
+    // eslint-disable-next-line no-console
     console.log("Security Event:", logEntry);
   } else {
+    // eslint-disable-next-line no-console
     console.log("Security Event:", logEntry);
   }
 }

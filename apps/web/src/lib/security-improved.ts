@@ -394,8 +394,10 @@ export function logSecurityEvent(
     // In production, send to your logging service
     if (process.env.NODE_ENV === "production") {
         // Send to logging service (e.g., Sentry, LogRocket, etc.)
+        // eslint-disable-next-line no-console
         console.log("Security Event:", logEntry);
     } else {
+        // eslint-disable-next-line no-console
         console.log("Security Event:", logEntry);
     }
 }
