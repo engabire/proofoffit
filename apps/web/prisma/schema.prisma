@@ -95,11 +95,13 @@ model User {
   // Relations
   tenant           Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   candidateProfile CandidateProfile?
+  applications     Application[]
   consents         Consent[]
   proofs           Proof[]
   auditLinks       AuditLink[]
   applicationPackages ApplicationPackage[]
   autoApplyRules   AutoApplyRule[]
+  signals          Signal[]
 
   @@map("users")
 }
@@ -261,8 +263,8 @@ model Application {
   // Relations
   tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   job                Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  candidateProfile   CandidateProfile    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  candidateProfile   CandidateProfile    @relation(fields: [userId], references: [userId], onDelete: Cascade, map: "applications_candidate_profile_fkey")
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade, map: "applications_user_fkey")
   targetProofWeights TargetProofWeight[]
   consentLedger      ConsentLedgerEntry[]
 
@@ -299,21 +301,7 @@ model Embedding {
   @@map("embeddings")
 }
 
-// Consent and privacy management
-model Consent {
-  id        String    @id @default(cuid())
-  tenantId  String
-  userId    String
-  scope     String    // data_sharing, marketing, analytics, etc.
-  grantedAt DateTime  @default(now())
-  expiresAt DateTime?
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("consents")
-}
+// Consent and privacy management (enhanced version below)
 
 model GiftCode {
   id                    String   @id @default(uuid()) @db.Uuid
@@ -437,8 +425,9 @@ model TargetProofWeight {
   createdAt     DateTime @default(now())
 
   // Relations
-  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade, map: "target_proof_weights_application_fkey")
   proof       Proof       @relation(fields: [proofId], references: [id], onDelete: Cascade)
+  target      Target      @relation(fields: [applicationId], references: [id], onDelete: Cascade, map: "target_proof_weights_target_fkey")
 
   @@unique([applicationId, proofId])
   @@map("target_proof_weights")
@@ -460,6 +449,7 @@ model AuditLink {
   // Relations
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   auditLinkProofs AuditLinkProof[]
+  target          Target            @relation(fields: [userId], references: [id], onDelete: Cascade, map: "audit_links_target_fkey")
 
   @@map("audit_links")
 }
@@ -555,7 +545,7 @@ model ConsentLedgerEntry {
 
   // Relations
   consent Consent @relation(fields: [consentId], references: [id], onDelete: Cascade)
-  application Application @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  application Application? @relation(fields: [jobId], references: [id], onDelete: SetNull)
 
   @@map("consent_ledger")
 }
