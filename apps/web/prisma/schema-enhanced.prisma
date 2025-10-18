@@ -59,7 +59,7 @@ enum AutoApplyAction {
   duplicate
 }
 
-// Core tenant and user management
+// Core tenant and user management (enhanced)
 model Tenant {
   id        String   @id @default(cuid())
   name      String
@@ -133,50 +133,24 @@ model CandidateProfile {
   @@map("candidate_profiles")
 }
 
-model Credential {
-  id          String   @id @default(cuid())
-  candidateId String
-  type        String   // degree, certification, license, etc.
-  issuer      String
-  issuedOn    DateTime?
-  verified    Boolean  @default(false)
-  docUrl      String?
+// Organizations for employers
+model Organization {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  domain    String?
+  website   String?
+  logoUrl   String?
+  createdAt DateTime @default(now())
 
   // Relations
-  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  jobs   Job[]
 
-  @@map("credentials")
+  @@map("organizations")
 }
 
-model Bullet {
-  id          String   @id @default(cuid())
-  candidateId String
-  text        String
-  tags        Json     @default("{}") // {criterion, evidence_type, metric?, scope?, tool?, link?}
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-
-  @@map("bullets")
-}
-
-model Artifact {
-  id          String   @id @default(cuid())
-  candidateId String
-  title       String
-  url         String
-  type        String   // resume, portfolio, cover_letter, etc.
-  createdAt   DateTime @default(now())
-
-  // Relations
-  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-
-  @@map("artifacts")
-}
-
-// Job and employer data
+// Enhanced Job model (Targets in ProofOfFit-2)
 model Job {
   id           String   @id @default(cuid())
   externalId   String?
@@ -208,202 +182,6 @@ model Job {
   @@map("jobs")
 }
 
-model EmployerIntake {
-  id               String   @id @default(cuid())
-  tenantId         String
-  jobRef           String
-  mustHave         Json     @default("[]")
-  preferred        Json     @default("[]")
-  preferenceOrder  Json     @default("[]")
-  weights          Json     @default("{}")
-  constraints      Json     @default("{}")
-  terms            Json     @default("{}")
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  job    Job    @relation(fields: [jobRef], references: [id], onDelete: Cascade)
-  slates Slate[]
-
-  @@map("employer_intakes")
-}
-
-model Slate {
-  id         String   @id @default(cuid())
-  tenantId   String
-  employerId String
-  jobRef     String
-  weights    Json     @default("{}")
-  candidates Json     @default("[]") // [{candidate_id, fit: 0..1, explanations: [], status}]
-  auditUrl   String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  job    Job    @relation(fields: [jobRef], references: [id], onDelete: Cascade)
-  intake EmployerIntake @relation(fields: [employerId], references: [id], onDelete: Cascade)
-
-  @@map("slates")
-}
-
-model Application {
-  id          String            @id @default(cuid())
-  tenantId    String
-  jobId       String
-  userId      String
-  status      ApplicationStatus @default(draft)
-  coverLetter String?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-
-  // Relations
-  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  job                Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  candidateProfile   CandidateProfile    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  targetProofWeights TargetProofWeight[]
-  consentLedger      ConsentLedgerEntry[]
-
-  @@map("applications")
-}
-
-// Criteria graph for matching
-model CriteriaNode {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  label     String
-  parentId  String?
-  synonyms  String[] @default([])
-  meta      Json     @default("{}")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Self-referential relation
-  parent   CriteriaNode?  @relation("CriteriaHierarchy", fields: [parentId], references: [id])
-  children CriteriaNode[] @relation("CriteriaHierarchy")
-
-  @@map("criteria_nodes")
-}
-
-// Vector embeddings for semantic search
-model Embedding {
-  id       String @id @default(cuid())
-  objType  String // job, bullet, criteria
-  objId    String
-  vector   Unsupported("vector(768)") // pgvector extension
-  createdAt DateTime @default(now())
-
-  @@unique([objType, objId])
-  @@map("embeddings")
-}
-
-// Consent and privacy management
-model Consent {
-  id        String    @id @default(cuid())
-  tenantId  String
-  userId    String
-  scope     String    // data_sharing, marketing, analytics, etc.
-  grantedAt DateTime  @default(now())
-  expiresAt DateTime?
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("consents")
-}
-
-model GiftCode {
-  id                    String   @id @default(uuid()) @db.Uuid
-  code                  String   @unique
-  months                Int
-  currency              String   @default("USD")
-  amountCents           Int      @map("amount_cents")
-  status                String   @default("active")
-  sponsorUserId         String?  @map("sponsor_user_id") @db.Uuid
-  recipientEmail        String?  @map("recipient_email")
-  message               String?
-  redeemedBy            String?  @map("redeemed_by") @db.Uuid
-  redeemedAt            DateTime? @map("redeemed_at")
-  expiresAt             DateTime  @default(dbgenerated("now() + interval '12 months'")) @map("expires_at")
-  createdAt             DateTime  @default(now()) @map("created_at")
-  stripeCouponId        String?   @map("stripe_coupon_id")
-  stripePromotionCodeId String?   @map("stripe_promotion_code_id")
-  stripeSubscriptionId  String?   @map("stripe_subscription_id")
-
-  @@map("gift_codes")
-}
-
-model SponsorPool {
-  id            String   @id @default(uuid()) @db.Uuid
-  sponsorUserId String   @map("sponsor_user_id") @db.Uuid
-  amountCents   Int      @map("amount_cents")
-  currency      String   @default("USD")
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  @@map("sponsor_pool")
-}
-
-// Policy sources and ToS compliance
-model PolicySource {
-  id        String   @id @default(cuid())
-  domain    String   @unique
-  allowed   Boolean  @default(false)
-  captcha   Boolean  @default(false)
-  notes     String?
-  version   String   @default("1.0")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("policy_sources")
-}
-
-// Immutable action log with hash chaining
-model ActionLog {
-  id          BigInt   @id @default(autoincrement())
-  tenantId    String
-  actorType   String   // user, system, api
-  actorId     String
-  action      String   // create, update, delete, apply, etc.
-  objType     String   // job, profile, slate, etc.
-  objId       String
-  payloadHash Bytes    // SHA256 hash of payload
-  prevHash    Bytes?   // Previous hash in chain
-  hash        Bytes    // Current hash: SHA256(prevHash + payloadHash + timestamp)
-  ts          DateTime @default(now())
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@map("action_log")
-}
-
-// Target model for job targeting and proof organization
-model Target {
-  id           String   @id @default(cuid())
-  userId       String
-  title        String
-  role         String
-  companyHint  String?
-  layout       String   @default("REPORT") // REPORT, PORTFOLIO, ONEPAGER
-  rubricJson   Json     @default("{}")
-  jdSnapshot   String?
-  fitScore     Float?
-  lastAnalyzedAt DateTime?
-  isDeleted    Boolean  @default(false)
-  deletedAt    DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // Relations
-  weights      TargetProofWeight[]
-  auditLinks   AuditLink[]
-
-  @@map("targets")
-}
-
 // Enhanced Proof model (formerly Evidence/Artifact)
 model Proof {
   id          String    @id @default(cuid())
@@ -427,7 +205,44 @@ model Proof {
   @@map("proofs")
 }
 
-// Enhanced TargetProofWeight - weighted proof linking
+// Legacy compatibility - Artifact points to Proof
+model Artifact {
+  id          String   @id @default(cuid())
+  candidateId String
+  title       String
+  url         String
+  type        String   // resume, portfolio, cover_letter, etc.
+  createdAt   DateTime @default(now())
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("artifacts")
+}
+
+// Enhanced Application model
+model Application {
+  id          String            @id @default(cuid())
+  tenantId    String
+  jobId       String
+  userId      String
+  status      ApplicationStatus @default(draft)
+  coverLetter String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job                Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidateProfile   CandidateProfile    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  targetProofWeights TargetProofWeight[]
+  consentLedger      ConsentLedgerEntry[]
+
+  @@map("applications")
+}
+
+// NEW: TargetProofWeight - weighted proof linking
 model TargetProofWeight {
   id            String   @id @default(cuid())
   applicationId String
@@ -444,7 +259,7 @@ model TargetProofWeight {
   @@map("target_proof_weights")
 }
 
-// Enhanced AuditLinks - shareable portfolio links
+// NEW: AuditLinks - shareable portfolio links
 model AuditLink {
   id           String    @id @default(cuid())
   userId       String
@@ -579,73 +394,80 @@ model AutoApplyRule {
   @@map("auto_apply_rules")
 }
 
-// Organizations for employers
-model Organization {
+// Existing models (maintained for backward compatibility)
+model Credential {
+  id          String   @id @default(cuid())
+  candidateId String
+  type        String   // degree, certification, license, etc.
+  issuer      String
+  issuedOn    DateTime?
+  verified    Boolean  @default(false)
+  docUrl      String?
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("credentials")
+}
+
+model Bullet {
+  id          String   @id @default(cuid())
+  candidateId String
+  text        String
+  tags        Json     @default("{}") // {criterion, evidence_type, metric?, scope?, tool?, link?}
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  candidate CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@map("bullets")
+}
+
+model EmployerIntake {
+  id               String   @id @default(cuid())
+  tenantId         String
+  jobRef           String
+  mustHave         Json     @default("[]")
+  preferred        Json     @default("[]")
+  preferenceOrder  Json     @default("[]")
+  weights          Json     @default("{}")
+  constraints      Json     @default("{}")
+  terms            Json     @default("{}")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobRef], references: [id], onDelete: Cascade)
+
+  @@map("employer_intakes")
+}
+
+model Slate {
+  id          String   @id @default(cuid())
+  tenantId    String
+  jobId       String
+  rationale   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("slates")
+}
+
+model ActionLog {
   id        String   @id @default(cuid())
   tenantId  String
-  name      String
-  domain    String?
-  website   String?
-  logoUrl   String?
+  action    String
+  details   Json     @default("{}")
   createdAt DateTime @default(now())
 
   // Relations
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  jobs   Job[]
 
-  @@map("organizations")
-}
-
-// Analytics events for tracking user behavior
-model AnalyticsEvent {
-  id        String   @id @default(cuid())
-  eventType String
-  userId    String?
-  targetId  String?
-  metadata  Json     @default("{}")
-  createdAt DateTime @default(now())
-
-  @@map("analytics_events")
-}
-
-// Claim generation logs for AI-generated content
-model ClaimGenerationLog {
-  id              String   @id @default(cuid())
-  userId          String
-  targetId        String
-  prompt          String
-  claim           String
-  outputHash      String
-  allowedProofIds String[] @default([])
-  createdAt       DateTime @default(now())
-
-  @@map("claim_generation_logs")
-}
-
-// System health check table for monitoring
-model SystemHealth {
-  id        String   @id @default(cuid())
-  status    String   @default("healthy") // healthy, degraded, unhealthy
-  message   String?
-  timestamp DateTime @default(now())
-  metadata  Json     @default("{}")
-
-  @@map("system_health")
-}
-
-// Audit events for compliance tracking
-model AuditEvent {
-  id          String   @id @default(cuid())
-  eventType   String   // login, data_access, data_export, data_deletion, etc.
-  userId      String?
-  tenantId    String?
-  action      String   // create, read, update, delete, export, etc.
-  resource    String   // user, profile, application, etc.
-  resourceId  String?
-  metadata    Json     @default("{}")
-  ipAddress   String?
-  userAgent   String?
-  timestamp   DateTime @default(now())
-
-  @@map("audit_events")
+  @@map("action_logs")
 }
