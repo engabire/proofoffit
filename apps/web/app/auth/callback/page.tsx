@@ -64,8 +64,8 @@ function AuthCallbackPageContent() {
           ? new URLSearchParams(window.location.hash.replace(/^#/, ""))
           : null;
 
-        const hashError = hashParams?.get("error_description")
-          || hashParams?.get("error");
+        const hashError = hashParams?.get("error_description") ||
+          hashParams?.get("error");
         if (hashError) {
           throw new Error(`Authentication error: ${hashError}`);
         }
@@ -87,7 +87,9 @@ function AuthCallbackPageContent() {
               // If there's an error, it might be because the code verifier wasn't found
               // Let's try to provide more specific error information
               if (exchangeError.message?.includes("code verifier")) {
-                throw new Error("Authentication failed: PKCE code verifier mismatch. Please try signing in again.");
+                throw new Error(
+                  "Authentication failed: PKCE code verifier mismatch. Please try signing in again.",
+                );
               }
               throw exchangeError;
             }
@@ -113,8 +115,8 @@ function AuthCallbackPageContent() {
           const refreshToken = hashParams.get("refresh_token");
 
           if (accessToken && refreshToken) {
-            const { data: sessionData, error: sessionError } =
-              await supabase.auth.setSession({
+            const { data: sessionData, error: sessionError } = await supabase
+              .auth.setSession({
                 access_token: accessToken,
                 refresh_token: refreshToken,
               });
