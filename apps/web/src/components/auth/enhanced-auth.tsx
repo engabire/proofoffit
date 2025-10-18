@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { useCSRFHeaders } from "@/components/security/csrf-provider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientSupabaseClient } from "@/lib/supabase/client";
 import {
   AlertTriangle,
   ArrowRight,
@@ -90,7 +90,7 @@ export default function EnhancedAuth({
     error: authError,
   } = useAuth();
   const csrfHeaders = useCSRFHeaders();
-  const supabase = createClientComponentClient();
+  const supabase = createClientSupabaseClient();
   const [audience, setAudience] = useState<Audience>(defaultAudience);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -224,6 +224,10 @@ export default function EnhancedAuth({
   const handleSSO = async (providerKey: string) => {
     setIsLoading(true);
     try {
+      if (!supabase) {
+        throw new Error("Authentication service not available");
+      }
+
       // Generate PKCE code verifier and store it
       const codeVerifier = generateCodeVerifier();
       sessionStorage.setItem("pkce_code_verifier", codeVerifier);

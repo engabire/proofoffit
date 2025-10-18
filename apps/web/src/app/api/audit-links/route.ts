@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const { title, description, expiresAt } = await req.json();
 
     // Generate unique slug
-    const slug = crypto.randomBytes(16).toString('hex');
+    const slug = crypto.randomBytes(16).toString("hex");
 
     const link = await prisma.auditLink.create({
       data: {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     console.error("Error creating audit link:", error);
     return NextResponse.json(
       { error: "Failed to create audit link" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -70,8 +70,7 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching audit links:", error);
     return NextResponse.json(
       { error: "Failed to fetch audit links" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

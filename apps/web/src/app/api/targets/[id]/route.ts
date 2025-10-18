@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const userId = await requireUserId();
@@ -40,7 +40,7 @@ export async function GET(
     if (!target) {
       return NextResponse.json(
         { error: "Target not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -49,14 +49,14 @@ export async function GET(
     console.error("Error fetching target:", error);
     return NextResponse.json(
       { error: "Failed to fetch target" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const userId = await requireUserId();
@@ -74,7 +74,7 @@ export async function PUT(
     if (!target) {
       return NextResponse.json(
         { error: "Target not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -94,14 +94,14 @@ export async function PUT(
     console.error("Error updating target:", error);
     return NextResponse.json(
       { error: "Failed to update target" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const userId = await requireUserId();
@@ -118,7 +118,7 @@ export async function DELETE(
     if (!target) {
       return NextResponse.json(
         { error: "Target not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -135,7 +135,7 @@ export async function DELETE(
     console.error("Error deleting target:", error);
     return NextResponse.json(
       { error: "Failed to delete target" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

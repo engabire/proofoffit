@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const userId = await requireUserId();
@@ -22,7 +22,7 @@ export async function POST(
     if (!target) {
       return NextResponse.json(
         { error: "Target not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -39,14 +39,14 @@ export async function POST(
     console.error("Error adding proof to target:", error);
     return NextResponse.json(
       { error: "Failed to add proof to target" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const userId = await requireUserId();
@@ -57,7 +57,7 @@ export async function DELETE(
     if (!proofId) {
       return NextResponse.json(
         { error: "Proof ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -72,7 +72,7 @@ export async function DELETE(
     if (!target) {
       return NextResponse.json(
         { error: "Target not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -88,7 +88,7 @@ export async function DELETE(
     console.error("Error removing proof from target:", error);
     return NextResponse.json(
       { error: "Failed to remove proof from target" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
