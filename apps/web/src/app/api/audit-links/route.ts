@@ -6,42 +6,27 @@ import crypto from "crypto";
 export async function POST(req: NextRequest) {
   try {
     const userId = await requireUserId();
-    const { targetId, expiresAt, maxViews } = await req.json();
+    const { title, description, expiresAt } = await req.json();
 
-    // Verify target belongs to user
-    const target = await prisma.target.findFirst({
-      where: {
-        id: targetId,
-        userId,
-        isDeleted: false,
-      },
-    });
-
-    if (!target) {
-      return NextResponse.json(
-        { error: "Target not found" },
-        { status: 404 }
-      );
-    }
-
-    // Generate secure token
-    const token = crypto.randomBytes(32).toString('hex');
+    // Generate unique slug
+    const slug = crypto.randomBytes(16).toString('hex');
 
     const link = await prisma.auditLink.create({
       data: {
-        targetId,
         userId,
-        token,
+        slug,
+        title: title || "My Portfolio",
+        description: description || null,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
-        maxViews: maxViews || null,
       },
     });
 
     return NextResponse.json({
       id: link.id,
-      token: link.token,
+      slug: link.slug,
+      title: link.title,
+      description: link.description,
       expiresAt: link.expiresAt,
-      maxViews: link.maxViews,
       createdAt: link.createdAt,
     });
   } catch (error) {
@@ -56,25 +41,22 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const userId = await requireUserId();
-    const { searchParams } = new URL(req.url);
-    const targetId = searchParams.get("targetId");
-
-    const whereClause: any = {
-      userId,
-    };
-
-    if (targetId) {
-      whereClause.targetId = targetId;
-    }
 
     const links = await prisma.auditLink.findMany({
-      where: whereClause,
+      where: {
+        userId,
+      },
       include: {
-        target: {
-          select: {
-            id: true,
-            title: true,
-            role: true,
+        auditLinkProofs: {
+          include: {
+            proof: {
+              select: {
+                id: true,
+                title: true,
+                kind: true,
+                description: true,
+              },
+            },
           },
         },
       },

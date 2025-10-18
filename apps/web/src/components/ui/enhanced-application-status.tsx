@@ -4,11 +4,11 @@ import { Badge } from "@proof-of-fit/ui";
 import { Progress } from "@proof-of-fit/ui";
 import {
     AlertCircle,
+    Award,
     CheckCircle,
     Clock,
     Eye,
     FileText,
-    Handshake,
     MessageSquare,
     XCircle,
 } from "lucide-react";
@@ -61,7 +61,7 @@ const statusConfig = {
     offer: {
         label: "Offer",
         color: "bg-green-100 text-green-800",
-        icon: Handshake,
+        icon: Award,
         progress: 100,
         description: "Congratulations! You received an offer",
     },
@@ -200,7 +200,7 @@ export function ApplicationTimeline({
             key: "offer" as const,
             label: "Decision",
             icon: status === "offer"
-                ? Handshake
+                ? Award
                 : status === "rejected"
                 ? XCircle
                 : AlertCircle,

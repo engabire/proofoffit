@@ -24,7 +24,7 @@ export async function GET(
         },
         auditLinks: {
           where: {
-            isRevoked: false,
+            isActive: true,
             OR: [
               { expiresAt: null },
               { expiresAt: { gt: new Date() } },

@@ -12,7 +12,7 @@ async function main() {
     create: {
       id: 'demo-tenant',
       name: 'Demo Tenant',
-      plan: 'pro',
+      plan: 'PRO',
     },
   })
 
@@ -93,24 +93,29 @@ async function main() {
   const candidateProof = await prisma.proof.create({
     data: {
       userId: candidateUser.id,
-      targetId: candidateTarget.id,
       title: "Built scalable web application",
-      summary: "Developed a full-stack web application serving 10,000+ users",
-      kind: "achievement",
-      artifacts: [
-        {
-          type: "portfolio",
-          title: "Project Demo",
-          url: "https://example.com/demo"
-        }
-      ]
+      description: "Developed a full-stack web application serving 10,000+ users",
+      kind: "case",
+      url: "https://example.com/demo",
+      skills: ["React", "Node.js", "PostgreSQL"],
+      impact: "Served 10,000+ users with 99.9% uptime"
+    }
+  })
+
+  // Create application
+  const application = await prisma.application.create({
+    data: {
+      tenantId: 'demo-tenant',
+      jobId: 'demo-job',
+      userId: candidateUser.id,
+      status: 'draft'
     }
   })
 
   // Create target-proof weight
   const targetProofWeight = await prisma.targetProofWeight.create({
     data: {
-      targetId: candidateTarget.id,
+      applicationId: application.id,
       proofId: candidateProof.id,
       weight: 1.0
     }

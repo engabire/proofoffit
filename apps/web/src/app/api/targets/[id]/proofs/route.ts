@@ -28,7 +28,7 @@ export async function POST(
 
     const targetProofWeight = await prisma.targetProofWeight.create({
       data: {
-        targetId: id,
+        applicationId: id,
         proofId,
         weight,
       },
@@ -78,7 +78,7 @@ export async function DELETE(
 
     await prisma.targetProofWeight.deleteMany({
       where: {
-        targetId: id,
+        applicationId: id,
         proofId,
       },
     });
