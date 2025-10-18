@@ -42,13 +42,14 @@
   "packageManager": "npm@9.6.7",
   "dependencies": {
     "@prisma/client": "^6.16.2",
-    "cheerio": "^1.1.2",
+    "cheerio": "1.1.2",
     "p-limit": "^7.1.1",
     "prisma": "^6.16.2",
     "robots-parser": "^3.0.1",
     "vercel": "^48.4.0"
   },
   "overrides": {
+    "cheerio": "1.1.2",
     "esbuild": "0.25.11",
     "path-to-regexp": "6.3.0",
     "undici": "5.29.0"
