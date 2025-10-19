@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd packages/ui && npm run build && cd ../../apps/web && npx prisma generate && npx next build",
+  "buildCommand": "npm run build:web",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci",
   "ignoreCommand": "node vercel-deployment-guard.js",
