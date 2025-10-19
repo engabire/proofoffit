@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
         };
 
         // Log performance data (in production, you might want to send to analytics service)
+        // eslint-disable-next-line no-console
         console.log("Performance Report:", {
             url: enrichedData.url,
             score: enrichedData.score,

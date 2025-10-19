@@ -137,7 +137,7 @@ export function PerformanceDashboard({ className }: PerformanceDashboardProps) {
                         Performance Dashboard
                     </h2>
                     <p className="text-gray-600">
-                        Monitor your application's performance metrics
+                        Monitor your application&apos;s performance metrics
                     </p>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -410,7 +410,7 @@ export function PerformanceDashboard({ className }: PerformanceDashboardProps) {
                 <CardHeader>
                     <CardTitle>Performance Actions</CardTitle>
                     <CardDescription>
-                        Tools and actions to improve your application's
+                        Tools and actions to improve your application&apos;s
                         performance
                     </CardDescription>
                 </CardHeader>

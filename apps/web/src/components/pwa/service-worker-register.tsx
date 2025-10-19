@@ -9,6 +9,7 @@ export function ServiceWorkerRegister() {
             navigator.serviceWorker
                 .register("/sw.js")
                 .then((registration) => {
+                    // eslint-disable-next-line no-console
                     console.log(
                         "Service Worker registered successfully:",
                         registration,
@@ -24,6 +25,7 @@ export function ServiceWorkerRegister() {
                                     navigator.serviceWorker.controller
                                 ) {
                                     // New version available
+                                    // eslint-disable-next-line no-console
                                     console.log("New version available");
                                     // You could show a notification to the user here
                                 }
@@ -43,11 +45,13 @@ export function ServiceWorkerRegister() {
 
             // Handle offline/online status
             const handleOnline = () => {
+                // eslint-disable-next-line no-console
                 console.log("App is online");
                 // You could show a notification that the app is back online
             };
 
             const handleOffline = () => {
+                // eslint-disable-next-line no-console
                 console.log("App is offline");
                 // You could show a notification that the app is offline
             };
