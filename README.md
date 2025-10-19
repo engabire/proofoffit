@@ -1,289 +1,203 @@
-# ProofOfFit - Compliance-First Hiring OS
-
-A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; employers get ranked, explainable slates. Every decision is traceable, consented, auditable, and as low-carbon as practical.
-
-## 🎯 North Star
-
-**The Da Vincian Constraints (our Vitruvian system):**
-- **Truth:** Every score explains itself with evidence
-- **Care:** Human dignity, consent, accessibility
-- **Craft:** Lean primitives over ornate machinery; fewer moving parts
-- **Planet:** Measure kWh/kgCO₂e; prefer smaller models when outcomes are equal
-
-## 🏗️ Architecture
-
-**Pattern:** Modular monolith → service extraction as load/teams grow
-
-### Core Planes
-- **Data Plane:** Postgres (OLTP), Object Store (docs/artifacts), Vector Index, Event Bus, Immutable ActionLog
-- **Control Plane:** Orchestrators (Apply, Comms), Schedulers (Carbon-aware), Policies (ToS/Compliance), RBAC/Consent
-- **Intelligence Plane:** Criteria Graph, Ranker, Tailor Engine, Bias Monitor, Evaluator
-- **Edge/IO Plane:** Feed Connectors (USAJOBS, ReliefWeb, ATS boards), Email/Calendar Bridges (Gmail/Outlook), Web/API, Admin UI
-
-### Tech Stack (MVP)
-- **Frontend:** Next.js (App Router) with React Server Components, Tailwind, shadcn/ui
-- **Backend:** FastAPI (Python) for ML-adjacent services; Node/TypeScript for IO-heavy connectors
-- **Database:** Supabase Postgres with pgvector, pgcrypto, RLS
-- **Infrastructure:** Vercel (serverless), Supabase (managed services)
-- **Payments:** Stripe
-- **AI/ML:** Provider-agnostic adapter with structured outputs via Pydantic
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+
-- npm 9+
-- Supabase account
-- Stripe account (for payments)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/proof-of-fit.git
-   cd proof-of-fit
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp apps/web/env.example apps/web/.env.local
-   ```
-   
-   Fill in your environment variables:
-   ```env
-   # Supabase
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-   
-   # Stripe
-   STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-   STRIPE_SECRET_KEY=your_stripe_secret_key
-   STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-   STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
-
-   # Email (optional)
-   RESEND_API_KEY=your_resend_api_key
-   ```
-
-4. **Set up Supabase**
-   - Create a new Supabase project
-   - Enable the required extensions: `pgcrypto`, `pgvector`, `pg_cron`, `pg_stat_statements`
-   - Run the database migrations:
-     ```bash
-     cd apps/web
-     npm run db:push
-     ```
-
-5. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-The application will be available at `http://localhost:3000`.
-
-## 📁 Project Structure
-
-```
-proof-of-fit/
-├── apps/
-│   ├── web/                 # Next.js application
-│   │   ├── src/
-│   │   │   ├── app/         # App Router pages
-│   │   │   ├── components/  # React components
-│   │   │   ├── lib/         # Utilities and configurations
-│   │   │   └── types/       # TypeScript type definitions
-│   │   ├── prisma/          # Database schema and migrations
-│   │   └── package.json
-│   ├── api/                 # FastAPI service (future)
-│   └── workers/             # Node/TS connectors (future)
-├── packages/
-│   ├── ui/                  # Shared UI components
-│   ├── types/               # Shared TypeScript types
-│   ├── clients/             # Typed SDKs
-│   └── prompts/             # LLM prompts and guards
-├── infra/                   # Infrastructure as code
-│   ├── terraform/           # AWS modules
-│   └── k8s/                 # Kubernetes manifests
-└── .github/workflows/       # CI/CD workflows
-```
-
-## 🎨 UI Components
-
-The project uses a custom UI component library built on top of Radix UI and Tailwind CSS. Components are located in `packages/ui/src/components/` and include:
-
-- **Layout:** Card, Separator, Sheet, Dialog
-- **Forms:** Input, Button, Checkbox, RadioGroup, Select, Textarea
-- **Navigation:** NavigationMenu, Tabs, Accordion
-- **Feedback:** Toast, Alert, Progress, Skeleton
-- **Data Display:** Avatar, Badge, Table
-- **Overlays:** Popover, Tooltip, DropdownMenu
-
-## 🗄️ Database Schema
-
-The application uses Prisma with PostgreSQL and includes the following key entities:
-
-- **Tenant:** Multi-tenant organization management
-- **User:** User accounts with role-based access
-- **CandidateProfile:** Candidate information and preferences
-- **Job:** Job postings from various sources
-- **Slate:** Ranked candidate lists for employers
-- **Application:** Job applications with status tracking
-- **ActionLog:** Immutable audit trail with hash chaining
-- **CriteriaNode:** Hierarchical criteria graph for matching
-- **Embedding:** Vector embeddings for semantic search
+# ProofOfFit - Evidence-Based Hiring Platform
+
+## Overview
+
+ProofOfFit is a compliance-first, criteria-driven hiring OS. It enables candidates to manage their job search with an "autopilot" while providing employers with ranked, explainable candidate slates supported by auditable evidence. The platform emphasizes weighted requirements, human-in-the-loop application processes, consent-first privacy, bias checks, and carbon-aware compute. Its core principles are Truth (evidence-based scoring), Care (human dignity, consent, accessibility), Craft (lean architecture), and Planet (environmental awareness).
+
+The project targets Job Seekers looking for evidence-based job matching and Employers/Hiring Teams seeking transparent, explainable candidate evaluations. This Replit prototype uses Express + Vite for rapid development, while the production version is built with Next.js 15 + FastAPI.
+
+## Production Implementation
+
+**This Replit prototype is for rapid development and testing.**
+
+The production implementation is at: **[github.com/engabire/proofoffit](https://github.com/engabire/proofoffit)**
+
+For detailed architectural differences, see `ARCHITECTURE_COMPARISON.md`.
+
+### Recent Production-Grade Enhancements (October 18, 2025)
+
+Implemented key security and compliance features from the GitHub production version:
+
+**Security Features:**
+- **Rate Limiting**: Sliding window rate limiter (30 req/min for API, 5 req/15min for auth, 10 req/min for uploads)
+- **Audit Logging**: Immutable hash-chained audit trail with cryptographic integrity verification
+- **Admin API**: Endpoints for audit log viewing, statistics, and integrity verification
+
+**Audit Actions Tracked:**
+- Authentication (login, logout, signup)
+- Profile operations (create, update, delete)
+- Proof/evidence management (create, update, delete, link, unlink)
+- Applications (create, update, withdraw)
+- Subscriptions (create, cancel, update)
+- Admin actions and policy violations
+
+**Technical Implementation:**
+- In-memory storage for this prototype (production uses PostgreSQL with RLS)
+- SHA-256 hash chaining ensures tamper-proof audit trail
+- Rate limiting prevents abuse and DoS attacks
+- All critical operations are logged with user, timestamp, IP, and user agent
 
-## 🔐 Security & Privacy
+**API Endpoints:**
+- `GET /api/admin/audit-logs` - View audit logs with filters
+- `GET /api/admin/audit-logs/stats` - Get audit statistics
+- `POST /api/admin/audit-logs/verify` - Verify audit log integrity
 
-- **Row-Level Security (RLS):** Tenant isolation at the database level
-- **Authentication:** Supabase Auth with magic links and OAuth
-- **Authorization:** Role-based access control (RBAC)
-- **Data Protection:** Field-level encryption for PII
-- **Audit Trail:** Immutable action log with cryptographic integrity
-- **Consent Management:** Granular consent tracking and management
+### Auto-Apply with Consent System (October 18, 2025)
 
-## 🌱 Sustainability
+Implemented a comprehensive consent-based automated job application system:
 
-- **Carbon-Aware Processing:** Batch operations during low-carbon periods
-- **Efficient Models:** Preference for smaller, more efficient AI models
-- **Sustainability Metrics:** Track kWh/kgCO₂e per operation
-- **Green Hosting:** Vercel's carbon-neutral infrastructure
+**Core Features:**
+- **Application Packages**: Versioned bundles containing resume URLs and cover letter templates
+- **Digital Consent**: Canvas-based signature capture with base64 encoding and explicit scope definitions
+- **Consent Ledger**: Immutable, hash-chained audit trail of all automated application activities
+- **Auto-Apply Rules**: User-configurable job matching criteria with weekly caps and cooldown periods
 
-## 🚦 Development Workflow
-
-### Available Scripts
-
-```bash
-# Development
-npm run dev              # Start all services in development mode
-npm run build            # Build all packages
-npm run lint             # Lint all packages
-npm run test             # Run tests
-
-# Database
-npm run db:generate      # Generate Prisma client
-npm run db:push          # Push schema changes to database
-npm run db:migrate       # Run database migrations
-npm run db:studio        # Open Prisma Studio
-```
-
-### Code Quality
-
-- **TypeScript:** Strict type checking across all packages
-- **ESLint:** Consistent code style and best practices
-- **Prettier:** Code formatting
-- **Husky:** Git hooks for pre-commit checks
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-npm run test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
-
-### Manual Deployment
-
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm run start
-```
-
-## 📊 Monitoring & Observability
-
-- **Error Tracking:** Sentry integration
-- **Performance:** Vercel Analytics
-- **Logs:** Structured logging with correlation IDs
-- **Metrics:** Custom dashboards for business KPIs
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow the existing code style and patterns
-- Write tests for new features
-- Update documentation as needed
-- Ensure all CI checks pass
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Documentation:** [docs.proofoffit.com](https://docs.proofoffit.com)
-- **Issues:** [GitHub Issues](https://github.com/your-org/proof-of-fit/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/your-org/proof-of-fit/discussions)
-- **Email:** support@proofoffit.com
-
-## 🗺️ Roadmap
-
-### Phase A - Groundwork & Skeleton ✅
-- [x] Monorepo setup with Turborepo
-- [x] Next.js App Router with Supabase
-- [x] Prisma schema and RLS
-- [x] Basic UI component library
-- [x] Landing page and marketing site
-
-### Phase B - Candidate Autopilot (In Progress)
-- [ ] Feed connectors (USAJOBS, ReliefWeb, ATS)
-- [ ] Job normalizer and ToS policy engine
-- [ ] Criteria graph and ranker
-- [ ] Tailor engine for resume generation
-- [ ] Prep-and-confirm flow
-
-### Phase C - Employer Slate Engine
-- [ ] Intake builder for employers
-- [ ] Slate generation with explanations
-- [ ] Recruiter actions and feedback loop
-- [ ] Audit URLs and compliance reporting
-
-### Phase D - Compliance & Safety
-- [ ] Consent manager and privacy controls
-- [ ] Bias monitoring and fairness metrics
-- [ ] Carbon-aware scheduling
-- [ ] Accessibility compliance (WCAG 2.2 AA)
-
-### Phase E - Monetization
-- [ ] Stripe integration and subscription management
-- [ ] Plan entitlements and feature gates
-- [ ] Billing and invoicing
-
-## 🙏 Acknowledgments
-
-- Built with [Next.js](https://nextjs.org/)
-- UI components from [Radix UI](https://www.radix-ui.com/)
-- Styling with [Tailwind CSS](https://tailwindcss.com/)
-- Database powered by [Supabase](https://supabase.com/)
-- Deployed on [Vercel](https://vercel.com/)
-
----
-
-**ProofOfFit** - Making hiring more transparent, fair, and sustainable. 🌍
+**Database Schema Extensions:**
+- `application_packages` - Reusable application material bundles (version, resumeUrl, coverLetterTemplate, contentHash)
+- `consents` - Digital consent records (packageId, scopeJson, signatureBlob, signatureProvider)
+- `consent_ledger` - Append-only audit trail (consentRef, action, jobId, timestamp, applyPayloadHash)
+- `auto_apply_rules` - Automated application rules (name, consentRef, weeklyCap, cooldownSeconds, enabled)
+
+**API Endpoints:**
+- `POST /api/package` - Create application package
+- `GET /api/package` - List user's packages
+- `POST /api/consent` - Sign digital consent with signature blob
+- `GET /api/consent` - List user's consents
+- `GET /api/consent/ledger` - View immutable consent activity ledger
+- `GET /api/auto-apply/status` - Get auto-apply configuration summary
+- `GET /api/auto-apply/rules` - List auto-apply rules
+- `PUT /api/auto-apply/rule/:id` - Update rule (enable/disable)
+- `DELETE /api/auto-apply/rule/:id` - Delete rule
+
+**Frontend Components:**
+- `SignatureCapture` - HTML5 canvas-based digital signature component with clear/confirm actions
+- `AutoApplyStatusCard` - Dashboard widget showing auto-apply configuration at-a-glance
+- `ConsentLedgerTable` - Display component for immutable audit trail with action badges
+
+**Frontend Pages:**
+- `/candidate/application-package` - Create and manage application packages, sign digital consents
+- `/candidate/auto-apply` - Configure auto-apply rules, view consent ledger and activity summary
+
+**User Workflow:**
+1. Create Application Package with resume URL and cover letter template
+2. Sign Digital Consent using canvas-based signature capture
+3. Configure Auto-Apply Rules defining job matching criteria and frequency limits
+4. System automatically submits applications within consent scope
+5. All actions logged to immutable consent_ledger with cryptographic hash chaining
+
+**Compliance Features:**
+- Explicit consent required before any automated applications
+- Digital signatures captured and stored as base64-encoded PNG images
+- Immutable audit trail prevents tampering and provides full transparency
+- Weekly application caps and cooldown periods prevent spam
+- Consent can be revoked at any time, immediately halting automated applications
+
+### Saved Jobs Feature (October 19, 2025)
+
+Implemented a complete saved jobs system allowing users to bookmark jobs for later review:
+
+**Core Features:**
+- **Save/Unsave Jobs**: One-click save/unsave functionality with instant feedback
+- **Job Library**: Dedicated page to view all saved jobs with full details
+- **Audit Logging**: All save/unsave actions are logged for transparency
+- **Notes Support**: Optional notes field for user annotations
+
+**Database Schema:**
+- `saved_jobs` - User's saved jobs (id, userId, jobId, notes, createdAt)
+- Indexes on userId and jobId for fast lookups
+
+**Storage Interface:**
+- `saveJob(userId, jobId, notes?)` - Save a job (idempotent)
+- `unsaveJob(userId, jobId)` - Remove saved job
+- `getUserSavedJobs(userId)` - Get all saved jobs for user
+- `isJobSaved(userId, jobId)` - Check if job is saved
+
+**API Endpoints:**
+- `POST /api/jobs/:id/save` - Save a job (protected, rate-limited)
+- `DELETE /api/jobs/:id/save` - Unsave a job (protected)
+- `GET /api/saved-jobs` - Get user's saved jobs with full job details (protected)
+- `GET /api/jobs/:id/is-saved` - Check if job is saved (protected)
+
+**Audit Actions:**
+- `JOB_SAVE` - Job saved by user
+- `JOB_UNSAVE` - Job removed from saved list
+
+**Implementation Notes:**
+- Backend fully implemented and tested
+- Frontend UI integration pending
+- All endpoints include authentication and rate limiting
+- Saved jobs are populated with full job details on retrieval
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Frontend
+
+The frontend is built with React 18+ and TypeScript, utilizing Wouter for lightweight client-side routing, TanStack React Query for server state management, and React hooks for local state. UI components are developed using Shadcn/ui, built on Radix UI primitives, and styled with Tailwind CSS, following a custom design system based on Material Design and Linear typography. The design prioritizes a dark mode primary aesthetic with a custom HSL-based color palette and the Inter font family. Key pages include landing, login, pricing, job listings, evidence submission, and candidate/employer dashboards.
+
+### Backend
+
+The backend is developed with Express.js and TypeScript, serving RESTful APIs under `/api/*`. It incorporates Vite in middleware mode for development and features robust security measures including:
+- CSP (Content Security Policy), HSTS, XSS protection, CORS configuration
+- Rate limiting with sliding window algorithm (30 req/min API, 5 req/15min auth)
+- Immutable audit logging with cryptographic hash chaining
+- Session management with Express sessions and PostgreSQL store
+
+The API supports core functionalities such as job management, application submission, evidence (proofs) management, user profiles, subscription handling via Stripe, and a weighted proof scoring system for applications. Initial development uses in-memory storage with an interface for future PostgreSQL migration.
+
+### Data Layer
+
+The data layer employs Drizzle ORM for PostgreSQL with a schema-first approach and TypeScript types, integrated with Zod for runtime validation. It utilizes Neon Serverless PostgreSQL as the database provider. Core entities include `users`, `profiles`, `organizations`, `jobs`, `proofs`, `applications`, `targetProofWeights`, `auditLinks`, and `signals`. Enums define roles, plan tiers, proof kinds, application statuses, and signal sources.
+
+### Build & Development
+
+The project uses Vite for fast HMR in development and optimized production builds, supporting TypeScript and ESBuild for server bundling. The development workflow includes standard npm scripts for development, building, starting the production server, and pushing schema changes to the database. It uses ES Modules throughout and employs path aliases for better code organization.
+
+### Authentication
+
+The system implements a Supabase-based authentication system with JWTs, email verification, and role-based signup. It integrates an AuthContext and `useAuth` hook for managing authentication state on the frontend and uses a protected route component for access control. All protected API routes require authentication.
+
+### Monetization
+
+The platform features a three-tier pricing model (FREE, PRO, PREMIUM) managed through Stripe subscriptions. It includes API endpoints for fetching pricing plans, managing user subscriptions, and creating/canceling subscriptions.
+
+## External Dependencies
+
+### UI & Interaction
+- **Radix UI:** Accessible React primitives.
+- **Lucide React:** Icon library.
+- **Framer Motion:** Animation library.
+- **cmdk:** Command palette component.
+- **Embla Carousel:** Carousel/slider functionality.
+- **React Hook Form & Zod:** Form state management and validation.
+- **date-fns:** Date manipulation and formatting.
+
+### Data & Validation
+- **Zod:** Schema validation.
+- **TanStack React Query:** Server state management and caching.
+
+### Database & Storage
+- **Neon Serverless PostgreSQL:** Cloud PostgreSQL database.
+- **Drizzle ORM & Drizzle Kit:** Type-safe database queries and migrations.
+- **connect-pg-simple:** PostgreSQL session store for Express.
+
+### Styling & CSS
+- **Tailwind CSS:** Utility-first CSS framework.
+- **class-variance-authority, clsx, tailwind-merge:** Styling utilities.
+
+### Development Tools
+- **TypeScript:** Type safety.
+- **Vite, ESBuild, tsx:** Build tools and TypeScript execution.
+
+### Replit Integration
+- `@replit/vite-plugin-runtime-error-modal`
+- `@replit/vite-plugin-cartographer`
+- `@replit/vite-plugin-dev-banner`
+
+### Design Assets
+- Custom brand logo and AI-generated marketing images.
+- Unsplash images for hero sections.
+- Google Fonts: Inter, JetBrains Mono.
