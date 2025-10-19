@@ -216,7 +216,7 @@ export default function EnhancedAuth({
       // Generate PKCE code verifier and challenge
       const codeVerifier = generateCodeVerifier();
       const codeChallenge = await generateCodeChallenge(codeVerifier);
-      
+
       // Store the code verifier in sessionStorage for the callback
       sessionStorage.setItem("pkce_code_verifier", codeVerifier);
 
