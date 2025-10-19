@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { DegradedBanner } from '@/components/system/degraded-banner'
 import { ReportIssue } from '@/components/system/report-issue'
+import { ServiceWorkerRegister } from '@/components/pwa/service-worker-register'
 import '@/lib/suppress-warnings'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
@@ -30,6 +31,26 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  manifest: '/manifest.json',
+  themeColor: '#2563eb',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'ProofOfFit',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'msapplication-TileColor': '#2563eb',
+    'msapplication-config': '/browserconfig.xml',
   },
 }
 
@@ -83,6 +104,7 @@ export default function RootLayout({
           <div id="main">{children}</div>
           <ReportIssue />
           <Toaster />
+          <ServiceWorkerRegister />
         </Providers>
       </body>
     </html>

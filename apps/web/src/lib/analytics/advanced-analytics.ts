@@ -1,469 +1,698 @@
-import { createClient } from '@supabase/supabase-js'
+/**
+ * Advanced Analytics System for ProofOfFit
+ * Comprehensive tracking, reporting, and insights
+ */
+
+import { trackEvent } from '../analytics';
 
 export interface AnalyticsEvent {
-  id?: string
-  eventType: string
-  eventData: Record<string, any>
-  userId?: string
-  sessionId?: string
-  timestamp: Date
-  metadata?: Record<string, any>
+  eventType: string;
+  userId?: string;
+  sessionId?: string;
+  targetId?: string;
+  metadata?: Record<string, any>;
+  timestamp?: number;
+  url?: string;
+  userAgent?: string;
+  ip?: string;
 }
 
-export interface UserMetrics {
-  userId: string
-  totalSearches: number
-  totalApplications: number
-  totalViews: number
-  avgSessionDuration: number
-  lastActive: Date
-  conversionRate: number
-  topSkills: string[]
-  preferredLocations: string[]
-  avgFitScore: number
+export interface UserJourney {
+  userId: string;
+  sessionId: string;
+  events: AnalyticsEvent[];
+  startTime: number;
+  endTime?: number;
+  duration?: number;
+  conversionEvents: string[];
+  dropoffPoints: string[];
 }
 
-export interface JobMetrics {
-  jobId: string
-  totalViews: number
-  totalApplications: number
-  avgFitScore: number
-  conversionRate: number
-  topCandidateSources: string[]
-  timeToFirstApplication: number
-  applicationTrends: Array<{
-    date: string
-    applications: number
-    views: number
-  }>
+export interface AnalyticsInsight {
+  type: 'trend' | 'anomaly' | 'recommendation' | 'alert';
+  title: string;
+  description: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  data: any;
+  timestamp: number;
+  actionable: boolean;
+  actionUrl?: string;
 }
 
-export interface SystemMetrics {
-  totalUsers: number
-  activeUsers: number
-  totalJobs: number
-  activeJobs: number
-  totalApplications: number
-  avgResponseTime: number
-  systemUptime: number
-  errorRate: number
-  revenue: number
-  churnRate: number
+export interface PerformanceMetrics {
+  pageViews: number;
+  uniqueUsers: number;
+  bounceRate: number;
+  averageSessionDuration: number;
+  conversionRate: number;
+  topPages: Array<{ url: string; views: number; bounceRate: number }>;
+  userFlow: Array<{ from: string; to: string; count: number }>;
+  deviceBreakdown: Record<string, number>;
+  browserBreakdown: Record<string, number>;
+  geographicData: Record<string, number>;
 }
 
 export class AdvancedAnalytics {
-  private supabase: any
+  private events: AnalyticsEvent[] = [];
+  private userJourneys: Map<string, UserJourney> = new Map();
+  private insights: AnalyticsInsight[] = [];
+  private sessionId: string;
+  private userId?: string;
 
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    this.sessionId = this.generateSessionId();
+    this.initializeTracking();
   }
 
-  // Track custom analytics event
-  async trackEvent(event: AnalyticsEvent): Promise<boolean> {
+  private generateSessionId(): string {
+    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private initializeTracking() {
+    if (typeof window === 'undefined') return;
+
+    // Track page views
+    this.trackPageView();
+
+    // Track user interactions
+    this.setupInteractionTracking();
+
+    // Track performance metrics
+    this.setupPerformanceTracking();
+
+    // Track errors
+    this.setupErrorTracking();
+
+    // Track user engagement
+    this.setupEngagementTracking();
+  }
+
+  private trackPageView() {
+    const event: AnalyticsEvent = {
+      eventType: 'page_view',
+      sessionId: this.sessionId,
+      userId: this.userId,
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+      timestamp: Date.now(),
+      metadata: {
+        referrer: document.referrer,
+        title: document.title,
+        path: window.location.pathname,
+        search: window.location.search,
+        hash: window.location.hash,
+      },
+    };
+
+    this.recordEvent(event);
+  }
+
+  private setupInteractionTracking() {
+    // Track clicks
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target) {
+        this.trackInteraction('click', {
+          element: target.tagName,
+          id: target.id,
+          className: target.className,
+          text: target.textContent?.substring(0, 100),
+          href: (target as HTMLAnchorElement).href,
+        });
+      }
+    });
+
+    // Track form submissions
+    document.addEventListener('submit', (event) => {
+      const form = event.target as HTMLFormElement;
+      this.trackInteraction('form_submit', {
+        formId: form.id,
+        formAction: form.action,
+        formMethod: form.method,
+        fieldCount: form.elements.length,
+      });
+    });
+
+    // Track scroll depth
+    let maxScrollDepth = 0;
+    window.addEventListener('scroll', () => {
+      const scrollDepth = Math.round(
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+      );
+      
+      if (scrollDepth > maxScrollDepth) {
+        maxScrollDepth = scrollDepth;
+        this.trackInteraction('scroll_depth', {
+          depth: maxScrollDepth,
+          timestamp: Date.now(),
+        });
+      }
+    });
+  }
+
+  private setupPerformanceTracking() {
+    // Track Core Web Vitals
+    if ('PerformanceObserver' in window) {
+      // LCP
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        this.trackPerformance('lcp', lastEntry.startTime);
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+
+      // FID
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          this.trackPerformance('fid', entry.processingStart - entry.startTime);
+        });
+      }).observe({ type: 'first-input', buffered: true });
+
+      // CLS
+      let clsValue = 0;
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if (!(entry as any).hadRecentInput) {
+            clsValue += (entry as any).value;
+            this.trackPerformance('cls', clsValue);
+          }
+        });
+      }).observe({ type: 'layout-shift', buffered: true });
+    }
+
+    // Track page load time
+    window.addEventListener('load', () => {
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      this.trackPerformance('page_load_time', navigation.loadEventEnd - navigation.fetchStart);
+      this.trackPerformance('dom_content_loaded', navigation.domContentLoadedEventEnd - navigation.fetchStart);
+      this.trackPerformance('time_to_first_byte', navigation.responseStart - navigation.fetchStart);
+    });
+  }
+
+  private setupErrorTracking() {
+    // Track JavaScript errors
+    window.addEventListener('error', (event) => {
+      this.trackError('javascript_error', {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        stack: event.error?.stack,
+      });
+    });
+
+    // Track unhandled promise rejections
+    window.addEventListener('unhandledrejection', (event) => {
+      this.trackError('unhandled_promise_rejection', {
+        reason: event.reason,
+        stack: event.reason?.stack,
+      });
+    });
+
+    // Track fetch errors
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      try {
+        const response = await originalFetch(...args);
+        if (!response.ok) {
+          this.trackError('fetch_error', {
+            url: args[0],
+            status: response.status,
+            statusText: response.statusText,
+          });
+        }
+        return response;
+      } catch (error) {
+        this.trackError('fetch_error', {
+          url: args[0],
+          error: error.message,
+        });
+        throw error;
+      }
+    };
+  }
+
+  private setupEngagementTracking() {
+    // Track time on page
+    const startTime = Date.now();
+    let isActive = true;
+    let totalActiveTime = 0;
+    let lastActiveTime = startTime;
+
+    const updateActiveTime = () => {
+      if (isActive) {
+        totalActiveTime += Date.now() - lastActiveTime;
+      }
+      lastActiveTime = Date.now();
+    };
+
+    // Track visibility changes
+    document.addEventListener('visibilitychange', () => {
+      updateActiveTime();
+      isActive = !document.hidden;
+      
+      if (isActive) {
+        this.trackEngagement('page_visible', { timestamp: Date.now() });
+      } else {
+        this.trackEngagement('page_hidden', { 
+          timestamp: Date.now(),
+          activeTime: totalActiveTime,
+        });
+      }
+    });
+
+    // Track focus changes
+    window.addEventListener('focus', () => {
+      updateActiveTime();
+      this.trackEngagement('window_focus', { timestamp: Date.now() });
+    });
+
+    window.addEventListener('blur', () => {
+      updateActiveTime();
+      this.trackEngagement('window_blur', { 
+        timestamp: Date.now(),
+        activeTime: totalActiveTime,
+      });
+    });
+
+    // Track beforeunload
+    window.addEventListener('beforeunload', () => {
+      updateActiveTime();
+      this.trackEngagement('page_unload', {
+        timestamp: Date.now(),
+        totalActiveTime: totalActiveTime,
+        sessionDuration: Date.now() - startTime,
+      });
+    });
+  }
+
+  public setUserId(userId: string) {
+    this.userId = userId;
+  }
+
+  public trackCustomEvent(eventType: string, metadata?: Record<string, any>) {
+    const event: AnalyticsEvent = {
+      eventType,
+      userId: this.userId,
+      sessionId: this.sessionId,
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+      timestamp: Date.now(),
+      metadata,
+    };
+
+    this.recordEvent(event);
+  }
+
+  private trackInteraction(type: string, metadata: Record<string, any>) {
+    this.trackCustomEvent(`interaction_${type}`, metadata);
+  }
+
+  private trackPerformance(metric: string, value: number) {
+    this.trackCustomEvent('performance_metric', {
+      metric,
+      value,
+      timestamp: Date.now(),
+    });
+  }
+
+  private trackError(type: string, metadata: Record<string, any>) {
+    this.trackCustomEvent(`error_${type}`, {
+      ...metadata,
+      severity: this.determineErrorSeverity(type, metadata),
+    });
+  }
+
+  private trackEngagement(type: string, metadata: Record<string, any>) {
+    this.trackCustomEvent(`engagement_${type}`, metadata);
+  }
+
+  private determineErrorSeverity(type: string, metadata: Record<string, any>): string {
+    if (type === 'javascript_error' && metadata.message?.includes('ChunkLoadError')) {
+      return 'high';
+    }
+    if (type === 'fetch_error' && metadata.status >= 500) {
+      return 'high';
+    }
+    if (type === 'unhandled_promise_rejection') {
+      return 'medium';
+    }
+    return 'low';
+  }
+
+  private recordEvent(event: AnalyticsEvent) {
+    this.events.push(event);
+    
+    // Update user journey
+    this.updateUserJourney(event);
+    
+    // Send to analytics service
+    this.sendToAnalytics(event);
+    
+    // Generate insights
+    this.generateInsights(event);
+  }
+
+  private updateUserJourney(event: AnalyticsEvent) {
+    if (!event.userId) return;
+
+    const journeyKey = `${event.userId}_${event.sessionId}`;
+    let journey = this.userJourneys.get(journeyKey);
+
+    if (!journey) {
+      journey = {
+        userId: event.userId,
+        sessionId: event.sessionId,
+        events: [],
+        startTime: event.timestamp || Date.now(),
+        conversionEvents: [],
+        dropoffPoints: [],
+      };
+      this.userJourneys.set(journeyKey, journey);
+    }
+
+    journey.events.push(event);
+
+    // Track conversion events
+    if (this.isConversionEvent(event.eventType)) {
+      journey.conversionEvents.push(event.eventType);
+    }
+
+    // Update journey end time
+    journey.endTime = event.timestamp || Date.now();
+    journey.duration = journey.endTime - journey.startTime;
+  }
+
+  private isConversionEvent(eventType: string): boolean {
+    const conversionEvents = [
+      'signup_complete',
+      'purchase_complete',
+      'subscription_started',
+      'target_created',
+      'application_submitted',
+    ];
+    return conversionEvents.includes(eventType);
+  }
+
+  private async sendToAnalytics(event: AnalyticsEvent) {
     try {
-      const { error } = await this.supabase
-        .from('analytics_events')
-        .insert({
-          event_type: event.eventType,
-          event_data: event.eventData,
-          user_id: event.userId,
-          session_id: event.sessionId,
-          metadata: event.metadata,
-          created_at: event.timestamp.toISOString()
-        })
-
-      if (error) throw error
-
-      return true
+      await trackEvent({
+        eventType: event.eventType,
+        userId: event.userId,
+        targetId: event.targetId,
+        metadata: event.metadata,
+      });
     } catch (error) {
-      console.error('Error tracking analytics event:', error)
-      return false
+      console.error('Failed to send analytics event:', error);
     }
   }
 
-  // Get user metrics
-  async getUserMetrics(userId: string, days: number = 30): Promise<UserMetrics | null> {
-    try {
-      const startDate = new Date()
-      startDate.setDate(startDate.getDate() - days)
+  private generateInsights(event: AnalyticsEvent) {
+    // Generate real-time insights based on events
+    const insights = this.analyzeEventPatterns(event);
+    this.insights.push(...insights);
+  }
 
-      // Get user events
-      const { data: events, error: eventsError } = await this.supabase
-        .from('analytics_events')
-        .select('*')
-        .eq('user_id', userId)
-        .gte('created_at', startDate.toISOString())
+  private analyzeEventPatterns(event: AnalyticsEvent): AnalyticsInsight[] {
+    const insights: AnalyticsInsight[] = [];
 
-      if (eventsError) throw eventsError
-
-      // Get user applications
-      const { data: applications, error: appsError } = await this.supabase
-        .from('job_applications')
-        .select('*')
-        .eq('user_id', userId)
-        .gte('applied_at', startDate.toISOString())
-
-      if (appsError) throw appsError
-
-      const eventList = (events ?? []) as Array<Record<string, any>>
-      const applicationList = (applications ?? []) as Array<Record<string, any>>
-
-      // Calculate metrics
-      const totalSearches = eventList.filter((e) => e.event_type === 'job_search').length
-      const totalApplications = applicationList.length
-      const totalViews = eventList.filter((e) => e.event_type === 'job_view').length
-
-      // Calculate session duration
-      const sessions = this.groupEventsBySession(eventList)
-      const avgSessionDuration = sessions.reduce((acc, session) => {
-        const duration = session.endTime.getTime() - session.startTime.getTime()
-        return acc + duration
-      }, 0) / sessions.length / 1000 / 60 // Convert to minutes
-
-      // Calculate conversion rate
-      const conversionRate = totalSearches > 0 ? (totalApplications / totalSearches) * 100 : 0
-
-      // Get top skills and locations
-      const topSkills = this.extractTopSkills(eventList)
-      const preferredLocations = this.extractPreferredLocations(eventList)
-
-      // Calculate average fit score
-      const fitScores = eventList
-        .filter((e) => e.event_type === 'job_match' && e.event_data?.fitScore)
-        .map((e) => e.event_data.fitScore as number)
-      const avgFitScore = fitScores.length > 0 
-        ? fitScores.reduce((a, b) => a + b, 0) / fitScores.length 
-        : 0
-
-      return {
-        userId,
-        totalSearches,
-        totalApplications,
-        totalViews,
-        avgSessionDuration: Math.round(avgSessionDuration * 100) / 100,
-        lastActive: new Date(Math.max(...eventList.map((e) => new Date(e.created_at).getTime()))),
-        conversionRate: Math.round(conversionRate * 100) / 100,
-        topSkills,
-        preferredLocations,
-        avgFitScore: Math.round(avgFitScore * 100) / 100
+    // High bounce rate detection
+    if (event.eventType === 'page_view') {
+      const recentEvents = this.events.filter(
+        e => e.sessionId === event.sessionId && 
+        e.timestamp && 
+        e.timestamp > (event.timestamp || 0) - 30000 // Last 30 seconds
+      );
+      
+      if (recentEvents.length === 1) {
+        insights.push({
+          type: 'alert',
+          title: 'High Bounce Rate Detected',
+          description: 'User left the page within 30 seconds',
+          severity: 'medium',
+          data: { url: event.url, sessionId: event.sessionId },
+          timestamp: Date.now(),
+          actionable: true,
+          actionUrl: event.url,
+        });
       }
-    } catch (error) {
-      console.error('Error getting user metrics:', error)
-      return null
     }
-  }
 
-  // Get job metrics
-  async getJobMetrics(jobId: string, days: number = 30): Promise<JobMetrics | null> {
-    try {
-      const startDate = new Date()
-      startDate.setDate(startDate.getDate() - days)
+    // Error rate monitoring
+    if (event.eventType.startsWith('error_')) {
+      const recentErrors = this.events.filter(
+        e => e.eventType.startsWith('error_') && 
+        e.timestamp && 
+        e.timestamp > Date.now() - 300000 // Last 5 minutes
+      );
 
-      // Get job events
-      const { data: events, error: eventsError } = await this.supabase
-        .from('analytics_events')
-        .select('*')
-        .eq('event_data.jobId', jobId)
-        .gte('created_at', startDate.toISOString())
-
-      if (eventsError) throw eventsError
-
-      // Get job applications
-      const { data: applications, error: appsError } = await this.supabase
-        .from('job_applications')
-        .select('*')
-        .eq('job_id', jobId)
-        .gte('applied_at', startDate.toISOString())
-
-      if (appsError) throw appsError
-
-      const eventList = (events ?? []) as Array<Record<string, any>>
-      const applicationList = (applications ?? []) as Array<Record<string, any>>
-
-      // Calculate metrics
-      const totalViews = eventList.filter((e) => e.event_type === 'job_view').length
-      const totalApplications = applicationList.length
-      const conversionRate = totalViews > 0 ? (totalApplications / totalViews) * 100 : 0
-
-      // Calculate average fit score
-      const fitScores = eventList
-        .filter((e) => e.event_type === 'job_match' && e.event_data?.fitScore)
-        .map((e) => e.event_data.fitScore as number)
-      const avgFitScore = fitScores.length > 0 
-        ? fitScores.reduce((a, b) => a + b, 0) / fitScores.length 
-        : 0
-
-      // Get top candidate sources
-      const topCandidateSources = this.extractTopCandidateSources(applicationList)
-
-      // Calculate time to first application
-      const firstApplication = [...applicationList].sort((a, b) => 
-        new Date(a.applied_at).getTime() - new Date(b.applied_at).getTime()
-      )[0]
-      const timeToFirstApplication = firstApplication 
-        ? (new Date(firstApplication.applied_at).getTime() - startDate.getTime()) / (1000 * 60 * 60) // hours
-        : 0
-
-      // Generate application trends
-      const applicationTrends = this.generateApplicationTrends(applicationList, days)
-
-      return {
-        jobId,
-        totalViews,
-        totalApplications,
-        avgFitScore: Math.round(avgFitScore * 100) / 100,
-        conversionRate: Math.round(conversionRate * 100) / 100,
-        topCandidateSources,
-        timeToFirstApplication: Math.round(timeToFirstApplication * 100) / 100,
-        applicationTrends
+      if (recentErrors.length > 10) {
+        insights.push({
+          type: 'alert',
+          title: 'High Error Rate',
+          description: `${recentErrors.length} errors in the last 5 minutes`,
+          severity: 'high',
+          data: { errorCount: recentErrors.length, errors: recentErrors },
+          timestamp: Date.now(),
+          actionable: true,
+        });
       }
-    } catch (error) {
-      console.error('Error getting job metrics:', error)
-      return null
     }
-  }
 
-  // Get system metrics
-  async getSystemMetrics(days: number = 30): Promise<SystemMetrics | null> {
-    try {
-      const startDate = new Date()
-      startDate.setDate(startDate.getDate() - days)
+    // Performance degradation detection
+    if (event.eventType === 'performance_metric') {
+      const metric = event.metadata?.metric;
+      const value = event.metadata?.value;
 
-      // Get user counts
-      const { data: users, error: usersError } = await this.supabase
-        .from('users')
-        .select('id, created_at, last_sign_in_at')
-
-      if (usersError) throw usersError
-
-      // Get job counts
-      const { data: jobs, error: jobsError } = await this.supabase
-        .from('job_postings')
-        .select('id, status, created_at')
-
-      if (jobsError) throw jobsError
-
-      // Get application counts
-      const { data: applications, error: appsError } = await this.supabase
-        .from('job_applications')
-        .select('id, applied_at')
-        .gte('applied_at', startDate.toISOString())
-
-      if (appsError) throw appsError
-
-      // Get system health data
-      const { data: healthData, error: healthError } = await this.supabase
-        .from('system_health')
-        .select('*')
-        .gte('last_check', startDate.toISOString())
-
-      if (healthError) throw healthError
-
-      // Calculate metrics
-      type AuthUserRow = { last_sign_in_at: string | null }
-      type JobRow = { status?: string | null }
-      type HealthRow = { response_time_ms?: number | null; status?: string | null }
-
-      const userRows = (users ?? []) as AuthUserRow[]
-      const jobRows = (jobs ?? []) as JobRow[]
-      const healthRows = (healthData ?? []) as HealthRow[]
-      const applicationRows = (applications ?? []) as Array<Record<string, unknown>>
-
-      const totalUsers = userRows.length
-      const activeUsers = userRows.filter((u: AuthUserRow) => 
-        u.last_sign_in_at && new Date(u.last_sign_in_at) >= startDate
-      ).length
-
-      const totalJobs = jobRows.length
-      const activeJobs = jobRows.filter((j: JobRow) => j.status === 'active').length
-      const totalApplications = applicationRows.length
-
-      // Calculate average response time
-      const responseTimes = healthRows
-        .filter((h: HealthRow) => h.response_time_ms)
-        .map((h: HealthRow) => h.response_time_ms as number)
-      const avgResponseTime = responseTimes.length > 0 
-        ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length 
-        : 0
-
-      // Calculate system uptime
-      const healthyChecks = healthRows.filter((h: HealthRow) => h.status === 'healthy').length
-      const systemUptime = healthRows.length > 0 ? (healthyChecks / healthRows.length) * 100 : 100
-
-      // Calculate error rate
-      const errorChecks = healthRows.filter((h: HealthRow) => h.status === 'unhealthy').length
-      const errorRate = healthRows.length > 0 ? (errorChecks / healthRows.length) * 100 : 0
-
-      // Calculate revenue (from subscriptions)
-      const { data: subscriptions, error: subError } = await this.supabase
-        .from('user_subscriptions')
-        .select('*')
-        .eq('status', 'active')
-
-      if (subError) throw subError
-
-      const subscriptionRows = (subscriptions ?? []) as Array<Record<string, unknown>>
-      const revenue = subscriptionRows.reduce((acc, sub) => {
-        // This would need to be calculated based on actual subscription data
-        return acc + 0 // Placeholder
-      }, 0)
-
-      // Calculate churn rate
-      const churnedUsers = userRows.filter((u: AuthUserRow) => 
-        u.last_sign_in_at && new Date(u.last_sign_in_at) < startDate
-      ).length
-      const churnRate = totalUsers > 0 ? (churnedUsers / totalUsers) * 100 : 0
-
-      return {
-        totalUsers,
-        activeUsers,
-        totalJobs,
-        activeJobs,
-        totalApplications,
-        avgResponseTime: Math.round(avgResponseTime * 100) / 100,
-        systemUptime: Math.round(systemUptime * 100) / 100,
-        errorRate: Math.round(errorRate * 100) / 100,
-        revenue,
-        churnRate: Math.round(churnRate * 100) / 100
+      if (metric === 'page_load_time' && value > 5000) {
+        insights.push({
+          type: 'alert',
+          title: 'Slow Page Load',
+          description: `Page load time is ${value}ms, above 5s threshold`,
+          severity: 'medium',
+          data: { metric, value, url: event.url },
+          timestamp: Date.now(),
+          actionable: true,
+          actionUrl: event.url,
+        });
       }
-    } catch (error) {
-      console.error('Error getting system metrics:', error)
-      return null
     }
+
+    return insights;
   }
 
-  // Helper methods
-  private groupEventsBySession(events: any[]): Array<{ startTime: Date; endTime: Date }> {
-    const sessions: Array<{ startTime: Date; endTime: Date }> = []
-    const sessionMap = new Map<string, Date[]>()
+  public getInsights(): AnalyticsInsight[] {
+    return [...this.insights];
+  }
 
-    events.forEach(event => {
-      const sessionId = event.session_id || 'default'
-      if (!sessionMap.has(sessionId)) {
-        sessionMap.set(sessionId, [])
+  public getRecentInsights(limit: number = 10): AnalyticsInsight[] {
+    return this.insights
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, limit);
+  }
+
+  public getUserJourney(userId: string, sessionId?: string): UserJourney | undefined {
+    if (sessionId) {
+      return this.userJourneys.get(`${userId}_${sessionId}`);
+    }
+    
+    // Return most recent journey for user
+    const userJourneys = Array.from(this.userJourneys.values())
+      .filter(journey => journey.userId === userId)
+      .sort((a, b) => (b.endTime || 0) - (a.endTime || 0));
+    
+    return userJourneys[0];
+  }
+
+  public getPerformanceMetrics(): PerformanceMetrics {
+    const now = Date.now();
+    const last24Hours = now - (24 * 60 * 60 * 1000);
+    
+    const recentEvents = this.events.filter(e => (e.timestamp || 0) > last24Hours);
+    const pageViews = recentEvents.filter(e => e.eventType === 'page_view');
+    const uniqueUsers = new Set(recentEvents.map(e => e.userId).filter(Boolean)).size;
+    
+    const sessions = new Map<string, AnalyticsEvent[]>();
+    recentEvents.forEach(event => {
+      if (event.sessionId) {
+        if (!sessions.has(event.sessionId)) {
+          sessions.set(event.sessionId, []);
+        }
+        sessions.get(event.sessionId)!.push(event);
       }
-      sessionMap.get(sessionId)!.push(new Date(event.created_at))
-    })
+    });
 
-    sessionMap.forEach(timestamps => {
-      if (timestamps.length > 0) {
-        sessions.push({
-          startTime: new Date(Math.min(...timestamps.map(t => t.getTime()))),
-          endTime: new Date(Math.max(...timestamps.map(t => t.getTime())))
-        })
-      }
-    })
-
-    return sessions
-  }
-
-  private extractTopSkills(events: any[]): string[] {
-    const skillCounts = new Map<string, number>()
-
-    events.forEach(event => {
-      if (event.event_data.skills && Array.isArray(event.event_data.skills)) {
-        event.event_data.skills.forEach((skill: string) => {
-          skillCounts.set(skill, (skillCounts.get(skill) || 0) + 1)
-        })
-      }
-    })
-
-    return Array.from(skillCounts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([skill]) => skill)
-  }
-
-  private extractPreferredLocations(events: any[]): string[] {
-    const locationCounts = new Map<string, number>()
-
-    events.forEach(event => {
-      if (event.event_data.location) {
-        const location = event.event_data.location
-        locationCounts.set(location, (locationCounts.get(location) || 0) + 1)
-      }
-    })
-
-    return Array.from(locationCounts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([location]) => location)
-  }
-
-  private extractTopCandidateSources(applications: any[]): string[] {
-    const sourceCounts = new Map<string, number>()
-
-    applications.forEach(app => {
-      const source = app.source || 'unknown'
-      sourceCounts.set(source, (sourceCounts.get(source) || 0) + 1)
-    })
-
-    return Array.from(sourceCounts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([source]) => source)
-  }
-
-  private generateApplicationTrends(applications: any[], days: number): Array<{ date: string; applications: number; views: number }> {
-    const trends: Array<{ date: string; applications: number; views: number }> = []
-    const today = new Date()
-
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date(today)
-      date.setDate(date.getDate() - i)
-      const dateStr = date.toISOString().split('T')[0]
-
-      const dayApplications = applications.filter(app => 
-        app.applied_at.startsWith(dateStr)
-      ).length
-
-      trends.push({
-        date: dateStr,
-        applications: dayApplications,
-        views: 0 // This would need to be calculated from view events
+    const sessionDurations = Array.from(sessions.values())
+      .map(sessionEvents => {
+        const timestamps = sessionEvents.map(e => e.timestamp || 0).filter(t => t > 0);
+        return timestamps.length > 1 ? Math.max(...timestamps) - Math.min(...timestamps) : 0;
       })
-    }
+      .filter(duration => duration > 0);
 
-    return trends
+    const averageSessionDuration = sessionDurations.length > 0 
+      ? sessionDurations.reduce((sum, duration) => sum + duration, 0) / sessionDurations.length
+      : 0;
+
+    const bounceRate = sessions.size > 0 
+      ? (Array.from(sessions.values()).filter(session => session.length === 1).length / sessions.size) * 100
+      : 0;
+
+    const conversionEvents = recentEvents.filter(e => this.isConversionEvent(e.eventType));
+    const conversionRate = sessions.size > 0 ? (conversionEvents.length / sessions.size) * 100 : 0;
+
+    return {
+      pageViews: pageViews.length,
+      uniqueUsers,
+      bounceRate,
+      averageSessionDuration,
+      conversionRate,
+      topPages: this.getTopPages(pageViews),
+      userFlow: this.getUserFlow(recentEvents),
+      deviceBreakdown: this.getDeviceBreakdown(recentEvents),
+      browserBreakdown: this.getBrowserBreakdown(recentEvents),
+      geographicData: {}, // Would require IP geolocation
+    };
   }
 
-  // Generate analytics report
-  async generateAnalyticsReport(type: 'user' | 'job' | 'system', id?: string, days: number = 30): Promise<any> {
-    try {
-      let metrics
-
-      switch (type) {
-        case 'user':
-          if (!id) throw new Error('User ID is required for user analytics')
-          metrics = await this.getUserMetrics(id, days)
-          break
-        case 'job':
-          if (!id) throw new Error('Job ID is required for job analytics')
-          metrics = await this.getJobMetrics(id, days)
-          break
-        case 'system':
-          metrics = await this.getSystemMetrics(days)
-          break
-        default:
-          throw new Error('Invalid analytics type')
+  private getTopPages(pageViews: AnalyticsEvent[]) {
+    const pageCounts = new Map<string, { views: number; bounces: number }>();
+    
+    pageViews.forEach(event => {
+      const url = event.url || '';
+      if (!pageCounts.has(url)) {
+        pageCounts.set(url, { views: 0, bounces: 0 });
       }
+      pageCounts.get(url)!.views++;
+      
+      // Check if this was a bounce (only one event in session)
+      const sessionEvents = this.events.filter(e => e.sessionId === event.sessionId);
+      if (sessionEvents.length === 1) {
+        pageCounts.get(url)!.bounces++;
+      }
+    });
 
+    return Array.from(pageCounts.entries())
+      .map(([url, data]) => ({
+        url,
+        views: data.views,
+        bounceRate: (data.bounces / data.views) * 100,
+      }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 10);
+  }
+
+  private getUserFlow(events: AnalyticsEvent[]) {
+    const flows = new Map<string, number>();
+    
+    events
+      .filter(e => e.eventType === 'page_view')
+      .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+      .forEach((event, index, array) => {
+        if (index < array.length - 1) {
+          const nextEvent = array[index + 1];
+          const flow = `${event.url} -> ${nextEvent.url}`;
+          flows.set(flow, (flows.get(flow) || 0) + 1);
+        }
+      });
+
+    return Array.from(flows.entries())
+      .map(([flow, count]) => {
+        const [from, to] = flow.split(' -> ');
+        return { from, to, count };
+      })
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+  }
+
+  private getDeviceBreakdown(events: AnalyticsEvent[]) {
+    const devices = new Map<string, number>();
+    
+    events.forEach(event => {
+      const userAgent = event.userAgent || '';
+      let device = 'desktop';
+      
+      if (/mobile|android|iphone|ipad/i.test(userAgent)) {
+        device = 'mobile';
+      } else if (/tablet|ipad/i.test(userAgent)) {
+        device = 'tablet';
+      }
+      
+      devices.set(device, (devices.get(device) || 0) + 1);
+    });
+
+    return Object.fromEntries(devices);
+  }
+
+  private getBrowserBreakdown(events: AnalyticsEvent[]) {
+    const browsers = new Map<string, number>();
+    
+    events.forEach(event => {
+      const userAgent = event.userAgent || '';
+      let browser = 'unknown';
+      
+      if (userAgent.includes('Chrome')) browser = 'Chrome';
+      else if (userAgent.includes('Firefox')) browser = 'Firefox';
+      else if (userAgent.includes('Safari')) browser = 'Safari';
+      else if (userAgent.includes('Edge')) browser = 'Edge';
+      
+      browsers.set(browser, (browsers.get(browser) || 0) + 1);
+    });
+
+    return Object.fromEntries(browsers);
+  }
+
+  public exportData() {
       return {
-        type,
-        id,
-        period: `${days} days`,
-        generatedAt: new Date().toISOString(),
-        metrics
-      }
-    } catch (error) {
-      console.error('Error generating analytics report:', error)
-      return null
-    }
+      events: this.events,
+      userJourneys: Array.from(this.userJourneys.values()),
+      insights: this.insights,
+      performanceMetrics: this.getPerformanceMetrics(),
+      exportTimestamp: Date.now(),
+    };
+  }
+
+  public clearData() {
+    this.events = [];
+    this.userJourneys.clear();
+    this.insights = [];
   }
 }
 
-// Export singleton instance
-export const advancedAnalytics = new AdvancedAnalytics()
+// Singleton instance
+let analyticsInstance: AdvancedAnalytics | null = null;
+
+export function getAnalytics(): AdvancedAnalytics {
+  if (!analyticsInstance) {
+    analyticsInstance = new AdvancedAnalytics();
+  }
+  return analyticsInstance;
+}
+
+// React hook for analytics
+export function useAnalytics() {
+  const [analytics] = React.useState(() => getAnalytics());
+  const [insights, setInsights] = React.useState<AnalyticsInsight[]>([]);
+  const [metrics, setMetrics] = React.useState<PerformanceMetrics | null>(null);
+
+  React.useEffect(() => {
+    const updateData = () => {
+      setInsights(analytics.getRecentInsights());
+      setMetrics(analytics.getPerformanceMetrics());
+    };
+
+    updateData();
+    const interval = setInterval(updateData, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [analytics]);
+
+  return {
+    analytics,
+    insights,
+    metrics,
+    trackEvent: (eventType: string, metadata?: Record<string, any>) => 
+      analytics.trackCustomEvent(eventType, metadata),
+    setUserId: (userId: string) => analytics.setUserId(userId),
+  };
+}
