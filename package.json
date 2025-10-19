@@ -13,6 +13,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "ci": "npm run lint && npm run test && npm run build",
     "clean": "turbo run clean",
     "type-check": "turbo run type-check",
     "preflight": "bash ./scripts/preflight.sh",
@@ -21,7 +22,7 @@
     "build-storybook": "storybook build"
   },
   "engines": {
-    "node": ">=22 <23"
+    "node": ">=22 <24"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
@@ -49,9 +50,8 @@
     "vercel": "^48.4.0"
   },
   "overrides": {
-    "cheerio": "1.1.2",
     "esbuild": "0.25.11",
     "path-to-regexp": "6.3.0",
-    "undici": "5.29.0"
+    "undici": "6.22.0"
   }
 }

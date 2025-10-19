@@ -64,7 +64,7 @@ export interface PredictiveInsight {
   timeframe: string;
 }
 
-export interface A/BTestResult {
+export interface ABTestResult {
   testId: string;
   testName: string;
   variantA: {
@@ -312,7 +312,7 @@ class AdvancedInsightsEngine {
   /**
    * Analyze A/B test results
    */
-  public async analyzeABTestResults(testId: string): Promise<A/BTestResult> {
+  public async analyzeABTestResults(testId: string): Promise<ABTestResult> {
     // Mock implementation
     return {
       testId,
@@ -348,7 +348,8 @@ class AdvancedInsightsEngine {
       description: 'Bounce rate has decreased by 15% over the last 7 days, indicating improved user engagement.',
       severity: 'low',
       data: { metric: 'bounce_rate', change: -15, period: '7d' },
-      timestamp: new Date()
+      timestamp: Date.now(),
+      actionable: false
     };
     insights.push(bounceRateInsight);
 
@@ -359,7 +360,8 @@ class AdvancedInsightsEngine {
       description: 'Conversion rate increased by 35% yesterday, likely due to the new feature launch.',
       severity: 'low',
       data: { metric: 'conversion_rate', change: 35, date: new Date(Date.now() - 24 * 60 * 60 * 1000) },
-      timestamp: new Date()
+      timestamp: Date.now(),
+      actionable: false
     };
     insights.push(conversionInsight);
 
@@ -374,7 +376,9 @@ class AdvancedInsightsEngine {
         desktopConversion: 11.0, 
         opportunity: 'mobile_optimization' 
       },
-      timestamp: new Date()
+      timestamp: Date.now(),
+      actionable: true,
+      actionUrl: '/dashboard/optimization'
     };
     insights.push(recommendationInsight);
 

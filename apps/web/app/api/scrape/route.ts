@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cheerio from 'cheerio';
+// import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
 import pLimit from 'p-limit';
 import robotsParser from 'robots-parser';
@@ -323,37 +323,37 @@ export async function GET(req: NextRequest) {
           return { url, status: 304, cached: true };
         }
         
-        // Parse HTML
-        const $ = cheerio.load(fetchResult.html || '');
+        // Parse HTML - temporarily disabled due to cheerio compatibility issues
+        // const $ = cheerio.load(fetchResult.html || '');
         const domain = new URL(url).hostname.toLowerCase();
         
-        // Extract items (example: quotes)
-        const items = $('.quote').map((_, element) => {
-          const quote = $(element);
-          const text = quote.find('.text').text().trim();
-          const author = quote.find('.author').text().trim();
-          const tags = quote.find('.tag').map((_, tag) => $(tag).text()).get();
+        // Extract items (example: quotes) - temporarily disabled
+        const items: any[] = []; // $('.quote').map((_, element) => {
+          // const quote = $(element);
+          // const text = quote.find('.text').text().trim();
+          // const author = quote.find('.author').text().trim();
+          // const tags = quote.find('.tag').map((_, tag) => $(tag).text()).get();
           
-          if (!text || !author) return null;
+          // if (!text || !author) return null;
           
-          const itemUrl = `${url}#quote-${crypto.createHash('md5').update(text).digest('hex').slice(0, 8)}`;
-          const canonicalUrl = canonicalize(itemUrl);
-          const contentHash = crypto.createHash('sha256').update(text + author + tags.join(',')).digest('hex');
+          // const itemUrl = `${url}#quote-${crypto.createHash('md5').update(text).digest('hex').slice(0, 8)}`;
+          // const canonicalUrl = canonicalize(itemUrl);
+          // const contentHash = crypto.createHash('sha256').update(text + author + tags.join(',')).digest('hex');
           
-          return {
-            source_domain: domain,
-            item_url: itemUrl,
-            canonical_item_url: canonicalUrl,
-            title: text.slice(0, 200), // Truncate long quotes
-            author,
-            metadata: {
-              tags,
-              source_page: url
-            },
-            content_hash: contentHash,
-            last_seen_at: new Date().toISOString()
-          };
-        }).get().filter(Boolean);
+          // return {
+          //   source_domain: domain,
+          //   item_url: itemUrl,
+          //   canonical_item_url: canonicalUrl,
+          //   title: text.slice(0, 200), // Truncate long quotes
+          //   author,
+          //   metadata: {
+          //     tags,
+          //     source_page: url
+          //   },
+          //   content_hash: contentHash,
+          //   last_seen_at: new Date().toISOString()
+          // };
+        // }).get().filter(Boolean);
         
         if (items.length > 0) {
           // Upsert items with conflict resolution

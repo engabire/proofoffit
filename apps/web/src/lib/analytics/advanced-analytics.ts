@@ -3,6 +3,7 @@
  * Comprehensive tracking, reporting, and insights
  */
 
+import React from "react";
 import { trackEvent } from "../analytics";
 
 export interface AnalyticsEvent {
@@ -165,7 +166,8 @@ export class AdvancedAnalytics {
       new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
-          this.trackPerformance("fid", entry.processingStart - entry.startTime);
+          const fidEntry = entry as any; // FirstInputEntry type
+          this.trackPerformance("fid", fidEntry.processingStart - fidEntry.startTime);
         });
       }).observe({ type: "first-input", buffered: true });
 
@@ -235,10 +237,10 @@ export class AdvancedAnalytics {
           });
         }
         return response;
-      } catch (error) {
+      } catch (error: any) {
         this.trackError("fetch_error", {
           url: args[0],
-          error: error.message,
+          error: error?.message || "Unknown error",
         });
         throw error;
       }
@@ -381,7 +383,7 @@ export class AdvancedAnalytics {
     if (!journey) {
       journey = {
         userId: event.userId,
-        sessionId: event.sessionId,
+        sessionId: event.sessionId || '',
         events: [],
         startTime: event.timestamp || Date.now(),
         conversionEvents: [],
@@ -416,7 +418,7 @@ export class AdvancedAnalytics {
   private async sendToAnalytics(event: AnalyticsEvent) {
     try {
       await trackEvent({
-        eventType: event.eventType,
+        eventType: event.eventType as any, // Cast to match the expected type
         userId: event.userId,
         targetId: event.targetId,
         metadata: event.metadata,

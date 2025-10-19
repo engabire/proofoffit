@@ -5,7 +5,7 @@
 
 import {
     type PerformanceMetrics,
-    PerformanceMonitor,
+    getPerformanceMonitor,
 } from "./performance-monitor";
 
 export interface OptimizationRecommendation {
@@ -45,12 +45,12 @@ export interface OptimizationResult {
 }
 
 class PerformanceOptimizationEngine {
-    private performanceMonitor: PerformanceMonitor;
+    private performanceMonitor: ReturnType<typeof getPerformanceMonitor>;
     private optimizationHistory: OptimizationRecommendation[] = [];
     private performanceBudgets: PerformanceBudget[] = [];
 
     constructor() {
-        this.performanceMonitor = new PerformanceMonitor();
+        this.performanceMonitor = getPerformanceMonitor();
         this.initializePerformanceBudgets();
     }
 

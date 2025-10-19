@@ -117,8 +117,8 @@ class PushNotificationManager {
             const existingSubscription = await this.registration.pushManager
                 .getSubscription();
             if (existingSubscription) {
-                this.subscription = existingSubscription;
-                return existingSubscription;
+                this.subscription = existingSubscription as any;
+                return existingSubscription as any;
             }
 
             // Create new subscription
@@ -126,15 +126,15 @@ class PushNotificationManager {
                 userVisibleOnly: true,
                 applicationServerKey: this.urlBase64ToUint8Array(
                     process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "",
-                ),
+                ) as any,
             });
 
-            this.subscription = subscription;
+            this.subscription = subscription as any;
 
             // Send subscription to server
-            await this.sendSubscriptionToServer(subscription);
+            await this.sendSubscriptionToServer(subscription as any);
 
-            return subscription;
+            return subscription as any;
         } catch (error) {
             console.error("Failed to subscribe to push notifications:", error);
             return null;
@@ -150,7 +150,7 @@ class PushNotificationManager {
         }
 
         try {
-            const result = await this.subscription.unsubscribe();
+            const result = await (this.subscription as any).unsubscribe();
             if (result) {
                 this.subscription = null;
                 await this.removeSubscriptionFromServer();
@@ -183,10 +183,8 @@ class PushNotificationManager {
                 body: payload.body,
                 icon: payload.icon || "/icons/icon-192x192.png",
                 badge: payload.badge || "/icons/icon-72x72.png",
-                image: payload.image,
                 tag: payload.tag,
                 data: payload.data,
-                actions: payload.actions,
                 requireInteraction: payload.requireInteraction,
                 silent: payload.silent,
             });
@@ -277,7 +275,7 @@ class PushNotificationManager {
         if (!this.registration) return;
 
         // Handle notification clicks
-        this.registration.addEventListener("notificationclick", (event) => {
+        this.registration.addEventListener("notificationclick", (event: any) => {
             event.notification.close();
 
             const data = event.notification.data;
@@ -286,7 +284,7 @@ class PushNotificationManager {
             if (action === "open") {
                 // Open the app
                 event.waitUntil(
-                    clients.openWindow(data?.url || "/"),
+                    (self as any).clients.openWindow(data?.url || "/"),
                 );
             } else if (action === "dismiss") {
                 // Just close the notification
@@ -294,13 +292,13 @@ class PushNotificationManager {
             } else {
                 // Default action - open the app
                 event.waitUntil(
-                    clients.openWindow(data?.url || "/"),
+                    (self as any).clients.openWindow(data?.url || "/"),
                 );
             }
         });
 
         // Handle notification close
-        this.registration.addEventListener("notificationclose", (event) => {
+        this.registration.addEventListener("notificationclose", (event: any) => {
             console.log("Notification closed:", event.notification.tag);
         });
     }

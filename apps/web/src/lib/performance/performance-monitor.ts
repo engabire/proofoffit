@@ -73,7 +73,7 @@ class PerformanceMonitor {
 
         // First Input Delay (FID)
         this.observeMetric("first-input", (entries) => {
-            const firstInput = entries[0];
+            const firstInput = entries[0] as any;
             this.metrics.fid = firstInput.processingStart -
                 firstInput.startTime;
         });
@@ -116,7 +116,8 @@ class PerformanceMonitor {
         // Resource Load Time
         this.observeMetric("resource", (entries) => {
             const totalResourceTime = entries.reduce((sum, entry) => {
-                return sum + (entry.responseEnd - entry.startTime);
+                const resourceEntry = entry as any;
+                return sum + (resourceEntry.responseEnd - resourceEntry.startTime);
             }, 0);
             this.metrics.resourceLoadTime = totalResourceTime / entries.length;
         });
