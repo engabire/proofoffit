@@ -3,7 +3,7 @@
  * Comprehensive tracking, reporting, and insights
  */
 
-import { trackEvent } from '../analytics';
+import { trackEvent } from "../analytics";
 
 export interface AnalyticsEvent {
   eventType: string;
@@ -29,10 +29,10 @@ export interface UserJourney {
 }
 
 export interface AnalyticsInsight {
-  type: 'trend' | 'anomaly' | 'recommendation' | 'alert';
+  type: "trend" | "anomaly" | "recommendation" | "alert";
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   data: any;
   timestamp: number;
   actionable: boolean;
@@ -69,7 +69,7 @@ export class AdvancedAnalytics {
   }
 
   private initializeTracking() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Track page views
     this.trackPageView();
@@ -89,7 +89,7 @@ export class AdvancedAnalytics {
 
   private trackPageView() {
     const event: AnalyticsEvent = {
-      eventType: 'page_view',
+      eventType: "page_view",
       sessionId: this.sessionId,
       userId: this.userId,
       url: window.location.href,
@@ -109,10 +109,10 @@ export class AdvancedAnalytics {
 
   private setupInteractionTracking() {
     // Track clicks
-    document.addEventListener('click', (event) => {
+    document.addEventListener("click", (event) => {
       const target = event.target as HTMLElement;
       if (target) {
-        this.trackInteraction('click', {
+        this.trackInteraction("click", {
           element: target.tagName,
           id: target.id,
           className: target.className,
@@ -123,9 +123,9 @@ export class AdvancedAnalytics {
     });
 
     // Track form submissions
-    document.addEventListener('submit', (event) => {
+    document.addEventListener("submit", (event) => {
       const form = event.target as HTMLFormElement;
-      this.trackInteraction('form_submit', {
+      this.trackInteraction("form_submit", {
         formId: form.id,
         formAction: form.action,
         formMethod: form.method,
@@ -135,14 +135,15 @@ export class AdvancedAnalytics {
 
     // Track scroll depth
     let maxScrollDepth = 0;
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       const scrollDepth = Math.round(
-        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
+          100,
       );
-      
+
       if (scrollDepth > maxScrollDepth) {
         maxScrollDepth = scrollDepth;
-        this.trackInteraction('scroll_depth', {
+        this.trackInteraction("scroll_depth", {
           depth: maxScrollDepth,
           timestamp: Date.now(),
         });
@@ -152,21 +153,21 @@ export class AdvancedAnalytics {
 
   private setupPerformanceTracking() {
     // Track Core Web Vitals
-    if ('PerformanceObserver' in window) {
+    if ("PerformanceObserver" in window) {
       // LCP
       new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        this.trackPerformance('lcp', lastEntry.startTime);
-      }).observe({ type: 'largest-contentful-paint', buffered: true });
+        this.trackPerformance("lcp", lastEntry.startTime);
+      }).observe({ type: "largest-contentful-paint", buffered: true });
 
       // FID
       new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
-          this.trackPerformance('fid', entry.processingStart - entry.startTime);
+          this.trackPerformance("fid", entry.processingStart - entry.startTime);
         });
-      }).observe({ type: 'first-input', buffered: true });
+      }).observe({ type: "first-input", buffered: true });
 
       // CLS
       let clsValue = 0;
@@ -175,25 +176,36 @@ export class AdvancedAnalytics {
         entries.forEach((entry) => {
           if (!(entry as any).hadRecentInput) {
             clsValue += (entry as any).value;
-            this.trackPerformance('cls', clsValue);
+            this.trackPerformance("cls", clsValue);
           }
         });
-      }).observe({ type: 'layout-shift', buffered: true });
+      }).observe({ type: "layout-shift", buffered: true });
     }
 
     // Track page load time
-    window.addEventListener('load', () => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      this.trackPerformance('page_load_time', navigation.loadEventEnd - navigation.fetchStart);
-      this.trackPerformance('dom_content_loaded', navigation.domContentLoadedEventEnd - navigation.fetchStart);
-      this.trackPerformance('time_to_first_byte', navigation.responseStart - navigation.fetchStart);
+    window.addEventListener("load", () => {
+      const navigation = performance.getEntriesByType(
+        "navigation",
+      )[0] as PerformanceNavigationTiming;
+      this.trackPerformance(
+        "page_load_time",
+        navigation.loadEventEnd - navigation.fetchStart,
+      );
+      this.trackPerformance(
+        "dom_content_loaded",
+        navigation.domContentLoadedEventEnd - navigation.fetchStart,
+      );
+      this.trackPerformance(
+        "time_to_first_byte",
+        navigation.responseStart - navigation.fetchStart,
+      );
     });
   }
 
   private setupErrorTracking() {
     // Track JavaScript errors
-    window.addEventListener('error', (event) => {
-      this.trackError('javascript_error', {
+    window.addEventListener("error", (event) => {
+      this.trackError("javascript_error", {
         message: event.message,
         filename: event.filename,
         lineno: event.lineno,
@@ -203,8 +215,8 @@ export class AdvancedAnalytics {
     });
 
     // Track unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
-      this.trackError('unhandled_promise_rejection', {
+    window.addEventListener("unhandledrejection", (event) => {
+      this.trackError("unhandled_promise_rejection", {
         reason: event.reason,
         stack: event.reason?.stack,
       });
@@ -216,7 +228,7 @@ export class AdvancedAnalytics {
       try {
         const response = await originalFetch(...args);
         if (!response.ok) {
-          this.trackError('fetch_error', {
+          this.trackError("fetch_error", {
             url: args[0],
             status: response.status,
             statusText: response.statusText,
@@ -224,7 +236,7 @@ export class AdvancedAnalytics {
         }
         return response;
       } catch (error) {
-        this.trackError('fetch_error', {
+        this.trackError("fetch_error", {
           url: args[0],
           error: error.message,
         });
@@ -248,14 +260,14 @@ export class AdvancedAnalytics {
     };
 
     // Track visibility changes
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       updateActiveTime();
       isActive = !document.hidden;
-      
+
       if (isActive) {
-        this.trackEngagement('page_visible', { timestamp: Date.now() });
+        this.trackEngagement("page_visible", { timestamp: Date.now() });
       } else {
-        this.trackEngagement('page_hidden', { 
+        this.trackEngagement("page_hidden", {
           timestamp: Date.now(),
           activeTime: totalActiveTime,
         });
@@ -263,23 +275,23 @@ export class AdvancedAnalytics {
     });
 
     // Track focus changes
-    window.addEventListener('focus', () => {
+    window.addEventListener("focus", () => {
       updateActiveTime();
-      this.trackEngagement('window_focus', { timestamp: Date.now() });
+      this.trackEngagement("window_focus", { timestamp: Date.now() });
     });
 
-    window.addEventListener('blur', () => {
+    window.addEventListener("blur", () => {
       updateActiveTime();
-      this.trackEngagement('window_blur', { 
+      this.trackEngagement("window_blur", {
         timestamp: Date.now(),
         activeTime: totalActiveTime,
       });
     });
 
     // Track beforeunload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       updateActiveTime();
-      this.trackEngagement('page_unload', {
+      this.trackEngagement("page_unload", {
         timestamp: Date.now(),
         totalActiveTime: totalActiveTime,
         sessionDuration: Date.now() - startTime,
@@ -310,7 +322,7 @@ export class AdvancedAnalytics {
   }
 
   private trackPerformance(metric: string, value: number) {
-    this.trackCustomEvent('performance_metric', {
+    this.trackCustomEvent("performance_metric", {
       metric,
       value,
       timestamp: Date.now(),
@@ -328,28 +340,34 @@ export class AdvancedAnalytics {
     this.trackCustomEvent(`engagement_${type}`, metadata);
   }
 
-  private determineErrorSeverity(type: string, metadata: Record<string, any>): string {
-    if (type === 'javascript_error' && metadata.message?.includes('ChunkLoadError')) {
-      return 'high';
+  private determineErrorSeverity(
+    type: string,
+    metadata: Record<string, any>,
+  ): string {
+    if (
+      type === "javascript_error" &&
+      metadata.message?.includes("ChunkLoadError")
+    ) {
+      return "high";
     }
-    if (type === 'fetch_error' && metadata.status >= 500) {
-      return 'high';
+    if (type === "fetch_error" && metadata.status >= 500) {
+      return "high";
     }
-    if (type === 'unhandled_promise_rejection') {
-      return 'medium';
+    if (type === "unhandled_promise_rejection") {
+      return "medium";
     }
-    return 'low';
+    return "low";
   }
 
   private recordEvent(event: AnalyticsEvent) {
     this.events.push(event);
-    
+
     // Update user journey
     this.updateUserJourney(event);
-    
+
     // Send to analytics service
     this.sendToAnalytics(event);
-    
+
     // Generate insights
     this.generateInsights(event);
   }
@@ -386,11 +404,11 @@ export class AdvancedAnalytics {
 
   private isConversionEvent(eventType: string): boolean {
     const conversionEvents = [
-      'signup_complete',
-      'purchase_complete',
-      'subscription_started',
-      'target_created',
-      'application_submitted',
+      "signup_complete",
+      "purchase_complete",
+      "subscription_started",
+      "target_created",
+      "application_submitted",
     ];
     return conversionEvents.includes(eventType);
   }
@@ -404,7 +422,7 @@ export class AdvancedAnalytics {
         metadata: event.metadata,
       });
     } catch (error) {
-      console.error('Failed to send analytics event:', error);
+      console.error("Failed to send analytics event:", error);
     }
   }
 
@@ -418,19 +436,20 @@ export class AdvancedAnalytics {
     const insights: AnalyticsInsight[] = [];
 
     // High bounce rate detection
-    if (event.eventType === 'page_view') {
+    if (event.eventType === "page_view") {
       const recentEvents = this.events.filter(
-        e => e.sessionId === event.sessionId && 
-        e.timestamp && 
-        e.timestamp > (event.timestamp || 0) - 30000 // Last 30 seconds
+        (e) =>
+          e.sessionId === event.sessionId &&
+          e.timestamp &&
+          e.timestamp > (event.timestamp || 0) - 30000, // Last 30 seconds
       );
-      
+
       if (recentEvents.length === 1) {
         insights.push({
-          type: 'alert',
-          title: 'High Bounce Rate Detected',
-          description: 'User left the page within 30 seconds',
-          severity: 'medium',
+          type: "alert",
+          title: "High Bounce Rate Detected",
+          description: "User left the page within 30 seconds",
+          severity: "medium",
           data: { url: event.url, sessionId: event.sessionId },
           timestamp: Date.now(),
           actionable: true,
@@ -440,19 +459,20 @@ export class AdvancedAnalytics {
     }
 
     // Error rate monitoring
-    if (event.eventType.startsWith('error_')) {
+    if (event.eventType.startsWith("error_")) {
       const recentErrors = this.events.filter(
-        e => e.eventType.startsWith('error_') && 
-        e.timestamp && 
-        e.timestamp > Date.now() - 300000 // Last 5 minutes
+        (e) =>
+          e.eventType.startsWith("error_") &&
+          e.timestamp &&
+          e.timestamp > Date.now() - 300000, // Last 5 minutes
       );
 
       if (recentErrors.length > 10) {
         insights.push({
-          type: 'alert',
-          title: 'High Error Rate',
+          type: "alert",
+          title: "High Error Rate",
           description: `${recentErrors.length} errors in the last 5 minutes`,
-          severity: 'high',
+          severity: "high",
           data: { errorCount: recentErrors.length, errors: recentErrors },
           timestamp: Date.now(),
           actionable: true,
@@ -461,16 +481,16 @@ export class AdvancedAnalytics {
     }
 
     // Performance degradation detection
-    if (event.eventType === 'performance_metric') {
+    if (event.eventType === "performance_metric") {
       const metric = event.metadata?.metric;
       const value = event.metadata?.value;
 
-      if (metric === 'page_load_time' && value > 5000) {
+      if (metric === "page_load_time" && value > 5000) {
         insights.push({
-          type: 'alert',
-          title: 'Slow Page Load',
+          type: "alert",
+          title: "Slow Page Load",
           description: `Page load time is ${value}ms, above 5s threshold`,
-          severity: 'medium',
+          severity: "medium",
           data: { metric, value, url: event.url },
           timestamp: Date.now(),
           actionable: true,
@@ -492,29 +512,35 @@ export class AdvancedAnalytics {
       .slice(0, limit);
   }
 
-  public getUserJourney(userId: string, sessionId?: string): UserJourney | undefined {
+  public getUserJourney(
+    userId: string,
+    sessionId?: string,
+  ): UserJourney | undefined {
     if (sessionId) {
       return this.userJourneys.get(`${userId}_${sessionId}`);
     }
-    
+
     // Return most recent journey for user
     const userJourneys = Array.from(this.userJourneys.values())
-      .filter(journey => journey.userId === userId)
+      .filter((journey) => journey.userId === userId)
       .sort((a, b) => (b.endTime || 0) - (a.endTime || 0));
-    
+
     return userJourneys[0];
   }
 
   public getPerformanceMetrics(): PerformanceMetrics {
     const now = Date.now();
     const last24Hours = now - (24 * 60 * 60 * 1000);
-    
-    const recentEvents = this.events.filter(e => (e.timestamp || 0) > last24Hours);
-    const pageViews = recentEvents.filter(e => e.eventType === 'page_view');
-    const uniqueUsers = new Set(recentEvents.map(e => e.userId).filter(Boolean)).size;
-    
+
+    const recentEvents = this.events.filter((e) =>
+      (e.timestamp || 0) > last24Hours
+    );
+    const pageViews = recentEvents.filter((e) => e.eventType === "page_view");
+    const uniqueUsers =
+      new Set(recentEvents.map((e) => e.userId).filter(Boolean)).size;
+
     const sessions = new Map<string, AnalyticsEvent[]>();
-    recentEvents.forEach(event => {
+    recentEvents.forEach((event) => {
       if (event.sessionId) {
         if (!sessions.has(event.sessionId)) {
           sessions.set(event.sessionId, []);
@@ -524,22 +550,32 @@ export class AdvancedAnalytics {
     });
 
     const sessionDurations = Array.from(sessions.values())
-      .map(sessionEvents => {
-        const timestamps = sessionEvents.map(e => e.timestamp || 0).filter(t => t > 0);
-        return timestamps.length > 1 ? Math.max(...timestamps) - Math.min(...timestamps) : 0;
+      .map((sessionEvents) => {
+        const timestamps = sessionEvents.map((e) => e.timestamp || 0).filter(
+          (t) => t > 0
+        );
+        return timestamps.length > 1
+          ? Math.max(...timestamps) - Math.min(...timestamps)
+          : 0;
       })
-      .filter(duration => duration > 0);
+      .filter((duration) => duration > 0);
 
-    const averageSessionDuration = sessionDurations.length > 0 
-      ? sessionDurations.reduce((sum, duration) => sum + duration, 0) / sessionDurations.length
+    const averageSessionDuration = sessionDurations.length > 0
+      ? sessionDurations.reduce((sum, duration) => sum + duration, 0) /
+        sessionDurations.length
       : 0;
 
-    const bounceRate = sessions.size > 0 
-      ? (Array.from(sessions.values()).filter(session => session.length === 1).length / sessions.size) * 100
+    const bounceRate = sessions.size > 0
+      ? (Array.from(sessions.values()).filter((session) => session.length === 1)
+        .length / sessions.size) * 100
       : 0;
 
-    const conversionEvents = recentEvents.filter(e => this.isConversionEvent(e.eventType));
-    const conversionRate = sessions.size > 0 ? (conversionEvents.length / sessions.size) * 100 : 0;
+    const conversionEvents = recentEvents.filter((e) =>
+      this.isConversionEvent(e.eventType)
+    );
+    const conversionRate = sessions.size > 0
+      ? (conversionEvents.length / sessions.size) * 100
+      : 0;
 
     return {
       pageViews: pageViews.length,
@@ -557,16 +593,18 @@ export class AdvancedAnalytics {
 
   private getTopPages(pageViews: AnalyticsEvent[]) {
     const pageCounts = new Map<string, { views: number; bounces: number }>();
-    
-    pageViews.forEach(event => {
-      const url = event.url || '';
+
+    pageViews.forEach((event) => {
+      const url = event.url || "";
       if (!pageCounts.has(url)) {
         pageCounts.set(url, { views: 0, bounces: 0 });
       }
       pageCounts.get(url)!.views++;
-      
+
       // Check if this was a bounce (only one event in session)
-      const sessionEvents = this.events.filter(e => e.sessionId === event.sessionId);
+      const sessionEvents = this.events.filter((e) =>
+        e.sessionId === event.sessionId
+      );
       if (sessionEvents.length === 1) {
         pageCounts.get(url)!.bounces++;
       }
@@ -584,9 +622,9 @@ export class AdvancedAnalytics {
 
   private getUserFlow(events: AnalyticsEvent[]) {
     const flows = new Map<string, number>();
-    
+
     events
-      .filter(e => e.eventType === 'page_view')
+      .filter((e) => e.eventType === "page_view")
       .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
       .forEach((event, index, array) => {
         if (index < array.length - 1) {
@@ -598,7 +636,7 @@ export class AdvancedAnalytics {
 
     return Array.from(flows.entries())
       .map(([flow, count]) => {
-        const [from, to] = flow.split(' -> ');
+        const [from, to] = flow.split(" -> ");
         return { from, to, count };
       })
       .sort((a, b) => b.count - a.count)
@@ -607,17 +645,17 @@ export class AdvancedAnalytics {
 
   private getDeviceBreakdown(events: AnalyticsEvent[]) {
     const devices = new Map<string, number>();
-    
-    events.forEach(event => {
-      const userAgent = event.userAgent || '';
-      let device = 'desktop';
-      
+
+    events.forEach((event) => {
+      const userAgent = event.userAgent || "";
+      let device = "desktop";
+
       if (/mobile|android|iphone|ipad/i.test(userAgent)) {
-        device = 'mobile';
+        device = "mobile";
       } else if (/tablet|ipad/i.test(userAgent)) {
-        device = 'tablet';
+        device = "tablet";
       }
-      
+
       devices.set(device, (devices.get(device) || 0) + 1);
     });
 
@@ -626,16 +664,16 @@ export class AdvancedAnalytics {
 
   private getBrowserBreakdown(events: AnalyticsEvent[]) {
     const browsers = new Map<string, number>();
-    
-    events.forEach(event => {
-      const userAgent = event.userAgent || '';
-      let browser = 'unknown';
-      
-      if (userAgent.includes('Chrome')) browser = 'Chrome';
-      else if (userAgent.includes('Firefox')) browser = 'Firefox';
-      else if (userAgent.includes('Safari')) browser = 'Safari';
-      else if (userAgent.includes('Edge')) browser = 'Edge';
-      
+
+    events.forEach((event) => {
+      const userAgent = event.userAgent || "";
+      let browser = "unknown";
+
+      if (userAgent.includes("Chrome")) browser = "Chrome";
+      else if (userAgent.includes("Firefox")) browser = "Firefox";
+      else if (userAgent.includes("Safari")) browser = "Safari";
+      else if (userAgent.includes("Edge")) browser = "Edge";
+
       browsers.set(browser, (browsers.get(browser) || 0) + 1);
     });
 
@@ -643,7 +681,7 @@ export class AdvancedAnalytics {
   }
 
   public exportData() {
-      return {
+    return {
       events: this.events,
       userJourneys: Array.from(this.userJourneys.values()),
       insights: this.insights,
@@ -691,7 +729,7 @@ export function useAnalytics() {
     analytics,
     insights,
     metrics,
-    trackEvent: (eventType: string, metadata?: Record<string, any>) => 
+    trackEvent: (eventType: string, metadata?: Record<string, any>) =>
       analytics.trackCustomEvent(eventType, metadata),
     setUserId: (userId: string) => analytics.setUserId(userId),
   };
