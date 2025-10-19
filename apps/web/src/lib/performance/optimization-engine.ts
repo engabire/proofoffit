@@ -4,8 +4,8 @@
  */
 
 import {
-    type PerformanceMetrics,
     getPerformanceMonitor,
+    type PerformanceMetrics,
 } from "./performance-monitor";
 
 export interface OptimizationRecommendation {

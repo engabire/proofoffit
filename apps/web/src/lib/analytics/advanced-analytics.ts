@@ -167,7 +167,10 @@ export class AdvancedAnalytics {
         const entries = list.getEntries();
         entries.forEach((entry) => {
           const fidEntry = entry as any; // FirstInputEntry type
-          this.trackPerformance("fid", fidEntry.processingStart - fidEntry.startTime);
+          this.trackPerformance(
+            "fid",
+            fidEntry.processingStart - fidEntry.startTime,
+          );
         });
       }).observe({ type: "first-input", buffered: true });
 
@@ -383,7 +386,7 @@ export class AdvancedAnalytics {
     if (!journey) {
       journey = {
         userId: event.userId,
-        sessionId: event.sessionId || '',
+        sessionId: event.sessionId || "",
         events: [],
         startTime: event.timestamp || Date.now(),
         conversionEvents: [],
@@ -554,7 +557,7 @@ export class AdvancedAnalytics {
     const sessionDurations = Array.from(sessions.values())
       .map((sessionEvents) => {
         const timestamps = sessionEvents.map((e) => e.timestamp || 0).filter(
-          (t) => t > 0
+          (t) => t > 0,
         );
         return timestamps.length > 1
           ? Math.max(...timestamps) - Math.min(...timestamps)

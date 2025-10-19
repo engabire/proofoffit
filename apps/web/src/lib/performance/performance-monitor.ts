@@ -117,7 +117,8 @@ class PerformanceMonitor {
         this.observeMetric("resource", (entries) => {
             const totalResourceTime = entries.reduce((sum, entry) => {
                 const resourceEntry = entry as any;
-                return sum + (resourceEntry.responseEnd - resourceEntry.startTime);
+                return sum +
+                    (resourceEntry.responseEnd - resourceEntry.startTime);
             }, 0);
             this.metrics.resourceLoadTime = totalResourceTime / entries.length;
         });

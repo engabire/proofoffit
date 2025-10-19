@@ -275,32 +275,38 @@ class PushNotificationManager {
         if (!this.registration) return;
 
         // Handle notification clicks
-        this.registration.addEventListener("notificationclick", (event: any) => {
-            event.notification.close();
+        this.registration.addEventListener(
+            "notificationclick",
+            (event: any) => {
+                event.notification.close();
 
-            const data = event.notification.data;
-            const action = event.action;
+                const data = event.notification.data;
+                const action = event.action;
 
-            if (action === "open") {
-                // Open the app
-                event.waitUntil(
-                    (self as any).clients.openWindow(data?.url || "/"),
-                );
-            } else if (action === "dismiss") {
-                // Just close the notification
-                return;
-            } else {
-                // Default action - open the app
-                event.waitUntil(
-                    (self as any).clients.openWindow(data?.url || "/"),
-                );
-            }
-        });
+                if (action === "open") {
+                    // Open the app
+                    event.waitUntil(
+                        (self as any).clients.openWindow(data?.url || "/"),
+                    );
+                } else if (action === "dismiss") {
+                    // Just close the notification
+                    return;
+                } else {
+                    // Default action - open the app
+                    event.waitUntil(
+                        (self as any).clients.openWindow(data?.url || "/"),
+                    );
+                }
+            },
+        );
 
         // Handle notification close
-        this.registration.addEventListener("notificationclose", (event: any) => {
-            console.log("Notification closed:", event.notification.tag);
-        });
+        this.registration.addEventListener(
+            "notificationclose",
+            (event: any) => {
+                console.log("Notification closed:", event.notification.tag);
+            },
+        );
     }
 }
 

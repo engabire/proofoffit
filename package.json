@@ -16,6 +16,7 @@
     "ci": "npm run lint && npm run test && npm run build",
     "clean": "turbo run clean",
     "type-check": "turbo run type-check",
+    "audit": "tsx scripts/audit.ts",
     "preflight": "bash ./scripts/preflight.sh",
     "validate-migrations": "bash ./scripts/validate-migrations.sh",
     "storybook": "storybook dev -p 6006",
@@ -36,6 +37,7 @@
     "eslint": "8.57.1",
     "playwright": "^1.55.1",
     "storybook": "^9.1.10",
+    "tsx": "^4.7.0",
     "turbo": "^1.10.12",
     "typescript": "^5.2.2",
     "vitest": "^3.2.4"
