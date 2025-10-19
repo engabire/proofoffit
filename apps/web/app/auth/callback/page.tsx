@@ -70,43 +70,43 @@ function AuthCallbackPageContent() {
 
         let user: User | null = null;
 
-        if (code) {
-          // Check if this is a PKCE flow (OAuth) or magic link flow
-          const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
+               if (code) {
+                 // Check if this is a PKCE flow (OAuth) or magic link flow
+                 const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
 
-          if (codeVerifier) {
-            // This is a PKCE OAuth flow
-            // The newer @supabase/ssr client should automatically handle PKCE
-            // when the code verifier is available in sessionStorage
-            const { data: sessionData, error: exchangeError } = await supabase
-              .auth.exchangeCodeForSession(code);
+                 if (codeVerifier) {
+                   // This is a PKCE OAuth flow
+                   // The newer @supabase/ssr client should automatically handle PKCE
+                   // when the code verifier is available in sessionStorage
+                   const { data: sessionData, error: exchangeError } = await supabase
+                     .auth.exchangeCodeForSession(code);
 
-            if (exchangeError) {
-              // If there's an error, it might be because the code verifier wasn't found
-              // Let's try to provide more specific error information
-              if (exchangeError.message?.includes("code verifier")) {
-                throw new Error(
-                  "Authentication failed: PKCE code verifier mismatch. Please try signing in again.",
-                );
-              }
-              throw exchangeError;
-            }
+                   if (exchangeError) {
+                     // If there's an error, it might be because the code verifier wasn't found
+                     // Let's try to provide more specific error information
+                     if (exchangeError.message?.includes("code verifier")) {
+                       throw new Error(
+                         "Authentication failed: PKCE code verifier mismatch. Please try signing in again.",
+                       );
+                     }
+                     throw exchangeError;
+                   }
 
-            // Clear the verifier once it has been used successfully
-            sessionStorage.removeItem("pkce_code_verifier");
-            user = sessionData?.user ?? null;
-          } else {
-            // This is likely a magic link flow
-            const { data: sessionData, error: exchangeError } = await supabase
-              .auth.exchangeCodeForSession(code);
+                   // Clear the verifier once it has been used successfully
+                   sessionStorage.removeItem("pkce_code_verifier");
+                   user = sessionData?.user ?? null;
+                 } else {
+                   // This is likely a magic link flow
+                   const { data: sessionData, error: exchangeError } = await supabase
+                     .auth.exchangeCodeForSession(code);
 
-            if (exchangeError) {
-              throw exchangeError;
-            }
+                   if (exchangeError) {
+                     throw exchangeError;
+                   }
 
-            user = sessionData?.user ?? null;
-          }
-        }
+                   user = sessionData?.user ?? null;
+                 }
+               }
 
         if (!user && hashParams) {
           const accessToken = hashParams.get("access_token");

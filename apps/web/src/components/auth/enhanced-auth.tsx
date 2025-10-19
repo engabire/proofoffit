@@ -213,8 +213,11 @@ export default function EnhancedAuth({
         throw new Error("Authentication service not available");
       }
 
-      // Generate PKCE code verifier and store it
+      // Generate PKCE code verifier and challenge
       const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+      
+      // Store the code verifier in sessionStorage for the callback
       sessionStorage.setItem("pkce_code_verifier", codeVerifier);
 
       // Map provider keys to Supabase provider names
@@ -234,6 +237,8 @@ export default function EnhancedAuth({
           queryParams: {
             access_type: "offline",
             prompt: "consent",
+            code_challenge: codeChallenge,
+            code_challenge_method: "S256",
           },
         },
       });
@@ -411,7 +416,7 @@ export default function EnhancedAuth({
                   placeholder={isHirer ? "name@yourco.com" : "you@example.com"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`block w-full pl-9 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                  className={`block w-full pl-9 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 bg-white ${
                     emailError ? "border-red-300" : "border-gray-300"
                   }`}
                 />
@@ -448,7 +453,7 @@ export default function EnhancedAuth({
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                    className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 bg-white ${
                       passwordError ? "border-red-300" : "border-gray-300"
                     }`}
                     placeholder="Enter your password"
