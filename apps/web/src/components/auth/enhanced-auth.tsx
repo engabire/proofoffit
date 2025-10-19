@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { useCSRFHeaders } from "@/components/security/csrf-provider";
 import { createClientSupabaseClient } from "@/lib/supabase/client";
+import { LogoSymbol } from "@/components/branding/logo-symbol";
 import {
   AlertTriangle,
   ArrowRight,
@@ -58,23 +59,7 @@ interface EnhancedAuthProps {
   redirectTo?: string;
 }
 
-function BrandMark({ className = "h-6 w-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden className={className}>
-      <defs>
-        <linearGradient id="pf" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#2563EB" />
-          <stop offset="100%" stopColor="#4F46E5" />
-        </linearGradient>
-      </defs>
-      <rect x="2" y="2" width="28" height="28" rx="8" fill="#F6F9FF" />
-      <path
-        d="M9 22V10h7.5a4.5 4.5 0 0 1 0 9H14v3H9zm5-7h2.5a1.5 1.5 0 0 0 0-3H14v3z"
-        fill="url(#pf)"
-      />
-    </svg>
-  );
-}
+// Using the new LogoSymbol component instead of the old BrandMark
 
 export default function EnhancedAuth({
   mode = "signin",
@@ -314,7 +299,7 @@ export default function EnhancedAuth({
       <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-900 p-10 relative overflow-hidden">
         <div>
           <div className="flex items-center gap-3">
-            <BrandMark className="h-10 w-10" />
+            <LogoSymbol className="h-10 w-10" variant="default" />
             <h1 className="text-5xl font-extrabold tracking-tight">
               ProofOfFit
             </h1>

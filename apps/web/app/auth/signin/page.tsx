@@ -4,6 +4,7 @@ import React, { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import EnhancedAuth from '@/components/auth/enhanced-auth'
 import EnterpriseLogin from '@/components/auth/enterprise-login'
+import { EnhancedHeader } from '@/components/navigation/enhanced-header'
 
 function SignInPageContent() {
   const searchParams = useSearchParams()
@@ -20,11 +21,14 @@ function SignInPageContent() {
   }
 
   return (
-    <EnhancedAuth 
-      mode="signin"
-      defaultAudience={defaultAudience}
-      redirectTo={redirectTo}
-    />
+    <div className="min-h-screen">
+      <EnhancedHeader variant="minimal" />
+      <EnhancedAuth 
+        mode="signin"
+        defaultAudience={defaultAudience}
+        redirectTo={redirectTo}
+      />
+    </div>
   )
 }
 
