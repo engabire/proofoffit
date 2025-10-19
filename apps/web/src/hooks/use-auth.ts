@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientSupabaseClient } from '@/lib/supabase/client'
 import type { User, Session } from '@supabase/supabase-js'
 
 interface AuthState {
@@ -20,12 +20,17 @@ export function useAuth() {
     error: null
   })
   
-  const supabase = createClientComponentClient()
+  const supabase = createClientSupabaseClient()
   const router = useRouter()
 
   const initializeAuth = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
+      
+      if (!supabase) {
+        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+        return
+      }
       
       // Get current session
       const { data: { session }, error } = await supabase.auth.getSession()
@@ -58,6 +63,11 @@ export function useAuth() {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       
+      if (!supabase) {
+        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+        return { success: false, error: 'Authentication service not available' }
+      }
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -87,6 +97,11 @@ export function useAuth() {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       
+      if (!supabase) {
+        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+        return { success: false, error: 'Authentication service not available' }
+      }
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -114,6 +129,11 @@ export function useAuth() {
   const signOut = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
+      
+      if (!supabase) {
+        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+        return { success: false, error: 'Authentication service not available' }
+      }
       
       const { error } = await supabase.auth.signOut()
       
@@ -144,6 +164,11 @@ export function useAuth() {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       
+      if (!supabase) {
+        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+        return { success: false, error: 'Authentication service not available' }
+      }
+      
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -167,6 +192,11 @@ export function useAuth() {
 
   // Initialize auth on mount
   useEffect(() => {
+    if (!supabase) {
+      setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
+      return
+    }
+    
     initializeAuth()
 
     // Listen for auth state changes

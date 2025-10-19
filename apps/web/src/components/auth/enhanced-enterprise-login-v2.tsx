@@ -23,7 +23,7 @@ import { Separator } from "@proof-of-fit/ui";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/env";
 import { detectEnterpriseDomain } from "@/lib/enterprise-domains";
 import { toast } from "sonner";
@@ -122,9 +122,7 @@ export default function EnhancedEnterpriseLoginV2({
   const [error, setError] = React.useState<string>("");
 
   const router = useRouter();
-  const supabase = isSupabaseConfigured()
-    ? createClientComponentClient()
-    : null;
+  const supabase = createClientSupabaseClient();
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm<
     EmailForm

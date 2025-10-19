@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientSupabaseClient } from "@/lib/supabase/client";
 import { Button } from "@proof-of-fit/ui";
 import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
 import { Input } from "@proof-of-fit/ui";
@@ -66,9 +66,7 @@ export function EnhancedEnterpriseLogin({
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = isSupabaseConfigured()
-    ? createClientComponentClient()
-    : null;
+  const supabase = createClientSupabaseClient();
 
   // Get redirect URL from search params
   const redirectUrl = redirectTo || searchParams.get("redirect") ||

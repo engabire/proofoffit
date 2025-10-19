@@ -380,7 +380,7 @@ export const plans = {
     },
 } as const;
 
-export default {
+const designTokens = {
     colors,
     typography,
     spacing,
@@ -394,3 +394,5 @@ export default {
     applicationStatuses,
     plans,
 };
+
+export default designTokens;

@@ -38,7 +38,7 @@ export default function TermsPage() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
                     <p className="mb-4">
-                        The materials on ProofOfFit are provided on an 'as is'
+                        The materials on ProofOfFit are provided on an &apos;as is&apos;
                         basis. ProofOfFit makes no warranties, expressed or
                         implied, and hereby disclaims and negates all other
                         warranties.

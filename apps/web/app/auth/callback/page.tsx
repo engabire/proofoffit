@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientSupabaseClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { isSupabaseConfigured } from "@/lib/env";
 import { detectEnterpriseDomain } from "@/lib/enterprise-domains";
@@ -11,9 +11,7 @@ import { Badge } from "@proof-of-fit/ui";
 import { AlertCircle, Building2, CheckCircle, Loader2 } from "lucide-react";
 
 function AuthCallbackPageContent() {
-  const supabase = isSupabaseConfigured()
-    ? createClientComponentClient()
-    : null;
+  const supabase = createClientSupabaseClient();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -78,7 +76,7 @@ function AuthCallbackPageContent() {
 
           if (codeVerifier) {
             // This is a PKCE OAuth flow
-            // The newer @supabase/ssr client should handle PKCE automatically
+            // The newer @supabase/ssr client should automatically handle PKCE
             // when the code verifier is available in sessionStorage
             const { data: sessionData, error: exchangeError } = await supabase
               .auth.exchangeCodeForSession(code);
@@ -318,4 +316,3 @@ export default function AuthCallbackPage() {
   );
 }
 
-// Build fix: Ensure latest commit is used (f78eb5f)
