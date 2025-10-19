@@ -3,13 +3,27 @@ import { cn } from "@/lib/utils"
 interface LogoSymbolProps {
   className?: string
   label?: string
+  variant?: "default" | "gradient" | "minimal"
 }
 
-export function LogoSymbol({ className, label = "ProofOfFit shield" }: LogoSymbolProps) {
+export function LogoSymbol({ 
+  className, 
+  label = "ProofOfFit logo", 
+  variant = "default" 
+}: LogoSymbolProps) {
+  const baseClasses = "inline-flex items-center justify-center"
+  
+  const variantClasses = {
+    default: "rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-lg",
+    gradient: "rounded-xl bg-gradient-to-br from-sky-500 via-indigo-500 to-purple-600 text-white shadow-lg",
+    minimal: "rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20"
+  }
+
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20",
+        baseClasses,
+        variantClasses[variant],
         className
       )}
       role="img"
@@ -22,24 +36,50 @@ export function LogoSymbol({ className, label = "ProofOfFit shield" }: LogoSymbo
         aria-hidden="true"
         focusable="false"
       >
+        {/* Modern shield design with gradient */}
+        <defs>
+          <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="currentColor" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="currentColor" stopOpacity="0.7" />
+          </linearGradient>
+          <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="white" stopOpacity="1" />
+            <stop offset="100%" stopColor="white" stopOpacity="0.9" />
+          </linearGradient>
+        </defs>
+        
+        {/* Shield shape with modern styling */}
         <path
-          d="M32 6.5 52 13v12.5c0 11.2-6.7 20.9-17.5 24.8a5 5 0 0 1-3.1 0C20.7 46.4 14 36.7 14 25.5V13l18-6.5Z"
-          fill="none"
+          d="M32 4 54 12v14c0 12-7.5 22.5-19.5 26.5a6 6 0 0 1-5 0C17.5 48.5 10 38 10 26V12l22-8Z"
+          fill="url(#shieldGradient)"
           stroke="currentColor"
-          strokeWidth="4"
+          strokeWidth="2"
           strokeLinejoin="round"
+          className="drop-shadow-sm"
         />
+        
+        {/* Modern PF text with better typography */}
         <text
           x="32"
-          y="38"
+          y="40"
           textAnchor="middle"
-          fontSize="20"
-          fontFamily="'Inter', 'Helvetica', 'Arial', sans-serif"
-          fontWeight="700"
-          fill="currentColor"
+          fontSize="18"
+          fontFamily="'Inter', 'SF Pro Display', 'Helvetica Neue', sans-serif"
+          fontWeight="800"
+          fill="url(#textGradient)"
+          className="drop-shadow-sm"
         >
           PF
         </text>
+        
+        {/* Subtle accent dot */}
+        <circle
+          cx="32"
+          cy="28"
+          r="2"
+          fill="currentColor"
+          opacity="0.6"
+        />
       </svg>
     </span>
   )
