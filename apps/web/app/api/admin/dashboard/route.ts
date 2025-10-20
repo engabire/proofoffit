@@ -31,7 +31,12 @@ const mockTelemetry = {
             activeUsers: 150,
         },
     }),
-    getEvents: (startTime: Date, endTime: Date, type?: string, severity?: string) => {
+    getEvents: (
+        startTime: Date,
+        endTime: Date,
+        type?: string,
+        severity?: string,
+    ) => {
         // Mock events data
         return [
             {
@@ -45,15 +50,23 @@ const mockTelemetry = {
         ];
     },
     exportEvents: (format: "json" | "csv") => {
-        return format === "json" 
+        return format === "json"
             ? JSON.stringify([{ id: "event_1", message: "Mock event" }])
             : "id,message\nevent_1,Mock event";
     },
-    recordUserActivity: (activity: string, userId: string, sessionId: string, metadata: any) => {
+    recordUserActivity: (
+        activity: string,
+        userId: string,
+        sessionId: string,
+        metadata: any,
+    ) => {
         console.log(`User activity: ${activity} by ${userId}`, metadata);
     },
     recordError: (error: Error, context: any, severity: string) => {
-        console.error(`Error recorded: ${error.message}`, { context, severity });
+        console.error(`Error recorded: ${error.message}`, {
+            context,
+            severity,
+        });
     },
 };
 
@@ -61,7 +74,11 @@ const mockTelemetry = {
 const getProviderHealth = () => ({
     indeed: { status: "healthy", latency: 150, successRate: 0.99 },
     seed: { status: "healthy", latency: 50, successRate: 1.0 },
-    overall: { status: "healthy", averageLatency: 100, averageSuccessRate: 0.995 },
+    overall: {
+        status: "healthy",
+        averageLatency: 100,
+        averageSuccessRate: 0.995,
+    },
 });
 
 // RBAC roles
@@ -309,7 +326,9 @@ export async function POST(request: NextRequest) {
 
                 const events = mockTelemetry.getEvents(startTime, now);
                 result = {
-                    events: mockTelemetry.exportEvents(format as "json" | "csv"),
+                    events: mockTelemetry.exportEvents(
+                        format as "json" | "csv",
+                    ),
                     count: events.length,
                     format,
                     timeRange,
