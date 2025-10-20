@@ -14,77 +14,27 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import { Header } from "@/components/landing/header";
+import { HeroIllustration } from "@/components/illustrations/hero-illustration";
 
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">
-                ProofOfFit
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                href="#features"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Features
-              </Link>
-              <Link
-                href="#pricing"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Pricing
-              </Link>
-              <Link
-                href="#about"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="#contact"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Contact
-              </Link>
-            </nav>
-            <div className="flex space-x-4">
-              <Link
-                href="/auth/signin"
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <Header />
 
       {/* Hero Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
-          <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 mb-4">
-            <Star className="h-3 w-3 mr-1" />
+          <div className="inline-flex items-center rounded-full bg-white/80 backdrop-blur-sm border border-gray-200/50 px-4 py-2 text-sm font-medium text-gray-700 mb-6 shadow-sm">
+            <Star className="h-4 w-4 mr-2 text-proof-orange" />
             Trusted by 500+ Companies
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Evidence-based hiring for
             <br />
-            <span className="text-blue-600">both sides of the table.</span>
+            <span className="text-proof-blue">both sides of the table.</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             Whether you&apos;re seeking your next role or building your team,
@@ -100,10 +50,10 @@ export default function HomePage() {
               I am seeking a job
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-            <Link
-              href="/auth/signup?type=employer"
-              className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition-colors"
-            >
+              <Link
+                href="/auth/signup?type=employer"
+                className="inline-flex items-center justify-center px-8 py-4 border-2 border-proof-blue text-proof-blue text-lg font-medium rounded-lg hover:bg-proof-blue hover:text-white transition-all duration-200 shadow-sm hover:shadow-lg"
+              >
               <Briefcase className="mr-2 h-5 w-5" />
               I am hiring
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -113,11 +63,16 @@ export default function HomePage() {
             No card • 2 minutes to first Fit Report
           </p>
 
+          {/* Hero Visual Element */}
+          <div className="relative max-w-4xl mx-auto mb-16">
+            <HeroIllustration className="max-w-md mx-auto" />
+          </div>
+
           {/* Proof Signals */}
           <div className="mt-12 p-6 bg-white rounded-lg shadow-lg border max-w-4xl mx-auto">
             <div className="grid md:grid-cols-3 gap-6 items-center">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">
+                <div className="text-3xl font-bold text-proof-blue mb-2">
                   3.2×
                 </div>
                 <div className="text-sm text-gray-600">
@@ -128,7 +83,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">
+                <div className="text-3xl font-bold text-proof-green mb-2">
                   90s
                 </div>
                 <div className="text-sm text-gray-600">
@@ -139,7 +94,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">
+                <div className="text-3xl font-bold text-proof-purple mb-2">
                   100%
                 </div>
                 <div className="text-sm text-gray-600">Audit-ready trails</div>
@@ -528,7 +483,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/signup?type=seeker"
-                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 bg-proof-blue text-white text-lg font-medium rounded-lg hover:bg-proof-blue/90 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <UserCheck className="mr-2 h-5 w-5" />
                 Start as Job Seeker

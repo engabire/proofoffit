@@ -30,16 +30,16 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          50: '#f3f0ff',
-          100: '#e9e5ff',
-          200: '#d6ceff',
-          300: '#b8a6ff',
-          400: '#9575ff',
-          500: '#7c3aed',
-          600: '#6d28d9',
-          700: '#5b21b6',
-          800: '#4c1d95',
-          900: '#3c1a78',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -105,6 +105,14 @@ module.exports = {
           free: '#6b7280',    // Gray
           pro: '#3b82f6',     // Blue
           premium: '#7c3aed', // Purple
+        },
+        // ProofOfFit Brand Colors
+        proof: {
+          blue: "hsl(var(--proof-blue))",
+          green: "hsl(var(--proof-green))",
+          purple: "hsl(var(--proof-purple))",
+          orange: "hsl(var(--proof-orange))",
+          gray: "hsl(var(--proof-gray))",
         },
       },
       borderRadius: {

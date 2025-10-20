@@ -4,52 +4,96 @@
 
 @layer base {
   :root {
-    --background: 210 33% 98%;
+    /* ProofOfFit Brand Colors */
+    --background: 210 40% 98%;
     --foreground: 224 35% 14%;
     --card: 0 0% 100%;
     --card-foreground: 224 35% 14%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 35% 14%;
-    --primary: 222 86% 57%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217 44% 94%;
+    
+    /* Primary Brand Color - Trust Blue */
+    --primary: 214 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Professional Gray */
+    --secondary: 220 13% 95%;
     --secondary-foreground: 224 35% 18%;
-    --muted: 214 36% 92%;
+    
+    /* Muted - Subtle Gray */
+    --muted: 220 13% 92%;
     --muted-foreground: 220 17% 42%;
-    --accent: 191 68% 76%;
-    --accent-foreground: 215 40% 18%;
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 216 36% 89%;
-    --input: 215 36% 88%;
-    --ring: 214 80% 65%;
+    
+    /* Accent - Success Green */
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive - Alert Red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* UI Elements */
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 214 95% 50%;
     --radius: 0.75rem;
-    --glow-start: 203 100% 85%;
-    --glow-end: 267 100% 87%;
+    
+    /* Brand Gradients */
+    --glow-start: 214 95% 85%;
+    --glow-end: 142 76% 75%;
+    
+    /* ProofOfFit Specific Colors */
+    --proof-blue: 214 95% 50%;
+    --proof-green: 142 76% 36%;
+    --proof-purple: 262 83% 58%;
+    --proof-orange: 25 95% 53%;
+    --proof-gray: 220 13% 46%;
   }
 
   .dark {
+    /* Dark Mode Brand Colors */
     --background: 224 46% 7%;
     --foreground: 216 33% 92%;
     --card: 224 47% 9%;
     --card-foreground: 216 33% 92%;
     --popover: 224 47% 9%;
     --popover-foreground: 216 33% 92%;
-    --primary: 216 88% 72%;
+    
+    /* Primary - Trust Blue (Dark) */
+    --primary: 214 95% 65%;
     --primary-foreground: 224 47% 9%;
+    
+    /* Secondary - Dark Gray */
     --secondary: 222 25% 17%;
     --secondary-foreground: 216 33% 92%;
+    
+    /* Muted - Dark Gray */
     --muted: 222 24% 17%;
     --muted-foreground: 220 16% 64%;
-    --accent: 189 70% 58%;
-    --accent-foreground: 224 47% 10%;
-    --destructive: 0 76% 40%;
-    --destructive-foreground: 210 40% 98%;
+    
+    /* Accent - Success Green (Dark) */
+    --accent: 142 76% 50%;
+    --accent-foreground: 224 47% 9%;
+    
+    /* Destructive - Alert Red (Dark) */
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 224 47% 9%;
+    
+    /* UI Elements */
     --border: 222 23% 22%;
     --input: 222 23% 22%;
-    --ring: 216 88% 72%;
-    --glow-start: 203 88% 65%;
-    --glow-end: 267 76% 68%;
+    --ring: 214 95% 65%;
+    
+    /* Brand Gradients (Dark) */
+    --glow-start: 214 95% 65%;
+    --glow-end: 142 76% 55%;
+    
+    /* ProofOfFit Specific Colors (Dark) */
+    --proof-blue: 214 95% 65%;
+    --proof-green: 142 76% 50%;
+    --proof-purple: 262 83% 70%;
+    --proof-orange: 25 95% 65%;
+    --proof-gray: 220 13% 60%;
   }
 }
 

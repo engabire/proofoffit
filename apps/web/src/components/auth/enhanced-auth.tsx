@@ -301,7 +301,7 @@ export default function EnhancedAuth({
   return (
     <div className="w-full min-h-screen grid md:grid-cols-2 bg-white">
       {/* Left: Brand/Value */}
-      <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-900 p-10 relative overflow-hidden">
+      <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-gray-900 p-10 relative overflow-hidden">
         <div>
           <div className="flex items-center gap-3">
             <LogoSymbol className="h-10 w-10" variant="default" />
@@ -309,7 +309,7 @@ export default function EnhancedAuth({
               ProofOfFit
             </h1>
           </div>
-          <div className="h-1 w-28 bg-gradient-to-r from-blue-600 to-indigo-500 my-4 rounded" />
+          <div className="h-1 w-28 bg-gradient-to-r from-proof-blue to-proof-purple my-4 rounded" />
           <p className="max-w-sm text-gray-600">
             {isHirer
               ? "Hire with confidence. Streamline reviews, collaborate with your team, and prove compliance — fast and secure."
@@ -341,7 +341,7 @@ export default function EnhancedAuth({
           className="pointer-events-none absolute inset-0 opacity-20"
           aria-hidden
         >
-          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl bg-gradient-to-tr from-blue-600 to-indigo-500" />
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl bg-gradient-to-tr from-proof-blue to-proof-purple" />
         </div>
       </div>
 
