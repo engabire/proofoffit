@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { ReplitLogin } from "@/components/auth/replit-login";
+import { UnifiedAuth } from "@/components/auth/unified-auth";
 import EnterpriseLogin from "@/components/auth/enterprise-login";
 
 function SignInPageContent() {
@@ -20,7 +20,8 @@ function SignInPageContent() {
   }
 
   return (
-    <ReplitLogin
+    <UnifiedAuth
+      mode="signin"
       defaultUserType={defaultAudience}
       redirectTo={redirectTo}
     />

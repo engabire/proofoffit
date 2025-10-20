@@ -2,9 +2,8 @@
 
 import React, { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import EnhancedAuth from '@/components/auth/enhanced-auth'
+import { UnifiedAuth } from '@/components/auth/unified-auth'
 import EnterpriseLogin from '@/components/auth/enterprise-login'
-import { EnhancedHeader } from '@/components/navigation/enhanced-header'
 
 function SignUpPageContent() {
   const searchParams = useSearchParams()
@@ -21,14 +20,11 @@ function SignUpPageContent() {
   }
 
   return (
-    <div className="min-h-screen">
-      <EnhancedHeader variant="minimal" />
-      <EnhancedAuth 
-        mode="signup"
-        defaultAudience={defaultAudience}
-        redirectTo={redirectTo}
-      />
-    </div>
+    <UnifiedAuth 
+      mode="signup"
+      defaultUserType={defaultAudience}
+      redirectTo={redirectTo}
+    />
   )
 }
 

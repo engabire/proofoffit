@@ -4,32 +4,54 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LogoSymbol } from "@/components/branding/logo-symbol";
-import { Briefcase, Eye, EyeOff, Lock, Mail, Users } from "lucide-react";
+import {
+    Briefcase,
+    Eye,
+    EyeOff,
+    Lock,
+    Mail,
+    Users,
+    User,
+    CheckCircle,
+} from "lucide-react";
 
-interface ReplitLoginProps {
+interface UnifiedAuthProps {
+    mode: "signin" | "signup";
     defaultUserType?: "hirer" | "seeker";
     redirectTo?: string;
 }
 
-export function ReplitLogin({
+export function UnifiedAuth({
+    mode,
     defaultUserType = "seeker",
     redirectTo = "/dashboard",
-}: ReplitLoginProps) {
-    const [userType, setUserType] = useState<"hirer" | "seeker">(
-        defaultUserType,
-    );
+}: UnifiedAuthProps) {
+    const [userType, setUserType] = useState<"hirer" | "seeker">(defaultUserType);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [fullName, setFullName] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
     const router = useRouter();
+
+    const isSignup = mode === "signup";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
         // TODO: Implement actual authentication
-        console.log("Login attempt:", { userType, email, password });
+        console.log("Auth attempt:", { 
+            mode, 
+            userType, 
+            email, 
+            password, 
+            fullName: isSignup ? fullName : undefined,
+            agreedToTerms: isSignup ? agreedToTerms : undefined
+        });
 
         // Simulate loading
         setTimeout(() => {
@@ -44,8 +66,7 @@ export function ReplitLogin({
             <div
                 className="absolute inset-0 opacity-30"
                 style={{
-                    backgroundImage:
-                        "url(/images/backgrounds/login-pattern.svg)",
+                    backgroundImage: "url(/images/backgrounds/login-pattern.svg)",
                     backgroundSize: "400px 400px",
                     backgroundRepeat: "repeat",
                 }}
@@ -233,16 +254,19 @@ export function ReplitLogin({
                 </div>
             </div>
 
-            {/* Right Column - Login Form */}
+            {/* Right Column - Auth Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative z-10">
                 <div className="w-full max-w-md">
                     <div className="bg-white rounded-xl shadow-lg p-8">
                         {/* Title */}
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                            Sign in to ProofOfFit
+                            {isSignup ? "Create your ProofOfFit account" : "Sign in to ProofOfFit"}
                         </h1>
                         <p className="text-gray-600 mb-8">
-                            Sign in to access your applications and portfolio.
+                            {isSignup 
+                                ? "Join thousands of professionals finding their perfect fit."
+                                : "Sign in to access your applications and portfolio."
+                            }
                         </p>
 
                         {/* User Type Selector */}
@@ -273,8 +297,34 @@ export function ReplitLogin({
                             </button>
                         </div>
 
-                        {/* Login Form */}
+                        {/* Auth Form */}
                         <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Full Name Field (Signup only) */}
+                            {isSignup && (
+                                <div>
+                                    <label
+                                        htmlFor="fullName"
+                                        className="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        Full Name
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <User className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            id="fullName"
+                                            type="text"
+                                            value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
+                                            placeholder="Enter your full name"
+                                            required={isSignup}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Email Field */}
                             <div>
                                 <label
@@ -291,8 +341,7 @@ export function ReplitLogin({
                                         id="email"
                                         type="email"
                                         value={email}
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="you@example.com"
                                         required
@@ -314,52 +363,115 @@ export function ReplitLogin({
                                     </div>
                                     <input
                                         id="password"
-                                        type={showPassword
-                                            ? "text"
-                                            : "password"}
+                                        type={showPassword ? "text" : "password"}
                                         value={password}
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="Enter your password"
                                         required
                                     />
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setShowPassword(!showPassword)}
+                                        onClick={() => setShowPassword(!showPassword)}
                                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     >
-                                        {showPassword
-                                            ? (
-                                                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                            )
-                                            : (
-                                                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                            )}
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                        ) : (
+                                            <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                        )}
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Sign In Button */}
+                            {/* Confirm Password Field (Signup only) */}
+                            {isSignup && (
+                                <div>
+                                    <label
+                                        htmlFor="confirmPassword"
+                                        className="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        Confirm Password
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <Lock className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            id="confirmPassword"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
+                                            placeholder="Confirm your password"
+                                            required={isSignup}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                        >
+                                            {showConfirmPassword ? (
+                                                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            ) : (
+                                                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Terms Agreement (Signup only) */}
+                            {isSignup && (
+                                <div className="flex items-start gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setAgreedToTerms(!agreedToTerms)}
+                                        className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                                            agreedToTerms
+                                                ? "bg-purple-600 border-purple-600"
+                                                : "border-gray-300 hover:border-purple-500"
+                                        }`}
+                                    >
+                                        {agreedToTerms && (
+                                            <CheckCircle className="h-3 w-3 text-white" />
+                                        )}
+                                    </button>
+                                    <label className="text-sm text-gray-600">
+                                        I agree to the{" "}
+                                        <Link href="/terms" className="text-purple-600 hover:text-purple-700">
+                                            Terms of Service
+                                        </Link>{" "}
+                                        and{" "}
+                                        <Link href="/privacy" className="text-purple-600 hover:text-purple-700">
+                                            Privacy Policy
+                                        </Link>
+                                    </label>
+                                </div>
+                            )}
+
+                            {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isLoading}
+                                disabled={isLoading || (isSignup && !agreedToTerms)}
                                 className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isLoading ? "Signing in..." : "Sign in"}
+                                {isLoading 
+                                    ? (isSignup ? "Creating account..." : "Signing in...") 
+                                    : (isSignup ? "Create account" : "Sign in")
+                                }
                             </button>
                         </form>
 
-                        {/* Sign Up Link */}
+                        {/* Auth Switch Link */}
                         <div className="mt-6 text-center">
                             <p className="text-gray-600">
-                                Don't have an account?{" "}
+                                {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
                                 <Link
-                                    href="/auth/signup"
+                                    href={isSignup ? "/auth/signin" : "/auth/signup"}
                                     className="text-purple-600 hover:text-purple-700 font-medium"
                                 >
-                                    Sign up
+                                    {isSignup ? "Sign in" : "Sign up"}
                                 </Link>
                             </p>
                         </div>
@@ -370,8 +482,10 @@ export function ReplitLogin({
                                 <span className="text-xs">i</span>
                             </div>
                             <p>
-                                Access your applications, manage your portfolio,
-                                and showcase your proven capabilities.
+                                {isSignup 
+                                    ? "Join the future of evidence-based hiring. Your data is secure and privacy-first."
+                                    : "Access your applications, manage your portfolio, and showcase your proven capabilities."
+                                }
                             </p>
                         </div>
                     </div>
