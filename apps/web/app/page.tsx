@@ -67,7 +67,22 @@ export default function HomePage() {
 
           {/* Hero Visual Element */}
           <div className="relative max-w-4xl mx-auto mb-16">
-            <HeroIllustration className="max-w-md mx-auto" />
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="order-2 md:order-1">
+                <img 
+                  src="/images/illustrations/job-matching.svg" 
+                  alt="AI-powered job matching illustration"
+                  className="w-full h-auto max-w-md mx-auto"
+                />
+              </div>
+              <div className="order-1 md:order-2">
+                <img 
+                  src="/images/illustrations/dashboard-preview.svg" 
+                  alt="ProofOfFit dashboard preview"
+                  className="w-full h-auto max-w-md mx-auto"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Proof Signals */}
@@ -105,6 +120,15 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Trust Badges */}
+          <div className="mt-8 max-w-4xl mx-auto">
+            <img 
+              src="/images/ui-elements/trust-badges.svg" 
+              alt="Security and compliance badges"
+              className="w-full h-auto"
+            />
           </div>
 
           {/* Live Fit Report Preview */}
@@ -146,6 +170,94 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Professional Diversity Showcase */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              For Every Profession, Every Background
+            </h2>
+            <p className="text-lg text-gray-600">
+              ProofOfFit works across all industries and career levels, from entry-level to executive positions.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/construction-worker.svg" 
+                  alt="Construction professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Construction</h3>
+              <p className="text-xs text-gray-600">Safety & Project Management</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/healthcare-professional.svg" 
+                  alt="Healthcare professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Healthcare</h3>
+              <p className="text-xs text-gray-600">Medical & Patient Care</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/culinary-professional.svg" 
+                  alt="Culinary professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Culinary</h3>
+              <p className="text-xs text-gray-600">Food Service & Hospitality</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/technology-professional.svg" 
+                  alt="Technology professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Technology</h3>
+              <p className="text-xs text-gray-600">Software & Engineering</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/education-professional.svg" 
+                  alt="Education professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Education</h3>
+              <p className="text-xs text-gray-600">Teaching & Administration</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
+                <img 
+                  src="/images/professionals/finance-professional.svg" 
+                  alt="Finance professional"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">Finance</h3>
+              <p className="text-xs text-gray-600">Banking & Investment</p>
             </div>
           </div>
         </div>

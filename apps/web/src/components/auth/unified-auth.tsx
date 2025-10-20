@@ -6,13 +6,13 @@ import Link from "next/link";
 import { LogoSymbol } from "@/components/branding/logo-symbol";
 import {
     Briefcase,
+    CheckCircle,
     Eye,
     EyeOff,
     Lock,
     Mail,
-    Users,
     User,
-    CheckCircle,
+    Users,
 } from "lucide-react";
 
 interface UnifiedAuthProps {
@@ -26,7 +26,9 @@ export function UnifiedAuth({
     defaultUserType = "seeker",
     redirectTo = "/dashboard",
 }: UnifiedAuthProps) {
-    const [userType, setUserType] = useState<"hirer" | "seeker">(defaultUserType);
+    const [userType, setUserType] = useState<"hirer" | "seeker">(
+        defaultUserType,
+    );
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -44,13 +46,13 @@ export function UnifiedAuth({
         setIsLoading(true);
 
         // TODO: Implement actual authentication
-        console.log("Auth attempt:", { 
-            mode, 
-            userType, 
-            email, 
-            password, 
+        console.log("Auth attempt:", {
+            mode,
+            userType,
+            email,
+            password,
             fullName: isSignup ? fullName : undefined,
-            agreedToTerms: isSignup ? agreedToTerms : undefined
+            agreedToTerms: isSignup ? agreedToTerms : undefined,
         });
 
         // Simulate loading
@@ -66,7 +68,8 @@ export function UnifiedAuth({
             <div
                 className="absolute inset-0 opacity-30"
                 style={{
-                    backgroundImage: "url(/images/backgrounds/login-pattern.svg)",
+                    backgroundImage:
+                        "url(/images/backgrounds/login-pattern.svg)",
                     backgroundSize: "400px 400px",
                     backgroundRepeat: "repeat",
                 }}
@@ -260,13 +263,14 @@ export function UnifiedAuth({
                     <div className="bg-white rounded-xl shadow-lg p-8">
                         {/* Title */}
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                            {isSignup ? "Create your ProofOfFit account" : "Sign in to ProofOfFit"}
+                            {isSignup
+                                ? "Create your ProofOfFit account"
+                                : "Sign in to ProofOfFit"}
                         </h1>
                         <p className="text-gray-600 mb-8">
-                            {isSignup 
+                            {isSignup
                                 ? "Join thousands of professionals finding their perfect fit."
-                                : "Sign in to access your applications and portfolio."
-                            }
+                                : "Sign in to access your applications and portfolio."}
                         </p>
 
                         {/* User Type Selector */}
@@ -316,7 +320,8 @@ export function UnifiedAuth({
                                             id="fullName"
                                             type="text"
                                             value={fullName}
-                                            onChange={(e) => setFullName(e.target.value)}
+                                            onChange={(e) =>
+                                                setFullName(e.target.value)}
                                             className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                             placeholder="Enter your full name"
                                             required={isSignup}
@@ -341,7 +346,8 @@ export function UnifiedAuth({
                                         id="email"
                                         type="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)}
                                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="you@example.com"
                                         required
@@ -363,23 +369,29 @@ export function UnifiedAuth({
                                     </div>
                                     <input
                                         id="password"
-                                        type={showPassword ? "text" : "password"}
+                                        type={showPassword
+                                            ? "text"
+                                            : "password"}
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)}
                                         className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="Enter your password"
                                         required
                                     />
                                     <button
                                         type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)}
                                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     >
-                                        {showPassword ? (
-                                            <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                        ) : (
-                                            <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                        )}
+                                        {showPassword
+                                            ? (
+                                                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            )
+                                            : (
+                                                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            )}
                                     </button>
                                 </div>
                             </div>
@@ -399,23 +411,33 @@ export function UnifiedAuth({
                                         </div>
                                         <input
                                             id="confirmPassword"
-                                            type={showConfirmPassword ? "text" : "password"}
+                                            type={showConfirmPassword
+                                                ? "text"
+                                                : "password"}
                                             value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            onChange={(e) =>
+                                                setConfirmPassword(
+                                                    e.target.value,
+                                                )}
                                             className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                             placeholder="Confirm your password"
                                             required={isSignup}
                                         />
                                         <button
                                             type="button"
-                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            onClick={() =>
+                                                setShowConfirmPassword(
+                                                    !showConfirmPassword,
+                                                )}
                                             className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                         >
-                                            {showConfirmPassword ? (
-                                                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                            ) : (
-                                                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                                            )}
+                                            {showConfirmPassword
+                                                ? (
+                                                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                                )
+                                                : (
+                                                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                                )}
                                         </button>
                                     </div>
                                 </div>
@@ -426,7 +448,8 @@ export function UnifiedAuth({
                                 <div className="flex items-start gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => setAgreedToTerms(!agreedToTerms)}
+                                        onClick={() =>
+                                            setAgreedToTerms(!agreedToTerms)}
                                         className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                             agreedToTerms
                                                 ? "bg-purple-600 border-purple-600"
@@ -439,11 +462,17 @@ export function UnifiedAuth({
                                     </button>
                                     <label className="text-sm text-gray-600">
                                         I agree to the{" "}
-                                        <Link href="/terms" className="text-purple-600 hover:text-purple-700">
+                                        <Link
+                                            href="/terms"
+                                            className="text-purple-600 hover:text-purple-700"
+                                        >
                                             Terms of Service
                                         </Link>{" "}
                                         and{" "}
-                                        <Link href="/privacy" className="text-purple-600 hover:text-purple-700">
+                                        <Link
+                                            href="/privacy"
+                                            className="text-purple-600 hover:text-purple-700"
+                                        >
                                             Privacy Policy
                                         </Link>
                                     </label>
@@ -453,22 +482,28 @@ export function UnifiedAuth({
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isLoading || (isSignup && !agreedToTerms)}
+                                disabled={isLoading ||
+                                    (isSignup && !agreedToTerms)}
                                 className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isLoading 
-                                    ? (isSignup ? "Creating account..." : "Signing in...") 
-                                    : (isSignup ? "Create account" : "Sign in")
-                                }
+                                {isLoading
+                                    ? (isSignup
+                                        ? "Creating account..."
+                                        : "Signing in...")
+                                    : (isSignup ? "Create account" : "Sign in")}
                             </button>
                         </form>
 
                         {/* Auth Switch Link */}
                         <div className="mt-6 text-center">
                             <p className="text-gray-600">
-                                {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+                                {isSignup
+                                    ? "Already have an account?"
+                                    : "Don't have an account?"}{" "}
                                 <Link
-                                    href={isSignup ? "/auth/signin" : "/auth/signup"}
+                                    href={isSignup
+                                        ? "/auth/signin"
+                                        : "/auth/signup"}
                                     className="text-purple-600 hover:text-purple-700 font-medium"
                                 >
                                     {isSignup ? "Sign in" : "Sign up"}
@@ -482,10 +517,9 @@ export function UnifiedAuth({
                                 <span className="text-xs">i</span>
                             </div>
                             <p>
-                                {isSignup 
+                                {isSignup
                                     ? "Join the future of evidence-based hiring. Your data is secure and privacy-first."
-                                    : "Access your applications, manage your portfolio, and showcase your proven capabilities."
-                                }
+                                    : "Access your applications, manage your portfolio, and showcase your proven capabilities."}
                             </p>
                         </div>
                     </div>
