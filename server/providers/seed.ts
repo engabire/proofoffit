@@ -39,6 +39,7 @@ export class SeedProvider implements JobProvider {
 
     private initializeSeedData(): void {
         const companies = [
+            // Tech Companies
             "TechCorp",
             "InnovateLabs",
             "DataFlow",
@@ -49,9 +50,23 @@ export class SeedProvider implements JobProvider {
             "MobileTech",
             "WebCraft",
             "StartupXYZ",
+            // Public Health Organizations
+            "Global Health Initiative",
+            "Community Health Partners",
+            "Public Health Foundation",
+            "Health Equity Alliance",
+            "Epidemiology Research Center",
+            "Health Policy Institute",
+            // Finance & Consulting
+            "Financial Advisory Group",
+            "Investment Partners LLC",
+            "Risk Management Corp",
+            "Economic Consulting Firm",
+            "Wealth Management Solutions",
         ];
 
         const titles = [
+            // Tech Roles
             "Software Engineer",
             "Senior Developer",
             "Full Stack Engineer",
@@ -64,21 +79,57 @@ export class SeedProvider implements JobProvider {
             "Mobile Developer",
             "Cloud Architect",
             "Security Engineer",
+            // Public Health Roles
+            "Public Health Analyst",
+            "Epidemiologist",
+            "Health Policy Specialist",
+            "Community Health Coordinator",
+            "Health Data Scientist",
+            "Public Health Program Manager",
+            "Health Equity Researcher",
+            "Environmental Health Specialist",
+            "Health Communications Manager",
+            "Public Health Consultant",
+            // Finance Roles
+            "Financial Analyst",
+            "Investment Advisor",
+            "Risk Management Specialist",
+            "Portfolio Manager",
+            "Financial Consultant",
+            "Quantitative Analyst",
+            "Compliance Officer",
+            "Treasury Analyst",
+            "Credit Risk Analyst",
+            "Wealth Management Advisor",
         ];
 
         const locations = [
+            // US Tech Hubs
             "San Francisco, CA",
             "New York, NY",
             "Seattle, WA",
             "Austin, TX",
             "Boston, MA",
+            "Denver, CO",
+            "Chicago, IL",
+            "Atlanta, GA",
             "Remote",
+            // International
             "London, UK",
             "Berlin, Germany",
             "Toronto, Canada",
+            "Amsterdam, Netherlands",
+            "Singapore",
+            // Public Health Centers
+            "Washington, DC",
+            "Atlanta, GA",
+            "Baltimore, MD",
+            "Minneapolis, MN",
+            "Portland, OR",
         ];
 
         const skills = [
+            // Tech Skills
             "JavaScript",
             "TypeScript",
             "React",
@@ -92,9 +143,35 @@ export class SeedProvider implements JobProvider {
             "PostgreSQL",
             "MongoDB",
             "Redis",
+            // Public Health Skills
+            "Epidemiology",
+            "Biostatistics",
+            "SAS",
+            "R",
+            "STATA",
+            "Public Health Policy",
+            "Health Equity",
+            "Community Health",
+            "Health Data Analysis",
+            "GIS",
+            "Health Communications",
+            "Program Evaluation",
+            // Finance Skills
+            "Financial Modeling",
+            "Excel",
+            "Bloomberg Terminal",
+            "Risk Assessment",
+            "Portfolio Management",
+            "Compliance",
+            "Regulatory Affairs",
+            "Investment Analysis",
+            "Credit Analysis",
+            "Derivatives",
+            "Fixed Income",
+            "Equity Research",
         ];
 
-        // Generate 100 seed jobs
+        // Generate 100 seed jobs with industry-specific distribution
         for (let i = 0; i < 100; i++) {
             const company =
                 companies[Math.floor(this.rng() * companies.length)];
@@ -103,9 +180,25 @@ export class SeedProvider implements JobProvider {
                 locations[Math.floor(this.rng() * locations.length)];
             const isRemote = location === "Remote" || this.rng() > 0.7;
 
-            // Generate salary range
-            const baseSalary = 60000 + Math.floor(this.rng() * 120000);
-            const salaryRange = Math.floor(this.rng() * 20000);
+            // Industry-specific salary ranges
+            let baseSalary: number;
+            let salaryRange: number;
+            
+            if (title.includes("Public Health") || title.includes("Epidemiologist") || 
+                title.includes("Health Policy") || title.includes("Community Health")) {
+                // Public Health: $45k - $95k
+                baseSalary = 45000 + Math.floor(this.rng() * 50000);
+                salaryRange = Math.floor(this.rng() * 15000);
+            } else if (title.includes("Financial") || title.includes("Investment") || 
+                       title.includes("Portfolio") || title.includes("Risk")) {
+                // Finance: $65k - $150k
+                baseSalary = 65000 + Math.floor(this.rng() * 85000);
+                salaryRange = Math.floor(this.rng() * 25000);
+            } else {
+                // Tech: $70k - $180k
+                baseSalary = 70000 + Math.floor(this.rng() * 110000);
+                salaryRange = Math.floor(this.rng() * 20000);
+            }
 
             // Randomly close some jobs (10% chance)
             const closed = this.rng() < 0.1;
@@ -157,25 +250,64 @@ export class SeedProvider implements JobProvider {
             .sort(() => this.rng() - 0.5)
             .slice(0, 3 + Math.floor(this.rng() * 3));
 
-        return `
-We are ${company}, a leading technology company looking for a ${title} to join our team.
+        // Generate industry-specific descriptions
+        let industryContext = "";
+        let responsibilities = "";
+        let benefits = "";
 
-**Key Responsibilities:**
-- Develop and maintain high-quality software solutions
+        if (title.includes("Public Health") || title.includes("Epidemiologist") || 
+            title.includes("Health Policy") || title.includes("Community Health")) {
+            industryContext = "a leading public health organization";
+            responsibilities = `- Analyze public health data and trends
+- Develop evidence-based health policies and programs
+- Collaborate with community partners and stakeholders
+- Conduct epidemiological research and surveillance
+- Evaluate program effectiveness and health outcomes`;
+            benefits = `- Mission-driven work environment
+- Comprehensive health and retirement benefits
+- Professional development in public health
+- Flexible work arrangements
+- Impact on community health outcomes`;
+        } else if (title.includes("Financial") || title.includes("Investment") || 
+                   title.includes("Portfolio") || title.includes("Risk")) {
+            industryContext = "a premier financial services firm";
+            responsibilities = `- Conduct financial analysis and modeling
+- Manage investment portfolios and risk assessment
+- Develop investment strategies and recommendations
+- Ensure regulatory compliance and reporting
+- Collaborate with clients and internal teams`;
+            benefits = `- Competitive compensation and bonus structure
+- Comprehensive benefits package
+- Professional development opportunities
+- Access to cutting-edge financial tools
+- Collaborative and results-driven environment`;
+        } else {
+            industryContext = "a leading technology company";
+            responsibilities = `- Develop and maintain high-quality software solutions
 - Collaborate with cross-functional teams
 - Participate in code reviews and technical discussions
 - Contribute to architectural decisions
+- Drive innovation and technical excellence`;
+            benefits = `- Competitive salary and equity
+- Flexible work arrangements
+- Professional development opportunities
+- Collaborative and inclusive environment
+- Cutting-edge technology stack`;
+        }
+
+        return `
+We are ${company}, ${industryContext} looking for a ${title} to join our team.
+
+**Key Responsibilities:**
+${responsibilities}
 
 **Required Skills:**
 ${selectedSkills.map((skill) => `- ${skill}`).join("\n")}
 
 **What We Offer:**
-- Competitive salary and benefits
-- Flexible work arrangements
-- Professional development opportunities
-- Collaborative and inclusive environment
+${benefits}
 
-Join us in building the future of technology!
+Join us in making a meaningful impact in your field!
     `.trim();
     }
 
