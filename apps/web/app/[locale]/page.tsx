@@ -130,7 +130,7 @@ export default function HomePage() {
               Why ProofOfFit
             </h3>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
-              Because hiring deserves evidence—and delightful software.
+              Because hiring deserves evidence—and verified matches.
             </p>
             <p className="text-base text-gray-500 max-w-4xl mx-auto">
               Evidence-first matching, bias-aware automation, and audit-ready

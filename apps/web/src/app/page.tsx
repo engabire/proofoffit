@@ -687,7 +687,7 @@ function WhyChoose() {
               Why ProofOfFit
             </p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900 dark:text-white">
-              Because hiring deserves evidence—and delightful software.
+              Because hiring deserves evidence—and verified matches.
             </h2>
           </div>
           <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">

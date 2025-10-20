@@ -4,6 +4,11 @@
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci",
   "ignoreCommand": "node vercel-deployment-guard.js",
+  "build": {
+    "env": {
+      "FORCE_REBUILD": "true"
+    }
+  },
   "crons": [
     {
       "path": "/api/scrape",

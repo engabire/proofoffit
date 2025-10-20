@@ -27,9 +27,9 @@ type PlansMap = {
 export function getStripeConfig() {
   // Use environment variables directly to avoid CredentialManager dependency
   return {
-    apiKey: process.env.STRIPE_SECRET_KEY || '',
-    publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
-    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
+    apiKey: process.env.STRIPE_SECRET_KEY || "",
+    publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
     connectAccountId: "acct_1S83Ea5r3cXmAzLD", // Extracted from your connect URL
   };
 }

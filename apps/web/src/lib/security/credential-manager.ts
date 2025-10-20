@@ -8,6 +8,12 @@ export class CredentialManager {
   }
 
   public static getInstance(): CredentialManager {
+    // Prevent client-side instantiation in production
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
+      console.warn('CredentialManager should not be instantiated on client-side in production');
+      return new CredentialManager();
+    }
+    
     if (!CredentialManager.instance) {
       CredentialManager.instance = new CredentialManager();
     }
@@ -47,7 +53,7 @@ export class CredentialManager {
       if (!value) {
         console.warn(`Missing required credential: ${credential}`);
         // Don't throw error in production to prevent app crashes
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
           throw new Error(`Missing required credential: ${credential}`);
         }
       } else {
@@ -68,9 +74,9 @@ export class CredentialManager {
     const credential = this.credentials.get(key);
     if (!credential) {
       // In production, return empty string instead of throwing to prevent crashes
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === "production") {
         console.warn(`Credential not found: ${key}`);
-        return '';
+        return "";
       }
       throw new Error(`Credential not found: ${key}`);
     }
