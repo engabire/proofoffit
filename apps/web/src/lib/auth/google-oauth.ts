@@ -1,9 +1,6 @@
-import { credentialManager } from "@/lib/security/credential-manager";
-
 // Check if Google OAuth is configured
 export const isGoogleOAuthConfigured = (): boolean => {
-  return credentialManager.hasCredential("GOOGLE_CLIENT_ID") &&
-    credentialManager.hasCredential("GOOGLE_CLIENT_SECRET");
+  return !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 };
 
 // Google OAuth configuration - SECURE VERSION
@@ -14,7 +11,7 @@ export const googleOAuthConfig = {
         "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
       );
     }
-    return credentialManager.getCredential("GOOGLE_CLIENT_ID");
+    return process.env.GOOGLE_CLIENT_ID!;
   },
   get clientSecret() {
     if (!isGoogleOAuthConfigured()) {
@@ -22,7 +19,7 @@ export const googleOAuthConfig = {
         "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
       );
     }
-    return credentialManager.getCredential("GOOGLE_CLIENT_SECRET");
+    return process.env.GOOGLE_CLIENT_SECRET!;
   },
   redirectUri: process.env.GOOGLE_REDIRECT_URI ||
     `${

@@ -41,13 +41,18 @@ export class CredentialManager {
       "USAJOBS_API_KEY",
     ];
 
-    // Load required credentials (throw error if missing)
+    // Load required credentials (log warning if missing, don't throw error)
     for (const credential of requiredCredentials) {
       const value = process.env[credential];
       if (!value) {
-        throw new Error(`Missing required credential: ${credential}`);
+        console.warn(`Missing required credential: ${credential}`);
+        // Don't throw error in production to prevent app crashes
+        if (process.env.NODE_ENV === 'development') {
+          throw new Error(`Missing required credential: ${credential}`);
+        }
+      } else {
+        this.credentials.set(credential, value);
       }
-      this.credentials.set(credential, value);
     }
 
     // Load optional credentials (no error if missing)
@@ -62,6 +67,11 @@ export class CredentialManager {
   public getCredential(key: string): string {
     const credential = this.credentials.get(key);
     if (!credential) {
+      // In production, return empty string instead of throwing to prevent crashes
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`Credential not found: ${key}`);
+        return '';
+      }
       throw new Error(`Credential not found: ${key}`);
     }
     return credential;

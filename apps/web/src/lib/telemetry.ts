@@ -1,25 +1,25 @@
 /**
  * Telemetry Redaction System
- * 
+ *
  * Provides PII redaction and structured logging for ProofOfFit
  * Implements the trust engine's transparency requirements
  */
 
 export function redact<T extends Record<string, any>>(evt: T): T {
   const clone = { ...evt } as any;
-  
+
   // Redact IP addresses
   if ("ip" in clone) clone.ip = "redacted";
   if ("clientIp" in clone) clone.clientIp = "redacted";
   if ("xForwardedFor" in clone) clone.xForwardedFor = "redacted";
-  
+
   // Redact user identifiers (keep hashed versions)
   if ("userId" in clone && typeof clone.userId === "string") {
     clone.userId = `user_${hashString(clone.userId)}`;
   }
   if ("email" in clone) clone.email = "redacted";
   if ("phone" in clone) clone.phone = "redacted";
-  
+
   // Remove potentially sensitive query data
   if ("query" in clone && typeof clone.query === "object") {
     const query = clone.query as any;
@@ -31,7 +31,7 @@ export function redact<T extends Record<string, any>>(evt: T): T {
       query.userId = `user_${hashString(query.userId)}`;
     }
   }
-  
+
   // Redact any nested objects that might contain PII
   if ("metadata" in clone && typeof clone.metadata === "object") {
     const metadata = clone.metadata as any;
@@ -40,7 +40,7 @@ export function redact<T extends Record<string, any>>(evt: T): T {
       metadata.userAgent = metadata.userAgent.split(" ")[0] + " [redacted]";
     }
   }
-  
+
   return clone as T;
 }
 
