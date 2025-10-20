@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/landing/header";
 import { HeroIllustration } from "@/components/illustrations/hero-illustration";
+import { FeatureCard } from "@/components/ui/feature-card";
+import { TestimonialCard } from "@/components/ui/testimonial-card";
 
 export const dynamic = "force-dynamic";
 
@@ -165,71 +167,35 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="text-sm font-medium text-blue-600 mb-2">
-                Signal
-              </div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
-                Explainable Fit Reports
-              </h3>
-              <p className="text-sm text-gray-600">
-                Our narrative engine translates criteria into evidence you can
-                share with recruiters or compliance teams.
-              </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              <FeatureCard
+                icon={Shield}
+                title="Explainable Fit Reports"
+                description="Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams."
+                variant="highlighted"
+              />
+              
+              <FeatureCard
+                icon={Zap}
+                title="Adaptive Autopilot"
+                description="Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away."
+                variant="default"
+              />
+              
+              <FeatureCard
+                icon={Users}
+                title="Bias-aware Scoring"
+                description="We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story."
+                variant="default"
+              />
+              
+              <FeatureCard
+                icon={Star}
+                title="Design-grade Outputs"
+                description="From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it."
+                variant="default"
+              />
             </div>
-
-            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="text-sm font-medium text-green-600 mb-2">
-                Signal
-              </div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
-                Adaptive Autopilot
-              </h3>
-              <p className="text-sm text-gray-600">
-                Guided automations prepare resumes, outreach, and interview
-                briefs while keeping you one approval tap away.
-              </p>
-            </div>
-
-            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Users className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="text-sm font-medium text-purple-600 mb-2">
-                Signal
-              </div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
-                Bias-aware Scoring
-              </h3>
-              <p className="text-sm text-gray-600">
-                We surface blind spots and suggest alternate signals so your
-                slate tells a fair, transparent story.
-              </p>
-            </div>
-
-            <div className="rounded-lg border-0 shadow-lg hover:shadow-xl transition-shadow bg-white p-6">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                <Star className="h-6 w-6 text-orange-600" />
-              </div>
-              <div className="text-sm font-medium text-orange-600 mb-2">
-                Signal
-              </div>
-              <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">
-                Design-grade outputs
-              </h3>
-              <p className="text-sm text-gray-600">
-                From dashboards to Fit Reports, every screen is crafted to feel
-                as considered as the decisions behind it.
-              </p>
-            </div>
-          </div>
 
           {/* Why ProofOfFit Section */}
           <div className="mt-16 text-center">
@@ -521,37 +487,25 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="border-0 shadow-lg rounded-lg bg-white p-8">
-              <div className="mb-4">
-                <div className="text-sm font-medium text-blue-600 mb-2">
-                  Proof in practice
-                </div>
-                <blockquote className="text-lg text-gray-700 italic mb-4">
-                  &ldquo;I stopped guessing. Two weeks in, I had interviews that
-                  referenced my Fit Report directly.&rdquo;
-                </blockquote>
-                <div className="text-sm text-gray-600">
-                  — Amara B., Data Analyst
-                </div>
-              </div>
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <TestimonialCard
+                name="Amara B."
+                role="Data Analyst"
+                company="TechCorp"
+                content="I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
+                variant="featured"
+                rating={5}
+              />
+              
+              <TestimonialCard
+                name="Luis R."
+                role="Product Manager"
+                company="StartupXYZ"
+                content="The tailored bullets were spooky-good. It became my pre-screen script."
+                variant="default"
+                rating={5}
+              />
             </div>
-
-            <div className="border-0 shadow-lg rounded-lg bg-white p-8">
-              <div className="mb-4">
-                <div className="text-sm font-medium text-green-600 mb-2">
-                  Proof in practice
-                </div>
-                <blockquote className="text-lg text-gray-700 italic mb-4">
-                  &ldquo;The tailored bullets were spooky‑good. It became my
-                  pre‑screen script.&rdquo;
-                </blockquote>
-                <div className="text-sm text-gray-600">
-                  — Luis R., Product Manager
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
