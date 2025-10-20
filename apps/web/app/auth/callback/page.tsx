@@ -34,9 +34,9 @@ function AuthCallbackPageContent() {
         setStatus("loading");
         setMessage("Verifying authentication...");
 
-        const code = searchParams.get("code");
         const error = searchParams.get("error");
         const errorDescription = searchParams.get("error_description");
+        const redirectTo = searchParams.get("redirect") || "/dashboard";
 
         if (error) {
           // Handle specific OAuth errors with user-friendly messages
@@ -58,84 +58,30 @@ function AuthCallbackPageContent() {
           }
         }
 
-        const hashParams = typeof window !== "undefined" && window.location.hash
-          ? new URLSearchParams(window.location.hash.replace(/^#/, ""))
-          : null;
+        try {
+          const { data: sessionData, error: sessionError } = await supabase
+            .auth
+            .getSession();
 
-        const hashError = hashParams?.get("error_description") ||
-          hashParams?.get("error");
-        if (hashError) {
-          throw new Error(`Authentication error: ${hashError}`);
-        }
-
-        let user: User | null = null;
-
-        if (code) {
-          // Check if this is a PKCE flow (OAuth) or magic link flow
-          const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
-
-          if (codeVerifier) {
-            // This is a PKCE OAuth flow
-            // The newer @supabase/ssr client should automatically handle PKCE
-            // when the code verifier is available in sessionStorage
-            const { data: sessionData, error: exchangeError } = await supabase
-              .auth.exchangeCodeForSession(code);
-
-            if (exchangeError) {
-              // If there's an error, it might be because the code verifier wasn't found
-              // Let's try to provide more specific error information
-              if (exchangeError.message?.includes("code verifier")) {
-                throw new Error(
-                  "Authentication failed: PKCE code verifier mismatch. Please try signing in again.",
-                );
-              }
-              throw exchangeError;
+          if (sessionError) {
+            // Provide specific messaging for PKCE verifier mismatch
+            if (
+              sessionError.message?.includes("code verifier") ||
+              sessionError.message?.includes("PKCE")
+            ) {
+              throw new Error(
+                "Authentication failed: PKCE verification mismatch. Please start the sign-in again.",
+              );
             }
-
-            // Clear the verifier once it has been used successfully
-            sessionStorage.removeItem("pkce_code_verifier");
-            user = sessionData?.user ?? null;
-          } else {
-            // This is likely a magic link flow
-            const { data: sessionData, error: exchangeError } = await supabase
-              .auth.exchangeCodeForSession(code);
-
-            if (exchangeError) {
-              throw exchangeError;
-            }
-
-            user = sessionData?.user ?? null;
+            throw sessionError;
           }
-        }
 
-        if (!user && hashParams) {
-          const accessToken = hashParams.get("access_token");
-          const refreshToken = hashParams.get("refresh_token");
+          const user: User | null = sessionData.session?.user ?? null;
 
-          if (accessToken && refreshToken) {
-            const { data: sessionData, error: sessionError } = await supabase
-              .auth.setSession({
-                access_token: accessToken,
-                refresh_token: refreshToken,
-              });
-
-            if (sessionError) {
-              throw sessionError;
-            }
-
-            user = sessionData.user ?? null;
+          if (!user) {
+            throw new Error("No authentication credentials returned.");
           }
-        }
 
-        if (typeof window !== "undefined" && window.location.hash) {
-          window.history.replaceState(
-            null,
-            document.title,
-            window.location.pathname + window.location.search,
-          );
-        }
-
-        if (user) {
           setUserEmail(user.email || null);
 
           // Check if this is an enterprise user
@@ -174,10 +120,11 @@ function AuthCallbackPageContent() {
           }
 
           setTimeout(() => {
-            router.replace("/dashboard");
+            router.replace(redirectTo);
           }, 2000);
-        } else {
-          throw new Error("No authentication credentials provided");
+        } finally {
+          // Ensure PKCE verifier is cleared even if Supabase handled it internally
+          sessionStorage.removeItem("pkce_code_verifier");
         }
       } catch (err: any) {
         console.error("Auth callback error:", err);

@@ -183,14 +183,20 @@ export class SeedProvider implements JobProvider {
             // Industry-specific salary ranges
             let baseSalary: number;
             let salaryRange: number;
-            
-            if (title.includes("Public Health") || title.includes("Epidemiologist") || 
-                title.includes("Health Policy") || title.includes("Community Health")) {
+
+            if (
+                title.includes("Public Health") ||
+                title.includes("Epidemiologist") ||
+                title.includes("Health Policy") ||
+                title.includes("Community Health")
+            ) {
                 // Public Health: $45k - $95k
                 baseSalary = 45000 + Math.floor(this.rng() * 50000);
                 salaryRange = Math.floor(this.rng() * 15000);
-            } else if (title.includes("Financial") || title.includes("Investment") || 
-                       title.includes("Portfolio") || title.includes("Risk")) {
+            } else if (
+                title.includes("Financial") || title.includes("Investment") ||
+                title.includes("Portfolio") || title.includes("Risk")
+            ) {
                 // Finance: $65k - $150k
                 baseSalary = 65000 + Math.floor(this.rng() * 85000);
                 salaryRange = Math.floor(this.rng() * 25000);
@@ -255,8 +261,12 @@ export class SeedProvider implements JobProvider {
         let responsibilities = "";
         let benefits = "";
 
-        if (title.includes("Public Health") || title.includes("Epidemiologist") || 
-            title.includes("Health Policy") || title.includes("Community Health")) {
+        if (
+            title.includes("Public Health") ||
+            title.includes("Epidemiologist") ||
+            title.includes("Health Policy") ||
+            title.includes("Community Health")
+        ) {
             industryContext = "a leading public health organization";
             responsibilities = `- Analyze public health data and trends
 - Develop evidence-based health policies and programs
@@ -268,8 +278,10 @@ export class SeedProvider implements JobProvider {
 - Professional development in public health
 - Flexible work arrangements
 - Impact on community health outcomes`;
-        } else if (title.includes("Financial") || title.includes("Investment") || 
-                   title.includes("Portfolio") || title.includes("Risk")) {
+        } else if (
+            title.includes("Financial") || title.includes("Investment") ||
+            title.includes("Portfolio") || title.includes("Risk")
+        ) {
             industryContext = "a premier financial services firm";
             responsibilities = `- Conduct financial analysis and modeling
 - Manage investment portfolios and risk assessment
@@ -283,7 +295,8 @@ export class SeedProvider implements JobProvider {
 - Collaborative and results-driven environment`;
         } else {
             industryContext = "a leading technology company";
-            responsibilities = `- Develop and maintain high-quality software solutions
+            responsibilities =
+                `- Develop and maintain high-quality software solutions
 - Collaborate with cross-functional teams
 - Participate in code reviews and technical discussions
 - Contribute to architectural decisions

@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { DegradedBanner } from '@/components/system/degraded-banner'
 import { ReportIssue } from '@/components/system/report-issue'
+import { ConsentBanner } from '@/components/consent-banner'
 import '@/lib/suppress-warnings'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
@@ -82,6 +83,7 @@ export default function RootLayout({
           <DegradedBanner />
           <div id="main">{children}</div>
           <ReportIssue />
+          <ConsentBanner policyVersion="v1" />
           <Toaster />
         </Providers>
       </body>

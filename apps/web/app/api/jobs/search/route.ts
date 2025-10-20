@@ -3,10 +3,15 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { isSupabaseConfigured } from "@/lib/env";
 import { jobSearchService } from "@/lib/job-search";
 import { usajobsAPI, USAJobsSearchParams } from "@/lib/job-feeds/usajobs";
+import { logSearchEvent } from "@/lib/telemetry";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const startTime = performance.now();
+  let provider = "unknown";
+  let resultCount = 0;
+  
   try {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("q") || "";
@@ -32,6 +37,9 @@ export async function GET(req: NextRequest) {
         const usajobsResults = await usajobsAPI.searchJobs(searchParams);
 
         if (usajobsResults.length > 0) {
+          provider = "usajobs";
+          resultCount = usajobsResults.length;
+          
           // Transform USAJOBS data to our format
           const transformedJobs = usajobsResults.map((job) => ({
             id: job.id,
@@ -111,6 +119,9 @@ export async function GET(req: NextRequest) {
         });
 
         if (enhancedJobs.length > 0) {
+          provider = "enhanced";
+          resultCount = enhancedJobs.length;
+          
           // Transform enhanced jobs to match expected format
           const transformedJobs = enhancedJobs.map((job) => ({
             id: job.id,
@@ -166,8 +177,12 @@ export async function GET(req: NextRequest) {
 
     // Fallback to Supabase or mock data
     if (!isSupabaseConfigured() || !supabaseAdmin) {
+      provider = "mock";
+      const mockJobs = getMockJobs(query, location, workType, limit);
+      resultCount = mockJobs.length;
+      
       return NextResponse.json({
-        jobs: getMockJobs(query, location, workType, limit),
+        jobs: mockJobs,
         total: 6,
         hasMore: false,
         source: "mock",
@@ -215,6 +230,9 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    provider = "supabase";
+    resultCount = jobs.length;
+    
     // Transform to match the expected format
     const transformedJobs = jobs.map((job) => ({
       id: job.id,
@@ -244,20 +262,44 @@ export async function GET(req: NextRequest) {
       tos: job.tos,
     }));
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       jobs: transformedJobs,
       total: transformedJobs.length,
       hasMore: transformedJobs.length === limit,
       source: "supabase",
     });
+    
+    // Log search event for telemetry
+    const latency = Math.round(performance.now() - startTime);
+    logSearchEvent({
+      provider,
+      latency_ms: latency,
+      result_count: resultCount,
+      query: { q: query, location, workType, limit },
+    });
+    
+    return response;
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
       console.error("Error searching jobs:", error);
     }
     // Fallback to mock data on any error
+    provider = "error_fallback";
+    const fallbackJobs = getMockJobs("", "", "", 20);
+    resultCount = fallbackJobs.length;
+    
+    // Log error event
+    const latency = Math.round(performance.now() - startTime);
+    logSearchEvent({
+      provider,
+      latency_ms: latency,
+      result_count: resultCount,
+      query: { error: "fallback_triggered" },
+    });
+    
     return NextResponse.json({
-      jobs: getMockJobs("", "", "", 20),
+      jobs: fallbackJobs,
       total: 6,
       hasMore: false,
       source: "mock",

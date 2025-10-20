@@ -21,6 +21,7 @@ export interface FitScoreWeights {
     location: number;
     salary: number;
     culture?: number;
+    reliability?: number;
 }
 
 export interface FitScoreConfig {
@@ -48,6 +49,7 @@ export class FitScoreEngine {
             weights: {
                 skills: 0.3,
                 experience: 0.25,
+                reliability: 0.1,
                 education: 0.15,
                 location: 0.15,
                 salary: 0.1,
