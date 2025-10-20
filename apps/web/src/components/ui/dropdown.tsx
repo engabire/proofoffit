@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
@@ -51,12 +51,13 @@ export function Dropdown({
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleSelect = (item: DropdownItem) => {
         if (item.disabled) return;
-        
+
         onSelect?.(item.value);
         item.onClick?.();
         setIsOpen(false);
@@ -78,9 +79,11 @@ export function Dropdown({
             >
                 <div className="flex items-center space-x-2">
                     {selectedItem?.icon}
-                    <span className={cn(
-                        selectedItem ? "text-gray-900" : "text-gray-500"
-                    )}>
+                    <span
+                        className={cn(
+                            selectedItem ? "text-gray-900" : "text-gray-500",
+                        )}
+                    >
                         {selectedItem?.label || placeholder}
                     </span>
                 </div>
@@ -106,7 +109,8 @@ export function Dropdown({
                                     item.disabled
                                         ? "text-gray-400 cursor-not-allowed"
                                         : "text-gray-900 hover:bg-gray-50 focus:bg-gray-50",
-                                    item.value === value && "bg-proof-blue/10 text-proof-blue",
+                                    item.value === value &&
+                                        "bg-proof-blue/10 text-proof-blue",
                                 )}
                             >
                                 {item.icon}
