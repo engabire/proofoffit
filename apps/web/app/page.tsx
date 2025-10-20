@@ -52,10 +52,10 @@ export default function HomePage() {
               I am seeking a job
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-              <Link
-                href="/auth/signup?type=employer"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-proof-blue text-proof-blue text-lg font-medium rounded-lg hover:bg-proof-blue hover:text-white transition-all duration-200 shadow-sm hover:shadow-lg"
-              >
+            <Link
+              href="/auth/signup?type=employer"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-proof-blue text-proof-blue text-lg font-medium rounded-lg hover:bg-proof-blue hover:text-white transition-all duration-200 shadow-sm hover:shadow-lg"
+            >
               <Briefcase className="mr-2 h-5 w-5" />
               I am hiring
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -167,35 +167,35 @@ export default function HomePage() {
             </p>
           </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-              <FeatureCard
-                icon={Shield}
-                title="Explainable Fit Reports"
-                description="Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams."
-                variant="highlighted"
-              />
-              
-              <FeatureCard
-                icon={Zap}
-                title="Adaptive Autopilot"
-                description="Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away."
-                variant="default"
-              />
-              
-              <FeatureCard
-                icon={Users}
-                title="Bias-aware Scoring"
-                description="We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story."
-                variant="default"
-              />
-              
-              <FeatureCard
-                icon={Star}
-                title="Design-grade Outputs"
-                description="From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it."
-                variant="default"
-              />
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <FeatureCard
+              icon={Shield}
+              title="Explainable Fit Reports"
+              description="Our narrative engine translates criteria into evidence you can share with recruiters or compliance teams."
+              variant="highlighted"
+            />
+
+            <FeatureCard
+              icon={Zap}
+              title="Adaptive Autopilot"
+              description="Guided automations prepare resumes, outreach, and interview briefs while keeping you one approval tap away."
+              variant="default"
+            />
+
+            <FeatureCard
+              icon={Users}
+              title="Bias-aware Scoring"
+              description="We surface blind spots and suggest alternate signals so your slate tells a fair, transparent story."
+              variant="default"
+            />
+
+            <FeatureCard
+              icon={Star}
+              title="Design-grade Outputs"
+              description="From dashboards to Fit Reports, every screen is crafted to feel as considered as the decisions behind it."
+              variant="default"
+            />
+          </div>
 
           {/* Why ProofOfFit Section */}
           <div className="mt-16 text-center">
@@ -487,25 +487,25 @@ export default function HomePage() {
             </p>
           </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <TestimonialCard
-                name="Amara B."
-                role="Data Analyst"
-                company="TechCorp"
-                content="I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
-                variant="featured"
-                rating={5}
-              />
-              
-              <TestimonialCard
-                name="Luis R."
-                role="Product Manager"
-                company="StartupXYZ"
-                content="The tailored bullets were spooky-good. It became my pre-screen script."
-                variant="default"
-                rating={5}
-              />
-            </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <TestimonialCard
+              name="Amara B."
+              role="Data Analyst"
+              company="TechCorp"
+              content="I stopped guessing. Two weeks in, I had interviews that referenced my Fit Report directly."
+              variant="featured"
+              rating={5}
+            />
+
+            <TestimonialCard
+              name="Luis R."
+              role="Product Manager"
+              company="StartupXYZ"
+              content="The tailored bullets were spooky-good. It became my pre-screen script."
+              variant="default"
+              rating={5}
+            />
+          </div>
         </div>
       </section>
 

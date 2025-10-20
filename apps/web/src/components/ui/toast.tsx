@@ -1,133 +1,171 @@
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react'
+import React, { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { CheckCircle, XCircle, AlertTriangle, Info, X } from "lucide-react";
 
 export interface ToastProps {
-  id: string
-  title?: string
-  description?: string
-  variant?: 'default' | 'success' | 'error' | 'warning' | 'info'
-  duration?: number
-  onClose?: (id: string) => void
-  className?: string
+    id: string;
+    type?: "success" | "error" | "warning" | "info"; // Made optional for backward compatibility
+    variant?: "success" | "error" | "warning" | "info" | "default"; // For backward compatibility
+    title: string;
+    message?: string;
+    description?: string; // For backward compatibility
+    duration?: number;
+    onClose?: (id: string) => void; // Made optional for compatibility with existing hook
+    className?: string;
 }
 
-const variantStyles = {
-  default: {
-    container: 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700',
-    icon: 'text-slate-600 dark:text-slate-400',
-    title: 'text-slate-900 dark:text-slate-100',
-    description: 'text-slate-600 dark:text-slate-400'
-  },
-  success: {
-    container: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
-    icon: 'text-emerald-600 dark:text-emerald-400',
-    title: 'text-emerald-900 dark:text-emerald-100',
-    description: 'text-emerald-700 dark:text-emerald-300'
-  },
-  error: {
-    container: 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800',
-    icon: 'text-red-600 dark:text-red-400',
-    title: 'text-red-900 dark:text-red-100',
-    description: 'text-red-700 dark:text-red-300'
-  },
-  warning: {
-    container: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
-    icon: 'text-amber-600 dark:text-amber-400',
-    title: 'text-amber-900 dark:text-amber-100',
-    description: 'text-amber-700 dark:text-amber-300'
-  },
-  info: {
-    container: 'bg-sky-50 dark:bg-sky-950/50 border-sky-200 dark:border-sky-800',
-    icon: 'text-sky-600 dark:text-sky-400',
-    title: 'text-sky-900 dark:text-sky-100',
-    description: 'text-sky-700 dark:text-sky-300'
-  }
-}
-
-const icons = {
-  default: Info,
-  success: CheckCircle,
-  error: XCircle,
-  warning: AlertCircle,
-  info: Info
-}
-
-export function Toast({ 
-  id, 
-  title, 
-  description, 
-  variant = 'default', 
-  onClose, 
-  className 
+export function Toast({
+    id,
+    type,
+    variant,
+    title,
+    message,
+    description,
+    duration = 5000,
+    onClose,
+    className,
 }: ToastProps) {
-  const Icon = icons[variant]
-  const styles = variantStyles[variant]
+    const [isVisible, setIsVisible] = useState(false);
+    const [isLeaving, setIsLeaving] = useState(false);
 
-  return (
-    <div
-      className={cn(
-        'relative flex w-full items-start gap-3 rounded-lg border p-4 shadow-lg backdrop-blur-sm',
-        styles.container,
-        className
-      )}
-      role="alert"
-      aria-live="polite"
-    >
-      <Icon className={cn('h-5 w-5 flex-shrink-0 mt-0.5', styles.icon)} />
-      <div className="flex-1 min-w-0">
-        {title && (
-          <h4 className={cn('text-sm font-semibold', styles.title)}>
-            {title}
-          </h4>
-        )}
-        {description && (
-          <p className={cn('text-sm mt-1', styles.description)}>
-            {description}
-          </p>
-        )}
-      </div>
-      {onClose && (
-        <button
-          onClick={() => onClose(id)}
-          className={cn(
-            'flex-shrink-0 rounded-md p-1 transition-colors hover:bg-black/5 dark:hover:bg-white/5',
-            styles.icon
-          )}
-          aria-label="Close notification"
+    useEffect(() => {
+        // Trigger entrance animation
+        const timer = setTimeout(() => setIsVisible(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        if (duration > 0) {
+            const timer = setTimeout(() => {
+                handleClose();
+            }, duration);
+            return () => clearTimeout(timer);
+        }
+    }, [duration]);
+
+    const handleClose = () => {
+        setIsLeaving(true);
+        setTimeout(() => {
+            onClose?.(id);
+        }, 300);
+    };
+
+    const typeConfig = {
+        success: {
+            icon: CheckCircle,
+            bgColor: "bg-proof-green/10",
+            borderColor: "border-proof-green/20",
+            iconColor: "text-proof-green",
+            titleColor: "text-proof-green",
+        },
+        error: {
+            icon: XCircle,
+            bgColor: "bg-red-50",
+            borderColor: "border-red-200",
+            iconColor: "text-red-500",
+            titleColor: "text-red-700",
+        },
+        warning: {
+            icon: AlertTriangle,
+            bgColor: "bg-proof-orange/10",
+            borderColor: "border-proof-orange/20",
+            iconColor: "text-proof-orange",
+            titleColor: "text-proof-orange",
+        },
+        info: {
+            icon: Info,
+            bgColor: "bg-proof-blue/10",
+            borderColor: "border-proof-blue/20",
+            iconColor: "text-proof-blue",
+            titleColor: "text-proof-blue",
+        },
+        default: {
+            icon: Info,
+            bgColor: "bg-gray-50",
+            borderColor: "border-gray-200",
+            iconColor: "text-gray-600",
+            titleColor: "text-gray-700",
+        },
+    };
+
+    const toastType = variant || type || "info"; // Use variant for backward compatibility, fallback to info
+    const config = typeConfig[toastType];
+    const Icon = config.icon;
+
+    return (
+        <div
+            className={cn(
+                "relative flex items-start space-x-3 p-4 rounded-lg border shadow-lg transition-all duration-300",
+                config.bgColor,
+                config.borderColor,
+                isVisible && !isLeaving
+                    ? "translate-x-0 opacity-100"
+                    : "translate-x-full opacity-0",
+                className,
+            )}
         >
-          <X className="h-4 w-4" />
-        </button>
-      )}
-    </div>
-  )
+            <Icon className={cn("h-5 w-5 mt-0.5 flex-shrink-0", config.iconColor)} />
+            
+            <div className="flex-1 min-w-0">
+                <h4 className={cn("text-sm font-medium", config.titleColor)}>
+                    {title}
+                </h4>
+                {(message || description) && (
+                    <p className="mt-1 text-sm text-gray-600">{message || description}</p>
+                )}
+            </div>
+
+            <button
+                onClick={handleClose}
+                className="flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 rounded-md transition-colors"
+            >
+                <X className="h-4 w-4" />
+            </button>
+        </div>
+    );
 }
 
+// Toast Container Component
 interface ToastContainerProps {
-  toasts: ToastProps[]
-  onRemove: (id: string) => void
-  className?: string
+    toasts: Array<{
+        id: string;
+        type?: "success" | "error" | "warning" | "info";
+        variant?: "success" | "error" | "warning" | "info" | "default";
+        title: string;
+        message?: string;
+        description?: string;
+        duration?: number;
+    }>;
+    onClose: (id: string) => void;
+    position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
 }
 
-export function ToastContainer({ toasts, onRemove, className }: ToastContainerProps) {
-  if (toasts.length === 0) return null
+export function ToastContainer({
+    toasts,
+    onClose,
+    position = "top-right",
+}: ToastContainerProps) {
+    const positionClasses = {
+        "top-right": "top-4 right-4",
+        "top-left": "top-4 left-4",
+        "bottom-right": "bottom-4 right-4",
+        "bottom-left": "bottom-4 left-4",
+    };
 
-  return (
-    <div
-      className={cn(
-        'fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full',
-        className
-      )}
-      role="region"
-      aria-label="Notifications"
-    >
-      {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          {...toast}
-          onClose={onRemove}
-        />
-      ))}
-    </div>
-  )
+    return (
+        <div
+            className={cn(
+                "fixed z-50 space-y-2 max-w-sm w-full",
+                positionClasses[position],
+            )}
+        >
+            {toasts.map((toast) => (
+                <Toast
+                    key={toast.id}
+                    {...toast}
+                    onClose={onClose}
+                />
+            ))}
+        </div>
+    );
 }

@@ -16,7 +16,7 @@ export function LoadingSpinner({
     sm: "h-4 w-4",
     md: "h-6 w-6",
     lg: "h-8 w-8",
-    xl: "h-12 w-12"
+    xl: "h-12 w-12",
   };
 
   const variantClasses = {
@@ -24,7 +24,7 @@ export function LoadingSpinner({
     primary: "text-proof-blue",
     success: "text-proof-green",
     warning: "text-proof-orange",
-    info: "text-proof-purple"
+    info: "text-proof-purple",
   };
 
   return (
@@ -33,7 +33,7 @@ export function LoadingSpinner({
         "animate-spin rounded-full border-2 border-current border-t-transparent",
         sizeClasses[size],
         variantClasses[variant],
-        className
+        className,
       )}
       role="status"
       aria-label="Loading"
