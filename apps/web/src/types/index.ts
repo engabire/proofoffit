@@ -42,6 +42,17 @@ export interface Job {
   fetchedAt: Date
   createdAt: Date
   updatedAt: Date
+  // Additional fields for job matching
+  company?: string
+  remote?: boolean
+  salaryMin?: number
+  salaryMax?: number
+  experienceRequired?: number
+  requiredSkills?: string[]
+  educationRequired?: string[]
+  industry?: string
+  jobType?: string
+  postedAt?: string
 }
 
 export interface Slate {
@@ -172,4 +183,32 @@ export interface Subscription {
   currentPeriodStart: Date
   currentPeriodEnd: Date
   cancelAtPeriodEnd: boolean
+}
+
+// Job matching and recommendation types
+export interface UserProfile {
+  id: string
+  name: string
+  email: string
+  experience: number
+  skills: string[]
+  education: string[]
+  location: string
+  preferences: {
+    salaryRange: [number, number]
+    jobTypes: string[]
+    industries: string[]
+    remote: boolean
+  }
+}
+
+export interface FitScore {
+  overall: number
+  skills: number
+  experience: number
+  location: number
+  salary: number
+  education: number
+  industry: number
+  confidence: number
 }

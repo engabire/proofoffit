@@ -1,590 +1,209 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
-import { isSupabaseConfigured } from "@/lib/env";
-import { jobSearchService } from "@/lib/job-search";
-import { usajobsAPI, USAJobsSearchParams } from "@/lib/job-feeds/usajobs";
-import { logSearchEvent } from "@/lib/telemetry";
+import { withAuditLogging } from "@/lib/audit";
+import { createClient } from "@/lib/supabase/server";
 
-export const dynamic = "force-dynamic";
+export const GET = withAuditLogging(async (req: NextRequest) => {
+    try {
+        // Temporarily disable authentication for testing
+        // const supabase = createClient();
+        // const { data: { user } } = await supabase.auth.getUser();
 
-export async function GET(req: NextRequest) {
-  const startTime = performance.now();
-  let provider = "unknown";
-  let resultCount = 0;
-  
-  try {
-    const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q") || "";
-    const location = searchParams.get("location") || "";
-    const workType = searchParams.get("workType") || "";
-    const limit = parseInt(searchParams.get("limit") || "20");
-    const offset = parseInt(searchParams.get("offset") || "0");
+        // if (!user) {
+        //     return NextResponse.json(
+        //         { error: "Unauthorized" },
+        //         { status: 401 }
+        //     );
+        // }
 
-    // Try USAJOBS API first for government jobs
-    if (query.trim()) {
-      try {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.log("Searching USAJOBS API...");
-        }
-        const searchParams: USAJobsSearchParams = {
-          keyword: query,
-          location: location,
-          page: 1,
-          resultsPerPage: limit,
-        };
+        const { searchParams } = new URL(req.url);
+        const query = searchParams.get("q") || "";
+        const location = searchParams.get("location") || "";
+        const remote = searchParams.get("remote") === "true";
+        const salaryMin = parseInt(searchParams.get("salaryMin") || "0");
+        const salaryMax = parseInt(searchParams.get("salaryMax") || "1000000");
+        const experience = parseInt(searchParams.get("experience") || "0");
+        const industry = searchParams.get("industry") || "";
+        const jobType = searchParams.get("jobType") || "";
+        const page = parseInt(searchParams.get("page") || "1");
+        const limit = parseInt(searchParams.get("limit") || "20");
 
-        const usajobsResults = await usajobsAPI.searchJobs(searchParams);
-
-        if (usajobsResults.length > 0) {
-          provider = "usajobs";
-          resultCount = usajobsResults.length;
-          
-          // Transform USAJOBS data to our format
-          const transformedJobs = usajobsResults.map((job) => ({
-            id: job.id,
-            title: job.title,
-            company: job.organization,
-            location: job.location,
-            type: "full-time",
-            remote: false,
-            salary: job.salaryMin && job.salaryMax
-              ? {
-                min: job.salaryMin,
-                max: job.salaryMax,
-                currency: "USD",
-              }
-              : undefined,
-            description: job.description,
-            requirements: job.requirements ? [job.requirements] : [],
-            niceToHaves: [],
-            benefits: [
-              "Government benefits",
-              "Retirement plan",
-              "Health insurance",
-            ],
-            postedAt: new Date(job.postedDate),
-            companyLogo: undefined,
-            companySize: "1000+",
-            industry: "Government",
-            experienceLevel: "mid",
-            source: "USAJOBS",
-            constraints: {},
-            tos: {
-              allowed: true,
-              captcha: false,
-              notes: "Government position - auto-apply eligible",
+        // Mock job data - in production, this would come from your database
+        const allJobs = [
+            {
+                id: "job-1",
+                title: "Senior Software Engineer",
+                company: "TechCorp",
+                location: "San Francisco, CA",
+                remote: true,
+                salaryMin: 120000,
+                salaryMax: 180000,
+                experienceRequired: 5,
+                requiredSkills: ["JavaScript", "React", "Node.js", "TypeScript"],
+                educationRequired: ["Bachelor's Degree"],
+                industry: "Technology",
+                jobType: "Full-time",
+                postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+                description: "We're looking for a senior software engineer to join our team...",
             },
-            url: job.url,
-            applyUrl: job.url,
-            department: job.department,
-            agency: job.agency,
-            workSchedule: job.workSchedule,
-            positionType: job.positionType,
-            closingDate: job.closingDate,
-          }));
+            {
+                id: "job-2",
+                title: "Product Manager",
+                company: "StartupXYZ",
+                location: "New York, NY",
+                remote: false,
+                salaryMin: 100000,
+                salaryMax: 140000,
+                experienceRequired: 3,
+                requiredSkills: ["Product Management", "Analytics", "Agile"],
+                educationRequired: ["Bachelor's Degree"],
+                industry: "Technology",
+                jobType: "Full-time",
+                postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                description: "Join our growing product team...",
+            },
+            {
+                id: "job-3",
+                title: "Data Scientist",
+                company: "DataCorp",
+                location: "Seattle, WA",
+                remote: true,
+                salaryMin: 110000,
+                salaryMax: 160000,
+                experienceRequired: 4,
+                requiredSkills: ["Python", "Machine Learning", "SQL", "Statistics"],
+                educationRequired: ["Master's Degree"],
+                industry: "Data Science",
+                jobType: "Full-time",
+                postedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                description: "Exciting opportunity for a data scientist...",
+            },
+            {
+                id: "job-4",
+                title: "Frontend Developer",
+                company: "WebCorp",
+                location: "Austin, TX",
+                remote: true,
+                salaryMin: 80000,
+                salaryMax: 120000,
+                experienceRequired: 2,
+                requiredSkills: ["React", "CSS", "JavaScript", "HTML"],
+                educationRequired: ["Bachelor's Degree"],
+                industry: "Technology",
+                jobType: "Full-time",
+                postedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                description: "Join our frontend development team...",
+            },
+            {
+                id: "job-5",
+                title: "Marketing Manager",
+                company: "GrowthCorp",
+                location: "Chicago, IL",
+                remote: false,
+                salaryMin: 70000,
+                salaryMax: 100000,
+                experienceRequired: 3,
+                requiredSkills: ["Digital Marketing", "Analytics", "SEO", "Social Media"],
+                educationRequired: ["Bachelor's Degree"],
+                industry: "Marketing",
+                jobType: "Full-time",
+                postedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                description: "Lead our marketing initiatives...",
+            },
+        ];
 
-          return NextResponse.json({
-            jobs: transformedJobs,
-            total: transformedJobs.length,
-            hasMore: false,
-            source: "usajobs",
-          });
-        }
-      } catch (usajobsError) {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.error(
-          "USAJOBS API failed, trying enhanced search:",
-          usajobsError,
-        );
-        }
-      }
-    }
+        // Filter jobs based on search criteria
+        let filteredJobs = allJobs.filter((job) => {
+            // Text search
+            if (query) {
+                const searchText = `${job.title} ${job.company} ${job.description}`.toLowerCase();
+                if (!searchText.includes(query.toLowerCase())) {
+                    return false;
+                }
+            }
 
-    // Try enhanced job search as fallback
-    if (query.trim()) {
-      try {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.log("Using enhanced job search service...");
-        }
-        const enhancedJobs = await jobSearchService.searchJobs({
-          query,
-          location,
-          remote: workType === "remote",
-          limit,
-          experienceLevel: "mid",
-          jobType: "full-time",
+            // Location filter
+            if (location && !job.remote) {
+                if (!job.location.toLowerCase().includes(location.toLowerCase())) {
+                    return false;
+                }
+            }
+
+            // Remote filter
+            if (remote && !job.remote) {
+                return false;
+            }
+
+            // Salary filter
+            if (salaryMin > 0 && job.salaryMax && job.salaryMax < salaryMin) {
+                return false;
+            }
+            if (salaryMax < 1000000 && job.salaryMin && job.salaryMin > salaryMax) {
+                return false;
+            }
+
+            // Experience filter
+            if (experience > 0 && job.experienceRequired && job.experienceRequired > experience) {
+                return false;
+            }
+
+            // Industry filter
+            if (industry && job.industry !== industry) {
+                return false;
+            }
+
+            // Job type filter
+            if (jobType && job.jobType !== jobType) {
+                return false;
+            }
+
+            return true;
         });
 
-        if (enhancedJobs.length > 0) {
-          provider = "enhanced";
-          resultCount = enhancedJobs.length;
-          
-          // Transform enhanced jobs to match expected format
-          const transformedJobs = enhancedJobs.map((job) => ({
-            id: job.id,
-            title: job.title,
-            company: job.company,
-            location: job.location,
-            type: job.employmentType || "full-time",
-            remote: job.isRemote,
-            salary: job.salary
-              ? {
-                min: job.salaryMin || 0,
-                max: job.salaryMax || 0,
-                currency: "USD",
-              }
-              : undefined,
-            description: job.description,
-            requirements: job.skills || [],
-            niceToHaves: [],
-            benefits: job.benefits || [],
-            postedAt: job.postedDate,
-            companyLogo: undefined,
-            companySize: job.companySize,
-            industry: job.industry,
-            experienceLevel: job.experienceLevel || "mid",
-            source: job.source,
-            constraints: {},
-            tos: {
-              allowed: job.source === "governmentjobs",
-              captcha: false,
-              notes: `${job.source} job posting`,
-            },
-            url: job.url,
-            applyUrl: job.applyUrl,
-          }));
-
-          return NextResponse.json({
-            jobs: transformedJobs,
-            total: transformedJobs.length,
-            hasMore: false,
-            source: "enhanced",
-          });
-        }
-      } catch (enhancedError) {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.error(
-          "Enhanced job search failed, falling back:",
-          enhancedError,
+        // Sort by posting date (newest first)
+        filteredJobs.sort((a, b) => 
+            new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()
         );
-        }
-      }
+
+        // Pagination
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedJobs = filteredJobs.slice(startIndex, endIndex);
+
+        // Calculate pagination info
+        const totalJobs = filteredJobs.length;
+        const totalPages = Math.ceil(totalJobs / limit);
+        const hasNextPage = page < totalPages;
+        const hasPrevPage = page > 1;
+
+        return NextResponse.json({
+            success: true,
+            data: {
+                jobs: paginatedJobs,
+                pagination: {
+                    page,
+                    limit,
+                    totalJobs,
+                    totalPages,
+                    hasNextPage,
+                    hasPrevPage,
+                },
+                filters: {
+                    query,
+                    location,
+                    remote,
+                    salaryMin,
+                    salaryMax,
+                    experience,
+                    industry,
+                    jobType,
+                },
+            },
+        });
+    } catch (error) {
+        console.error("Error searching jobs:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
     }
-
-    // Fallback to Supabase or mock data
-    if (!isSupabaseConfigured() || !supabaseAdmin) {
-      provider = "mock";
-      const mockJobs = getMockJobs(query, location, workType, limit);
-      resultCount = mockJobs.length;
-      
-      return NextResponse.json({
-        jobs: mockJobs,
-        total: 6,
-        hasMore: false,
-        source: "mock",
-      });
-    }
-
-    // Build Supabase query
-    let supabaseQuery = supabaseAdmin
-      .from("jobs")
-      .select("*")
-      .order("createdAt", { ascending: false })
-      .range(offset, offset + limit - 1);
-
-    // Add text search filters
-    if (query.trim()) {
-      supabaseQuery = supabaseQuery.or(
-        `title.ilike.%${query}%,org.ilike.%${query}%,location.ilike.%${query}%,description.ilike.%${query}%`,
-      );
-    }
-
-    // Location filter
-    if (location.trim()) {
-      supabaseQuery = supabaseQuery.ilike("location", `%${location}%`);
-    }
-
-    // Work type filter
-    if (workType && workType !== "all") {
-      supabaseQuery = supabaseQuery.eq("workType", workType);
-    }
-
-    // Execute query
-    const { data: jobs, error } = await supabaseQuery;
-
-    if (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.error("Supabase query error:", error);
-      }
-      // Fallback to mock data
-      return NextResponse.json({
-        jobs: getMockJobs(query, location, workType, limit),
-        total: 6,
-        hasMore: false,
-        source: "mock",
-      });
-    }
-
-    provider = "supabase";
-    resultCount = jobs.length;
-    
-    // Transform to match the expected format
-    const transformedJobs = jobs.map((job) => ({
-      id: job.id,
-      title: job.title,
-      company: job.org,
-      location: job.location,
-      type: job.workType === "remote" ? "full-time" : "full-time",
-      remote: job.workType === "remote",
-      salary: job.pay
-        ? {
-          min: job.pay.min || 0,
-          max: job.pay.max || 0,
-          currency: job.pay.currency || "USD",
-        }
-        : undefined,
-      description: job.description,
-      requirements: job.requirements?.must_have || [],
-      niceToHaves: job.requirements?.preferred || [],
-      benefits: [], // Could be added to schema later
-      postedAt: new Date(job.fetchedAt || job.createdAt),
-      companyLogo: undefined,
-      companySize: undefined,
-      industry: undefined,
-      experienceLevel: "mid", // Could be determined from requirements
-      source: job.source,
-      constraints: job.constraints,
-      tos: job.tos,
-    }));
-
-    const response = NextResponse.json({
-      jobs: transformedJobs,
-      total: transformedJobs.length,
-      hasMore: transformedJobs.length === limit,
-      source: "supabase",
-    });
-    
-    // Log search event for telemetry
-    const latency = Math.round(performance.now() - startTime);
-    logSearchEvent({
-      provider,
-      latency_ms: latency,
-      result_count: resultCount,
-      query: { q: query, location, workType, limit },
-    });
-    
-    return response;
-  } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error("Error searching jobs:", error);
-    }
-    // Fallback to mock data on any error
-    provider = "error_fallback";
-    const fallbackJobs = getMockJobs("", "", "", 20);
-    resultCount = fallbackJobs.length;
-    
-    // Log error event
-    const latency = Math.round(performance.now() - startTime);
-    logSearchEvent({
-      provider,
-      latency_ms: latency,
-      result_count: resultCount,
-      query: { error: "fallback_triggered" },
-    });
-    
-    return NextResponse.json({
-      jobs: fallbackJobs,
-      total: 6,
-      hasMore: false,
-      source: "mock",
-    });
-  }
-}
-
-// POST endpoint to add jobs from external sources
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { jobs } = body;
-
-    if (!Array.isArray(jobs)) {
-      return NextResponse.json(
-        { error: "Jobs must be an array" },
-        { status: 400 },
-      );
-    }
-
-    return NextResponse.json({
-      message: "Jobs would be created successfully",
-      jobs: jobs,
-    });
-  } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error("Error creating jobs:", error);
-    }
-    return NextResponse.json(
-      { error: "Failed to create jobs" },
-      { status: 500 },
-    );
-  }
-}
-
-// Mock jobs data for fallback
-function getMockJobs(
-  query: string,
-  location: string,
-  workType: string,
-  limit: number,
-) {
-  const mockJobs = [
-    {
-      id: "1",
-      title: "Data Analyst",
-      company: "Metropolitan Council",
-      location: "Minneapolis, MN",
-      type: "full-time",
-      remote: false,
-      salary: { min: 65000, max: 85000, currency: "USD" },
-      description:
-        "Analyze transportation data to support regional planning decisions. Work with large datasets and create visualizations for policy makers.",
-      requirements: [
-        "Bachelor's degree in Data Science or related field",
-        "3+ years experience with SQL and Python",
-        "Experience with data visualization tools",
-      ],
-      niceToHaves: [
-        "Master's degree",
-        "Experience with transportation planning",
-        "Knowledge of GIS systems",
-      ],
-      benefits: ["Health insurance", "Retirement plan", "Flexible schedule"],
-      postedAt: new Date(),
-      companyLogo: undefined,
-      companySize: "1000-5000",
-      industry: "Government",
-      experienceLevel: "mid",
-      source: "USAJOBS",
-      constraints: {},
-      tos: {
-        allowed: true,
-        captcha: false,
-        notes: "Government position - auto-apply eligible",
-      },
-    },
-    {
-      id: "2",
-      title: "Project Manager",
-      company: "Metropolitan Council",
-      location: "St. Paul, MN",
-      type: "full-time",
-      remote: false,
-      salary: { min: 70000, max: 95000, currency: "USD" },
-      description:
-        "Lead infrastructure projects for regional development. Coordinate with multiple stakeholders and ensure project delivery on time and budget.",
-      requirements: [
-        "Bachelor's degree in Engineering or Project Management",
-        "5+ years project management experience",
-        "PMP certification preferred",
-      ],
-      niceToHaves: [
-        "Experience with government contracts",
-        "Knowledge of environmental regulations",
-        "Strong communication skills",
-      ],
-      benefits: [
-        "Health insurance",
-        "Retirement plan",
-        "Professional development",
-      ],
-      postedAt: new Date("2024-01-10"),
-      companyLogo: undefined,
-      companySize: "1000-5000",
-      industry: "Government",
-      experienceLevel: "senior",
-      source: "USAJOBS",
-      constraints: {},
-      tos: {
-        allowed: true,
-        captcha: false,
-        notes: "Government position - auto-apply eligible",
-      },
-    },
-    {
-      id: "3",
-      title: "Software Engineer",
-      company: "TechCorp Solutions",
-      location: "San Francisco, CA",
-      type: "full-time",
-      remote: true,
-      salary: { min: 120000, max: 180000, currency: "USD" },
-      description:
-        "Build scalable web applications using modern technologies. Work with a talented team to deliver high-quality software solutions.",
-      requirements: [
-        "Bachelor's degree in Computer Science",
-        "3+ years experience with React and Node.js",
-        "Experience with cloud platforms",
-      ],
-      niceToHaves: [
-        "TypeScript experience",
-        "DevOps knowledge",
-        "Open source contributions",
-      ],
-      benefits: [
-        "Health insurance",
-        "Stock options",
-        "Remote work",
-        "Learning budget",
-      ],
-      postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-      companyLogo: undefined,
-      companySize: "100-500",
-      industry: "Technology",
-      experienceLevel: "mid",
-      source: "LinkedIn",
-      constraints: {},
-      tos: {
-        allowed: false,
-        captcha: true,
-        notes: "Requires manual application",
-      },
-    },
-    {
-      id: "4",
-      title: "Marketing Manager",
-      company: "GrowthCo",
-      location: "New York, NY",
-      type: "full-time",
-      remote: false,
-      salary: { min: 80000, max: 120000, currency: "USD" },
-      description:
-        "Develop and execute marketing strategies to drive business growth. Lead a team of marketing professionals and manage campaigns across multiple channels.",
-      requirements: [
-        "Bachelor's degree in Marketing or related field",
-        "5+ years marketing experience",
-        "Experience with digital marketing tools",
-      ],
-      niceToHaves: [
-        "MBA",
-        "Experience with B2B marketing",
-        "Analytics expertise",
-      ],
-      benefits: ["Health insurance", "401k", "Flexible PTO"],
-      postedAt: new Date("2024-01-18"),
-      companyLogo: undefined,
-      companySize: "50-200",
-      industry: "Marketing",
-      experienceLevel: "senior",
-      source: "Indeed",
-      constraints: {},
-      tos: {
-        allowed: false,
-        captcha: true,
-        notes: "Requires manual application",
-      },
-    },
-    {
-      id: "5",
-      title: "UX Designer",
-      company: "DesignStudio",
-      location: "Austin, TX",
-      type: "full-time",
-      remote: true,
-      salary: { min: 75000, max: 110000, currency: "USD" },
-      description:
-        "Create intuitive user experiences for web and mobile applications. Conduct user research and collaborate with development teams.",
-      requirements: [
-        "Bachelor's degree in Design or related field",
-        "3+ years UX design experience",
-        "Proficiency in Figma and Adobe Creative Suite",
-      ],
-      niceToHaves: [
-        "Experience with user research",
-        "Knowledge of front-end development",
-        "Portfolio of successful projects",
-      ],
-      benefits: ["Health insurance", "Remote work", "Design tools budget"],
-      postedAt: new Date("2024-01-22"),
-      companyLogo: undefined,
-      companySize: "20-100",
-      industry: "Design",
-      experienceLevel: "mid",
-      source: "LinkedIn",
-      constraints: {},
-      tos: {
-        allowed: false,
-        captcha: true,
-        notes: "Requires manual application",
-      },
-    },
-    {
-      id: "6",
-      title: "Data Scientist",
-      company: "AnalyticsPro",
-      location: "Seattle, WA",
-      type: "full-time",
-      remote: true,
-      salary: { min: 100000, max: 150000, currency: "USD" },
-      description:
-        "Apply machine learning and statistical analysis to solve complex business problems. Work with large datasets and build predictive models.",
-      requirements: [
-        "Master's degree in Data Science or related field",
-        "3+ years experience with Python and R",
-        "Experience with machine learning frameworks",
-      ],
-      niceToHaves: [
-        "PhD",
-        "Experience with deep learning",
-        "Knowledge of cloud platforms",
-      ],
-      benefits: ["Health insurance", "Stock options", "Conference budget"],
-      postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-      companyLogo: undefined,
-      companySize: "100-500",
-      industry: "Technology",
-      experienceLevel: "senior",
-      source: "Indeed",
-      constraints: {},
-      tos: {
-        allowed: false,
-        captcha: true,
-        notes: "Requires manual application",
-      },
-    },
-  ];
-
-  // Filter jobs based on search criteria
-  let filteredJobs = mockJobs;
-
-  if (query.trim()) {
-    const searchTerm = query.toLowerCase();
-    filteredJobs = filteredJobs.filter((job) =>
-      job.title.toLowerCase().includes(searchTerm) ||
-      job.company.toLowerCase().includes(searchTerm) ||
-      job.location.toLowerCase().includes(searchTerm) ||
-      job.description.toLowerCase().includes(searchTerm) ||
-      job.requirements.some((req) => req.toLowerCase().includes(searchTerm))
-    );
-  }
-
-  if (location.trim()) {
-    const locationTerm = location.toLowerCase();
-    filteredJobs = filteredJobs.filter((job) =>
-      job.location.toLowerCase().includes(locationTerm)
-    );
-  }
-
-  if (workType && workType !== "all") {
-    filteredJobs = filteredJobs.filter((job) =>
-      workType === "remote" ? job.remote : !job.remote
-    );
-  }
-
-  return filteredJobs.slice(0, limit);
-}
+});
