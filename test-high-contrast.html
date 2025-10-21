@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="high-contrast">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProofOfFit - High Contrast Theme Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* High Contrast Theme CSS from the app */
+        :where(.high-contrast, [data-theme="high-contrast"]) {
+            color-scheme: dark;
+            --background: 0 0% 0%;
+            --foreground: 0 0% 100%;
+            --card: 0 0% 0%;
+            --card-foreground: 0 0% 100%;
+            --popover: 0 0% 0%;
+            --popover-foreground: 0 0% 100%;
+            --primary: 52 100% 50%;
+            --primary-foreground: 0 0% 0%;
+            --secondary: 0 0% 15%;
+            --secondary-foreground: 0 0% 100%;
+            --muted: 0 0% 20%;
+            --muted-foreground: 0 0% 95%;
+            --accent: 52 100% 50%;
+            --accent-foreground: 0 0% 0%;
+            --destructive: 0 100% 65%;
+            --destructive-foreground: 0 0% 0%;
+            --border: 52 100% 70%;
+            --input: 52 100% 70%;
+            --ring: 52 100% 50%;
+            --proof-blue: 210 100% 60%;
+            --proof-green: 146 100% 75%;
+            --proof-purple: 275 100% 75%;
+            --proof-orange: 38 100% 65%;
+            --proof-gray: 0 0% 80%;
+            --glow-start: 52 100% 40%;
+            --glow-end: 52 100% 30%;
+            --tw-bg-opacity: 1;
+            --tw-text-opacity: 1;
+            --tw-border-opacity: 1;
+        }
+
+        :where(.high-contrast, [data-theme="high-contrast"]) .bg-white,
+        :where(.high-contrast, [data-theme="high-contrast"]) .bg-slate-900,
+        :where(.high-contrast, [data-theme="high-contrast"]) .bg-slate-50 {
+            background-color: hsl(var(--background)) !important;
+        }
+
+        :where(.high-contrast, [data-theme="high-contrast"]) .text-slate-900,
+        :where(.high-contrast, [data-theme="high-contrast"]) .text-slate-700,
+        :where(.high-contrast, [data-theme="high-contrast"]) .text-gray-900 {
+            color: hsl(var(--foreground)) !important;
+        }
+
+        :where(.high-contrast, [data-theme="high-contrast"]) .text-slate-100,
+        :where(.high-contrast, [data-theme="high-contrast"]) .text-gray-100 {
+            color: hsl(var(--background)) !important;
+        }
+
+        :where(.high-contrast, [data-theme="high-contrast"]) .border-slate-200,
+        :where(.high-contrast, [data-theme="high-contrast"]) .border-gray-200 {
+            border-color: hsl(var(--border)) !important;
+        }
+
+        :where(.high-contrast, [data-theme="high-contrast"]) .border-slate-700,
+        :where(.high-contrast, [data-theme="high-contrast"]) .border-gray-700 {
+            border-color: hsl(var(--border)) !important;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border: 2px solid hsl(var(--border));
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .theme-toggle:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        Toggle High Contrast
+    </button>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-slate-900">ProofOfFit</h1>
+                    <span class="ml-2 text-sm text-slate-600">High Contrast Test</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 mb-4">
+                High Contrast Theme Verification
+            </h2>
+            <p class="text-lg text-slate-600 mb-8">
+                This page demonstrates the high-contrast theme implementation for accessibility compliance.
+            </p>
+        </section>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Card 1 -->
+            <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">
+                    Job Matching
+                </h3>
+                <p class="text-slate-600 mb-4">
+                    AI-powered job recommendations with 95%+ accuracy using advanced matching algorithms.
+                </p>
+                <button class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700">
+                    Get Started
+                </button>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">
+                    Application Tracking
+                </h3>
+                <p class="text-slate-600 mb-4">
+                    Complete visibility into your job application progress with real-time updates.
+                </p>
+                <button class="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700">
+                    Track Applications
+                </button>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">
+                    Skill Assessment
+                </h3>
+                <p class="text-slate-600 mb-4">
+                    Comprehensive skill evaluation with detailed improvement recommendations.
+                </p>
+                <button class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">
+                    Assess Skills
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Example -->
+        <section class="bg-slate-50 border border-slate-200 rounded-lg p-8 mb-12">
+            <h3 class="text-2xl font-semibold text-slate-900 mb-6">
+                Contact Form Example
+            </h3>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        placeholder="Enter your full name"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        placeholder="Enter your email"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        Message
+                    </label>
+                    <textarea 
+                        rows="4" 
+                        class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        placeholder="Enter your message"
+                    ></textarea>
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-sky-600 text-white px-6 py-2 rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                >
+                    Send Message
+                </button>
+            </form>
+        </section>
+
+        <!-- Status Indicators -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-green-900 mb-2">
+                    ✅ High Contrast Active
+                </h4>
+                <p class="text-green-700">
+                    The high-contrast theme is currently applied to this page.
+                </p>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-blue-900 mb-2">
+                    🎨 Theme Toggle
+                </h4>
+                <p class="text-blue-700">
+                    Use the toggle button in the top-right corner to switch themes.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-100 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-slate-300">
+                    © 2024 ProofOfFit. All rights reserved. | High Contrast Theme Test
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'high-contrast') {
+                html.removeAttribute('data-theme');
+                html.classList.remove('high-contrast');
+                document.body.className = 'bg-white text-slate-900 min-h-screen';
+                document.querySelector('.theme-toggle').textContent = 'Enable High Contrast';
+            } else {
+                html.setAttribute('data-theme', 'high-contrast');
+                html.classList.add('high-contrast');
+                document.body.className = 'bg-black text-white min-h-screen';
+                document.querySelector('.theme-toggle').textContent = 'Disable High Contrast';
+            }
+        }
+
+        // Initialize theme toggle button text
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const button = document.querySelector('.theme-toggle');
+            if (currentTheme === 'high-contrast') {
+                button.textContent = 'Disable High Contrast';
+            } else {
+                button.textContent = 'Enable High Contrast';
+            }
+        });
+    </script>
+</body>
+</html>
