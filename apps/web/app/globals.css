@@ -98,9 +98,10 @@
 }
 
 @layer base {
-  * {
+  :where(button, input, textarea, select, fieldset) {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground antialiased;
     background-image:
@@ -108,6 +109,31 @@
       radial-gradient(140% 160% at 85% 10%, hsl(var(--glow-end) / 0.35), transparent 70%),
       linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)) 65%, hsl(var(--muted)) 100%);
     background-attachment: fixed;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+    background-position: top left;
+  }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

@@ -1,3 +1,10 @@
+const proofTypeColors = {
+  link: '#3b82f6',    // Blue
+  file: '#7c3aed',    // Purple
+  repo: '#10b981',    // Green
+  case: '#f59e0b',    // Yellow
+};
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -85,12 +92,8 @@ module.exports = {
           6: '#06b6d4', // Cyan
         },
         // Proof type colors
-        proof: {
-          link: '#3b82f6',    // Blue
-          file: '#7c3aed',    // Purple
-          repo: '#10b981',    // Green
-          case: '#f59e0b',    // Yellow
-        },
+        'proof-type': proofTypeColors,
+        proofType: proofTypeColors,
         // Application status colors
         status: {
           draft: '#6b7280',     // Gray

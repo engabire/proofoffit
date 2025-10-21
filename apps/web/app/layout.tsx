@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { DegradedBanner } from '@/components/system/degraded-banner'
 import { ReportIssue } from '@/components/system/report-issue'
 import { ConsentBanner } from '@/components/consent-banner'
+import { AccessibilityToggle } from '@/components/accessibility/accessibility-toggle'
 import '@/lib/suppress-warnings'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
@@ -85,6 +86,7 @@ export default function RootLayout({
           <ReportIssue />
           <ConsentBanner policyVersion="v1" />
           <Toaster />
+          <AccessibilityToggle />
         </Providers>
       </body>
     </html>
