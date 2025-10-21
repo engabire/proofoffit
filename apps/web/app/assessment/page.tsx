@@ -245,17 +245,21 @@ export default function AssessmentPage() {
                     <CardContent>
                         <div className="flex flex-wrap gap-2">
                             {["JavaScript", "Python", "React", "AWS", "Docker", "Machine Learning"].map((skill) => (
-                                <Badge 
-                                    key={skill} 
-                                    variant="secondary" 
-                                    className="cursor-pointer hover:bg-blue-100"
+                                <button
+                                    key={skill}
                                     onClick={() => {
                                         setSelectedSkill(skill);
                                         setSelectedDifficulty("intermediate");
                                     }}
+                                    className="cursor-pointer"
                                 >
-                                    {skill}
-                                </Badge>
+                                    <Badge 
+                                        variant="secondary" 
+                                        className="hover:bg-blue-100"
+                                    >
+                                        {skill}
+                                    </Badge>
+                                </button>
                             ))}
                         </div>
                     </CardContent>

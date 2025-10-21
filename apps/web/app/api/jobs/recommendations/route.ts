@@ -1,15 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JobRecommendationEngine } from "@/lib/jobs/recommendation-engine";
 import { withAuditLogging } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase";
 
 // Mock job data - in production, this would come from your database
 const mockJobs = [
     {
         id: "job-1",
+        source: "direct",
+        org: "TechCorp",
         title: "Senior Software Engineer",
-        company: "TechCorp",
         location: "San Francisco, CA",
+        workType: "Full-time",
+        pay: { min: 120000, max: 180000 },
+        description: "We're looking for a senior software engineer to join our team...",
+        requirements: {},
+        constraints: {},
+        tos: {},
+        fetchedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        company: "TechCorp",
         remote: true,
         salaryMin: 120000,
         salaryMax: 180000,
@@ -19,13 +30,23 @@ const mockJobs = [
         industry: "Technology",
         jobType: "Full-time",
         postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        description: "We're looking for a senior software engineer to join our team...",
     },
     {
         id: "job-2",
+        source: "direct",
+        org: "StartupXYZ",
         title: "Product Manager",
-        company: "StartupXYZ",
         location: "New York, NY",
+        workType: "Full-time",
+        pay: { min: 100000, max: 140000 },
+        description: "Join our growing product team...",
+        requirements: {},
+        constraints: {},
+        tos: {},
+        fetchedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        company: "StartupXYZ",
         remote: false,
         salaryMin: 100000,
         salaryMax: 140000,
@@ -35,13 +56,23 @@ const mockJobs = [
         industry: "Technology",
         jobType: "Full-time",
         postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-        description: "Join our growing product team...",
     },
     {
         id: "job-3",
+        source: "direct",
+        org: "DataCorp",
         title: "Data Scientist",
-        company: "DataCorp",
         location: "Seattle, WA",
+        workType: "Full-time",
+        pay: { min: 110000, max: 160000 },
+        description: "Exciting opportunity for a data scientist...",
+        requirements: {},
+        constraints: {},
+        tos: {},
+        fetchedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        company: "DataCorp",
         remote: true,
         salaryMin: 110000,
         salaryMax: 160000,
@@ -51,14 +82,13 @@ const mockJobs = [
         industry: "Data Science",
         jobType: "Full-time",
         postedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-        description: "Exciting opportunity for a data scientist...",
     },
 ];
 
 export const POST = withAuditLogging(async (req: NextRequest) => {
     try {
         // Temporarily disable authentication for testing
-        // const supabase = createClient();
+        // const supabaseClient = supabase;
         // const { data: { user } } = await supabase.auth.getUser();
 
         // if (!user) {

@@ -428,11 +428,11 @@ class PerformanceOptimizationEngine {
         );
         if (optimization) {
             // Update tracking
-            console.log(
-                `Optimization ${optimizationId} ${
-                    implemented ? "implemented" : "reverted"
-                }`,
-            );
+            // console.log(
+            //     `Optimization ${optimizationId} ${
+            //         implemented ? "implemented" : "reverted"
+            //     }`,
+            // ); // Disabled for production
         }
     }
 }

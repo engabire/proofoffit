@@ -57,7 +57,7 @@ export function TestimonialCard({
 
             {/* Content */}
             <blockquote className="text-gray-700 leading-relaxed mb-6">
-                "{content}"
+                &ldquo;{content}&rdquo;
             </blockquote>
 
             {/* Author */}

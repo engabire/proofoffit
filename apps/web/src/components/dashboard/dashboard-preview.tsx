@@ -77,7 +77,7 @@ export function DashboardPreview() {
                     Your ProofOfFit Dashboard
                 </h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Track your progress, manage applications, and see how you're
+                    Track your progress, manage applications, and see how you&apos;re
                     performing in the job market.
                 </p>
             </div>

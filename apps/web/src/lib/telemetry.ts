@@ -46,7 +46,7 @@ export function redact<T extends Record<string, any>>(evt: T): T {
 
 export function log(evt: Record<string, any>) {
   const redacted = redact(evt);
-  console.info(JSON.stringify(redacted));
+  // console.info(JSON.stringify(redacted)); // Disabled for production
 }
 
 export function logSearchEvent(params: {

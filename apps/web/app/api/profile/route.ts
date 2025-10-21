@@ -8,9 +8,9 @@ const mockProfile: EnhancedUserProfile = {
     id: "user-123",
     name: "John Doe",
     email: "john.doe@example.com",
-    experience: 5,
+    yearsOfExperience: 5,
     skills: [],
-    education: [],
+    skillAssessments: [],
     location: "San Francisco, CA",
     preferences: {
         salaryRange: [80000, 150000],
@@ -30,7 +30,6 @@ const mockProfile: EnhancedUserProfile = {
     summary: "Experienced developer with 5+ years building scalable web applications using modern technologies.",
     currentRole: "Senior Developer",
     currentCompany: "TechCorp",
-    yearsOfExperience: 5,
     topSkills: ["JavaScript", "React", "Node.js", "TypeScript", "Python"],
     experience: [
         {

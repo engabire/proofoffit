@@ -68,7 +68,21 @@ export interface ProjectEntry {
     role: string;
 }
 
-export interface EnhancedUserProfile extends UserProfile {
+export interface EnhancedUserProfile {
+    // Basic Information
+    id: string;
+    name: string;
+    email: string;
+    yearsOfExperience: number;
+    skills: string[];
+    location: string;
+    preferences: {
+        salaryRange: [number, number];
+        jobTypes: string[];
+        industries: string[];
+        remote: boolean;
+    };
+    
     // Personal Information
     firstName: string;
     lastName: string;
@@ -83,10 +97,9 @@ export interface EnhancedUserProfile extends UserProfile {
     summary: string;
     currentRole?: string;
     currentCompany?: string;
-    yearsOfExperience: number;
     
     // Skills and Assessments
-    skills: SkillAssessment[];
+    skillAssessments: SkillAssessment[];
     topSkills: string[];
     
     // Experience and Education
@@ -268,7 +281,7 @@ export class ProfileManager {
      * Get skill recommendations based on job market trends
      */
     getSkillRecommendations(): string[] {
-        const currentSkills = this.profile.skills.map(s => s.skill);
+        const currentSkills = this.profile.skillAssessments.map(s => s.skill);
         const trendingSkills = [
             'TypeScript', 'Python', 'React', 'Node.js', 'AWS', 'Docker',
             'Kubernetes', 'Machine Learning', 'Data Science', 'DevOps',
@@ -298,7 +311,7 @@ export class ProfileManager {
         const careerPath: string[] = [];
 
         // Analyze strengths
-        const topSkills = this.profile.skills
+        const topSkills = this.profile.skillAssessments
             .filter(s => s.level === 'advanced' || s.level === 'expert')
             .map(s => s.skill);
         
@@ -311,7 +324,7 @@ export class ProfileManager {
         }
 
         // Analyze areas for improvement
-        const beginnerSkills = this.profile.skills
+        const beginnerSkills = this.profile.skillAssessments
             .filter(s => s.level === 'beginner')
             .map(s => s.skill);
         
@@ -413,7 +426,7 @@ export class ProfileManager {
     }
 
     private hasSkills(): boolean {
-        return this.profile.skills.length > 0;
+        return this.profile.skillAssessments.length > 0;
     }
 
     private hasExperience(): boolean {
@@ -452,7 +465,7 @@ export class ProfileManager {
     }
 
     private getSkillsCompletion(): number {
-        return Math.min(100, this.profile.skills.length * 10);
+        return Math.min(100, this.profile.skillAssessments.length * 10);
     }
 
     private getExperienceCompletion(): number {
@@ -484,7 +497,7 @@ export class ProfileManager {
         // Simple estimation based on experience and skills
         const baseSalary = 60000;
         const experienceMultiplier = this.profile.yearsOfExperience * 8000;
-        const skillMultiplier = this.profile.skills.length * 2000;
+        const skillMultiplier = this.profile.skillAssessments.length * 2000;
         return baseSalary + experienceMultiplier + skillMultiplier;
     }
 
