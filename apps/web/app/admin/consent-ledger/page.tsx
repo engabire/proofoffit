@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -45,7 +45,7 @@ export default function ConsentLedgerPage() {
         limit: 100,
     });
 
-    const fetchEntries = async () => {
+    const fetchEntries = useCallback(async () => {
         try {
             setLoading(true);
             const params = new URLSearchParams();
@@ -72,9 +72,9 @@ export default function ConsentLedgerPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const response = await fetch("/api/admin/consent-ledger/stats");
             if (!response.ok) throw new Error("Failed to fetch stats");
@@ -84,12 +84,12 @@ export default function ConsentLedgerPage() {
         } catch (err) {
             console.error("Failed to fetch stats:", err);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchEntries();
         fetchStats();
-    }, [filters]);
+    }, [fetchEntries, fetchStats]);
 
     const getActionBadgeVariant = (action: string) => {
         switch (action) {

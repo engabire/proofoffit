@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -44,7 +44,7 @@ export default function AuditLogsPage() {
         limit: 100,
     });
 
-    const fetchLogs = async () => {
+    const fetchLogs = useCallback(async () => {
         try {
             setLoading(true);
             const params = new URLSearchParams();
@@ -64,9 +64,9 @@ export default function AuditLogsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const response = await fetch("/api/admin/audit-logs/stats");
             if (!response.ok) throw new Error("Failed to fetch stats");
@@ -76,7 +76,7 @@ export default function AuditLogsPage() {
         } catch (err) {
             console.error("Failed to fetch stats:", err);
         }
-    };
+    }, []);
 
     const verifyHashChain = async () => {
         try {
@@ -98,7 +98,7 @@ export default function AuditLogsPage() {
     useEffect(() => {
         fetchLogs();
         fetchStats();
-    }, [filters]);
+    }, [fetchLogs, fetchStats]);
 
     const columns = [
         {

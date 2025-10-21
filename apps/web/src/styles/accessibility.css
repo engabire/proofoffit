@@ -62,37 +62,37 @@
 }
 
 /* Large Text */
-.large-text {
+:where(.large-text, [data-large-text="true"]) {
   font-size: 1.125rem;
   line-height: 1.75;
 }
 
-.large-text h1 {
+:where(.large-text, [data-large-text="true"]) h1 {
   font-size: 2.5rem;
 }
 
-.large-text h2 {
+:where(.large-text, [data-large-text="true"]) h2 {
   font-size: 2rem;
 }
 
-.large-text h3 {
+:where(.large-text, [data-large-text="true"]) h3 {
   font-size: 1.75rem;
 }
 
-.large-text h4 {
+:where(.large-text, [data-large-text="true"]) h4 {
   font-size: 1.5rem;
 }
 
-.large-text h5 {
+:where(.large-text, [data-large-text="true"]) h5 {
   font-size: 1.25rem;
 }
 
-.large-text h6 {
+:where(.large-text, [data-large-text="true"]) h6 {
   font-size: 1.125rem;
 }
 
 /* Screen Reader Optimizations */
-.screen-reader-optimized .sr-only {
+:where(.screen-reader-optimized, [data-screen-reader="true"]) .sr-only {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;
@@ -104,52 +104,52 @@
   border: 0 !important;
 }
 
-.screen-reader-optimized [aria-hidden="true"] {
+:where(.screen-reader-optimized, [data-screen-reader="true"]) [aria-hidden="true"] {
   display: none !important;
 }
 
-.screen-reader-optimized [role="button"] {
+:where(.screen-reader-optimized, [data-screen-reader="true"]) [role="button"] {
   cursor: pointer;
 }
 
-.screen-reader-optimized [role="link"] {
+:where(.screen-reader-optimized, [data-screen-reader="true"]) [role="link"] {
   cursor: pointer;
 }
 
 /* Keyboard Navigation */
-.keyboard-navigation *:focus {
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) *:focus {
   outline: 2px solid #3b82f6 !important;
   outline-offset: 2px !important;
 }
 
-.keyboard-navigation button:focus,
-.keyboard-navigation [role="button"]:focus,
-.keyboard-navigation a:focus,
-.keyboard-navigation input:focus,
-.keyboard-navigation textarea:focus,
-.keyboard-navigation select:focus {
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) button:focus,
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) [role="button"]:focus,
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) a:focus,
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) input:focus,
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) textarea:focus,
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) select:focus {
   outline: 2px solid #3b82f6 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
 }
 
-.keyboard-navigation .focus\:outline-none:focus {
+:where(.keyboard-navigation, [data-keyboard-navigation="true"]) .focus\:outline-none:focus {
   outline: 2px solid #3b82f6 !important;
   outline-offset: 2px !important;
 }
 
 /* Focus Visible */
-.focus-visible *:focus-visible {
+:where(.focus-visible, [data-focus-visible="true"]) *:focus-visible {
   outline: 2px solid #3b82f6 !important;
   outline-offset: 2px !important;
 }
 
-.focus-visible button:focus-visible,
-.focus-visible [role="button"]:focus-visible,
-.focus-visible a:focus-visible,
-.focus-visible input:focus-visible,
-.focus-visible textarea:focus-visible,
-.focus-visible select:focus-visible {
+:where(.focus-visible, [data-focus-visible="true"]) button:focus-visible,
+:where(.focus-visible, [data-focus-visible="true"]) [role="button"]:focus-visible,
+:where(.focus-visible, [data-focus-visible="true"]) a:focus-visible,
+:where(.focus-visible, [data-focus-visible="true"]) input:focus-visible,
+:where(.focus-visible, [data-focus-visible="true"]) textarea:focus-visible,
+:where(.focus-visible, [data-focus-visible="true"]) select:focus-visible {
   outline: 2px solid #3b82f6 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
@@ -273,19 +273,19 @@
 
 /* Responsive Design for Accessibility */
 @media (max-width: 768px) {
-  .large-text {
+  :where(.large-text, [data-large-text="true"]) {
     font-size: 1rem;
   }
   
-  .large-text h1 {
+  :where(.large-text, [data-large-text="true"]) h1 {
     font-size: 2rem;
   }
   
-  .large-text h2 {
+  :where(.large-text, [data-large-text="true"]) h2 {
     font-size: 1.75rem;
   }
   
-  .large-text h3 {
+  :where(.large-text, [data-large-text="true"]) h3 {
     font-size: 1.5rem;
   }
 }

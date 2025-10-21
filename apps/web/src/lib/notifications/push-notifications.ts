@@ -304,7 +304,17 @@ class PushNotificationManager {
         this.registration.addEventListener(
             "notificationclose",
             (event: any) => {
-                console.log("Notification closed:", event.notification.tag);
+                if (typeof globalThis.dispatchEvent === "function") {
+                    const detail = {
+                        tag: event.notification?.tag,
+                        data: event.notification?.data,
+                    };
+                    const closeEvent = new CustomEvent(
+                        "push-notification:close",
+                        { detail },
+                    );
+                    globalThis.dispatchEvent(closeEvent);
+                }
             },
         );
     }

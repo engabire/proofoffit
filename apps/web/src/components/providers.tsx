@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { setupCtaBridge } from '@/lib/analytics'
-import { AuthProvider } from '@/components/auth/auth-provider'
-import { CSRFProvider } from '@/components/security/csrf-provider'
-import { AccessibilityProvider } from '@/components/accessibility/accessibility-provider'
+import { useEffect } from "react";
+import { setupCtaBridge } from "@/lib/analytics";
+import { AuthProvider } from "@/components/auth/auth-provider";
+import { CSRFProvider } from "@/components/security/csrf-provider";
+import { AccessibilityProvider } from "@/components/accessibility/accessibility-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  useEffect(() => { 
-    setupCtaBridge(); 
+  useEffect(() => {
+    setupCtaBridge();
   }, []);
 
   return (
@@ -19,5 +19,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </AuthProvider>
       </CSRFProvider>
     </AccessibilityProvider>
-  )
+  );
 }

@@ -68,47 +68,71 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
       root.style.setProperty('--animation-duration', '0.01ms')
       root.style.setProperty('--animation-iteration-count', '1')
       root.classList.add('reduce-motion')
+      root.setAttribute('data-reduced-motion', 'true')
     } else {
       root.style.removeProperty('--animation-duration')
       root.style.removeProperty('--animation-iteration-count')
       root.classList.remove('reduce-motion')
+      if (root.getAttribute('data-reduced-motion') === 'true') {
+        root.removeAttribute('data-reduced-motion')
+      }
     }
 
     // High contrast
     if (settings.highContrast) {
       root.classList.add('high-contrast')
+      root.setAttribute('data-theme', 'high-contrast')
     } else {
       root.classList.remove('high-contrast')
+      if (root.getAttribute('data-theme') === 'high-contrast') {
+        root.removeAttribute('data-theme')
+      }
     }
 
     // Large text
     if (settings.largeText) {
       root.style.fontSize = '1.125rem'
       root.classList.add('large-text')
+      root.setAttribute('data-large-text', 'true')
     } else {
       root.style.fontSize = ''
       root.classList.remove('large-text')
+      if (root.getAttribute('data-large-text') === 'true') {
+        root.removeAttribute('data-large-text')
+      }
     }
 
     // Screen reader optimizations
     if (settings.screenReader) {
       root.classList.add('screen-reader-optimized')
+      root.setAttribute('data-screen-reader', 'true')
     } else {
       root.classList.remove('screen-reader-optimized')
+      if (root.getAttribute('data-screen-reader') === 'true') {
+        root.removeAttribute('data-screen-reader')
+      }
     }
 
     // Keyboard navigation
     if (settings.keyboardNavigation) {
       root.classList.add('keyboard-navigation')
+      root.setAttribute('data-keyboard-navigation', 'true')
     } else {
       root.classList.remove('keyboard-navigation')
+      if (root.getAttribute('data-keyboard-navigation') === 'true') {
+        root.removeAttribute('data-keyboard-navigation')
+      }
     }
 
     // Focus visible
     if (settings.focusVisible) {
       root.classList.add('focus-visible')
+      root.setAttribute('data-focus-visible', 'true')
     } else {
       root.classList.remove('focus-visible')
+      if (root.getAttribute('data-focus-visible') === 'true') {
+        root.removeAttribute('data-focus-visible')
+      }
     }
   }, [settings])
 
