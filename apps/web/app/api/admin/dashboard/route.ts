@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/utils/logger";
 
 // Mock telemetry implementation for admin dashboard
 const mockTelemetry = {
@@ -60,10 +61,13 @@ const mockTelemetry = {
         sessionId: string,
         metadata: any,
     ) => {
-        console.log(`User activity: ${activity} by ${userId}`, metadata);
+        logger.info(`User activity: ${activity} by ${userId}`, {
+            sessionId,
+            metadata,
+        });
     },
     recordError: (error: Error, context: any, severity: string) => {
-        console.error(`Error recorded: ${error.message}`, {
+        logger.error(`Error recorded: ${error.message}`, {
             context,
             severity,
         });
