@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { logger } from "@/lib/utils/logger";
 
 // TODO: Wire to DB: insert into consent_events (user_id, event, policy_version, ip)
 export async function POST(req: NextRequest) {
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     // VALUES ($1, $2, $3, $4, NOW())
 
     // For now, log the consent event
-    console.log("Consent event:", {
+    logger.info("Consent event:", {
       event,
       policy_version,
       ip: ip === "unknown" ? "redacted" : "redacted", // Always redact IP in logs
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, policy_version, event }, { status: 200 });
   } catch (error) {
-    console.error("Consent API error:", error);
+    logger.error("Consent API error:", error);
     return NextResponse.json(
       { error: "Failed to process consent" },
       { status: 500 }
