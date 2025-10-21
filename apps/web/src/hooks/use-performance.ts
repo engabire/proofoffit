@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { logger } from "@/lib/utils/logger";
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -72,7 +73,7 @@ export function usePerformance() {
         entryTypes: ["largest-contentful-paint", "first-input", "layout-shift"],
       });
     } catch (e) {
-      console.warn("Performance Observer not fully supported:", e);
+      logger.warn("Performance Observer not fully supported:", e);
     }
 
     setMetrics(newMetrics);
@@ -170,8 +171,7 @@ export function usePerformance() {
       });
     }
 
-    // eslint-disable-next-line no-console
-    console.log("Performance metrics:", analyticsData);
+    logger.info("Performance metrics:", analyticsData);
   }, [metrics]);
 
   return {
@@ -202,7 +202,7 @@ export function useRenderPerformance(componentName: string) {
       );
 
       if (duration && duration > 16) { // More than one frame (16ms)
-        console.warn(`${componentName} render took ${duration.toFixed(2)}ms`);
+        logger.warn(`${componentName} render took ${duration.toFixed(2)}ms`);
       }
     };
   }, [componentName, markStart, markEnd, measureCustomMetric]);
@@ -230,7 +230,7 @@ export function useAPIPerformance() {
       );
 
       if (duration && duration > 1000) { // More than 1 second
-        console.warn(`API call to ${endpoint} took ${duration.toFixed(2)}ms`);
+        logger.warn(`API call to ${endpoint} took ${duration.toFixed(2)}ms`);
       }
     }
   }, [markStart, markEnd, measureCustomMetric]);

@@ -1,3 +1,5 @@
+import { logger } from '@/lib/utils/logger'
+
 // USAJOBS API integration
 export interface USAJobsJob {
   id: string
@@ -69,7 +71,7 @@ export class USAJobsAPI {
       const data = await response.json()
       return this.transformJobs(data.SearchResult.SearchResultItems || [])
     } catch (error) {
-      console.error('USAJOBS API error:', error)
+      logger.error('USAJOBS API error:', error)
       return []
     }
   }

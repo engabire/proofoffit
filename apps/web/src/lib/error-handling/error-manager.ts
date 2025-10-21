@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { logger } from '@/lib/utils/logger'
 
 export interface ErrorContext {
   userId?: string
@@ -68,7 +69,7 @@ export class ErrorManager {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.error('Error logged:', errorDetails)
+      logger.error('Error logged:', errorDetails)
     }
   }
 
@@ -165,12 +166,12 @@ export class ErrorManager {
         })))
 
       if (error) {
-        console.error('Failed to flush errors to database:', error)
+        logger.error('Failed to flush errors to database:', error)
         // Re-add errors to queue if flush failed
         this.errorQueue.unshift(...errorsToFlush)
       }
     } catch (flushError) {
-      console.error('Error flushing errors:', flushError)
+      logger.error('Error flushing errors:', flushError)
       // Re-add errors to queue if flush failed
       this.errorQueue.unshift(...errorsToFlush)
     }
@@ -234,7 +235,7 @@ export class ErrorManager {
 
       return stats
     } catch (error) {
-      console.error('Error getting error stats:', error)
+      logger.error('Error getting error stats:', error)
       return {
         total: 0,
         byType: {},
@@ -279,7 +280,7 @@ export class ErrorManager {
   public setupGlobalErrorHandlers(): void {
     // Handle unhandled promise rejections
     process.on('unhandledRejection', (reason, promise) => {
-      console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+      logger.error('Unhandled Rejection at:', promise, 'reason:', reason)
       this.logError(new Error(`Unhandled Promise Rejection: ${reason}`), {
         metadata: { type: 'unhandled_rejection', promise: promise.toString() }
       })
@@ -287,7 +288,7 @@ export class ErrorManager {
 
     // Handle uncaught exceptions
     process.on('uncaughtException', (error) => {
-      console.error('Uncaught Exception:', error)
+      logger.error('Uncaught Exception:', error)
       this.logError(error, {
         metadata: { type: 'uncaught_exception' }
       })

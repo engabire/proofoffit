@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/rest";
+import { logger } from "@/lib/utils/logger";
 
 export interface VerificationStatus {
   isVerified: boolean;
@@ -36,7 +37,7 @@ export async function verifyGitHubCommit(
       },
     };
   } catch (error) {
-    console.error("Error verifying GitHub commit:", error);
+    logger.error("Error verifying GitHub commit:", error);
     return {
       isVerified: false,
       verificationType: "github",
@@ -75,7 +76,7 @@ export async function verifyDOI(doi: string): Promise<VerificationStatus> {
       },
     };
   } catch (error) {
-    console.error("Error verifying DOI:", error);
+    logger.error("Error verifying DOI:", error);
     return {
       isVerified: false,
       verificationType: "doi",
@@ -121,7 +122,7 @@ export async function verifyArXiv(arxivId: string): Promise<VerificationStatus> 
       },
     };
   } catch (error) {
-    console.error("Error verifying arXiv ID:", error);
+    logger.error("Error verifying arXiv ID:", error);
     return {
       isVerified: false,
       verificationType: "arxiv",
@@ -177,7 +178,6 @@ export async function verifyProofUrl(url: string): Promise<VerificationStatus> {
     isVerified: false,
   };
 }
-
 
 
 

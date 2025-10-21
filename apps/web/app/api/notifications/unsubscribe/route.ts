@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/utils/logger";
 
 export async function POST(req: NextRequest) {
     try {
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
         // 3. Clean up any associated data
 
         // Log unsubscription (in production, remove from database)
-        console.log("Push subscription removed:", {
+        logger.info("Push subscription removed:", {
             endpoint,
             timestamp: new Date().toISOString(),
         });
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
             message: "Subscription removed successfully",
         });
     } catch (error) {
-        console.error("Error removing push subscription:", error);
+        logger.error("Error removing push subscription:", error);
         return NextResponse.json(
             { error: "Failed to remove subscription" },
             { status: 500 },

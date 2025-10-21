@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -68,7 +68,7 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
         hasPrevPage: false,
     });
 
-    const searchJobs = async (page = 1) => {
+    const searchJobs = useCallback(async (page = 1) => {
         setLoading(true);
         setError(null);
 
@@ -95,11 +95,11 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters, pagination.limit]);
 
     useEffect(() => {
         searchJobs();
-    }, []);
+    }, [searchJobs]);
 
     const handleFilterChange = (key: string, value: string | boolean) => {
         setFilters(prev => ({ ...prev, [key]: value }));

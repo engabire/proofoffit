@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { hmac } from "@/lib/hash";
+import { logger } from "@/lib/utils/logger";
 
 export interface SecurityContext {
   correlationId: string;
@@ -37,15 +38,13 @@ export async function logSecurityEvent(
 ) {
   try {
     // TODO: Implement security event logging when analytics model is available
-    // eslint-disable-next-line no-console
-    console.log("Security event:", {
+    logger.info("Security event:", {
       event: `security_${event}`,
       context,
       metadata,
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Failed to log security event:", error);
+    logger.error("Failed to log security event:", error);
     // Don't throw - logging failures shouldn't break the app
   }
 }
@@ -85,7 +84,6 @@ export async function checkAuditLinkSecurity(
   // For now, return valid for all tokens with correct format
   return { isValid: true };
 }
-
 
 
 

@@ -1,4 +1,5 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { logger } from '@/lib/utils/logger'
 
 export interface PolicyDecision {
   allowed: boolean
@@ -56,7 +57,7 @@ export class PolicyEngine {
         action
       }
     } catch (error) {
-      console.error('Policy check failed:', error)
+      logger.error('Policy check failed:', error)
       return {
         allowed: false,
         captcha: true,
@@ -80,7 +81,7 @@ export class PolicyEngine {
 
       return policy?.captcha || false
     } catch (error) {
-      console.error('CAPTCHA check failed:', error)
+      logger.error('CAPTCHA check failed:', error)
       return true // Default to requiring CAPTCHA if check fails
     }
   }
@@ -98,7 +99,7 @@ export class PolicyEngine {
       if (error) throw error
       return policies || []
     } catch (error) {
-      console.error('Failed to fetch policy sources:', error)
+      logger.error('Failed to fetch policy sources:', error)
       return []
     }
   }
@@ -116,7 +117,7 @@ export class PolicyEngine {
       if (error) throw error
       return true
     } catch (error) {
-      console.error('Failed to update policy source:', error)
+      logger.error('Failed to update policy source:', error)
       return false
     }
   }
@@ -136,7 +137,7 @@ export class PolicyEngine {
       if (error) throw error
       return true
     } catch (error) {
-      console.error('Failed to add policy source:', error)
+      logger.error('Failed to add policy source:', error)
       return false
     }
   }
@@ -224,7 +225,7 @@ export class PolicyEngine {
 
       if (error) throw error
     } catch (error) {
-      console.error('Failed to log policy decision:', error)
+      logger.error('Failed to log policy decision:', error)
     }
   }
 

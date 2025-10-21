@@ -1,3 +1,5 @@
+import { logger } from "@/lib/utils/logger";
+
 export type AnalyticsEventType = 
   | "target_created"
   | "audit_link_created"
@@ -16,11 +18,9 @@ export interface AnalyticsEvent {
 export async function trackEvent(event: AnalyticsEvent) {
   try {
     // TODO: Implement analytics storage when database model is available
-    // eslint-disable-next-line no-console
-    console.log("Analytics event:", event);
+    logger.info("Analytics event:", event);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Failed to track analytics event:", error);
+    logger.error("Failed to track analytics event:", error);
     // Don't throw - analytics failures shouldn't break the app
   }
 }
@@ -61,19 +61,15 @@ export function startTimer(_label: string): number {
 
 export function stopTimer(startTime: number, label: string): number {
   const duration = performance.now() - startTime;
-  // eslint-disable-next-line no-console
-  console.log(`${label}: ${duration.toFixed(2)}ms`);
+  logger.info(`${label}: ${duration.toFixed(2)}ms`);
   return duration;
 }
 
 // Simple tracking function for client-side events
 export function track(event: { name: string; properties?: Record<string, any> }) {
-  // eslint-disable-next-line no-console
-  console.log('Analytics event:', event);
+  logger.info("Analytics event:", event);
   // In a real implementation, this would send to analytics service
 }
-
-
 
 
 

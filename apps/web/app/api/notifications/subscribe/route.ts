@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { logger } from "@/lib/utils/logger";
 
 export async function POST(req: NextRequest) {
     try {
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
         };
 
         // Log subscription (in production, store in database)
-        console.log("Push subscription received:", {
+        logger.info("Push subscription received:", {
             endpoint: subscription.endpoint,
             userAgent: subscriptionData.userAgent,
             timestamp: subscriptionData.timestamp,
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
             subscriptionId: `sub_${Date.now()}`,
         });
     } catch (error) {
-        console.error("Error saving push subscription:", error);
+        logger.error("Error saving push subscription:", error);
         return NextResponse.json(
             { error: "Failed to save subscription" },
             { status: 500 },

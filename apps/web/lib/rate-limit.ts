@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+import { logger } from "@/lib/utils/logger";
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -48,7 +49,7 @@ export async function checkRateLimit(
     }
     
     // If Redis is down, allow the request but log the error
-    console.error("Rate limit check failed:", error);
+    logger.error("Rate limit check failed:", error);
   }
 }
 
@@ -83,7 +84,6 @@ export const RATE_LIMITS = {
     maxRequests: 5, // 5 auth attempts per 15 minutes per IP
   },
 } as const;
-
 
 
 

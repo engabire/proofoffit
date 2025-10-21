@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/utils/logger'
 import { createClientSupabaseClient } from '@/lib/supabase/client'
 import type { User, Session } from '@supabase/supabase-js'
 
@@ -202,8 +203,7 @@ export function useAuth() {
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        // eslint-disable-next-line no-console
-        console.log('Auth state changed:', event, session?.user?.email)
+        logger.info('Auth state changed:', { event, email: session?.user?.email })
         
         setState(prev => ({
           ...prev,

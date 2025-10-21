@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LogoSymbol } from "@/components/branding/logo-symbol";
@@ -14,6 +15,7 @@ import {
     User,
     Users,
 } from "lucide-react";
+import { logger } from "@/lib/utils/logger";
 
 interface UnifiedAuthProps {
     mode: "signin" | "signup";
@@ -46,11 +48,10 @@ export function UnifiedAuth({
         setIsLoading(true);
 
         // TODO: Implement actual authentication
-        console.log("Auth attempt:", {
+        logger.info("Auth attempt:", {
             mode,
             userType,
-            email,
-            password,
+            hasEmail: Boolean(email),
             fullName: isSignup ? fullName : undefined,
             agreedToTerms: isSignup ? agreedToTerms : undefined,
         });
@@ -99,11 +100,13 @@ export function UnifiedAuth({
                     {/* Image Grid */}
                     <div className="grid grid-cols-2 gap-4 mb-8">
                         <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <div className="w-full h-32 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                                <img
+                        <div className="relative w-full h-32 rounded-lg mb-3 overflow-hidden">
+                                <Image
                                     src="/images/professionals/construction-worker.svg"
                                     alt="Construction worker with blueprints and safety equipment"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="(max-width: 1024px) 200px, 240px"
+                                    className="object-cover"
                                 />
                             </div>
                             <p className="text-sm text-gray-700 font-medium">
@@ -112,11 +115,13 @@ export function UnifiedAuth({
                         </div>
 
                         <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <div className="w-full h-32 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                                <img
+                        <div className="relative w-full h-32 rounded-lg mb-3 overflow-hidden">
+                                <Image
                                     src="/images/professionals/healthcare-professional.svg"
                                     alt="Healthcare professional with stethoscope and medical equipment"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="(max-width: 1024px) 200px, 240px"
+                                    className="object-cover"
                                 />
                             </div>
                             <p className="text-sm text-gray-700 font-medium">
@@ -125,11 +130,13 @@ export function UnifiedAuth({
                         </div>
 
                         <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <div className="w-full h-32 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                                <img
+                        <div className="relative w-full h-32 rounded-lg mb-3 overflow-hidden">
+                                <Image
                                     src="/images/professionals/culinary-professional.svg"
                                     alt="Culinary professional in kitchen with chef hat and plates"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="(max-width: 1024px) 200px, 240px"
+                                    className="object-cover"
                                 />
                             </div>
                             <p className="text-sm text-gray-700 font-medium">
@@ -138,11 +145,13 @@ export function UnifiedAuth({
                         </div>
 
                         <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <div className="w-full h-32 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                                <img
+                        <div className="relative w-full h-32 rounded-lg mb-3 overflow-hidden">
+                                <Image
                                     src="/images/professionals/technology-professional.svg"
                                     alt="Technology professional at computer with multiple monitors"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="(max-width: 1024px) 200px, 240px"
+                                    className="object-cover"
                                 />
                             </div>
                             <p className="text-sm text-gray-700 font-medium">
@@ -207,11 +216,13 @@ export function UnifiedAuth({
                 {/* Mobile Image Grid */}
                 <div className="grid grid-cols-2 gap-3 mb-6">
                     <div className="bg-white rounded-lg p-3 shadow-sm">
-                        <div className="w-full h-20 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-                            <img
+                        <div className="relative w-full h-20 rounded-lg mb-2 overflow-hidden">
+                            <Image
                                 src="/images/professionals/construction-worker.svg"
                                 alt="Construction worker"
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="(max-width: 640px) 140px, 180px"
+                                className="object-cover"
                             />
                         </div>
                         <p className="text-xs text-gray-700 font-medium">
@@ -219,11 +230,13 @@ export function UnifiedAuth({
                         </p>
                     </div>
                     <div className="bg-white rounded-lg p-3 shadow-sm">
-                        <div className="w-full h-20 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-                            <img
+                        <div className="relative w-full h-20 rounded-lg mb-2 overflow-hidden">
+                            <Image
                                 src="/images/professionals/healthcare-professional.svg"
                                 alt="Healthcare professional"
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="(max-width: 640px) 140px, 180px"
+                                className="object-cover"
                             />
                         </div>
                         <p className="text-xs text-gray-700 font-medium">
@@ -231,11 +244,13 @@ export function UnifiedAuth({
                         </p>
                     </div>
                     <div className="bg-white rounded-lg p-3 shadow-sm">
-                        <div className="w-full h-20 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-                            <img
+                        <div className="relative w-full h-20 rounded-lg mb-2 overflow-hidden">
+                            <Image
                                 src="/images/professionals/culinary-professional.svg"
                                 alt="Culinary professional"
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="(max-width: 640px) 140px, 180px"
+                                className="object-cover"
                             />
                         </div>
                         <p className="text-xs text-gray-700 font-medium">
@@ -243,11 +258,13 @@ export function UnifiedAuth({
                         </p>
                     </div>
                     <div className="bg-white rounded-lg p-3 shadow-sm">
-                        <div className="w-full h-20 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-                            <img
+                        <div className="relative w-full h-20 rounded-lg mb-2 overflow-hidden">
+                            <Image
                                 src="/images/professionals/technology-professional.svg"
                                 alt="Technology professional"
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="(max-width: 640px) 140px, 180px"
+                                className="object-cover"
                             />
                         </div>
                         <p className="text-xs text-gray-700 font-medium">

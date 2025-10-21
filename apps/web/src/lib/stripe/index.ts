@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { isSupabaseConfigured } from "../env";
 import { getStripe } from "./config";
+import { logger } from "@/lib/utils/logger";
 
 function getStripeClient(): Stripe {
   return getStripe();
@@ -193,7 +194,7 @@ export class StripeService {
 
       return { url: session.url! };
     } catch (error) {
-      console.error("Stripe checkout error:", error);
+      logger.error("Stripe checkout error:", error);
       throw error;
     }
   }
@@ -213,7 +214,7 @@ export class StripeService {
 
       return { url: session.url };
     } catch (error) {
-      console.error("Stripe portal error:", error);
+      logger.error("Stripe portal error:", error);
       throw error;
     }
   }
@@ -255,7 +256,7 @@ export class StripeService {
           : undefined,
       };
     } catch (error) {
-      console.error("Stripe customer error:", error);
+      logger.error("Stripe customer error:", error);
       return null;
     }
   }
@@ -285,7 +286,7 @@ export class StripeService {
 
       return true;
     } catch (error) {
-      console.error("Failed to update tenant plan:", error);
+      logger.error("Failed to update tenant plan:", error);
       return false;
     }
   }
@@ -363,7 +364,7 @@ export class StripeService {
         current,
       };
     } catch (error) {
-      console.error("Feature access check failed:", error);
+      logger.error("Feature access check failed:", error);
       return { allowed: false };
     }
   }
@@ -427,7 +428,7 @@ export class StripeService {
         },
       };
     } catch (error) {
-      console.error("Usage stats failed:", error);
+      logger.error("Usage stats failed:", error);
       return {
         applications: { current: 0, limit: 0 },
         slates: { current: 0, limit: 0 },
@@ -465,7 +466,7 @@ export class StripeService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Failed to log plan change:", error);
+      logger.error("Failed to log plan change:", error);
     }
   }
 

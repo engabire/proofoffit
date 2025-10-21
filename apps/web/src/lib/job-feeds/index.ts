@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/utils/logger";
 
 export interface JobFeedResult {
   jobs: any[];
@@ -53,8 +54,7 @@ export class USAJobsConnector implements JobFeedConnector {
         totalFound: data.SearchResult?.SearchResultCountAll || 0,
       };
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Error fetching from USAJOBS:", error);
+      logger.error("Error fetching from USAJOBS:", error);
       return {
         jobs: [],
         source: "usajobs",
@@ -276,15 +276,13 @@ export class JobFeedManager {
           },
         });
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error("Error saving job:", error);
+        logger.error("Error saving job:", error);
       }
     }
   }
 
   async refreshJobFeeds(): Promise<void> {
-    // eslint-disable-next-line no-console
-    console.log("Starting job feed refresh...");
+    logger.info("Starting job feed refresh...");
 
     const commonSearches = [
       { keywords: "software engineer", location: "" },
@@ -298,22 +296,17 @@ export class JobFeedManager {
       try {
         const results = await this.fetchAllJobs(search);
         await this.saveJobsToDatabase(results);
-        // eslint-disable-next-line no-console
-        console.log(
+        logger.info(
           `Fetched ${
             results.reduce((sum, r) => sum + r.jobs.length, 0)
           } jobs for "${search.keywords}"`,
         );
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(`Error fetching jobs for "${search.keywords}":`, error);
+        logger.error(`Error fetching jobs for "${search.keywords}":`, error);
       }
     }
 
-    // eslint-disable-next-line no-console
-
-    // eslint-disable-next-line no-console
-    console.log("Job feed refresh completed");
+    logger.info("Job feed refresh completed");
   }
 }
 

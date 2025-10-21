@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Briefcase,
@@ -69,17 +70,23 @@ export default function HomePage() {
           <div className="relative max-w-4xl mx-auto mb-16">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="order-2 md:order-1">
-                <img 
-                  src="/images/illustrations/job-matching.svg" 
+                <Image
+                  src="/images/illustrations/job-matching.svg"
                   alt="AI-powered job matching illustration"
+                  width={640}
+                  height={480}
                   className="w-full h-auto max-w-md mx-auto"
+                  priority
                 />
               </div>
               <div className="order-1 md:order-2">
-                <img 
-                  src="/images/illustrations/dashboard-preview.svg" 
+                <Image
+                  src="/images/illustrations/dashboard-preview.svg"
                   alt="ProofOfFit dashboard preview"
+                  width={640}
+                  height={480}
                   className="w-full h-auto max-w-md mx-auto"
+                  priority
                 />
               </div>
             </div>
@@ -124,9 +131,11 @@ export default function HomePage() {
 
           {/* Trust Badges */}
           <div className="mt-8 max-w-4xl mx-auto">
-            <img 
-              src="/images/ui-elements/trust-badges.svg" 
+            <Image
+              src="/images/ui-elements/trust-badges.svg"
               alt="Security and compliance badges"
+              width={1200}
+              height={200}
               className="w-full h-auto"
             />
           </div>
@@ -190,11 +199,15 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/construction-worker.svg" 
-                  alt="Construction professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/construction-worker.svg"
+                    alt="Construction professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Construction</h3>
               <p className="text-xs text-gray-600">Safety & Project Management</p>
@@ -202,11 +215,15 @@ export default function HomePage() {
             
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/healthcare-professional.svg" 
-                  alt="Healthcare professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/healthcare-professional.svg"
+                    alt="Healthcare professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Healthcare</h3>
               <p className="text-xs text-gray-600">Medical & Patient Care</p>
@@ -214,11 +231,15 @@ export default function HomePage() {
             
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/culinary-professional.svg" 
-                  alt="Culinary professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/culinary-professional.svg"
+                    alt="Culinary professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Culinary</h3>
               <p className="text-xs text-gray-600">Food Service & Hospitality</p>
@@ -226,11 +247,15 @@ export default function HomePage() {
             
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/technology-professional.svg" 
-                  alt="Technology professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/technology-professional.svg"
+                    alt="Technology professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Technology</h3>
               <p className="text-xs text-gray-600">Software & Engineering</p>
@@ -238,11 +263,15 @@ export default function HomePage() {
             
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/education-professional.svg" 
-                  alt="Education professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/education-professional.svg"
+                    alt="Education professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Education</h3>
               <p className="text-xs text-gray-600">Teaching & Administration</p>
@@ -250,11 +279,15 @@ export default function HomePage() {
             
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <img 
-                  src="/images/professionals/finance-professional.svg" 
-                  alt="Finance professional"
-                  className="w-full h-24 object-cover rounded-lg"
-                />
+                <div className="relative w-full h-24 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/professionals/finance-professional.svg"
+                    alt="Finance professional"
+                    fill
+                    sizes="(max-width: 768px) 150px, 200px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Finance</h3>
               <p className="text-xs text-gray-600">Banking & Investment</p>

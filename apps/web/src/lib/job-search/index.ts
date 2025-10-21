@@ -1,3 +1,5 @@
+import { logger } from "@/lib/utils/logger";
+
 // Enhanced Job Search Service for ProofOfFit
 // Integrates with multiple job boards with proper error handling and rate limiting
 
@@ -142,7 +144,7 @@ export class JobSearchService {
 
     // Log errors for monitoring
     if (errors.length > 0) {
-      console.warn("Job search errors:", errors);
+      logger.warn("Job search errors:", errors);
     }
 
     // Deduplicate, sort by relevance, and limit results
@@ -177,7 +179,7 @@ export class JobSearchService {
           };
       }
     } catch (error) {
-      console.error(`Error searching ${board}:`, error);
+      logger.error(`Error searching ${board}:`, error);
       return {
         success: false,
         jobs: [],
@@ -248,7 +250,7 @@ export class JobSearchService {
         source: "remoteok",
       };
     } catch (error: any) {
-      console.error("RemoteOK search error:", error);
+      logger.error("RemoteOK search error:", error);
       return {
         success: false,
         jobs: [],
@@ -315,7 +317,7 @@ export class JobSearchService {
         source: "indeed",
       };
     } catch (error: any) {
-      console.error("Indeed search error:", error);
+      logger.error("Indeed search error:", error);
       return {
         success: false,
         jobs: [],

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, CheckCircle, Info, X, XCircle } from "lucide-react";
 
@@ -34,6 +34,13 @@ export function Toast({
     return () => clearTimeout(timer);
   }, []);
 
+  const handleClose = useCallback(() => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onClose?.(id);
+    }, 300);
+  }, [id, onClose]);
+
   useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => {
@@ -41,14 +48,7 @@ export function Toast({
       }, duration);
       return () => clearTimeout(timer);
     }
-  }, [duration]);
-
-  const handleClose = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onClose?.(id);
-    }, 300);
-  };
+  }, [duration, handleClose]);
 
   const typeConfig = {
     success: {
