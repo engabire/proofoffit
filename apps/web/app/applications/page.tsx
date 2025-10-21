@@ -9,9 +9,12 @@ export default function ApplicationsPage() {
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold mb-4">Job Applications</h1>
+                    <h1 className="text-4xl font-bold mb-4">
+                        Job Applications
+                    </h1>
                     <p className="text-xl text-gray-600">
-                        Track and manage your job applications with detailed analytics
+                        Track and manage your job applications with detailed
+                        analytics
                     </p>
                 </div>
 

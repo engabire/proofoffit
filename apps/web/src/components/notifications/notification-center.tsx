@@ -1,31 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-    Bell, 
-    BellRing, 
-    Check, 
-    CheckCheck, 
-    Trash2, 
-    ExternalLink,
-    Clock,
+import {
     AlertCircle,
-    TrendingUp,
+    Bell,
+    BellRing,
     Briefcase,
-    User,
-    Settings,
+    Check,
+    CheckCheck,
+    Clock,
+    ExternalLink,
     Eye,
-    EyeOff
+    EyeOff,
+    Settings,
+    Trash2,
+    TrendingUp,
+    User,
 } from "lucide-react";
 
 interface NotificationType {
-    type: 'job-match' | 'application-update' | 'interview-reminder' | 'new-job-alert' | 'skill-assessment' | 'profile-completion' | 'system';
-    priority: 'low' | 'medium' | 'high' | 'urgent';
-    category: 'job' | 'application' | 'profile' | 'system';
+    type:
+        | "job-match"
+        | "application-update"
+        | "interview-reminder"
+        | "new-job-alert"
+        | "skill-assessment"
+        | "profile-completion"
+        | "system";
+    priority: "low" | "medium" | "high" | "urgent";
+    category: "job" | "application" | "profile" | "system";
 }
 
 interface Notification {
@@ -68,7 +75,7 @@ interface NotificationPreferences {
         profileCompletion: boolean;
         system: boolean;
     };
-    frequency: 'immediate' | 'daily' | 'weekly';
+    frequency: "immediate" | "daily" | "weekly";
     quietHours: {
         enabled: boolean;
         start: string;
@@ -82,10 +89,14 @@ interface NotificationCenterProps {
     compact?: boolean;
 }
 
-export function NotificationCenter({ userId, compact = false }: NotificationCenterProps) {
+export function NotificationCenter(
+    { userId, compact = false }: NotificationCenterProps,
+) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [stats, setStats] = useState<NotificationStats | null>(null);
-    const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
+    const [preferences, setPreferences] = useState<
+        NotificationPreferences | null
+    >(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState("all");
@@ -95,8 +106,10 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
         setError(null);
 
         try {
-            const response = await fetch("/api/notifications?includeStats=true");
-            
+            const response = await fetch(
+                "/api/notifications?includeStats=true",
+            );
+
             if (!response.ok) {
                 throw new Error("Failed to fetch notifications");
             }
@@ -130,13 +143,17 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
             });
 
             if (response.ok) {
-                setNotifications(prev => 
-                    prev.map(notif => 
-                        notif.id === notificationId ? { ...notif, read: true } : notif
+                setNotifications((prev) =>
+                    prev.map((notif) =>
+                        notif.id === notificationId
+                            ? { ...notif, read: true }
+                            : notif
                     )
                 );
                 if (stats) {
-                    setStats(prev => prev ? { ...prev, unread: prev.unread - 1 } : null);
+                    setStats((prev) =>
+                        prev ? { ...prev, unread: prev.unread - 1 } : null
+                    );
                 }
             }
         } catch (err) {
@@ -157,11 +174,11 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
             });
 
             if (response.ok) {
-                setNotifications(prev => 
-                    prev.map(notif => ({ ...notif, read: true }))
+                setNotifications((prev) =>
+                    prev.map((notif) => ({ ...notif, read: true }))
                 );
                 if (stats) {
-                    setStats(prev => prev ? { ...prev, unread: 0 } : null);
+                    setStats((prev) => prev ? { ...prev, unread: 0 } : null);
                 }
             }
         } catch (err) {
@@ -183,13 +200,23 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
             });
 
             if (response.ok) {
-                setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+                setNotifications((prev) =>
+                    prev.filter((notif) => notif.id !== notificationId)
+                );
                 if (stats) {
-                    setStats(prev => prev ? { 
-                        ...prev, 
-                        total: prev.total - 1,
-                        unread: prev.unread - (notifications.find(n => n.id === notificationId)?.read ? 0 : 1)
-                    } : null);
+                    setStats((prev) =>
+                        prev
+                            ? {
+                                ...prev,
+                                total: prev.total - 1,
+                                unread: prev.unread - (notifications.find((n) =>
+                                        n.id === notificationId
+                                    )?.read
+                                    ? 0
+                                    : 1),
+                            }
+                            : null
+                    );
                 }
             }
         } catch (err) {
@@ -199,24 +226,37 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
 
     const getPriorityColor = (priority: string) => {
         switch (priority) {
-            case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
-            case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-            case 'medium': return 'bg-blue-100 text-blue-800 border-blue-200';
-            case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
-            default: return 'bg-gray-100 text-gray-800 border-gray-200';
+            case "urgent":
+                return "bg-red-100 text-red-800 border-red-200";
+            case "high":
+                return "bg-orange-100 text-orange-800 border-orange-200";
+            case "medium":
+                return "bg-blue-100 text-blue-800 border-blue-200";
+            case "low":
+                return "bg-gray-100 text-gray-800 border-gray-200";
+            default:
+                return "bg-gray-100 text-gray-800 border-gray-200";
         }
     };
 
     const getTypeIcon = (type: string) => {
         switch (type) {
-            case 'job-match': return <TrendingUp className="h-4 w-4" />;
-            case 'application-update': return <Briefcase className="h-4 w-4" />;
-            case 'interview-reminder': return <Clock className="h-4 w-4" />;
-            case 'new-job-alert': return <Bell className="h-4 w-4" />;
-            case 'skill-assessment': return <User className="h-4 w-4" />;
-            case 'profile-completion': return <User className="h-4 w-4" />;
-            case 'system': return <Settings className="h-4 w-4" />;
-            default: return <Bell className="h-4 w-4" />;
+            case "job-match":
+                return <TrendingUp className="h-4 w-4" />;
+            case "application-update":
+                return <Briefcase className="h-4 w-4" />;
+            case "interview-reminder":
+                return <Clock className="h-4 w-4" />;
+            case "new-job-alert":
+                return <Bell className="h-4 w-4" />;
+            case "skill-assessment":
+                return <User className="h-4 w-4" />;
+            case "profile-completion":
+                return <User className="h-4 w-4" />;
+            case "system":
+                return <Settings className="h-4 w-4" />;
+            default:
+                return <Bell className="h-4 w-4" />;
         }
     };
 
@@ -227,14 +267,14 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
         const diffMinutes = Math.ceil(diffTime / (1000 * 60));
         const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffMinutes < 60) return `${diffMinutes}m ago`;
         if (diffHours < 24) return `${diffHours}h ago`;
         if (diffDays < 7) return `${diffDays}d ago`;
         return past.toLocaleDateString();
     };
 
-    const filteredNotifications = notifications.filter(notif => {
+    const filteredNotifications = notifications.filter((notif) => {
         if (activeTab === "all") return true;
         if (activeTab === "unread") return !notif.read;
         return notif.type.type === activeTab;
@@ -258,7 +298,8 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600">
+                </div>
             </div>
         );
     }
@@ -285,12 +326,20 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
                 </div>
                 <div className="flex items-center gap-2">
                     {stats && stats.unread > 0 && (
-                        <Button size="sm" variant="outline" onClick={markAllAsRead}>
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={markAllAsRead}
+                        >
                             <CheckCheck className="h-4 w-4 mr-2" />
                             Mark All Read
                         </Button>
                     )}
-                    <Button size="sm" variant="outline" onClick={fetchNotifications}>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={fetchNotifications}
+                    >
                         Refresh
                     </Button>
                 </div>
@@ -301,20 +350,28 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card>
                         <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+                            <div className="text-2xl font-bold text-blue-600">
+                                {stats.total}
+                            </div>
                             <div className="text-sm text-gray-600">Total</div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-orange-600">{stats.unread}</div>
+                            <div className="text-2xl font-bold text-orange-600">
+                                {stats.unread}
+                            </div>
                             <div className="text-sm text-gray-600">Unread</div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-green-600">{stats.recentActivity}</div>
-                            <div className="text-sm text-gray-600">This Week</div>
+                            <div className="text-2xl font-bold text-green-600">
+                                {stats.recentActivity}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                                This Week
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -334,74 +391,138 @@ export function NotificationCenter({ userId, compact = false }: NotificationCent
                     <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="unread">Unread</TabsTrigger>
                     <TabsTrigger value="job-match">Jobs</TabsTrigger>
-                    <TabsTrigger value="application-update">Applications</TabsTrigger>
+                    <TabsTrigger value="application-update">
+                        Applications
+                    </TabsTrigger>
                     <TabsTrigger value="skill-assessment">Skills</TabsTrigger>
                     <TabsTrigger value="system">System</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value={activeTab} className="space-y-4">
-                    {filteredNotifications.length === 0 ? (
-                        <div className="text-center py-8">
-                            <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-gray-600">No notifications found</p>
-                        </div>
-                    ) : (
-                        filteredNotifications.map((notification) => (
-                            <Card key={notification.id} className={`${!notification.read ? 'border-blue-200 bg-blue-50' : ''}`}>
-                                <CardContent className="p-4">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex items-start gap-3 flex-1">
-                                            <div className={`p-2 rounded-full ${!notification.read ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                                                {getTypeIcon(notification.type.type)}
-                                            </div>
-                                            <div className="flex-1">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <h4 className="font-semibold">{notification.data.title}</h4>
-                                                    <Badge className={getPriorityColor(notification.type.priority)}>
-                                                        {notification.type.priority}
-                                                    </Badge>
-                                                    {!notification.read && (
-                                                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    {filteredNotifications.length === 0
+                        ? (
+                            <div className="text-center py-8">
+                                <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                                <p className="text-gray-600">
+                                    No notifications found
+                                </p>
+                            </div>
+                        )
+                        : (
+                            filteredNotifications.map((notification) => (
+                                <Card
+                                    key={notification.id}
+                                    className={`${
+                                        !notification.read
+                                            ? "border-blue-200 bg-blue-50"
+                                            : ""
+                                    }`}
+                                >
+                                    <CardContent className="p-4">
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex items-start gap-3 flex-1">
+                                                <div
+                                                    className={`p-2 rounded-full ${
+                                                        !notification.read
+                                                            ? "bg-blue-100"
+                                                            : "bg-gray-100"
+                                                    }`}
+                                                >
+                                                    {getTypeIcon(
+                                                        notification.type.type,
                                                     )}
                                                 </div>
-                                                <p className="text-gray-600 text-sm mb-2">{notification.data.message}</p>
-                                                <div className="flex items-center gap-4 text-xs text-gray-500">
-                                                    <span>{formatTimeAgo(notification.createdAt)}</span>
-                                                    <span className="capitalize">{notification.type.type.replace('-', ' ')}</span>
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <h4 className="font-semibold">
+                                                            {notification.data
+                                                                .title}
+                                                        </h4>
+                                                        <Badge
+                                                            className={getPriorityColor(
+                                                                notification
+                                                                    .type
+                                                                    .priority,
+                                                            )}
+                                                        >
+                                                            {notification.type
+                                                                .priority}
+                                                        </Badge>
+                                                        {!notification.read && (
+                                                            <div className="w-2 h-2 bg-blue-500 rounded-full">
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-gray-600 text-sm mb-2">
+                                                        {notification.data
+                                                            .message}
+                                                    </p>
+                                                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                                                        <span>
+                                                            {formatTimeAgo(
+                                                                notification
+                                                                    .createdAt,
+                                                            )}
+                                                        </span>
+                                                        <span className="capitalize">
+                                                            {notification.type
+                                                                .type.replace(
+                                                                    "-",
+                                                                    " ",
+                                                                )}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            {notification.data.actionUrl && (
-                                                <Button size="sm" variant="outline" asChild>
-                                                    <a href={notification.data.actionUrl}>
-                                                        <ExternalLink className="h-3 w-3 mr-1" />
-                                                        {notification.data.actionText || 'View'}
-                                                    </a>
-                                                </Button>
-                                            )}
-                                            {!notification.read && (
-                                                <Button 
-                                                    size="sm" 
+                                            <div className="flex items-center gap-1">
+                                                {notification.data.actionUrl &&
+                                                    (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            asChild
+                                                        >
+                                                            <a
+                                                                href={notification
+                                                                    .data
+                                                                    .actionUrl}
+                                                            >
+                                                                <ExternalLink className="h-3 w-3 mr-1" />
+                                                                {notification
+                                                                    .data
+                                                                    .actionText ||
+                                                                    "View"}
+                                                            </a>
+                                                        </Button>
+                                                    )}
+                                                {!notification.read && (
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={() =>
+                                                            markAsRead(
+                                                                notification.id,
+                                                            )}
+                                                    >
+                                                        <Check className="h-3 w-3" />
+                                                    </Button>
+                                                )}
+                                                <Button
+                                                    size="sm"
                                                     variant="ghost"
-                                                    onClick={() => markAsRead(notification.id)}
+                                                    onClick={() =>
+                                                        deleteNotification(
+                                                            notification.id,
+                                                        )}
                                                 >
-                                                    <Check className="h-3 w-3" />
+                                                    <Trash2 className="h-3 w-3" />
                                                 </Button>
-                                            )}
-                                            <Button 
-                                                size="sm" 
-                                                variant="ghost"
-                                                onClick={() => deleteNotification(notification.id)}
-                                            >
-                                                <Trash2 className="h-3 w-3" />
-                                            </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))
-                    )}
+                                    </CardContent>
+                                </Card>
+                            ))
+                        )}
                 </TabsContent>
             </Tabs>
         </div>

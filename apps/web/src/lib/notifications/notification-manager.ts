@@ -1,9 +1,16 @@
 import { Job } from "@/types";
 
 export interface NotificationType {
-    type: 'job-match' | 'application-update' | 'interview-reminder' | 'new-job-alert' | 'skill-assessment' | 'profile-completion' | 'system';
-    priority: 'low' | 'medium' | 'high' | 'urgent';
-    category: 'job' | 'application' | 'profile' | 'system';
+    type:
+        | "job-match"
+        | "application-update"
+        | "interview-reminder"
+        | "new-job-alert"
+        | "skill-assessment"
+        | "profile-completion"
+        | "system";
+    priority: "low" | "medium" | "high" | "urgent";
+    category: "job" | "application" | "profile" | "system";
 }
 
 export interface NotificationData {
@@ -40,7 +47,7 @@ export interface NotificationPreferences {
         profileCompletion: boolean;
         system: boolean;
     };
-    frequency: 'immediate' | 'daily' | 'weekly';
+    frequency: "immediate" | "daily" | "weekly";
     quietHours: {
         enabled: boolean;
         start: string; // HH:MM format
@@ -54,7 +61,7 @@ export interface JobMatchNotification {
     fitScore: number;
     confidence: number;
     reasons: string[];
-    matchType: 'perfect' | 'good' | 'explore' | 'stretch';
+    matchType: "perfect" | "good" | "explore" | "stretch";
 }
 
 export interface ApplicationUpdateNotification {
@@ -71,7 +78,7 @@ export interface InterviewReminderNotification {
     jobTitle: string;
     company: string;
     interviewDate: Date;
-    interviewType: 'phone' | 'video' | 'in-person' | 'technical';
+    interviewType: "phone" | "video" | "in-person" | "technical";
     location?: string;
     interviewer?: string;
     preparationTips?: string[];
@@ -92,10 +99,12 @@ export class NotificationManager {
         userId: string,
         type: NotificationType,
         data: NotificationData,
-        expiresAt?: Date
+        expiresAt?: Date,
     ): Notification {
         const notification: Notification = {
-            id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            id: `notif-${Date.now()}-${
+                Math.random().toString(36).substr(2, 9)
+            }`,
             userId,
             type,
             data,
@@ -113,20 +122,25 @@ export class NotificationManager {
      */
     createJobMatchNotification(
         userId: string,
-        jobMatch: JobMatchNotification
+        jobMatch: JobMatchNotification,
     ): Notification {
         const type: NotificationType = {
-            type: 'job-match',
-            priority: jobMatch.matchType === 'perfect' ? 'high' : 
-                     jobMatch.matchType === 'good' ? 'medium' : 'low',
-            category: 'job',
+            type: "job-match",
+            priority: jobMatch.matchType === "perfect"
+                ? "high"
+                : jobMatch.matchType === "good"
+                ? "medium"
+                : "low",
+            category: "job",
         };
 
         const data: NotificationData = {
             title: `New ${jobMatch.matchType} job match!`,
-            message: `${jobMatch.job.title} at ${jobMatch.job.company || jobMatch.job.org} - ${Math.round(jobMatch.fitScore * 100)}% fit`,
+            message: `${jobMatch.job.title} at ${
+                jobMatch.job.company || jobMatch.job.org
+            } - ${Math.round(jobMatch.fitScore * 100)}% fit`,
             actionUrl: `/jobs/${jobMatch.job.id}`,
-            actionText: 'View Job',
+            actionText: "View Job",
             metadata: {
                 jobId: jobMatch.job.id,
                 fitScore: jobMatch.fitScore,
@@ -144,21 +158,26 @@ export class NotificationManager {
      */
     createApplicationUpdateNotification(
         userId: string,
-        update: ApplicationUpdateNotification
+        update: ApplicationUpdateNotification,
     ): Notification {
         const type: NotificationType = {
-            type: 'application-update',
-            priority: update.newStatus === 'offer-received' ? 'urgent' :
-                     update.newStatus === 'interview-scheduled' ? 'high' :
-                     update.newStatus === 'rejected' ? 'medium' : 'low',
-            category: 'application',
+            type: "application-update",
+            priority: update.newStatus === "offer-received"
+                ? "urgent"
+                : update.newStatus === "interview-scheduled"
+                ? "high"
+                : update.newStatus === "rejected"
+                ? "medium"
+                : "low",
+            category: "application",
         };
 
         const data: NotificationData = {
-            title: 'Application Status Updated',
-            message: `${update.jobTitle} at ${update.company}: ${update.oldStatus} → ${update.newStatus}`,
+            title: "Application Status Updated",
+            message:
+                `${update.jobTitle} at ${update.company}: ${update.oldStatus} → ${update.newStatus}`,
             actionUrl: `/applications/${update.applicationId}`,
-            actionText: 'View Application',
+            actionText: "View Application",
             metadata: {
                 applicationId: update.applicationId,
                 oldStatus: update.oldStatus,
@@ -175,22 +194,24 @@ export class NotificationManager {
      */
     createInterviewReminderNotification(
         userId: string,
-        reminder: InterviewReminderNotification
+        reminder: InterviewReminderNotification,
     ): Notification {
         const type: NotificationType = {
-            type: 'interview-reminder',
-            priority: 'high',
-            category: 'application',
+            type: "interview-reminder",
+            priority: "high",
+            category: "application",
         };
 
-        const timeUntilInterview = reminder.interviewDate.getTime() - Date.now();
+        const timeUntilInterview = reminder.interviewDate.getTime() -
+            Date.now();
         const hoursUntil = Math.round(timeUntilInterview / (1000 * 60 * 60));
 
         const data: NotificationData = {
-            title: 'Interview Reminder',
-            message: `${reminder.jobTitle} at ${reminder.company} in ${hoursUntil} hours`,
+            title: "Interview Reminder",
+            message:
+                `${reminder.jobTitle} at ${reminder.company} in ${hoursUntil} hours`,
             actionUrl: `/applications/${reminder.applicationId}`,
-            actionText: 'View Details',
+            actionText: "View Details",
             metadata: {
                 applicationId: reminder.applicationId,
                 interviewDate: reminder.interviewDate,
@@ -210,19 +231,19 @@ export class NotificationManager {
     createNewJobAlertNotification(
         userId: string,
         job: Job,
-        reason: string
+        reason: string,
     ): Notification {
         const type: NotificationType = {
-            type: 'new-job-alert',
-            priority: 'medium',
-            category: 'job',
+            type: "new-job-alert",
+            priority: "medium",
+            category: "job",
         };
 
         const data: NotificationData = {
-            title: 'New Job Alert',
+            title: "New Job Alert",
             message: `${job.title} at ${job.company || job.org} - ${reason}`,
             actionUrl: `/jobs/${job.id}`,
-            actionText: 'View Job',
+            actionText: "View Job",
             metadata: {
                 jobId: job.id,
                 reason,
@@ -239,19 +260,19 @@ export class NotificationManager {
         userId: string,
         skill: string,
         score: number,
-        level: string
+        level: string,
     ): Notification {
         const type: NotificationType = {
-            type: 'skill-assessment',
-            priority: 'medium',
-            category: 'profile',
+            type: "skill-assessment",
+            priority: "medium",
+            category: "profile",
         };
 
         const data: NotificationData = {
-            title: 'Skill Assessment Complete',
+            title: "Skill Assessment Complete",
             message: `${skill}: ${score}% (${level} level)`,
             actionUrl: `/assessment/results`,
-            actionText: 'View Results',
+            actionText: "View Results",
             metadata: {
                 skill,
                 score,
@@ -268,19 +289,23 @@ export class NotificationManager {
     createProfileCompletionNotification(
         userId: string,
         completionPercentage: number,
-        missingSections: string[]
+        missingSections: string[],
     ): Notification {
         const type: NotificationType = {
-            type: 'profile-completion',
-            priority: completionPercentage >= 80 ? 'low' : 'medium',
-            category: 'profile',
+            type: "profile-completion",
+            priority: completionPercentage >= 80 ? "low" : "medium",
+            category: "profile",
         };
 
         const data: NotificationData = {
-            title: 'Profile Completion Update',
-            message: `Your profile is ${completionPercentage}% complete. ${missingSections.length > 0 ? `Missing: ${missingSections.join(', ')}` : 'Great job!'}`,
-            actionUrl: '/profile',
-            actionText: 'Complete Profile',
+            title: "Profile Completion Update",
+            message: `Your profile is ${completionPercentage}% complete. ${
+                missingSections.length > 0
+                    ? `Missing: ${missingSections.join(", ")}`
+                    : "Great job!"
+            }`,
+            actionUrl: "/profile",
+            actionText: "Complete Profile",
             metadata: {
                 completionPercentage,
                 missingSections,
@@ -296,22 +321,28 @@ export class NotificationManager {
     getUserNotifications(
         userId: string,
         limit: number = 50,
-        unreadOnly: boolean = false
+        unreadOnly: boolean = false,
     ): Notification[] {
-        let userNotifications = this.notifications.filter(notif => notif.userId === userId);
+        let userNotifications = this.notifications.filter((notif) =>
+            notif.userId === userId
+        );
 
         // Filter out expired notifications
-        userNotifications = userNotifications.filter(notif => 
+        userNotifications = userNotifications.filter((notif) =>
             !notif.expiresAt || notif.expiresAt > new Date()
         );
 
         // Filter unread only if requested
         if (unreadOnly) {
-            userNotifications = userNotifications.filter(notif => !notif.read);
+            userNotifications = userNotifications.filter((notif) =>
+                !notif.read
+            );
         }
 
         // Sort by creation date (newest first)
-        userNotifications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        userNotifications.sort((a, b) =>
+            b.createdAt.getTime() - a.createdAt.getTime()
+        );
 
         return userNotifications.slice(0, limit);
     }
@@ -320,7 +351,9 @@ export class NotificationManager {
      * Mark notification as read
      */
     markAsRead(notificationId: string): boolean {
-        const notification = this.notifications.find(notif => notif.id === notificationId);
+        const notification = this.notifications.find((notif) =>
+            notif.id === notificationId
+        );
         if (!notification) return false;
 
         notification.read = true;
@@ -331,11 +364,11 @@ export class NotificationManager {
      * Mark all notifications as read for a user
      */
     markAllAsRead(userId: string): number {
-        const userNotifications = this.notifications.filter(notif => 
+        const userNotifications = this.notifications.filter((notif) =>
             notif.userId === userId && !notif.read
         );
 
-        userNotifications.forEach(notif => {
+        userNotifications.forEach((notif) => {
             notif.read = true;
         });
 
@@ -346,7 +379,9 @@ export class NotificationManager {
      * Delete a notification
      */
     deleteNotification(notificationId: string): boolean {
-        const index = this.notifications.findIndex(notif => notif.id === notificationId);
+        const index = this.notifications.findIndex((notif) =>
+            notif.id === notificationId
+        );
         if (index === -1) return false;
 
         this.notifications.splice(index, 1);
@@ -363,20 +398,25 @@ export class NotificationManager {
         byPriority: Record<string, number>;
         recentActivity: number; // notifications in last 7 days
     } {
-        const userNotifications = this.notifications.filter(notif => notif.userId === userId);
-        const unreadNotifications = userNotifications.filter(notif => !notif.read);
-        
+        const userNotifications = this.notifications.filter((notif) =>
+            notif.userId === userId
+        );
+        const unreadNotifications = userNotifications.filter((notif) =>
+            !notif.read
+        );
+
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        const recentNotifications = userNotifications.filter(notif => 
+        const recentNotifications = userNotifications.filter((notif) =>
             notif.createdAt > sevenDaysAgo
         );
 
         const byType: Record<string, number> = {};
         const byPriority: Record<string, number> = {};
 
-        userNotifications.forEach(notif => {
+        userNotifications.forEach((notif) => {
             byType[notif.type.type] = (byType[notif.type.type] || 0) + 1;
-            byPriority[notif.type.priority] = (byPriority[notif.type.priority] || 0) + 1;
+            byPriority[notif.type.priority] =
+                (byPriority[notif.type.priority] || 0) + 1;
         });
 
         return {
@@ -391,8 +431,12 @@ export class NotificationManager {
     /**
      * Update notification preferences
      */
-    updatePreferences(userId: string, preferences: Partial<NotificationPreferences>): NotificationPreferences {
-        const currentPrefs = this.preferences.get(userId) || this.getDefaultPreferences(userId);
+    updatePreferences(
+        userId: string,
+        preferences: Partial<NotificationPreferences>,
+    ): NotificationPreferences {
+        const currentPrefs = this.preferences.get(userId) ||
+            this.getDefaultPreferences(userId);
         const updatedPrefs = { ...currentPrefs, ...preferences };
         this.preferences.set(userId, updatedPrefs);
         return updatedPrefs;
@@ -402,7 +446,8 @@ export class NotificationManager {
      * Get notification preferences
      */
     getPreferences(userId: string): NotificationPreferences {
-        return this.preferences.get(userId) || this.getDefaultPreferences(userId);
+        return this.preferences.get(userId) ||
+            this.getDefaultPreferences(userId);
     }
 
     /**
@@ -410,21 +455,24 @@ export class NotificationManager {
      */
     shouldSendNotification(userId: string, type: NotificationType): boolean {
         const preferences = this.getPreferences(userId);
-        
+
         // Check if notification type is enabled
-        const typeEnabled = preferences.types[type.type as keyof typeof preferences.types];
+        const typeEnabled =
+            preferences.types[type.type as keyof typeof preferences.types];
         if (!typeEnabled) return false;
 
         // Check quiet hours
         if (preferences.quietHours.enabled) {
             const now = new Date();
-            const currentTime = now.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                timeZone: preferences.quietHours.timezone 
+            const currentTime = now.toLocaleTimeString("en-US", {
+                hour12: false,
+                timeZone: preferences.quietHours.timezone,
             }).substring(0, 5);
-            
-            if (currentTime >= preferences.quietHours.start && 
-                currentTime <= preferences.quietHours.end) {
+
+            if (
+                currentTime >= preferences.quietHours.start &&
+                currentTime <= preferences.quietHours.end
+            ) {
                 return false;
             }
         }
@@ -438,8 +486,8 @@ export class NotificationManager {
     cleanupExpiredNotifications(): number {
         const now = new Date();
         const initialCount = this.notifications.length;
-        
-        this.notifications = this.notifications.filter(notif => 
+
+        this.notifications = this.notifications.filter((notif) =>
             !notif.expiresAt || notif.expiresAt > now
         );
 
@@ -450,8 +498,8 @@ export class NotificationManager {
      * Get notifications that need to be delivered
      */
     getPendingNotifications(): Notification[] {
-        return this.notifications.filter(notif => 
-            !notif.deliveredAt && 
+        return this.notifications.filter((notif) =>
+            !notif.deliveredAt &&
             (!notif.expiresAt || notif.expiresAt > new Date())
         );
     }
@@ -460,7 +508,9 @@ export class NotificationManager {
      * Mark notification as delivered
      */
     markAsDelivered(notificationId: string): boolean {
-        const notification = this.notifications.find(notif => notif.id === notificationId);
+        const notification = this.notifications.find((notif) =>
+            notif.id === notificationId
+        );
         if (!notification) return false;
 
         notification.deliveredAt = new Date();
@@ -471,7 +521,9 @@ export class NotificationManager {
      * Mark notification as clicked
      */
     markAsClicked(notificationId: string): boolean {
-        const notification = this.notifications.find(notif => notif.id === notificationId);
+        const notification = this.notifications.find((notif) =>
+            notif.id === notificationId
+        );
         if (!notification) return false;
 
         notification.clickedAt = new Date();
@@ -481,7 +533,10 @@ export class NotificationManager {
     // Private helper methods
     private initializeDefaultPreferences(): void {
         // Initialize with some default preferences for testing
-        this.preferences.set('user-123', this.getDefaultPreferences('user-123'));
+        this.preferences.set(
+            "user-123",
+            this.getDefaultPreferences("user-123"),
+        );
     }
 
     private getDefaultPreferences(userId: string): NotificationPreferences {
@@ -499,12 +554,12 @@ export class NotificationManager {
                 profileCompletion: true,
                 system: true,
             },
-            frequency: 'immediate',
+            frequency: "immediate",
             quietHours: {
                 enabled: false,
-                start: '22:00',
-                end: '08:00',
-                timezone: 'America/New_York',
+                start: "22:00",
+                end: "08:00",
+                timezone: "America/New_York",
             },
         };
     }

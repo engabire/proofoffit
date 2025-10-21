@@ -25,7 +25,11 @@ const sampleNotifications = [
                 fitScore: 0.95,
                 confidence: 0.9,
                 matchType: "perfect",
-                reasons: ["Strong skill alignment", "Experience level matches", "Salary expectations align"],
+                reasons: [
+                    "Strong skill alignment",
+                    "Experience level matches",
+                    "Salary expectations align",
+                ],
             },
         },
         read: false,
@@ -41,7 +45,8 @@ const sampleNotifications = [
         },
         data: {
             title: "Application Status Updated",
-            message: "Product Manager at StartupXYZ: submitted → interview-scheduled",
+            message:
+                "Product Manager at StartupXYZ: submitted → interview-scheduled",
             actionUrl: "/applications/app-2",
             actionText: "View Application",
             metadata: {
@@ -72,7 +77,10 @@ const sampleNotifications = [
                 interviewDate: new Date(Date.now() + 2 * 60 * 60 * 1000),
                 interviewType: "phone",
                 interviewer: "Jane Smith",
-                preparationTips: ["Review company background", "Prepare questions about the role"],
+                preparationTips: [
+                    "Review company background",
+                    "Prepare questions about the role",
+                ],
             },
         },
         read: false,
@@ -110,7 +118,8 @@ const sampleNotifications = [
         },
         data: {
             title: "Profile Completion Update",
-            message: "Your profile is 80% complete. Missing: Projects, Certifications",
+            message:
+                "Your profile is 80% complete. Missing: Projects, Certifications",
             actionUrl: "/profile",
             actionText: "Complete Profile",
             metadata: {
@@ -124,7 +133,7 @@ const sampleNotifications = [
 ];
 
 // Add sample notifications to the manager
-sampleNotifications.forEach(notif => {
+sampleNotifications.forEach((notif) => {
     (notificationManager as any).notifications.push(notif);
 });
 
@@ -147,8 +156,14 @@ export const GET = withAuditLogging(async (req: NextRequest) => {
         const unreadOnly = searchParams.get("unreadOnly") === "true";
         const includeStats = searchParams.get("includeStats") === "true";
 
-        const notifications = notificationManager.getUserNotifications(userId, limit, unreadOnly);
-        const stats = includeStats ? notificationManager.getUserNotificationStats(userId) : null;
+        const notifications = notificationManager.getUserNotifications(
+            userId,
+            limit,
+            unreadOnly,
+        );
+        const stats = includeStats
+            ? notificationManager.getUserNotificationStats(userId)
+            : null;
         const preferences = notificationManager.getPreferences(userId);
 
         return NextResponse.json({
@@ -163,7 +178,7 @@ export const GET = withAuditLogging(async (req: NextRequest) => {
         console.error("Error fetching notifications:", error);
         return NextResponse.json(
             { error: "Internal server error" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 });
@@ -186,15 +201,17 @@ export const POST = withAuditLogging(async (req: NextRequest) => {
         const userId = "user-123"; // In production, use user.id
 
         switch (action) {
-            case 'mark-read':
+            case "mark-read":
                 const { notificationId } = data;
                 const success = notificationManager.markAsRead(notificationId);
                 return NextResponse.json({
                     success,
-                    message: success ? "Notification marked as read" : "Notification not found",
+                    message: success
+                        ? "Notification marked as read"
+                        : "Notification not found",
                 });
 
-            case 'mark-all-read':
+            case "mark-all-read":
                 const markedCount = notificationManager.markAllAsRead(userId);
                 return NextResponse.json({
                     success: true,
@@ -202,24 +219,33 @@ export const POST = withAuditLogging(async (req: NextRequest) => {
                     data: { markedCount },
                 });
 
-            case 'delete':
+            case "delete":
                 const { notificationId: deleteId } = data;
-                const deleted = notificationManager.deleteNotification(deleteId);
+                const deleted = notificationManager.deleteNotification(
+                    deleteId,
+                );
                 return NextResponse.json({
                     success: deleted,
-                    message: deleted ? "Notification deleted" : "Notification not found",
+                    message: deleted
+                        ? "Notification deleted"
+                        : "Notification not found",
                 });
 
-            case 'click':
+            case "click":
                 const { notificationId: clickId } = data;
                 const clicked = notificationManager.markAsClicked(clickId);
                 return NextResponse.json({
                     success: clicked,
-                    message: clicked ? "Notification click recorded" : "Notification not found",
+                    message: clicked
+                        ? "Notification click recorded"
+                        : "Notification not found",
                 });
 
-            case 'update-preferences':
-                const updatedPrefs = notificationManager.updatePreferences(userId, data.preferences);
+            case "update-preferences":
+                const updatedPrefs = notificationManager.updatePreferences(
+                    userId,
+                    data.preferences,
+                );
                 return NextResponse.json({
                     success: true,
                     message: "Preferences updated successfully",
@@ -229,14 +255,14 @@ export const POST = withAuditLogging(async (req: NextRequest) => {
             default:
                 return NextResponse.json(
                     { error: "Invalid action" },
-                    { status: 400 }
+                    { status: 400 },
                 );
         }
     } catch (error) {
         console.error("Error processing notification action:", error);
         return NextResponse.json(
             { error: "Internal server error" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 });

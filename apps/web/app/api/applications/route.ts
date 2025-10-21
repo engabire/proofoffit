@@ -20,8 +20,10 @@ const mockApplications = [
             educationRequired: ["Bachelor's Degree"],
             industry: "Technology",
             jobType: "Full-time",
-            postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-            description: "We're looking for a senior software engineer to join our team...",
+            postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+                .toISOString(),
+            description:
+                "We're looking for a senior software engineer to join our team...",
             source: "direct",
             org: "TechCorp",
             workType: "Full-time",
@@ -69,7 +71,8 @@ const mockApplications = [
         notes: [
             {
                 id: "note-1",
-                content: "Applied through company website. Position looks like a great fit for my skills.",
+                content:
+                    "Applied through company website. Position looks like a great fit for my skills.",
                 type: "user" as const,
                 createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
                 isPrivate: true,
@@ -80,7 +83,8 @@ const mockApplications = [
                 id: "event-1",
                 type: "status-change" as const,
                 title: "Application Created",
-                description: "Application created for Senior Software Engineer at TechCorp",
+                description:
+                    "Application created for Senior Software Engineer at TechCorp",
                 timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
             },
             {
@@ -116,7 +120,8 @@ const mockApplications = [
             educationRequired: ["Bachelor's Degree"],
             industry: "Technology",
             jobType: "Full-time",
-            postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+                .toISOString(),
             description: "Join our growing product team...",
             source: "recommendation",
             org: "StartupXYZ",
@@ -161,7 +166,8 @@ const mockApplications = [
         notes: [
             {
                 id: "note-2",
-                content: "Referred by Sarah Johnson who works at StartupXYZ. She mentioned they're looking for someone with strong technical background.",
+                content:
+                    "Referred by Sarah Johnson who works at StartupXYZ. She mentioned they're looking for someone with strong technical background.",
                 type: "user" as const,
                 createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
                 isPrivate: true,
@@ -172,7 +178,8 @@ const mockApplications = [
                 id: "event-3",
                 type: "status-change" as const,
                 title: "Application Created",
-                description: "Application created for Product Manager at StartupXYZ",
+                description:
+                    "Application created for Product Manager at StartupXYZ",
                 timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
             },
             {
@@ -227,10 +234,16 @@ export const GET = withAuditLogging(async (req: NextRequest) => {
         const source = searchParams.get("source")?.split(",");
         const company = searchParams.get("company")?.split(",");
         const jobTitle = searchParams.get("jobTitle")?.split(",");
-        const hasInterview = searchParams.get("hasInterview") === "true" ? true : 
-                           searchParams.get("hasInterview") === "false" ? false : undefined;
-        const hasOffer = searchParams.get("hasOffer") === "true" ? true : 
-                        searchParams.get("hasOffer") === "false" ? false : undefined;
+        const hasInterview = searchParams.get("hasInterview") === "true"
+            ? true
+            : searchParams.get("hasInterview") === "false"
+            ? false
+            : undefined;
+        const hasOffer = searchParams.get("hasOffer") === "true"
+            ? true
+            : searchParams.get("hasOffer") === "false"
+            ? false
+            : undefined;
 
         const filters = {
             status,
@@ -241,9 +254,16 @@ export const GET = withAuditLogging(async (req: NextRequest) => {
             hasOffer,
         };
 
-        const result = applicationTracker.getApplications(userId, filters, page, limit);
+        const result = applicationTracker.getApplications(
+            userId,
+            filters,
+            page,
+            limit,
+        );
         const stats = applicationTracker.getApplicationStats(userId);
-        const needsFollowUp = applicationTracker.getApplicationsNeedingFollowUp(userId);
+        const needsFollowUp = applicationTracker.getApplicationsNeedingFollowUp(
+            userId,
+        );
 
         return NextResponse.json({
             success: true,
@@ -263,7 +283,7 @@ export const GET = withAuditLogging(async (req: NextRequest) => {
         console.error("Error fetching applications:", error);
         return NextResponse.json(
             { error: "Internal server error" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 });
@@ -288,11 +308,16 @@ export const POST = withAuditLogging(async (req: NextRequest) => {
         if (!job) {
             return NextResponse.json(
                 { error: "Job data is required" },
-                { status: 400 }
+                { status: 400 },
             );
         }
 
-        const application = applicationTracker.createApplication(userId, job, source, customData);
+        const application = applicationTracker.createApplication(
+            userId,
+            job,
+            source,
+            customData,
+        );
 
         return NextResponse.json({
             success: true,
@@ -305,7 +330,7 @@ export const POST = withAuditLogging(async (req: NextRequest) => {
         console.error("Error creating application:", error);
         return NextResponse.json(
             { error: "Internal server error" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 });

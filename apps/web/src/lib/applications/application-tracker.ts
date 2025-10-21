@@ -1,15 +1,24 @@
 import { Job } from "@/types";
 
 export interface ApplicationStatus {
-    status: 'draft' | 'submitted' | 'under-review' | 'interview-scheduled' | 'interview-completed' | 'offer-received' | 'rejected' | 'withdrawn' | 'hired';
+    status:
+        | "draft"
+        | "submitted"
+        | "under-review"
+        | "interview-scheduled"
+        | "interview-completed"
+        | "offer-received"
+        | "rejected"
+        | "withdrawn"
+        | "hired";
     timestamp: Date;
     notes?: string;
-    updatedBy: 'user' | 'system' | 'employer';
+    updatedBy: "user" | "system" | "employer";
 }
 
 export interface ApplicationDocument {
     id: string;
-    type: 'resume' | 'cover-letter' | 'portfolio' | 'certificate' | 'other';
+    type: "resume" | "cover-letter" | "portfolio" | "certificate" | "other";
     name: string;
     url: string;
     uploadedAt: Date;
@@ -20,14 +29,21 @@ export interface ApplicationDocument {
 export interface ApplicationNote {
     id: string;
     content: string;
-    type: 'user' | 'system' | 'employer';
+    type: "user" | "system" | "employer";
     createdAt: Date;
     isPrivate: boolean;
 }
 
 export interface ApplicationEvent {
     id: string;
-    type: 'status-change' | 'document-upload' | 'note-added' | 'interview-scheduled' | 'email-sent' | 'email-received' | 'reminder-set';
+    type:
+        | "status-change"
+        | "document-upload"
+        | "note-added"
+        | "interview-scheduled"
+        | "email-sent"
+        | "email-received"
+        | "reminder-set";
     title: string;
     description: string;
     timestamp: Date;
@@ -43,28 +59,32 @@ export interface JobApplication {
     documents: ApplicationDocument[];
     notes: ApplicationNote[];
     events: ApplicationEvent[];
-    
+
     // Application details
     appliedAt: Date;
-    source: 'direct' | 'recommendation' | 'auto-apply' | 'referral';
+    source: "direct" | "recommendation" | "auto-apply" | "referral";
     referralContact?: string;
     expectedSalary?: number;
     availabilityDate?: Date;
     customMessage?: string;
-    
+
     // Tracking
     lastActivityAt: Date;
     nextAction?: {
-        type: 'follow-up' | 'interview-prep' | 'document-submission' | 'salary-negotiation';
+        type:
+            | "follow-up"
+            | "interview-prep"
+            | "document-submission"
+            | "salary-negotiation";
         dueDate: Date;
         description: string;
     };
-    
+
     // Analytics
     responseTime?: number; // hours from application to first response
     interviewCount: number;
     rejectionReason?: string;
-    
+
     // Metadata
     createdAt: Date;
     updatedAt: Date;
@@ -110,17 +130,17 @@ export class ApplicationTracker {
     createApplication(
         userId: string,
         job: Job,
-        source: JobApplication['source'] = 'direct',
-        customData?: Partial<JobApplication>
+        source: JobApplication["source"] = "direct",
+        customData?: Partial<JobApplication>,
     ): JobApplication {
         const application: JobApplication = {
             id: `app-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             userId,
             job,
             status: {
-                status: 'draft',
+                status: "draft",
                 timestamp: new Date(),
-                updatedBy: 'user',
+                updatedBy: "user",
             },
             statusHistory: [],
             documents: [],
@@ -137,9 +157,11 @@ export class ApplicationTracker {
 
         // Add initial event
         this.addEvent(application, {
-            type: 'status-change',
-            title: 'Application Created',
-            description: `Application created for ${job.title} at ${job.company || job.org}`,
+            type: "status-change",
+            title: "Application Created",
+            description: `Application created for ${job.title} at ${
+                job.company || job.org
+            }`,
             timestamp: new Date(),
         });
 
@@ -152,18 +174,20 @@ export class ApplicationTracker {
      */
     updateStatus(
         applicationId: string,
-        newStatus: ApplicationStatus['status'],
+        newStatus: ApplicationStatus["status"],
         notes?: string,
-        updatedBy: ApplicationStatus['updatedBy'] = 'user'
+        updatedBy: ApplicationStatus["updatedBy"] = "user",
     ): JobApplication | null {
-        const application = this.applications.find(app => app.id === applicationId);
+        const application = this.applications.find((app) =>
+            app.id === applicationId
+        );
         if (!application) return null;
 
         const oldStatus = application.status.status;
-        
+
         // Add to status history
         application.statusHistory.push({ ...application.status });
-        
+
         // Update current status
         application.status = {
             status: newStatus,
@@ -177,8 +201,8 @@ export class ApplicationTracker {
 
         // Add event
         this.addEvent(application, {
-            type: 'status-change',
-            title: 'Status Updated',
+            type: "status-change",
+            title: "Status Updated",
             description: `Status changed from ${oldStatus} to ${newStatus}`,
             timestamp: new Date(),
             metadata: { oldStatus, newStatus, notes },
@@ -192,9 +216,11 @@ export class ApplicationTracker {
      */
     addDocument(
         applicationId: string,
-        document: Omit<ApplicationDocument, 'id' | 'uploadedAt'>
+        document: Omit<ApplicationDocument, "id" | "uploadedAt">,
     ): JobApplication | null {
-        const application = this.applications.find(app => app.id === applicationId);
+        const application = this.applications.find((app) =>
+            app.id === applicationId
+        );
         if (!application) return null;
 
         const newDocument: ApplicationDocument = {
@@ -209,11 +235,14 @@ export class ApplicationTracker {
 
         // Add event
         this.addEvent(application, {
-            type: 'document-upload',
-            title: 'Document Uploaded',
+            type: "document-upload",
+            title: "Document Uploaded",
             description: `${document.name} uploaded`,
             timestamp: new Date(),
-            metadata: { documentType: document.type, documentName: document.name },
+            metadata: {
+                documentType: document.type,
+                documentName: document.name,
+            },
         });
 
         return application;
@@ -225,10 +254,12 @@ export class ApplicationTracker {
     addNote(
         applicationId: string,
         content: string,
-        type: ApplicationNote['type'] = 'user',
-        isPrivate: boolean = false
+        type: ApplicationNote["type"] = "user",
+        isPrivate: boolean = false,
     ): JobApplication | null {
-        const application = this.applications.find(app => app.id === applicationId);
+        const application = this.applications.find((app) =>
+            app.id === applicationId
+        );
         if (!application) return null;
 
         const note: ApplicationNote = {
@@ -245,9 +276,11 @@ export class ApplicationTracker {
 
         // Add event
         this.addEvent(application, {
-            type: 'note-added',
-            title: 'Note Added',
-            description: type === 'user' ? 'Personal note added' : 'System note added',
+            type: "note-added",
+            title: "Note Added",
+            description: type === "user"
+                ? "Personal note added"
+                : "System note added",
             timestamp: new Date(),
             metadata: { noteType: type, isPrivate },
         });
@@ -262,31 +295,41 @@ export class ApplicationTracker {
         applicationId: string,
         interviewDetails: {
             date: Date;
-            type: 'phone' | 'video' | 'in-person' | 'technical';
+            type: "phone" | "video" | "in-person" | "technical";
             location?: string;
             interviewer?: string;
             notes?: string;
-        }
+        },
     ): JobApplication | null {
-        const application = this.applications.find(app => app.id === applicationId);
+        const application = this.applications.find((app) =>
+            app.id === applicationId
+        );
         if (!application) return null;
 
         // Update status to interview scheduled
-        this.updateStatus(applicationId, 'interview-scheduled', interviewDetails.notes, 'system');
+        this.updateStatus(
+            applicationId,
+            "interview-scheduled",
+            interviewDetails.notes,
+            "system",
+        );
 
         // Add interview event
         this.addEvent(application, {
-            type: 'interview-scheduled',
-            title: 'Interview Scheduled',
-            description: `${interviewDetails.type} interview scheduled for ${interviewDetails.date.toLocaleDateString()}`,
+            type: "interview-scheduled",
+            title: "Interview Scheduled",
+            description:
+                `${interviewDetails.type} interview scheduled for ${interviewDetails.date.toLocaleDateString()}`,
             timestamp: new Date(),
             metadata: interviewDetails,
         });
 
         // Set next action
         application.nextAction = {
-            type: 'interview-prep',
-            dueDate: new Date(interviewDetails.date.getTime() - 24 * 60 * 60 * 1000), // 1 day before
+            type: "interview-prep",
+            dueDate: new Date(
+                interviewDetails.date.getTime() - 24 * 60 * 60 * 1000,
+            ), // 1 day before
             description: `Prepare for ${interviewDetails.type} interview`,
         };
 
@@ -300,66 +343,74 @@ export class ApplicationTracker {
         userId: string,
         filters: ApplicationFilters = {},
         page: number = 1,
-        limit: number = 20
+        limit: number = 20,
     ): {
         applications: JobApplication[];
         total: number;
         page: number;
         totalPages: number;
     } {
-        let filteredApplications = this.applications.filter(app => app.userId === userId);
+        let filteredApplications = this.applications.filter((app) =>
+            app.userId === userId
+        );
 
         // Apply filters
         if (filters.status && filters.status.length > 0) {
-            filteredApplications = filteredApplications.filter(app => 
+            filteredApplications = filteredApplications.filter((app) =>
                 filters.status!.includes(app.status.status)
             );
         }
 
         if (filters.source && filters.source.length > 0) {
-            filteredApplications = filteredApplications.filter(app => 
+            filteredApplications = filteredApplications.filter((app) =>
                 filters.source!.includes(app.source)
             );
         }
 
         if (filters.dateRange) {
-            filteredApplications = filteredApplications.filter(app => 
-                app.appliedAt >= filters.dateRange!.start && 
+            filteredApplications = filteredApplications.filter((app) =>
+                app.appliedAt >= filters.dateRange!.start &&
                 app.appliedAt <= filters.dateRange!.end
             );
         }
 
         if (filters.company && filters.company.length > 0) {
-            filteredApplications = filteredApplications.filter(app => 
-                filters.company!.some(company => 
-                    app.job.company?.toLowerCase().includes(company.toLowerCase()) ||
+            filteredApplications = filteredApplications.filter((app) =>
+                filters.company!.some((company) =>
+                    app.job.company?.toLowerCase().includes(
+                        company.toLowerCase(),
+                    ) ||
                     app.job.org?.toLowerCase().includes(company.toLowerCase())
                 )
             );
         }
 
         if (filters.jobTitle && filters.jobTitle.length > 0) {
-            filteredApplications = filteredApplications.filter(app => 
-                filters.jobTitle!.some(title => 
+            filteredApplications = filteredApplications.filter((app) =>
+                filters.jobTitle!.some((title) =>
                     app.job.title.toLowerCase().includes(title.toLowerCase())
                 )
             );
         }
 
         if (filters.hasInterview !== undefined) {
-            filteredApplications = filteredApplications.filter(app => 
-                filters.hasInterview ? app.interviewCount > 0 : app.interviewCount === 0
+            filteredApplications = filteredApplications.filter((app) =>
+                filters.hasInterview
+                    ? app.interviewCount > 0
+                    : app.interviewCount === 0
             );
         }
 
         if (filters.hasOffer !== undefined) {
-            filteredApplications = filteredApplications.filter(app => 
-                filters.hasOffer ? app.status.status === 'offer-received' : app.status.status !== 'offer-received'
+            filteredApplications = filteredApplications.filter((app) =>
+                filters.hasOffer
+                    ? app.status.status === "offer-received"
+                    : app.status.status !== "offer-received"
             );
         }
 
         // Sort by last activity (most recent first)
-        filteredApplications.sort((a, b) => 
+        filteredApplications.sort((a, b) =>
             b.lastActivityAt.getTime() - a.lastActivityAt.getTime()
         );
 
@@ -368,7 +419,10 @@ export class ApplicationTracker {
         const totalPages = Math.ceil(total / limit);
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
-        const paginatedApplications = filteredApplications.slice(startIndex, endIndex);
+        const paginatedApplications = filteredApplications.slice(
+            startIndex,
+            endIndex,
+        );
 
         return {
             applications: paginatedApplications,
@@ -382,8 +436,10 @@ export class ApplicationTracker {
      * Get application statistics
      */
     getApplicationStats(userId: string): ApplicationStats {
-        const userApplications = this.applications.filter(app => app.userId === userId);
-        
+        const userApplications = this.applications.filter((app) =>
+            app.userId === userId
+        );
+
         if (userApplications.length === 0) {
             return {
                 totalApplications: 0,
@@ -402,47 +458,59 @@ export class ApplicationTracker {
 
         // Status breakdown
         const byStatus: Record<string, number> = {};
-        userApplications.forEach(app => {
-            byStatus[app.status.status] = (byStatus[app.status.status] || 0) + 1;
+        userApplications.forEach((app) => {
+            byStatus[app.status.status] = (byStatus[app.status.status] || 0) +
+                1;
         });
 
         // Source breakdown
         const bySource: Record<string, number> = {};
-        userApplications.forEach(app => {
+        userApplications.forEach((app) => {
             bySource[app.source] = (bySource[app.source] || 0) + 1;
         });
 
         // Monthly breakdown
         const byMonth: Record<string, number> = {};
-        userApplications.forEach(app => {
+        userApplications.forEach((app) => {
             const month = app.appliedAt.toISOString().substring(0, 7); // YYYY-MM
             byMonth[month] = (byMonth[month] || 0) + 1;
         });
 
         // Response time analysis
         const responseTimes = userApplications
-            .filter(app => app.responseTime !== undefined)
-            .map(app => app.responseTime!);
-        const averageResponseTime = responseTimes.length > 0 
-            ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length 
+            .filter((app) => app.responseTime !== undefined)
+            .map((app) => app.responseTime!);
+        const averageResponseTime = responseTimes.length > 0
+            ? responseTimes.reduce((sum, time) => sum + time, 0) /
+                responseTimes.length
             : 0;
 
         // Interview and offer rates
-        const applicationsWithInterviews = userApplications.filter(app => app.interviewCount > 0).length;
-        const applicationsWithOffers = userApplications.filter(app => app.status.status === 'offer-received').length;
-        const rejectedApplications = userApplications.filter(app => app.status.status === 'rejected').length;
+        const applicationsWithInterviews =
+            userApplications.filter((app) => app.interviewCount > 0).length;
+        const applicationsWithOffers =
+            userApplications.filter((app) =>
+                app.status.status === "offer-received"
+            ).length;
+        const rejectedApplications =
+            userApplications.filter((app) => app.status.status === "rejected")
+                .length;
 
-        const interviewRate = (applicationsWithInterviews / userApplications.length) * 100;
-        const offerRate = (applicationsWithOffers / userApplications.length) * 100;
-        const rejectionRate = (rejectedApplications / userApplications.length) * 100;
-        const successRate = (applicationsWithOffers / userApplications.length) * 100;
+        const interviewRate =
+            (applicationsWithInterviews / userApplications.length) * 100;
+        const offerRate = (applicationsWithOffers / userApplications.length) *
+            100;
+        const rejectionRate = (rejectedApplications / userApplications.length) *
+            100;
+        const successRate = (applicationsWithOffers / userApplications.length) *
+            100;
 
         // Top companies and job titles
         const companyCounts: Record<string, number> = {};
         const titleCounts: Record<string, number> = {};
-        
-        userApplications.forEach(app => {
-            const company = app.job.company || app.job.org || 'Unknown';
+
+        userApplications.forEach((app) => {
+            const company = app.job.company || app.job.org || "Unknown";
             companyCounts[company] = (companyCounts[company] || 0) + 1;
             titleCounts[app.job.title] = (titleCounts[app.job.title] || 0) + 1;
         });
@@ -480,24 +548,30 @@ export class ApplicationTracker {
         const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
-        return this.applications.filter(app => {
+        return this.applications.filter((app) => {
             if (app.userId !== userId) return false;
-            
+
             // Applications submitted more than a week ago with no recent activity
-            if (app.status.status === 'submitted' && app.lastActivityAt < oneWeekAgo) {
+            if (
+                app.status.status === "submitted" &&
+                app.lastActivityAt < oneWeekAgo
+            ) {
                 return true;
             }
-            
+
             // Applications under review for more than two weeks
-            if (app.status.status === 'under-review' && app.lastActivityAt < twoWeeksAgo) {
+            if (
+                app.status.status === "under-review" &&
+                app.lastActivityAt < twoWeeksAgo
+            ) {
                 return true;
             }
-            
+
             // Applications with upcoming actions
             if (app.nextAction && app.nextAction.dueDate <= now) {
                 return true;
             }
-            
+
             return false;
         });
     }
@@ -505,12 +579,17 @@ export class ApplicationTracker {
     /**
      * Add an event to an application
      */
-    private addEvent(application: JobApplication, event: Omit<ApplicationEvent, 'id'>): void {
+    private addEvent(
+        application: JobApplication,
+        event: Omit<ApplicationEvent, "id">,
+    ): void {
         const newEvent: ApplicationEvent = {
             ...event,
-            id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            id: `event-${Date.now()}-${
+                Math.random().toString(36).substr(2, 9)
+            }`,
         };
-        
+
         application.events.push(newEvent);
     }
 
@@ -518,16 +597,19 @@ export class ApplicationTracker {
      * Get application by ID
      */
     getApplication(applicationId: string): JobApplication | null {
-        return this.applications.find(app => app.id === applicationId) || null;
+        return this.applications.find((app) => app.id === applicationId) ||
+            null;
     }
 
     /**
      * Delete an application
      */
     deleteApplication(applicationId: string): boolean {
-        const index = this.applications.findIndex(app => app.id === applicationId);
+        const index = this.applications.findIndex((app) =>
+            app.id === applicationId
+        );
         if (index === -1) return false;
-        
+
         this.applications.splice(index, 1);
         return true;
     }
