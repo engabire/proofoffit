@@ -9,7 +9,8 @@ export type AnalyticsEventType =
   | "fit_analysis_complete"
   | "resume_import_complete"
   | "document_download"
-  | "lane_select";
+  | "lane_select"
+  | "job_search_performed";
 
 export interface AnalyticsEvent {
   eventType: AnalyticsEventType;

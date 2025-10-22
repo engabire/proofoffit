@@ -20,7 +20,7 @@ import { HeroIllustration } from "@/components/illustrations/hero-illustration";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default function HomePage() {
   return (

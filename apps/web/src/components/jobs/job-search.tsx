@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
     Search, 
     MapPin, 
@@ -17,7 +18,8 @@ import {
     Filter,
     ExternalLink,
     Heart,
-    Share2
+    Share2,
+    AlertCircle
 } from "lucide-react";
 
 interface Job {
@@ -46,6 +48,7 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [savedJobs, setSavedJobs] = useState<Set<string>>(new Set());
+    const [dataSource, setDataSource] = useState<string | null>(null);
     
     // Search filters
     const [filters, setFilters] = useState({
@@ -88,8 +91,39 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
             }
 
             const data = await response.json();
-            setJobs(data.data.jobs);
-            setPagination(data.data.pagination);
+
+            if (data?.data?.jobs) {
+                setJobs(data.data.jobs);
+                setPagination(prev => ({
+                    ...prev,
+                    ...data.data.pagination,
+                    page: data.data.pagination?.page ?? page,
+                    totalJobs: data.data.pagination?.totalJobs ?? data.data.jobs.length,
+                    totalPages: data.data.pagination?.totalPages ?? Math.max(1, Math.ceil(data.data.jobs.length / Math.max(1, prev.limit))),
+                    hasNextPage: data.data.pagination?.hasNextPage ?? false,
+                    hasPrevPage: data.data.pagination?.hasPrevPage ?? page > 1,
+                }));
+                const resolvedSource = typeof data.data.source === "string"
+                    ? data.data.source
+                    : typeof data.data.filters?.source === "string"
+                        ? data.data.filters?.source
+                        : null;
+                setDataSource(resolvedSource);
+            } else {
+                const jobsPayload = Array.isArray(data?.jobs) ? data.jobs : [];
+                setJobs(jobsPayload);
+                setPagination(prev => ({
+                    ...prev,
+                    page,
+                    totalJobs: typeof data?.total === "number" ? data.total : jobsPayload.length,
+                    totalPages: typeof data?.total === "number"
+                        ? Math.max(1, Math.ceil(data.total / Math.max(1, prev.limit)))
+                        : prev.totalPages,
+                    hasNextPage: Boolean(data?.hasMore),
+                    hasPrevPage: page > 1,
+                }));
+                setDataSource(typeof data?.source === "string" ? data.source : null);
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : "An error occurred");
         } finally {
@@ -124,6 +158,8 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
             return newSet;
         });
     };
+
+    const isMockData = dataSource === "mock";
 
     const formatSalary = (min?: number, max?: number) => {
         if (!min || !max) return "Salary not specified";
@@ -272,6 +308,16 @@ export function JobSearch({ onJobSelect, showFilters = true }: JobSearchProps) {
                     )}
                 </CardContent>
             </Card>
+
+            {isMockData && (
+                <Alert className="border-dashed">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Showing demo jobs</AlertTitle>
+                    <AlertDescription>
+                        Connect live job feeds to unlock real postings and automation features.
+                    </AlertDescription>
+                </Alert>
+            )}
 
             {/* Results */}
             {loading ? (

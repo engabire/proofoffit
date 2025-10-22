@@ -1,94 +1,11 @@
-import { Job } from "@/types";
-
-export interface ApplicationStatus {
-    status:
-        | "draft"
-        | "submitted"
-        | "under-review"
-        | "interview-scheduled"
-        | "interview-completed"
-        | "offer-received"
-        | "rejected"
-        | "withdrawn"
-        | "hired";
-    timestamp: Date;
-    notes?: string;
-    updatedBy: "user" | "system" | "employer";
-}
-
-export interface ApplicationDocument {
-    id: string;
-    type: "resume" | "cover-letter" | "portfolio" | "certificate" | "other";
-    name: string;
-    url: string;
-    uploadedAt: Date;
-    size: number;
-    isPrimary: boolean;
-}
-
-export interface ApplicationNote {
-    id: string;
-    content: string;
-    type: "user" | "system" | "employer";
-    createdAt: Date;
-    isPrivate: boolean;
-}
-
-export interface ApplicationEvent {
-    id: string;
-    type:
-        | "status-change"
-        | "document-upload"
-        | "note-added"
-        | "interview-scheduled"
-        | "email-sent"
-        | "email-received"
-        | "reminder-set";
-    title: string;
-    description: string;
-    timestamp: Date;
-    metadata?: Record<string, any>;
-}
-
-export interface JobApplication {
-    id: string;
-    userId: string;
-    job: Job;
-    status: ApplicationStatus;
-    statusHistory: ApplicationStatus[];
-    documents: ApplicationDocument[];
-    notes: ApplicationNote[];
-    events: ApplicationEvent[];
-
-    // Application details
-    appliedAt: Date;
-    source: "direct" | "recommendation" | "auto-apply" | "referral";
-    referralContact?: string;
-    expectedSalary?: number;
-    availabilityDate?: Date;
-    customMessage?: string;
-
-    // Tracking
-    lastActivityAt: Date;
-    nextAction?: {
-        type:
-            | "follow-up"
-            | "interview-prep"
-            | "document-submission"
-            | "salary-negotiation";
-        dueDate: Date;
-        description: string;
-    };
-
-    // Analytics
-    responseTime?: number; // hours from application to first response
-    interviewCount: number;
-    rejectionReason?: string;
-
-    // Metadata
-    createdAt: Date;
-    updatedAt: Date;
-}
+import {
+    Job,
+    JobApplication,
+    ApplicationStatus,
+    ApplicationDocument,
+    ApplicationNote,
+    ApplicationEvent,
+} from "@/types";
 
 export interface ApplicationStats {
     totalApplications: number;

@@ -1,5 +1,10 @@
 import { logger } from '@/lib/utils/logger'
 
+const REQUEST_TIMEOUT_MS = Number.parseInt(
+  process.env.JOB_FEED_TIMEOUT_MS || '5000',
+  10
+)
+
 // USAJOBS API integration
 export interface USAJobsJob {
   id: string
@@ -41,6 +46,21 @@ export class USAJobsAPI {
     this.apiKey = apiKey || process.env.USAJOBS_API_KEY || ''
   }
 
+  private async fetchWithTimeout(
+    url: string,
+    init: RequestInit = {},
+    timeoutMs = REQUEST_TIMEOUT_MS
+  ) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      return await fetch(url, { ...init, signal: controller.signal })
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
   async searchJobs(params: USAJobsSearchParams): Promise<USAJobsJob[]> {
     try {
       const searchParams = new URLSearchParams()
@@ -56,7 +76,7 @@ export class USAJobsAPI {
       searchParams.append('ResultsPerPage', (params.resultsPerPage || 25).toString())
       searchParams.append('Page', (params.page || 1).toString())
 
-      const response = await fetch(`${this.baseUrl}?${searchParams.toString()}`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}?${searchParams.toString()}`, {
         headers: {
           'Host': 'data.usajobs.gov',
           'User-Agent': 'ProofOfFit/1.0 (contact@proofoffit.com)',
@@ -71,7 +91,11 @@ export class USAJobsAPI {
       const data = await response.json()
       return this.transformJobs(data.SearchResult.SearchResultItems || [])
     } catch (error) {
-      logger.error('USAJOBS API error:', error)
+      if ((error as Error).name === 'AbortError') {
+        logger.warn('USAJOBS API request timed out')
+      } else {
+        logger.error('USAJOBS API error:', error)
+      }
       return []
     }
   }
@@ -109,7 +133,7 @@ export class USAJobsAPI {
   // Get job details by ID
   async getJobDetails(jobId: string): Promise<USAJobsJob | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/${jobId}`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/${jobId}`, {
         headers: {
           'Host': 'data.usajobs.gov',
           'User-Agent': 'ProofOfFit/1.0 (contact@proofoffit.com)',
@@ -125,7 +149,11 @@ export class USAJobsAPI {
       const jobs = this.transformJobs([data])
       return jobs[0] || null
     } catch (error) {
-      console.error('USAJOBS API error:', error)
+      if ((error as Error).name === 'AbortError') {
+        logger.warn('USAJOBS job detail request timed out')
+      } else {
+        console.error('USAJOBS API error:', error)
+      }
       return null
     }
   }
@@ -133,7 +161,7 @@ export class USAJobsAPI {
   // Get organizations list
   async getOrganizations(): Promise<string[]> {
     try {
-      const response = await fetch('https://data.usajobs.gov/api/codelist/agencies', {
+      const response = await this.fetchWithTimeout('https://data.usajobs.gov/api/codelist/agencies', {
         headers: {
           'Host': 'data.usajobs.gov',
           'User-Agent': 'ProofOfFit/1.0 (contact@proofoffit.com)',
@@ -148,7 +176,11 @@ export class USAJobsAPI {
       const data = await response.json()
       return data.CodeList?.[0]?.ValidValue?.map((item: any) => item.Value) || []
     } catch (error) {
-      console.error('USAJOBS API error:', error)
+      if ((error as Error).name === 'AbortError') {
+        logger.warn('USAJOBS organizations request timed out')
+      } else {
+        console.error('USAJOBS API error:', error)
+      }
       return []
     }
   }

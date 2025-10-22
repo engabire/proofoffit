@@ -1,5 +1,33 @@
 import { logger } from "@/lib/utils/logger";
 
+const JOB_FEED_TIMEOUT_MS = Number.parseInt(
+  process.env.JOB_FEED_TIMEOUT_MS || "5000",
+  10,
+);
+const JOB_FEED_FAILURE_THRESHOLD = Number.parseInt(
+  process.env.JOB_FEED_FAILURE_THRESHOLD || "3",
+  10,
+);
+const JOB_FEED_COOLDOWN_MS = Number.parseInt(
+  process.env.JOB_FEED_COOLDOWN_MS || "60000",
+  10,
+);
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit = {},
+  timeoutMs = JOB_FEED_TIMEOUT_MS,
+) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 // Enhanced Job Search Service for ProofOfFit
 // Integrates with multiple job boards with proper error handling and rate limiting
 
@@ -61,6 +89,11 @@ export interface JobBoardConfig {
   priority: number;
 }
 
+interface CircuitState {
+  failures: number;
+  openedAt: number | null;
+}
+
 // Job board configurations - focusing on working implementations
 const JOB_BOARD_CONFIGS: Record<JobBoardProvider, JobBoardConfig> = {
   remoteok: {
@@ -102,6 +135,7 @@ const JOB_BOARD_CONFIGS: Record<JobBoardProvider, JobBoardConfig> = {
 
 export class JobSearchService {
   private lastRequestTime: Map<JobBoardProvider, number> = new Map();
+  private circuitState: Map<JobBoardProvider, CircuitState> = new Map();
 
   async searchJobs(params: JobSearchParams): Promise<JobBoardJob[]> {
     const allJobs: JobBoardJob[] = [];
@@ -158,17 +192,33 @@ export class JobSearchService {
     board: JobBoardProvider,
     params: JobSearchParams,
   ): Promise<JobBoardResponse> {
+    if (this.isCircuitOpen(board)) {
+      logger.warn(`Circuit open for ${board}, skipping request`);
+      return {
+        success: false,
+        jobs: [],
+        error: "Circuit open - skipping request during cooldown",
+        source: board,
+      };
+    }
+
     // Add delay between requests to prevent rate limiting
     await this.addDelay(board);
 
     try {
       switch (board) {
         case "remoteok":
-          return await this.searchRemoteOk(params);
+          return await this.wrapWithCircuitBreaker(board, () =>
+            this.searchRemoteOk(params)
+          );
         case "indeed":
-          return await this.searchIndeed(params);
+          return await this.wrapWithCircuitBreaker(board, () =>
+            this.searchIndeed(params)
+          );
         case "governmentjobs":
-          return await this.searchGovernmentJobs(params);
+          return await this.wrapWithCircuitBreaker(board, () =>
+            this.searchGovernmentJobs(params)
+          );
         default:
           // Fallback for other boards - return empty results for now
           return {
@@ -179,6 +229,7 @@ export class JobSearchService {
           };
       }
     } catch (error) {
+      this.recordFailure(board);
       logger.error(`Error searching ${board}:`, error);
       return {
         success: false,
@@ -189,12 +240,70 @@ export class JobSearchService {
     }
   }
 
+  private async wrapWithCircuitBreaker(
+    board: JobBoardProvider,
+    fn: () => Promise<JobBoardResponse>,
+  ): Promise<JobBoardResponse> {
+    try {
+      const response = await fn();
+      if (response.success) {
+        this.recordSuccess(board);
+      } else {
+        this.recordFailure(board);
+      }
+      return response;
+    } catch (error) {
+      this.recordFailure(board);
+      throw error;
+    }
+  }
+
+  private recordFailure(board: JobBoardProvider) {
+    const current = this.circuitState.get(board) || {
+      failures: 0,
+      openedAt: null,
+    };
+
+    const failures = current.failures + 1;
+    const shouldOpen = failures >= JOB_FEED_FAILURE_THRESHOLD;
+
+    this.circuitState.set(board, {
+      failures,
+      openedAt: shouldOpen ? Date.now() : current.openedAt,
+    });
+
+    if (shouldOpen && current.openedAt === null) {
+      logger.warn(
+        `Opening circuit breaker for ${board} after ${failures} failures`,
+      );
+    }
+  }
+
+  private recordSuccess(board: JobBoardProvider) {
+    this.circuitState.set(board, { failures: 0, openedAt: null });
+  }
+
+  private isCircuitOpen(board: JobBoardProvider): boolean {
+    const state = this.circuitState.get(board);
+    if (!state?.openedAt) {
+      return false;
+    }
+
+    const elapsed = Date.now() - state.openedAt;
+    if (elapsed > JOB_FEED_COOLDOWN_MS) {
+      this.circuitState.set(board, { failures: 0, openedAt: null });
+      return false;
+    }
+
+    return true;
+  }
+
   // RemoteOK API integration (free, no auth required)
   private async searchRemoteOk(
     params: JobSearchParams,
   ): Promise<JobBoardResponse> {
     try {
-      const response = await fetch("https://remoteok.io/api", {
+      const response = await fetchWithTimeout("https://remoteok.io/api", {
         headers: {
           "User-Agent": "ProofOfFit/1.0",
           "Accept": "application/json",
@@ -249,12 +358,17 @@ export class JobSearchService {
         totalFound: filteredJobs.length,
         source: "remoteok",
       };
-    } catch (error: any) {
-      logger.error("RemoteOK search error:", error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      if (error instanceof Error && error.name === "AbortError") {
+        logger.warn("RemoteOK search request timed out");
+      } else {
+        logger.error("RemoteOK search error:", error);
+      }
       return {
         success: false,
         jobs: [],
-        error: `RemoteOK API error: ${error.message}`,
+        error: `RemoteOK API error: ${message}`,
         source: "remoteok",
       };
     }
@@ -275,7 +389,7 @@ export class JobSearchService {
         };
       }
 
-      const response = await fetch("https://jsearch.p.rapidapi.com/search", {
+      const response = await fetchWithTimeout("https://jsearch.p.rapidapi.com/search", {
         method: "GET",
         headers: {
           "X-RapidAPI-Key": rapidApiKey,
@@ -316,12 +430,17 @@ export class JobSearchService {
         totalFound: transformedJobs.length,
         source: "indeed",
       };
-    } catch (error: any) {
-      logger.error("Indeed search error:", error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      if (error instanceof Error && error.name === "AbortError") {
+        logger.warn("Indeed search request timed out");
+      } else {
+        logger.error("Indeed search error:", error);
+      }
       return {
         success: false,
         jobs: [],
-        error: `Indeed API error: ${error.message}`,
+        error: `Indeed API error: ${message}`,
         source: "indeed",
       };
     }

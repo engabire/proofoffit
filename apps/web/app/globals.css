@@ -48,6 +48,10 @@
     --proof-purple: 262 83% 58%;
     --proof-orange: 25 95% 53%;
     --proof-gray: 220 13% 46%;
+
+    /* Typography fallbacks */
+    --font-sans: 'Inter', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', system-ui, sans-serif;
+    --font-serif: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
   }
 
   .dark {
