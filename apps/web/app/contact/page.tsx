@@ -23,7 +23,7 @@ export default function ContactPage() {
                 <strong>Email:</strong> enterprise@proofoffit.com
               </div>
               <div>
-                <strong>Phone:</strong> +1 (555) 123-4567
+                <strong>Phone:</strong> +1 (763) 339-9276
               </div>
               <div>
                 <strong>Hours:</strong> 9 AM - 6 PM CST, Mon-Fri

@@ -72,7 +72,8 @@ export default function PricingPage() {
 
   const handleSubscribe = async (planId: string) => {
     if (!isAuthenticated || !user) {
-      toast.error('Please sign in to subscribe')
+      // Redirect to signup instead of showing error
+      window.location.href = `/auth/signup?plan=${planId}`
       return
     }
 
@@ -96,7 +97,7 @@ export default function PricingPage() {
 
   const handleContactSales = (planName: string) => {
     const subject = encodeURIComponent(`${planName} plan inquiry`)
-    window.location.href = `mailto:sales@proofoffit.com?subject=${subject}`
+    window.location.href = `mailto:enterprise@proofoffit.com?subject=${subject}`
   }
 
   return (
@@ -132,10 +133,54 @@ export default function PricingPage() {
           </div>
           <h1 className="text-4xl font-bold text-gray-900">Choose your ProofOfFit plan</h1>
           <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Pricing scales with the evidence you deliver. Nonprofits can lock tailored discounts once
-            eligibility is verified—compliance add-ons always stay cost-based.
+            {selectedUserType === 'candidate' 
+              ? "Transform your job search with evidence-based matching. Get tailored resumes, cover letters, and fit reports that actually work."
+              : "Revolutionize your hiring with transparent, auditable matching. Build better teams with evidence-backed decisions and compliance guardrails."
+            }
+          </p>
+          <p className="mx-auto max-w-2xl text-sm text-gray-500 mt-2">
+            {selectedUserType === 'candidate' 
+              ? "No more guessing games. Know exactly why you're a match before you apply."
+              : "Nonprofits can lock tailored discounts once eligibility is verified—compliance add-ons always stay cost-based."
+            }
           </p>
         </div>
+
+        {!isEmployerView && (
+          <div className="mx-auto mb-12 max-w-4xl">
+            <div className="rounded-xl border border-dashed border-green-300 bg-white/80 p-6 shadow-sm backdrop-blur">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="space-y-3">
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Can't afford a subscription? We've got you covered.
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Access our sponsor program where community members can gift ProofOfFit Pro subscriptions to job seekers in need. 
+                    Get the same powerful tools without the financial burden.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="/gift"
+                      className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-green-700"
+                    >
+                      Request Sponsorship
+                    </Link>
+                    <Link
+                      href="/gift"
+                      className="inline-flex items-center justify-center rounded-md border border-green-200 px-4 py-2 text-sm font-semibold text-green-600 hover:bg-green-50"
+                    >
+                      Sponsor Someone
+                    </Link>
+                  </div>
+                </div>
+                <div className="w-full lg:max-w-sm text-center">
+                  <div className="text-3xl font-bold text-green-600 mb-2">100%</div>
+                  <div className="text-sm text-gray-600">Free with sponsorship</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {isEmployerView && (
           <div className="mx-auto mb-12 max-w-4xl">

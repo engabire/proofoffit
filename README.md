@@ -69,6 +69,13 @@ A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; 
 
    # Email (optional)
    RESEND_API_KEY=your_resend_api_key
+
+   # Job search feature flags (optional)
+   ENABLE_EXTERNAL_JOB_FEEDS=false # opt-in to external feeds when ready
+   ENABLE_SUPABASE_JOB_SEARCH=false # enable once Supabase data is available
+   JOB_FEED_TIMEOUT_MS=5000
+   JOB_FEED_FAILURE_THRESHOLD=3
+   JOB_FEED_COOLDOWN_MS=60000
    ```
 
 4. **Set up Supabase**
@@ -84,6 +91,20 @@ A compliance-first, criteria-driven hiring OS. Candidates run a safe autopilot; 
    ```bash
    npm run dev
    ```
+
+   > Enable `ENABLE_EXTERNAL_JOB_FEEDS` and `ENABLE_SUPABASE_JOB_SEARCH` only in environments where the respective services are available; they default to mock data for safer local development. Tune `JOB_FEED_TIMEOUT_MS`, `JOB_FEED_FAILURE_THRESHOLD`, and `JOB_FEED_COOLDOWN_MS` to match partner SLAs.
+
+6. **Wait for the dev server to warm up** (optional, but recommended for CI/tests)
+   ```bash
+   npm run warmup:web
+   ```
+   This polls `http://localhost:3000/api/health` until the server responds, providing a faster readiness check than hitting the marketing homepage.
+
+7. **Manual health probe**
+   ```bash
+   curl --connect-timeout 2 -sSL -o /dev/null -w "%{http_code}\n" http://localhost:3000/api/health
+   ```
+   Handy for local diagnostics or to confirm the service is responding before running commands that rely on a live server.
 
 The application will be available at `http://localhost:3000`.
 

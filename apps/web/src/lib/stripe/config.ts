@@ -64,6 +64,7 @@ export const subscriptionPlans: PlansMap = {
         "5 applications per month",
         "Resume parsing + fit guidance",
         "Email support",
+        "Sponsor feature access",
       ],
       limits: {
         applications: 5,
@@ -79,7 +80,7 @@ export const subscriptionPlans: PlansMap = {
       billing: "subscription",
       features: [
         "Unlimited applications & outreach",
-        "AI resume & cover letter tailoring",
+        "Resume & cover letter tailoring",
         "Interview prep library",
         "Priority matching notifications",
         "Advanced analytics & benchmarks",

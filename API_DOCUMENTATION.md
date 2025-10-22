@@ -8,6 +8,39 @@ The ProofOfFit platform provides a comprehensive REST API for job matching, appl
 
 ---
 
+## 🩺 **Health & Readiness**
+
+### **Health Check**
+```http
+GET /api/health
+HEAD /api/health
+```
+
+**Description:** Lightweight readiness endpoint used by load balancers, CI pipelines, and local tooling to confirm the application is responsive. Returns uptime metadata and contextual headers.
+
+**Sample Response (GET):**
+```json
+{
+  "status": "ok",
+  "timestamp": "2025-01-01T12:00:00.000Z",
+  "uptimeSeconds": 123,
+  "environment": "local",
+  "commit": "dev"
+}
+```
+
+**Response Headers:**
+- `X-Health-Status`: `ok` when the app is healthy; `degraded` otherwise.
+- `X-Health-Uptime-Seconds`: Seconds since the process booted.
+- `Cache-Control`: Always `no-store` to prevent caching.
+
+**Readiness Probe Example:**
+```bash
+curl --connect-timeout 2 -sSL -o /dev/null -w "%{http_code}\n" http://localhost:3000/api/health
+```
+
+---
+
 ## 🔐 **Authentication**
 
 All API endpoints require authentication via Supabase JWT tokens:
@@ -219,7 +252,7 @@ GET /api/jobs/search
 ```
 
 **Query Parameters:**
-- `query` (string): Search query
+- `query` (string): Search query (alias: `q`)
 - `location` (string): Job location
 - `remote` (boolean): Remote work filter
 - `salaryMin` (number): Minimum salary

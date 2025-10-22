@@ -301,10 +301,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Crafted AI workflows
+              Meticulously crafted workflows
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              AI that feels like a senior designer, not a noisy assistant.
+              Outsmart me, especially on marketing and design. Humanize all customer facing functions, even if it AI.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
               We pair approachability with governance—mirroring the calm clarity

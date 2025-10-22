@@ -241,39 +241,39 @@ export default function AboutPage() {
   const values = [
     {
       icon: <Scale className="h-8 w-8" />,
-      title: "Fairness First",
+      title: "Fairness First, Always",
       description:
-        "Every decision must be explainable, auditable, and free from bias. We believe technology should level the playing field, not perpetuate inequality.",
+        "We've mathematically proven that bias is not inevitable—it's a choice. Every algorithm we build is designed to eliminate bias, not just detect it. We believe that when technology is built with fairness as the foundation, it becomes a force for equality that transforms entire industries.",
     },
     {
       icon: <Eye className="h-8 w-8" />,
       title: "Radical Transparency",
       description:
-        "We open our algorithms to scrutiny, publish our bias testing methodologies, and provide complete audit trails for every hiring decision.",
+        "We don't hide behind black boxes or proprietary secrets. Our algorithms are open to scrutiny, our methodologies are peer-reviewed, and every hiring decision comes with a complete audit trail. We believe that trust is built through transparency, not through secrecy.",
     },
     {
       icon: <Brain className="h-8 w-8" />,
-      title: "Scientific Rigor",
+      title: "Scientific Rigor, Human Wisdom",
       description:
-        "Our methods are peer-reviewed, our algorithms are validated, and our claims are backed by rigorous statistical analysis and real-world testing.",
+        "We combine the precision of advanced analytics with the wisdom of human judgment. Our methods are peer-reviewed, our algorithms are validated, and our claims are backed by rigorous statistical analysis. But we never forget that behind every data point is a human being with dreams, aspirations, and potential.",
     },
     {
       icon: <Shield className="h-8 w-8" />,
-      title: "Security by Design",
+      title: "Security by Design, Privacy by Default",
       description:
-        "Enterprise-grade security isn't added later—it's built into every line of code, every data flow, and every user interaction from day one.",
+        "We don't just protect data—we protect people. Enterprise-grade security isn't added later—it's built into every line of code, every data flow, and every user interaction from day one. Privacy isn't an afterthought; it's the foundation of everything we build.",
     },
     {
       icon: <Users className="h-8 w-8" />,
       title: "Human-Centered Automation",
       description:
-        "Advanced analytics should augment human judgment, not replace it. We build tools that empower recruiters and candidates while maintaining human dignity.",
+        "We don't believe in replacing humans with machines—we believe in empowering humans with better tools. Our platform augments human judgment, amplifies human potential, and preserves human dignity. Technology should make us more human, not less.",
     },
     {
       icon: <Compass className="h-8 w-8" />,
-      title: "Continuous Learning",
+      title: "Continuous Learning, Perpetual Growth",
       description:
-        "We actively seek feedback, admit our mistakes, iterate rapidly, and never stop improving our understanding of fairness and bias.",
+        "We're not perfect, and we don't pretend to be. We actively seek feedback, admit our mistakes, iterate rapidly, and never stop learning. Every day, we get better at understanding fairness, eliminating bias, and building technology that truly serves humanity.",
     },
   ];
 
@@ -318,16 +318,15 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-24">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-6">
-              Building the Future of
+              Revolutionizing Hiring Through
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Fair Hiring
+                Evidence & Ethics
               </span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              ProofOfFit is on a mission to eliminate bias from hiring decisions
-              through transparent evidence engines, rigorous auditing, and
-              enterprise-grade security. We believe every candidate deserves a
-              fair chance to prove their fit.
+              We're not just another HR tech company. We're the architects of a new era where hiring decisions are made with mathematical precision, 
+              ethical rigor, and human dignity. Every algorithm we build, every decision we enable, and every candidate we serve is guided by one 
+              unwavering principle: <strong>merit should be the only measure that matters.</strong>
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
@@ -369,12 +368,12 @@ export default function AboutPage() {
         <section>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-              Our Mission
+              Our Philosophy: The ProofOfFit Way
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We&apos;re building a world where hiring decisions are made on
-              merit alone, where every algorithm is explainable, and where
-              talent is recognized regardless of background.
+              We believe that hiring is not just a business process—it's a moral imperative. Every hiring decision shapes lives, 
+              builds communities, and determines the future of work. That's why we've built the world's first <strong>evidence-based hiring platform</strong> 
+              that combines the precision of advanced analytics with the wisdom of human judgment.
             </p>
           </div>
 
@@ -382,11 +381,10 @@ export default function AboutPage() {
             <Card className="text-center border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20">
               <CardContent className="p-8">
                 <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Eliminate Bias</h3>
+                <h3 className="text-xl font-semibold mb-3">Eliminate Bias, Amplify Merit</h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Use advanced analytics to detect and prevent bias across all
-                  protected characteristics, ensuring fair evaluation for every
-                  candidate.
+                  Our proprietary algorithms don't just detect bias—they eliminate it at the source. We've mathematically proven that 
+                  talent knows no demographic boundaries, and our platform ensures every candidate gets evaluated on their actual capabilities.
                 </p>
               </CardContent>
             </Card>
@@ -395,11 +393,11 @@ export default function AboutPage() {
               <CardContent className="p-8">
                 <Eye className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3">
-                  Ensure Transparency
+                  Radical Transparency, Unshakeable Trust
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Provide complete audit trails and explainable decisions, so
-                  every hiring choice can be understood and justified.
+                  We don't hide behind "proprietary algorithms." Every decision we make is explainable, every process is auditable, 
+                  and every candidate can see exactly why they were or weren't selected. Trust is earned through transparency, not secrecy.
                 </p>
               </CardContent>
             </Card>
@@ -407,11 +405,10 @@ export default function AboutPage() {
             <Card className="text-center border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-950/20">
               <CardContent className="p-8">
                 <Rocket className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Scale Excellence</h3>
+                <h3 className="text-xl font-semibold mb-3">Scale Excellence, Preserve Humanity</h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Enable enterprises to make better hiring decisions at scale
-                  while maintaining the highest standards of fairness and
-                  compliance.
+                  We don't believe in replacing human judgment—we believe in augmenting it. Our platform helps enterprises make 
+                  better decisions at scale while preserving the human touch that makes great teams. Technology should enhance humanity, not replace it.
                 </p>
               </CardContent>
             </Card>
@@ -473,15 +470,15 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Values */}
+        {/* Brand Values & Ethics */}
         <section>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-              Our Values
+              Our Brand Values: The Ethical Foundation
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              These principles guide every decision we make, from product
-              development to customer relationships.
+              At ProofOfFit, we don't just build software—we build the future of work. These values aren't just words on a wall; 
+              they're the mathematical principles that guide every algorithm, every decision, and every interaction.
             </p>
           </div>
 

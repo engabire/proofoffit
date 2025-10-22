@@ -87,11 +87,40 @@ export default function AuditSamplePage() {
                 </div>
                 
                 <div className="flex gap-3">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                  <button 
+                    onClick={() => {
+                      const reportData = {
+                        auditId: "audit_2024_001",
+                        timestamp: "2024-01-15T14:30:22.000Z",
+                        decision: "CANDIDATE_APPROVED",
+                        hash: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+                        biasScore: 0.02,
+                        compliance: "FULL",
+                        verified: true
+                      };
+                      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'audit-report-2024-001.json';
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                  >
                     <Download className="h-4 w-4" />
                     Download Report
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText('0x1a2b3c4d5e6f7890abcdef1234567890abcdef12');
+                      // You could add a toast notification here
+                      alert('Hash copied to clipboard!');
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+                  >
                     <Copy className="h-4 w-4" />
                     Copy Hash
                   </button>
