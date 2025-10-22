@@ -89,7 +89,7 @@ export function EnhancedHeader({
   const navigationItems = [
     { href: "#features", label: "Features", icon: FileText },
     { href: "#how-it-works", label: "How it Works", icon: Sparkles },
-    { href: "#pricing", label: "Pricing", icon: DollarSign },
+    { href: "/pricing", label: "Pricing", icon: DollarSign },
     { href: "/gift", label: "Sponsor", icon: Gift },
     { href: "/fairness", label: "Fairness", icon: ShieldCheck },
   ];
