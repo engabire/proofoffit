@@ -174,9 +174,12 @@ export default function HomePage() {
                 </div>
                 <div className="space-y-1 text-xs text-gray-600">
                   <div>Portfolio • Audit logs • Peer refs</div>
-                  <div className="text-blue-600 hover:underline cursor-pointer">
+                  <Link 
+                    href="/audit-sample" 
+                    className="text-blue-600 hover:underline cursor-pointer"
+                  >
                     https://proofoffit.co/audit/9C2X‑A7Q
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -200,14 +203,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/construction-worker.svg"
-                    alt="Construction professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Briefcase className="h-12 w-12 text-orange-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">
@@ -220,14 +217,8 @@ export default function HomePage() {
 
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/healthcare-professional.svg"
-                    alt="Healthcare professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Shield className="h-12 w-12 text-green-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Healthcare</h3>
@@ -236,14 +227,8 @@ export default function HomePage() {
 
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/culinary-professional.svg"
-                    alt="Culinary professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-red-100 rounded-lg flex items-center justify-center">
+                  <Star className="h-12 w-12 text-red-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Culinary</h3>
@@ -254,14 +239,8 @@ export default function HomePage() {
 
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/technology-professional.svg"
-                    alt="Technology professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Zap className="h-12 w-12 text-blue-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Technology</h3>
@@ -270,14 +249,8 @@ export default function HomePage() {
 
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/education-professional.svg"
-                    alt="Education professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Users className="h-12 w-12 text-purple-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Education</h3>
@@ -286,14 +259,8 @@ export default function HomePage() {
 
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
-                <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/professionals/finance-professional.svg"
-                    alt="Finance professional"
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
+                <div className="w-full h-24 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-12 w-12 text-emerald-600" />
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Finance</h3>
@@ -311,8 +278,8 @@ export default function HomePage() {
               Meticulously crafted workflows
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Outsmart me, especially on marketing and design. Humanize all
-              customer facing functions, even if it AI.
+              Advanced AI that enhances human decision-making with transparent, 
+              evidence-based insights for better hiring outcomes.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
               We pair approachability with governance—mirroring the calm clarity
@@ -774,12 +741,12 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#contact"
+                  <Link
+                    href="/contact"
                     className="hover:text-white transition-colors"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
@@ -818,22 +785,6 @@ export default function HomePage() {
                     Security
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="hover:text-white transition-colors"
-                  >
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="hover:text-white transition-colors"
-                  >
-                    Terms
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>
@@ -842,26 +793,6 @@ export default function HomePage() {
               &copy; 2024 ProofOfFit, Inc. Crafted with transparency in the
               Midwest, with fairness and accountability at heart.
             </p>
-            <div className="flex justify-center space-x-6 mt-4 text-sm">
-              <Link
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacy
-              </Link>
-              <Link
-                href="/terms"
-                className="hover:text-white transition-colors"
-              >
-                Terms
-              </Link>
-              <Link
-                href="/security"
-                className="hover:text-white transition-colors"
-              >
-                Security
-              </Link>
-            </div>
           </div>
         </div>
       </footer>

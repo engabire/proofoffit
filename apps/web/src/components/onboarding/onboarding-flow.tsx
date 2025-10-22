@@ -397,11 +397,11 @@ function CompletionStep({
   const { user } = useAuth();
 
   const handleComplete = () => {
-    // Redirect based on user type
+    // Redirect to signup page with user type
     if (data?.userType === "employer") {
-      router.push("/employer/dashboard");
+      router.push("/auth/signup?type=employer");
     } else {
-      router.push("/dashboard");
+      router.push("/auth/signup?type=candidate");
     }
   };
 
