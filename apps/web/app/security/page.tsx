@@ -15,8 +15,8 @@ export default function SecurityPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Security Dashboard</h1>
           <p className="text-gray-600 mt-2">
-            Monitor security events, manage threats, and maintain the security of
-            your application.
+            Monitor security events, manage threats, and maintain the security
+            of your application.
           </p>
         </div>
         <SecurityDashboard />

@@ -174,8 +174,8 @@ export default function HomePage() {
                 </div>
                 <div className="space-y-1 text-xs text-gray-600">
                   <div>Portfolio • Audit logs • Peer refs</div>
-                  <Link 
-                    href="/audit-sample" 
+                  <Link
+                    href="/audit-sample"
                     className="text-blue-600 hover:underline cursor-pointer"
                   >
                     https://proofoffit.co/audit/9C2X‑A7Q
@@ -278,7 +278,7 @@ export default function HomePage() {
               Meticulously crafted workflows
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Advanced AI that enhances human decision-making with transparent, 
+              Advanced AI that enhances human decision-making with transparent,
               evidence-based insights for better hiring outcomes.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
