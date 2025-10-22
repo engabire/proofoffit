@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui"
-import { Shield, CheckCircle, AlertTriangle, Download, Copy } from "lucide-react"
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@proof-of-fit/ui";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Copy,
+  Download,
+  Shield,
+} from "lucide-react";
 
 export default function AuditSamplePage() {
   return (
@@ -38,7 +44,7 @@ export default function AuditSamplePage() {
                     Hash: 0x1a2b3c4d5e6f7890abcdef1234567890abcdef12
                   </p>
                 </div>
-                
+
                 <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4 text-blue-600" />
@@ -85,9 +91,9 @@ export default function AuditSamplePage() {
 }`}
                   </pre>
                 </div>
-                
+
                 <div className="flex gap-3">
-                  <button 
+                  <button
                     onClick={() => {
                       const reportData = {
                         auditId: "audit_2024_001",
@@ -96,13 +102,15 @@ export default function AuditSamplePage() {
                         hash: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
                         biasScore: 0.02,
                         compliance: "FULL",
-                        verified: true
+                        verified: true,
                       };
-                      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+                      const blob = new Blob([
+                        JSON.stringify(reportData, null, 2),
+                      ], { type: "application/json" });
                       const url = URL.createObjectURL(blob);
-                      const a = document.createElement('a');
+                      const a = document.createElement("a");
                       a.href = url;
-                      a.download = 'audit-report-2024-001.json';
+                      a.download = "audit-report-2024-001.json";
                       document.body.appendChild(a);
                       a.click();
                       document.body.removeChild(a);
@@ -113,11 +121,13 @@ export default function AuditSamplePage() {
                     <Download className="h-4 w-4" />
                     Download Report
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
-                      navigator.clipboard.writeText('0x1a2b3c4d5e6f7890abcdef1234567890abcdef12');
+                      navigator.clipboard.writeText(
+                        "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+                      );
                       // You could add a toast notification here
-                      alert('Hash copied to clipboard!');
+                      alert("Hash copied to clipboard!");
                     }}
                     className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
                   >
@@ -131,5 +141,5 @@ export default function AuditSamplePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

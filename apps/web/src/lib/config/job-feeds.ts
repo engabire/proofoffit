@@ -245,3 +245,4 @@ export function getConfigSummary(config: JobFeedConfig): Record<string, any> {
 
 // Export the configuration instance
 export const jobFeedConfig = getJobFeedConfig();
+

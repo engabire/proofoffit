@@ -69,3 +69,4 @@ export function adjustScoreForJurisdiction(
     const p = penaltyFor(job);
     return Math.round(baseScore * p);
 }
+

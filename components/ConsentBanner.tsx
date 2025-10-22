@@ -58,3 +58,4 @@ export function ConsentBanner({ policyVersion }: { policyVersion: string }) {
         </div>
     );
 }
+

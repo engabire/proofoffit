@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from "react"
+import React from "react";
 
 export default function ContactPage() {
   return (
@@ -16,7 +16,8 @@ export default function ContactPage() {
           <div className="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
             <h2 className="text-2xl font-semibold mb-4">Enterprise Sales</h2>
             <p className="text-slate-600 dark:text-slate-400 mb-6">
-              Ready to transform your hiring process? Contact our enterprise team.
+              Ready to transform your hiring process? Contact our enterprise
+              team.
             </p>
             <div className="space-y-4">
               <div>
@@ -30,8 +31,8 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="mt-8">
-              <a 
-                href="mailto:enterprise@proofoffit.com" 
+              <a
+                href="mailto:enterprise@proofoffit.com"
                 className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Contact Sales Team
@@ -41,5 +42,5 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

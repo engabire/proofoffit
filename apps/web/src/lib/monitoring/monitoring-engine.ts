@@ -594,3 +594,4 @@ class MonitoringEngine {
 
 // Export singleton instance
 export const monitoringEngine = new MonitoringEngine();
+

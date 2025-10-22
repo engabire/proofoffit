@@ -6,3 +6,4 @@ export async function GET() {
     // Example shape placeholder
     return NextResponse.json({ rows: [] });
 }
+

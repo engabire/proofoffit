@@ -703,3 +703,4 @@ export function IntegrationsDashboard() {
         </div>
     );
 }
+

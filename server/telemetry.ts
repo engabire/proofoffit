@@ -8,3 +8,4 @@ export function redact<T extends Record<string, any>>(evt: T) {
 export function log(evt: Record<string, any>) {
     console.info(JSON.stringify(redact(evt)));
 }
+

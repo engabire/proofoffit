@@ -324,9 +324,12 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              We're not just another HR tech company. We're the architects of a new era where hiring decisions are made with mathematical precision, 
-              ethical rigor, and human dignity. Every algorithm we build, every decision we enable, and every candidate we serve is guided by one 
-              unwavering principle: <strong>merit should be the only measure that matters.</strong>
+              We're not just another HR tech company. We're the architects of a
+              new era where hiring decisions are made with mathematical
+              precision, ethical rigor, and human dignity. Every algorithm we
+              build, every decision we enable, and every candidate we serve is
+              guided by one unwavering principle:{" "}
+              <strong>merit should be the only measure that matters.</strong>
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2">
@@ -371,9 +374,13 @@ export default function AboutPage() {
               Our Philosophy: The ProofOfFit Way
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We believe that hiring is not just a business process—it's a moral imperative. Every hiring decision shapes lives, 
-              builds communities, and determines the future of work. That's why we've built the world's first <strong>evidence-based hiring platform</strong> 
-              that combines the precision of advanced analytics with the wisdom of human judgment.
+              We believe that hiring is not just a business process—it's a moral
+              imperative. Every hiring decision shapes lives, builds
+              communities, and determines the future of work. That's why we've
+              built the world's first{" "}
+              <strong>evidence-based hiring platform</strong>
+              that combines the precision of advanced analytics with the wisdom
+              of human judgment.
             </p>
           </div>
 
@@ -381,10 +388,15 @@ export default function AboutPage() {
             <Card className="text-center border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20">
               <CardContent className="p-8">
                 <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Eliminate Bias, Amplify Merit</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Eliminate Bias, Amplify Merit
+                </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Our proprietary algorithms don't just detect bias—they eliminate it at the source. We've mathematically proven that 
-                  talent knows no demographic boundaries, and our platform ensures every candidate gets evaluated on their actual capabilities.
+                  Our proprietary algorithms don't just detect bias—they
+                  eliminate it at the source. We've mathematically proven that
+                  talent knows no demographic boundaries, and our platform
+                  ensures every candidate gets evaluated on their actual
+                  capabilities.
                 </p>
               </CardContent>
             </Card>
@@ -396,8 +408,10 @@ export default function AboutPage() {
                   Radical Transparency, Unshakeable Trust
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We don't hide behind "proprietary algorithms." Every decision we make is explainable, every process is auditable, 
-                  and every candidate can see exactly why they were or weren't selected. Trust is earned through transparency, not secrecy.
+                  We don't hide behind "proprietary algorithms." Every decision
+                  we make is explainable, every process is auditable, and every
+                  candidate can see exactly why they were or weren't selected.
+                  Trust is earned through transparency, not secrecy.
                 </p>
               </CardContent>
             </Card>
@@ -405,10 +419,15 @@ export default function AboutPage() {
             <Card className="text-center border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-950/20">
               <CardContent className="p-8">
                 <Rocket className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Scale Excellence, Preserve Humanity</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Scale Excellence, Preserve Humanity
+                </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We don't believe in replacing human judgment—we believe in augmenting it. Our platform helps enterprises make 
-                  better decisions at scale while preserving the human touch that makes great teams. Technology should enhance humanity, not replace it.
+                  We don't believe in replacing human judgment—we believe in
+                  augmenting it. Our platform helps enterprises make better
+                  decisions at scale while preserving the human touch that makes
+                  great teams. Technology should enhance humanity, not replace
+                  it.
                 </p>
               </CardContent>
             </Card>
@@ -477,8 +496,10 @@ export default function AboutPage() {
               Our Brand Values: The Ethical Foundation
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              At ProofOfFit, we don't just build software—we build the future of work. These values aren't just words on a wall; 
-              they're the mathematical principles that guide every algorithm, every decision, and every interaction.
+              At ProofOfFit, we don't just build software—we build the future of
+              work. These values aren't just words on a wall; they're the
+              mathematical principles that guide every algorithm, every
+              decision, and every interaction.
             </p>
           </div>
 

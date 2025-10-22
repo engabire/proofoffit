@@ -10,3 +10,4 @@ export async function requireConsent(userId: string): Promise<void> {
         throw err;
     }
 }
+

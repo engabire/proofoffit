@@ -70,3 +70,4 @@ create table if not exists job_meta (
 -- helpful indexes
 create index if not exists jobs_posted_at_idx on jobs(posted_at desc);
 create index if not exists jobs_source_idx on jobs(source);
+

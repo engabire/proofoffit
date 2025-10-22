@@ -1,104 +1,125 @@
-'use client'
+"use client";
 
-import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@proof-of-fit/ui'
-import { Building2, Check, Star, User, Zap } from 'lucide-react'
-import { toast } from 'sonner'
+import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@proof-of-fit/ui";
+import { Building2, Check, Star, User, Zap } from "lucide-react";
+import { toast } from "sonner";
 
 import {
-  subscriptionPlans,
+  getPlanById,
   PlanDefinition,
   PlanInterval,
-  getPlanById,
-} from '@/lib/stripe/config'
-import { stripeClient } from '@/lib/stripe/client'
+  subscriptionPlans,
+} from "@/lib/stripe/config";
+import { stripeClient } from "@/lib/stripe/client";
 import {
-  NonprofitToggle,
-  NonprofitTier,
   nonprofitMultipliers,
-} from './components/nonprofit-toggle'
+  NonprofitTier,
+  NonprofitToggle,
+} from "./components/nonprofit-toggle";
 
 const faqItems = [
   {
-    question: 'Can I change my plan at any time?',
+    question: "Can I change my plan at any time?",
     answer:
-      'Yes. Upgrades take effect immediately and downgrades apply on the next billing cycle. Nonprofit discounts stay locked while eligibility is valid.',
+      "Yes. Upgrades take effect immediately and downgrades apply on the next billing cycle. Nonprofit discounts stay locked while eligibility is valid.",
   },
   {
-    question: 'What payment methods do you accept?',
+    question: "What payment methods do you accept?",
     answer:
-      'We process payments via Stripe and accept all major credit cards. Enterprise customers can request invoicing during contract review.',
+      "We process payments via Stripe and accept all major credit cards. Enterprise customers can request invoicing during contract review.",
   },
   {
-    question: 'Do nonprofits need proof before launch?',
+    question: "Do nonprofits need proof before launch?",
     answer:
-      'Yes. You will submit EIN + org details during onboarding. Discounts apply once eligibility is verified—usually under three seconds.',
+      "Yes. You will submit EIN + org details during onboarding. Discounts apply once eligibility is verified—usually under three seconds.",
   },
-]
+];
 
 const formatCurrency = (value: number, interval?: PlanInterval) => {
-  const formatted = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const formatted = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     maximumFractionDigits: value % 1 === 0 ? 0 : 2,
-  }).format(value)
+  }).format(value);
 
-  if (!interval) return formatted
-  return `${formatted}/${interval === 'year' ? 'yr' : 'mo'}`
-}
+  if (!interval) return formatted;
+  return `${formatted}/${interval === "year" ? "yr" : "mo"}`;
+};
 
 export default function PricingPage() {
-  const [selectedUserType, setSelectedUserType] = useState<'candidate' | 'employer'>('candidate')
-  const [loading, setLoading] = useState<string | null>(null)
-  const [nonprofitTier, setNonprofitTier] = useState<NonprofitTier | null>(null)
+  const [selectedUserType, setSelectedUserType] = useState<
+    "candidate" | "employer"
+  >("candidate");
+  const [loading, setLoading] = useState<string | null>(null);
+  const [nonprofitTier, setNonprofitTier] = useState<NonprofitTier | null>(
+    null,
+  );
 
-  const isAuthenticated = true // Demo mode
-  const user = { id: 'demo-user', email: 'demo@example.com' }
+  const isAuthenticated = true; // Demo mode
+  const user = { id: "demo-user", email: "demo@example.com" };
 
-  const isEmployerView = selectedUserType === 'employer'
-  const plans = subscriptionPlans[selectedUserType] as Record<string, PlanDefinition>
+  const isEmployerView = selectedUserType === "employer";
+  const plans = subscriptionPlans[selectedUserType] as Record<
+    string,
+    PlanDefinition
+  >;
 
   useEffect(() => {
     if (!isEmployerView && nonprofitTier) {
-      setNonprofitTier(null)
+      setNonprofitTier(null);
     }
-  }, [isEmployerView, nonprofitTier])
+  }, [isEmployerView, nonprofitTier]);
 
   const nonprofitMultiplier = useMemo(() => {
-    if (!nonprofitTier) return 1
-    return nonprofitMultipliers[nonprofitTier]
-  }, [nonprofitTier])
+    if (!nonprofitTier) return 1;
+    return nonprofitMultipliers[nonprofitTier];
+  }, [nonprofitTier]);
 
   const handleSubscribe = async (planId: string) => {
     if (!isAuthenticated || !user) {
       // Redirect to signup instead of showing error
-      window.location.href = `/auth/signup?plan=${planId}`
-      return
+      window.location.href = `/auth/signup?plan=${planId}`;
+      return;
     }
 
-    const plan = getPlanById(planId)
-    if (!plan || plan.billing !== 'subscription') {
-      toast.error('This plan needs a sales-assisted workflow. Please contact us.')
-      return
+    const plan = getPlanById(planId);
+    if (!plan || plan.billing !== "subscription") {
+      toast.error(
+        "This plan needs a sales-assisted workflow. Please contact us.",
+      );
+      return;
     }
 
-    setLoading(planId)
+    setLoading(planId);
     try {
-      const { sessionId } = await stripeClient.createCheckoutSession(planId, user.id, user.email || '')
-      window.location.href = `/api/stripe/checkout?session_id=${sessionId}`
+      const { sessionId } = await stripeClient.createCheckoutSession(
+        planId,
+        user.id,
+        user.email || "",
+      );
+      window.location.href = `/api/stripe/checkout?session_id=${sessionId}`;
     } catch (error) {
-      console.error('Subscription error:', error)
-      toast.error('Failed to start subscription process')
+      console.error("Subscription error:", error);
+      toast.error("Failed to start subscription process");
     } finally {
-      setLoading(null)
+      setLoading(null);
     }
-  }
+  };
 
   const handleContactSales = (planName: string) => {
-    const subject = encodeURIComponent(`${planName} plan inquiry`)
-    window.location.href = `mailto:enterprise@proofoffit.com?subject=${subject}`
-  }
+    const subject = encodeURIComponent(`${planName} plan inquiry`);
+    window.location.href =
+      `mailto:enterprise@proofoffit.com?subject=${subject}`;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
@@ -108,22 +129,22 @@ export default function PricingPage() {
           <div className="flex justify-center gap-2 mb-6">
             <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
               <button
-                onClick={() => setSelectedUserType('candidate')}
+                onClick={() => setSelectedUserType("candidate")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  selectedUserType === 'candidate'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                  selectedUserType === "candidate"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 <User className="mr-2 inline h-4 w-4" />
                 Job seekers
               </button>
               <button
-                onClick={() => setSelectedUserType('employer')}
+                onClick={() => setSelectedUserType("employer")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  selectedUserType === 'employer'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                  selectedUserType === "employer"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 <Building2 className="mr-2 inline h-4 w-4" />
@@ -131,18 +152,18 @@ export default function PricingPage() {
               </button>
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900">Choose your ProofOfFit plan</h1>
+          <h1 className="text-4xl font-bold text-gray-900">
+            Choose your ProofOfFit plan
+          </h1>
           <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            {selectedUserType === 'candidate' 
+            {selectedUserType === "candidate"
               ? "Transform your job search with evidence-based matching. Get tailored resumes, cover letters, and fit reports that actually work."
-              : "Revolutionize your hiring with transparent, auditable matching. Build better teams with evidence-backed decisions and compliance guardrails."
-            }
+              : "Revolutionize your hiring with transparent, auditable matching. Build better teams with evidence-backed decisions and compliance guardrails."}
           </p>
           <p className="mx-auto max-w-2xl text-sm text-gray-500 mt-2">
-            {selectedUserType === 'candidate' 
+            {selectedUserType === "candidate"
               ? "No more guessing games. Know exactly why you're a match before you apply."
-              : "Nonprofits can lock tailored discounts once eligibility is verified—compliance add-ons always stay cost-based."
-            }
+              : "Nonprofits can lock tailored discounts once eligibility is verified—compliance add-ons always stay cost-based."}
           </p>
         </div>
 
@@ -155,8 +176,9 @@ export default function PricingPage() {
                     Can't afford a subscription? We've got you covered.
                   </h2>
                   <p className="text-sm text-gray-600">
-                    Access our sponsor program where community members can gift ProofOfFit Pro subscriptions to job seekers in need. 
-                    Get the same powerful tools without the financial burden.
+                    Access our sponsor program where community members can gift
+                    ProofOfFit Pro subscriptions to job seekers in need. Get the
+                    same powerful tools without the financial burden.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Link
@@ -174,8 +196,12 @@ export default function PricingPage() {
                   </div>
                 </div>
                 <div className="w-full lg:max-w-sm text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">100%</div>
-                  <div className="text-sm text-gray-600">Free with sponsorship</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">
+                    100%
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Free with sponsorship
+                  </div>
                 </div>
               </div>
             </div>
@@ -191,8 +217,9 @@ export default function PricingPage() {
                     Mission-aligned pricing for nonprofits
                   </h2>
                   <p className="text-sm text-gray-600">
-                    Submit EIN + org details to auto-lock your tier. Discounts apply to base fees and
-                    usage; Fund credits can pull spend even lower for high-impact programs.
+                    Submit EIN + org details to auto-lock your tier. Discounts
+                    apply to base fees and usage; Fund credits can pull spend
+                    even lower for high-impact programs.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Link
@@ -210,7 +237,10 @@ export default function PricingPage() {
                   </div>
                 </div>
                 <div className="w-full lg:max-w-sm">
-                  <NonprofitToggle selectedTier={nonprofitTier} onSelect={setNonprofitTier} />
+                  <NonprofitToggle
+                    selectedTier={nonprofitTier}
+                    onSelect={setNonprofitTier}
+                  />
                 </div>
               </div>
             </div>
@@ -220,37 +250,40 @@ export default function PricingPage() {
         {/* Pricing Cards */}
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {Object.entries(plans).map(([key, plan]) => {
-            const isPopular = key === 'pro' || key === 'professional'
-            const isEnterprise = key === 'enterprise'
-            const isQuote = plan.billing === 'quote'
-            const basePrice =
-              typeof plan.price === 'number' && plan.price > 0 ? plan.price : plan.price === 0 ? 0 : null
-            const nonprofitEligible =
-              isEmployerView && nonprofitTier && plan.nonprofitEligible !== false && basePrice !== null
+            const isPopular = key === "pro" || key === "professional";
+            const isEnterprise = key === "enterprise";
+            const isQuote = plan.billing === "quote";
+            const basePrice = typeof plan.price === "number" && plan.price > 0
+              ? plan.price
+              : plan.price === 0
+              ? 0
+              : null;
+            const nonprofitEligible = isEmployerView && nonprofitTier &&
+              plan.nonprofitEligible !== false && basePrice !== null;
 
-            const computedPrice =
-              nonprofitEligible && basePrice !== null
-                ? Math.round(basePrice * nonprofitMultiplier * 100) / 100
-                : basePrice
-            const annualized =
-              basePrice !== null && plan.interval === 'year'
-                ? Math.round((basePrice / 12) * 100) / 100
-                : null
+            const computedPrice = nonprofitEligible && basePrice !== null
+              ? Math.round(basePrice * nonprofitMultiplier * 100) / 100
+              : basePrice;
+            const annualized = basePrice !== null && plan.interval === "year"
+              ? Math.round((basePrice / 12) * 100) / 100
+              : null;
             const nonprofitAnnualized =
-              nonprofitEligible && computedPrice !== null && plan.interval === 'year'
+              nonprofitEligible && computedPrice !== null &&
+                plan.interval === "year"
                 ? Math.round((computedPrice / 12) * 100) / 100
-                : null
-            const nonprofitLabel =
-              nonprofitEligible && computedPrice !== null
-                ? formatCurrency(computedPrice, plan.interval)
-                : null
+                : null;
+            const nonprofitLabel = nonprofitEligible && computedPrice !== null
+              ? formatCurrency(computedPrice, plan.interval)
+              : null;
 
             return (
               <Card
                 key={plan.id}
                 className={`relative h-full ${
-                  isPopular ? 'border-blue-500 shadow-lg shadow-blue-100' : 'border-gray-200'
-                } ${isEnterprise ? 'border-purple-500' : ''}`}
+                  isPopular
+                    ? "border-blue-500 shadow-lg shadow-blue-100"
+                    : "border-gray-200"
+                } ${isEnterprise ? "border-purple-500" : ""}`}
               >
                 {isPopular && (
                   <Badge className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white">
@@ -266,34 +299,46 @@ export default function PricingPage() {
                 )}
 
                 <CardHeader className="text-center">
-                  <CardTitle className="text-2xl font-bold text-gray-900">{plan.name}</CardTitle>
+                  <CardTitle className="text-2xl font-bold text-gray-900">
+                    {plan.name}
+                  </CardTitle>
 
                   <div className="mt-4 space-y-1">
-                    {basePrice !== null ? (
-                      <>
-                        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">
-                          {plan.priceLead ?? 'Base price'}
-                        </p>
-                        <p className="text-4xl font-bold text-gray-900">
-                          {formatCurrency(basePrice, plan.interval)}
-                        </p>
-                        {annualized !== null && (
-                          <p className="text-xs text-gray-500">
-                            ≈ {formatCurrency(annualized, 'month')} billed annually
+                    {basePrice !== null
+                      ? (
+                        <>
+                          <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                            {plan.priceLead ?? "Base price"}
                           </p>
-                        )}
-                        {nonprofitLabel && nonprofitTier && (
-                          <p className="text-xs font-semibold text-blue-600">
-                            Nonprofit {nonprofitTier} price: {nonprofitLabel}
-                            {nonprofitAnnualized !== null && (
-                              <> (≈ {formatCurrency(nonprofitAnnualized, 'month')} billed annually)</>
-                            )}
+                          <p className="text-4xl font-bold text-gray-900">
+                            {formatCurrency(basePrice, plan.interval)}
                           </p>
-                        )}
-                      </>
-                    ) : (
-                      <p className="text-xl font-semibold text-gray-900">Custom pricing</p>
-                    )}
+                          {annualized !== null && (
+                            <p className="text-xs text-gray-500">
+                              ≈ {formatCurrency(annualized, "month")}{" "}
+                              billed annually
+                            </p>
+                          )}
+                          {nonprofitLabel && nonprofitTier && (
+                            <p className="text-xs font-semibold text-blue-600">
+                              Nonprofit {nonprofitTier} price: {nonprofitLabel}
+                              {nonprofitAnnualized !== null && (
+                                <>
+                                  (≈{" "}
+                                  {formatCurrency(nonprofitAnnualized, "month")}
+                                  {" "}
+                                  billed annually)
+                                </>
+                              )}
+                            </p>
+                          )}
+                        </>
+                      )
+                      : (
+                        <p className="text-xl font-semibold text-gray-900">
+                          Custom pricing
+                        </p>
+                      )}
                     {plan.price === 0 && (
                       <p className="text-sm text-gray-500">Free forever</p>
                     )}
@@ -315,15 +360,19 @@ export default function PricingPage() {
 
                   {plan.limits && (
                     <div className="rounded-lg bg-gray-50 p-4">
-                      <h4 className="mb-2 font-medium text-gray-900">Plan limits</h4>
+                      <h4 className="mb-2 font-medium text-gray-900">
+                        Plan limits
+                      </h4>
                       <div className="space-y-1 text-sm text-gray-600">
-                        {Object.entries(plan.limits).map(([limitKey, value]) => (
+                        {Object.entries(plan.limits).map((
+                          [limitKey, value],
+                        ) => (
                           <div key={limitKey} className="flex justify-between">
                             <span className="capitalize">
-                              {limitKey.replace(/([A-Z])/g, ' $1').trim()}:
+                              {limitKey.replace(/([A-Z])/g, " $1").trim()}:
                             </span>
                             <span className="font-medium">
-                              {value === -1 ? 'Unlimited' : String(value)}
+                              {value === -1 ? "Unlimited" : String(value)}
                             </span>
                           </div>
                         ))}
@@ -340,42 +389,50 @@ export default function PricingPage() {
                   <div className="space-y-2 pt-2">
                     <Button
                       onClick={() =>
-                        isQuote ? handleContactSales(plan.name) : handleSubscribe(plan.id)
-                      }
+                        isQuote
+                          ? handleContactSales(plan.name)
+                          : handleSubscribe(plan.id)}
                       disabled={!isQuote && loading === plan.id}
                       className="w-full"
                     >
                       {isQuote
-                        ? plan.cta ?? 'Talk to sales'
+                        ? plan.cta ?? "Talk to sales"
                         : loading === plan.id
-                          ? 'Processing...'
-                          : plan.price === 0
-                            ? 'Get started free'
-                            : 'Choose plan'}
+                        ? "Processing..."
+                        : plan.price === 0
+                        ? "Get started free"
+                        : "Choose plan"}
                     </Button>
                     <p className="text-center text-xs text-gray-500">
                       {isQuote
-                        ? 'We’ll schedule a sizing call with RevOps to finalize volume-tiered pricing.'
-                        : 'Billing handled securely via Stripe. Cancel anytime from your dashboard.'}
+                        ? "We’ll schedule a sizing call with RevOps to finalize volume-tiered pricing."
+                        : "Billing handled securely via Stripe. Cancel anytime from your dashboard."}
                     </p>
                   </div>
                 </CardContent>
               </Card>
-            )
+            );
           })}
         </div>
 
         {/* FAQ */}
         <div className="mx-auto mt-16 max-w-3xl space-y-6">
-          <h2 className="text-center text-2xl font-bold text-gray-900">Frequently asked questions</h2>
+          <h2 className="text-center text-2xl font-bold text-gray-900">
+            Frequently asked questions
+          </h2>
           {faqItems.map((item) => (
-            <div key={item.question} className="rounded-lg bg-white p-6 shadow-sm">
-              <h3 className="mb-2 font-semibold text-gray-900">{item.question}</h3>
+            <div
+              key={item.question}
+              className="rounded-lg bg-white p-6 shadow-sm"
+            >
+              <h3 className="mb-2 font-semibold text-gray-900">
+                {item.question}
+              </h3>
               <p className="text-gray-600">{item.answer}</p>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

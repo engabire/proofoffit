@@ -192,7 +192,8 @@ export default function HomePage() {
               For Every Profession, Every Background
             </h2>
             <p className="text-lg text-gray-600">
-              ProofOfFit works across all industries and career levels, from entry-level to executive positions.
+              ProofOfFit works across all industries and career levels, from
+              entry-level to executive positions.
             </p>
           </div>
 
@@ -209,10 +210,14 @@ export default function HomePage() {
                   />
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-900">Construction</h3>
-              <p className="text-xs text-gray-600">Safety & Project Management</p>
+              <h3 className="text-sm font-medium text-gray-900">
+                Construction
+              </h3>
+              <p className="text-xs text-gray-600">
+                Safety & Project Management
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
                 <div className="relative w-full h-24 overflow-hidden rounded-lg">
@@ -228,7 +233,7 @@ export default function HomePage() {
               <h3 className="text-sm font-medium text-gray-900">Healthcare</h3>
               <p className="text-xs text-gray-600">Medical & Patient Care</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
                 <div className="relative w-full h-24 overflow-hidden rounded-lg">
@@ -242,9 +247,11 @@ export default function HomePage() {
                 </div>
               </div>
               <h3 className="text-sm font-medium text-gray-900">Culinary</h3>
-              <p className="text-xs text-gray-600">Food Service & Hospitality</p>
+              <p className="text-xs text-gray-600">
+                Food Service & Hospitality
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
                 <div className="relative w-full h-24 overflow-hidden rounded-lg">
@@ -260,7 +267,7 @@ export default function HomePage() {
               <h3 className="text-sm font-medium text-gray-900">Technology</h3>
               <p className="text-xs text-gray-600">Software & Engineering</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
                 <div className="relative w-full h-24 overflow-hidden rounded-lg">
@@ -276,7 +283,7 @@ export default function HomePage() {
               <h3 className="text-sm font-medium text-gray-900">Education</h3>
               <p className="text-xs text-gray-600">Teaching & Administration</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-white rounded-lg p-4 shadow-sm mb-3">
                 <div className="relative w-full h-24 overflow-hidden rounded-lg">
@@ -304,7 +311,8 @@ export default function HomePage() {
               Meticulously crafted workflows
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Outsmart me, especially on marketing and design. Humanize all customer facing functions, even if it AI.
+              Outsmart me, especially on marketing and design. Humanize all
+              customer facing functions, even if it AI.
             </p>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
               We pair approachability with governance—mirroring the calm clarity
