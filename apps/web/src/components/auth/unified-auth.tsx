@@ -56,14 +56,14 @@ export function UnifiedAuth({
         return strength;
     };
 
+    const isSignup = mode === "signup";
+
     // Update password strength when password changes
     React.useEffect(() => {
         if (isSignup && password) {
             setPasswordStrength(calculatePasswordStrength(password));
         }
     }, [password, isSignup]);
-
-    const isSignup = mode === "signup";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
