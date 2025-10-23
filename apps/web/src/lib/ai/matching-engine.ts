@@ -84,6 +84,8 @@ export interface MatchResult {
 
 export class AIMatchingEngine {
   private supabase: any
+  private cache: Map<string, { data: any; timestamp: number }> = new Map()
+  private readonly CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
   constructor() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -440,6 +442,13 @@ export class AIMatchingEngine {
       if (!this.supabase) {
         return []
       }
+
+      // Check cache first
+      const cacheKey = `job_matches_${jobId}_${limit}`
+      const cached = this.cache.get(cacheKey)
+      if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
+        return cached.data
+      }
       // Get job requirements
       const { data: job, error: jobError } = await this.supabase
         .from('jobs')
@@ -461,18 +470,34 @@ export class AIMatchingEngine {
         throw new Error('Failed to fetch candidates')
       }
 
-      // Calculate matches
+      // Calculate matches in batches for better performance
       const matches: MatchResult[] = []
+      const batchSize = 10 // Process 10 candidates at a time
       
-      for (const candidate of candidates) {
-        const match = await this.calculateFitScore(candidate, job)
-        matches.push(match)
+      for (let i = 0; i < candidates.length; i += batchSize) {
+        const batch = candidates.slice(i, i + batchSize)
+        
+        // Process batch in parallel to avoid N+1 queries
+        const batchPromises = batch.map(candidate => 
+          this.calculateFitScore(candidate, job)
+        )
+        
+        const batchResults = await Promise.all(batchPromises)
+        matches.push(...batchResults)
       }
 
       // Sort by fit score and return top matches
-      return matches
+      const sortedMatches = matches
         .sort((a, b) => b.fitScore - a.fitScore)
         .slice(0, limit)
+
+      // Cache results
+      this.cache.set(cacheKey, {
+        data: sortedMatches,
+        timestamp: Date.now()
+      })
+
+      return sortedMatches
 
     } catch (error) {
       console.error('Error finding matches for job:', error)
@@ -485,6 +510,13 @@ export class AIMatchingEngine {
     try {
       if (!this.supabase) {
         return []
+      }
+
+      // Check cache first
+      const cacheKey = `candidate_jobs_${candidateId}_${limit}`
+      const cached = this.cache.get(cacheKey)
+      if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
+        return cached.data
       }
       // Get candidate profile
       const { data: candidate, error: candidateError } = await this.supabase
@@ -508,18 +540,34 @@ export class AIMatchingEngine {
         throw new Error('Failed to fetch jobs')
       }
 
-      // Calculate matches
+      // Calculate matches in batches for better performance
       const matches: MatchResult[] = []
+      const batchSize = 10 // Process 10 jobs at a time
       
-      for (const job of jobs) {
-        const match = await this.calculateFitScore(candidate, job)
-        matches.push(match)
+      for (let i = 0; i < jobs.length; i += batchSize) {
+        const batch = jobs.slice(i, i + batchSize)
+        
+        // Process batch in parallel to avoid N+1 queries
+        const batchPromises = batch.map(job => 
+          this.calculateFitScore(candidate, job)
+        )
+        
+        const batchResults = await Promise.all(batchPromises)
+        matches.push(...batchResults)
       }
 
       // Sort by fit score and return top matches
-      return matches
+      const sortedMatches = matches
         .sort((a, b) => b.fitScore - a.fitScore)
         .slice(0, limit)
+
+      // Cache results
+      this.cache.set(cacheKey, {
+        data: sortedMatches,
+        timestamp: Date.now()
+      })
+
+      return sortedMatches
 
     } catch (error) {
       console.error('Error finding jobs for candidate:', error)
