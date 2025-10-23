@@ -1,0 +1,27 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Puzzle Piece 1 -->
+  <path d="M 8 8 L 16 8 L 16 12 L 20 12 L 20 20 L 16 20 L 16 24 L 8 24 L 8 20 L 4 20 L 4 12 L 8 12 Z" fill="url(#puzzleGradient1)"/>
+  
+  <!-- Puzzle Piece 2 -->
+  <path d="M 20 8 L 28 8 L 28 12 L 32 12 L 32 20 L 28 20 L 28 24 L 20 24 L 20 20 L 16 20 L 16 12 L 20 12 Z" fill="url(#puzzleGradient2)"/>
+  
+  <!-- Text -->
+  <text x="40" y="28" font-family="Inter, sans-serif" font-size="18" font-weight="700" fill="url(#textGradient)">
+    ProofOfFit
+  </text>
+  
+  <defs>
+    <linearGradient id="puzzleGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="puzzleGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,74 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" rx="12" fill="url(#retailGradient)"/>
+  
+  <!-- Store Background -->
+  <rect x="20" y="120" width="160" height="60" fill="#FFF8DC" opacity="0.8"/>
+  <rect x="30" y="110" width="140" height="10" fill="#D2B48C"/>
+  <rect x="30" y="130" width="140" height="10" fill="#D2B48C"/>
+  <rect x="30" y="150" width="140" height="10" fill="#D2B48C"/>
+  
+  <!-- Person -->
+  <circle cx="100" cy="70" r="25" fill="#D4AF8C"/>
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#FF6B6B"/>
+  <rect x="80" y="135" width="20" height="30" fill="#2F4F4F"/>
+  <rect x="100" y="135" width="20" height="30" fill="#2F4F4F"/>
+  
+  <!-- Retail Uniform -->
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#FF6B6B"/>
+  <rect x="85" y="105" width="30" height="20" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Name Tag -->
+  <rect x="90" y="100" width="20" height="8" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1"/>
+  <text x="100" y="106" font-family="Arial" font-size="6" text-anchor="middle" fill="#2C2C2C">STAFF</text>
+  
+  <!-- Shopping Cart -->
+  <rect x="40" y="50" width="25" height="20" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1"/>
+  <rect x="42" y="52" width="21" height="16" fill="#F8F9FA"/>
+  <circle cx="47" cy="60" r="3" fill="#FF6B6B"/>
+  <circle cx="55" cy="60" r="3" fill="#4ECDC4"/>
+  <circle cx="63" cy="60" r="3" fill="#45B7D1"/>
+  <rect x="45" y="65" width="15" height="2" fill="#2C2C2C"/>
+  
+  <!-- Cash Register -->
+  <rect x="135" y="50" width="25" height="20" fill="#2C2C2C"/>
+  <rect x="137" y="52" width="21" height="16" fill="#F8F9FA"/>
+  <rect x="140" y="55" width="15" height="3" fill="#000000"/>
+  <rect x="140" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="144" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="148" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="152" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="140" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="144" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="148" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="152" y="64" width="3" height="3" fill="#6B7280"/>
+  
+  <!-- Price Tags -->
+  <rect x="30" y="80" width="12" height="8" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+  <text x="36" y="86" font-family="Arial" font-size="6" text-anchor="middle" fill="#000000">$9.99</text>
+  
+  <rect x="158" y="80" width="12" height="8" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+  <text x="164" y="86" font-family="Arial" font-size="6" text-anchor="middle" fill="#000000">$19.99</text>
+  
+  <!-- Products on Shelf -->
+  <rect x="25" y="100" width="8" height="12" fill="#FF6B6B"/>
+  <rect x="35" y="100" width="8" height="12" fill="#4ECDC4"/>
+  <rect x="45" y="100" width="8" height="12" fill="#45B7D1"/>
+  <rect x="55" y="100" width="8" height="12" fill="#96CEB4"/>
+  
+  <rect x="137" y="100" width="8" height="12" fill="#FF6B6B"/>
+  <rect x="147" y="100" width="8" height="12" fill="#4ECDC4"/>
+  <rect x="157" y="100" width="8" height="12" fill="#45B7D1"/>
+  <rect x="167" y="100" width="8" height="12" fill="#96CEB4"/>
+  
+  <!-- Customer Service -->
+  <circle cx="100" cy="40" r="8" fill="#FFD700"/>
+  <text x="100" y="45" font-family="Arial" font-size="8" text-anchor="middle" fill="#000000">?</text>
+  
+  <defs>
+    <linearGradient id="retailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8DC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE4B5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

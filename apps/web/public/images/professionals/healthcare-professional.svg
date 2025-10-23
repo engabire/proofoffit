@@ -1,0 +1,55 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" rx="12" fill="url(#healthcareGradient)"/>
+  
+  <!-- Hospital Corridor Background -->
+  <rect x="20" y="120" width="160" height="60" fill="#F0F8FF" opacity="0.8"/>
+  <rect x="30" y="110" width="140" height="10" fill="#E0E0E0"/>
+  <rect x="30" y="130" width="140" height="10" fill="#E0E0E0"/>
+  <rect x="30" y="150" width="140" height="10" fill="#E0E0E0"/>
+  
+  <!-- Person -->
+  <circle cx="100" cy="70" r="25" fill="#D4AF8C"/>
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#00CED1"/>
+  <rect x="80" y="135" width="20" height="30" fill="#2F4F4F"/>
+  <rect x="100" y="135" width="20" height="30" fill="#2F4F4F"/>
+  
+  <!-- Scrubs -->
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#87CEEB"/>
+  <rect x="85" y="105" width="30" height="20" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Stethoscope -->
+  <path d="M 100 95 Q 90 85 80 90 Q 70 95 75 105" stroke="#2F4F4F" stroke-width="3" fill="none"/>
+  <circle cx="75" cy="105" r="8" fill="#2F4F4F"/>
+  <circle cx="75" cy="105" r="5" fill="#FFFFFF"/>
+  <path d="M 100 95 Q 110 85 120 90 Q 130 95 125 105" stroke="#2F4F4F" stroke-width="3" fill="none"/>
+  <circle cx="125" cy="105" r="8" fill="#2F4F4F"/>
+  <circle cx="125" cy="105" r="5" fill="#FFFFFF"/>
+  
+  <!-- Medical Equipment -->
+  <rect x="40" y="50" width="15" height="25" rx="2" fill="#FFFFFF" stroke="#2F4F4F" stroke-width="1"/>
+  <rect x="42" y="52" width="11" height="8" fill="#FF6B6B"/>
+  <rect x="42" y="62" width="11" height="8" fill="#4ECDC4"/>
+  <rect x="42" y="72" width="11" height="3" fill="#45B7D1"/>
+  
+  <!-- Tablet -->
+  <rect x="135" y="60" width="20" height="30" rx="2" fill="#2C2C2C"/>
+  <rect x="137" y="62" width="16" height="26" fill="#87CEEB"/>
+  <circle cx="145" cy="90" r="2" fill="#2C2C2C"/>
+  
+  <!-- Medical Cross -->
+  <rect x="145" y="40" width="8" height="20" fill="#FF0000"/>
+  <rect x="140" y="48" width="18" height="4" fill="#FF0000"/>
+  
+  <!-- Heart Rate Monitor -->
+  <path d="M 30 40 Q 35 35 40 40 Q 45 45 50 40 Q 55 35 60 40" stroke="#FF0000" stroke-width="2" fill="none"/>
+  <circle cx="30" cy="40" r="2" fill="#FF0000"/>
+  <circle cx="60" cy="40" r="2" fill="#FF0000"/>
+  
+  <defs>
+    <linearGradient id="healthcareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E6FFE6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B3FFB3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

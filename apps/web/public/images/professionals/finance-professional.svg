@@ -1,0 +1,77 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" rx="12" fill="url(#financeGradient)"/>
+  
+  <!-- Office Background -->
+  <rect x="20" y="120" width="160" height="60" fill="#F8F9FA" opacity="0.8"/>
+  <rect x="30" y="110" width="140" height="10" fill="#E9ECEF"/>
+  <rect x="30" y="130" width="140" height="10" fill="#E9ECEF"/>
+  <rect x="30" y="150" width="140" height="10" fill="#E9ECEF"/>
+  
+  <!-- Person -->
+  <circle cx="100" cy="70" r="25" fill="#D4AF8C"/>
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#2C2C2C"/>
+  <rect x="80" y="135" width="20" height="30" fill="#2F4F4F"/>
+  <rect x="100" y="135" width="20" height="30" fill="#2F4F4F"/>
+  
+  <!-- Business Suit -->
+  <rect x="75" y="95" width="50" height="40" rx="8" fill="#2C2C2C"/>
+  <rect x="85" y="105" width="30" height="20" fill="#FFFFFF" opacity="0.1"/>
+  
+  <!-- Tie -->
+  <rect x="95" y="95" width="10" height="25" fill="#FF0000"/>
+  <rect x="97" y="97" width="6" height="21" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Financial Charts -->
+  <rect x="40" y="50" width="25" height="20" rx="2" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1"/>
+  <rect x="42" y="52" width="21" height="16" fill="#F8F9FA"/>
+  <rect x="44" y="60" width="3" height="8" fill="#10B981"/>
+  <rect x="48" y="58" width="3" height="10" fill="#10B981"/>
+  <rect x="52" y="55" width="3" height="13" fill="#10B981"/>
+  <rect x="56" y="62" width="3" height="6" fill="#EF4444"/>
+  <rect x="60" y="59" width="3" height="9" fill="#10B981"/>
+  
+  <!-- Calculator -->
+  <rect x="135" y="50" width="20" height="25" rx="2" fill="#2C2C2C"/>
+  <rect x="137" y="52" width="16" height="21" fill="#F8F9FA"/>
+  <rect x="139" y="54" width="12" height="4" fill="#000000"/>
+  <rect x="139" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="143" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="147" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="151" y="60" width="3" height="3" fill="#6B7280"/>
+  <rect x="139" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="143" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="147" y="64" width="3" height="3" fill="#6B7280"/>
+  <rect x="151" y="64" width="3" height="3" fill="#6B7280"/>
+  
+  <!-- Dollar Signs -->
+  <text x="30" y="40" font-family="Arial" font-size="16" font-weight="bold" fill="#10B981">$</text>
+  <text x="150" y="40" font-family="Arial" font-size="16" font-weight="bold" fill="#10B981">$</text>
+  <text x="90" y="35" font-family="Arial" font-size="12" font-weight="bold" fill="#10B981">$$</text>
+  
+  <!-- Documents -->
+  <rect x="25" y="80" width="15" height="20" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1"/>
+  <rect x="27" y="82" width="11" height="2" fill="#2C2C2C"/>
+  <rect x="27" y="85" width="11" height="1" fill="#6B7280"/>
+  <rect x="27" y="87" width="11" height="1" fill="#6B7280"/>
+  <rect x="27" y="89" width="8" height="1" fill="#6B7280"/>
+  
+  <rect x="160" y="80" width="15" height="20" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1"/>
+  <rect x="162" y="82" width="11" height="2" fill="#2C2C2C"/>
+  <rect x="162" y="85" width="11" height="1" fill="#6B7280"/>
+  <rect x="162" y="87" width="11" height="1" fill="#6B7280"/>
+  <rect x="162" y="89" width="8" height="1" fill="#6B7280"/>
+  
+  <!-- Briefcase -->
+  <rect x="85" y="85" width="30" height="20" rx="2" fill="#8B4513"/>
+  <rect x="87" y="87" width="26" height="16" fill="#DEB887"/>
+  <rect x="90" y="90" width="20" height="2" fill="#8B4513"/>
+  <rect x="95" y="95" width="10" height="8" fill="#8B4513"/>
+  
+  <defs>
+    <linearGradient id="financeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0FDF4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DCFCE7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
