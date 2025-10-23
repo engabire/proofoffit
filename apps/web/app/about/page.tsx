@@ -81,25 +81,29 @@ export default function AboutPage() {
     {
       year: "2024",
       title: "The Birth of ProofOfFit",
-      description: "Founded with a mission to eliminate bias in hiring through evidence-based matching and transparent algorithms.",
+      description:
+        "Founded with a mission to eliminate bias in hiring through evidence-based matching and transparent algorithms.",
       icon: <Rocket className="h-6 w-6" />,
     },
     {
       year: "2024",
       title: "First Algorithm Validation",
-      description: "Our bias-detection algorithms achieved 99.7% accuracy in peer-reviewed studies, setting new industry standards.",
+      description:
+        "Our bias-detection algorithms achieved 99.7% accuracy in peer-reviewed studies, setting new industry standards.",
       icon: <Award className="h-6 w-6" />,
     },
     {
       year: "2024",
       title: "Enterprise Partnerships",
-      description: "Partnered with Fortune 500 companies to implement fair hiring practices across diverse industries.",
+      description:
+        "Partnered with Fortune 500 companies to implement fair hiring practices across diverse industries.",
       icon: <Building2 className="h-6 w-6" />,
     },
     {
       year: "2024",
       title: "Global Impact",
-      description: "Expanded to serve job seekers and employers across 50+ countries, democratizing access to fair hiring.",
+      description:
+        "Expanded to serve job seekers and employers across 50+ countries, democratizing access to fair hiring.",
       icon: <Globe className="h-6 w-6" />,
     },
   ];
@@ -141,12 +145,19 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-8">
-              We're not just another HR tech company. We're the architects of a new era where hiring decisions are made with mathematical precision, 
-              ethical rigor, and human dignity. Every algorithm we build, every decision we enable, and every candidate we serve is guided by one 
-              unwavering principle: <strong>merit should be the only measure that matters.</strong>
+              We're not just another HR tech company. We're the architects of a
+              new era where hiring decisions are made with mathematical
+              precision, ethical rigor, and human dignity. Every algorithm we
+              build, every decision we enable, and every candidate we serve is
+              guided by one unwavering principle:{" "}
+              <strong>merit should be the only measure that matters.</strong>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
                 <Link href="/contact">
                   Partner With Us
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -170,9 +181,13 @@ export default function AboutPage() {
               Our Philosophy: The ProofOfFit Way
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              We believe that hiring is not just a business process—it's a moral imperative. Every hiring decision shapes lives, 
-              builds communities, and determines the future of work. That's why we've built the world's first <strong>evidence-based hiring platform</strong> 
-              that combines the precision of advanced analytics with the wisdom of human judgment.
+              We believe that hiring is not just a business process—it's a moral
+              imperative. Every hiring decision shapes lives, builds
+              communities, and determines the future of work. That's why we've
+              built the world's first{" "}
+              <strong>evidence-based hiring platform</strong>
+              that combines the precision of advanced analytics with the wisdom
+              of human judgment.
             </p>
           </div>
 
@@ -180,10 +195,15 @@ export default function AboutPage() {
             <Card className="text-center border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20">
               <CardContent className="p-8">
                 <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Eliminate Bias, Amplify Merit</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Eliminate Bias, Amplify Merit
+                </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Our proprietary algorithms don't just detect bias—they eliminate it at the source. We've mathematically proven that 
-                  talent knows no demographic boundaries, and our platform ensures every candidate gets evaluated on their actual capabilities.
+                  Our proprietary algorithms don't just detect bias—they
+                  eliminate it at the source. We've mathematically proven that
+                  talent knows no demographic boundaries, and our platform
+                  ensures every candidate gets evaluated on their actual
+                  capabilities.
                 </p>
               </CardContent>
             </Card>
@@ -195,7 +215,11 @@ export default function AboutPage() {
                   Radical Transparency, Unshakeable Trust
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We don't hide behind black boxes or proprietary secrets. Our algorithms are open to scrutiny, our methodologies are peer-reviewed, and every hiring decision comes with a complete audit trail. We believe that trust is built through transparency, not through secrecy.
+                  We don't hide behind black boxes or proprietary secrets. Our
+                  algorithms are open to scrutiny, our methodologies are
+                  peer-reviewed, and every hiring decision comes with a complete
+                  audit trail. We believe that trust is built through
+                  transparency, not through secrecy.
                 </p>
               </CardContent>
             </Card>
@@ -203,10 +227,15 @@ export default function AboutPage() {
             <Card className="text-center border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-950/20">
               <CardContent className="p-8">
                 <Rocket className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Scale Excellence, Preserve Humanity</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Scale Excellence, Preserve Humanity
+                </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We don't believe in replacing human judgment—we believe in augmenting it. Our platform helps enterprises make 
-                  better decisions at scale while preserving the human touch that makes great teams. Technology should enhance humanity, not replace it.
+                  We don't believe in replacing human judgment—we believe in
+                  augmenting it. Our platform helps enterprises make better
+                  decisions at scale while preserving the human touch that makes
+                  great teams. Technology should enhance humanity, not replace
+                  it.
                 </p>
               </CardContent>
             </Card>
@@ -222,8 +251,10 @@ export default function AboutPage() {
               Our Brand Values: The Ethical Foundation
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              At ProofOfFit, we don't just build software—we build the future of work. These values aren't just words on a wall; 
-              they're the mathematical principles that guide every algorithm, every decision, and every interaction.
+              At ProofOfFit, we don't just build software—we build the future of
+              work. These values aren't just words on a wall; they're the
+              mathematical principles that guide every algorithm, every
+              decision, and every interaction.
             </p>
           </div>
 
@@ -251,7 +282,8 @@ export default function AboutPage() {
               The ProofOfFit Impact
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              Numbers don't lie. Here's how we're transforming the hiring landscape, one evidence-based decision at a time.
+              Numbers don't lie. Here's how we're transforming the hiring
+              landscape, one evidence-based decision at a time.
             </p>
           </div>
 
@@ -259,8 +291,12 @@ export default function AboutPage() {
             {stats.map((stat, index) => (
               <Card key={index} className="text-center">
                 <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{stat.label}</h3>
+                  <div className="text-4xl font-bold text-blue-600 mb-2">
+                    {stat.number}
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                    {stat.label}
+                  </h3>
                   <p className="text-sm text-slate-600">{stat.description}</p>
                 </CardContent>
               </Card>
@@ -277,7 +313,8 @@ export default function AboutPage() {
               Our Journey: From Vision to Reality
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-              Every great revolution starts with a single step. Here's how we're building the future of fair hiring, one milestone at a time.
+              Every great revolution starts with a single step. Here's how we're
+              building the future of fair hiring, one milestone at a time.
             </p>
           </div>
 
@@ -291,12 +328,19 @@ export default function AboutPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-4 mb-2">
-                        <Badge variant="outline" className="text-blue-600 border-blue-600">
+                        <Badge
+                          variant="outline"
+                          className="text-blue-600 border-blue-600"
+                        >
                           {milestone.year}
                         </Badge>
-                        <h3 className="text-xl font-semibold text-slate-900">{milestone.title}</h3>
+                        <h3 className="text-xl font-semibold text-slate-900">
+                          {milestone.title}
+                        </h3>
                       </div>
-                      <p className="text-slate-600 dark:text-slate-300">{milestone.description}</p>
+                      <p className="text-slate-600 dark:text-slate-300">
+                        {milestone.description}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -311,16 +355,21 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <Quote className="h-12 w-12 text-blue-600 mx-auto mb-6" />
           <blockquote className="text-2xl font-medium text-slate-900 mb-6">
-            "ProofOfFit doesn't just talk about fairness—they prove it. Every algorithm, every decision, every outcome is backed by rigorous evidence. 
-            This is what the future of hiring looks like."
+            "ProofOfFit doesn't just talk about fairness—they prove it. Every
+            algorithm, every decision, every outcome is backed by rigorous
+            evidence. This is what the future of hiring looks like."
           </blockquote>
           <div className="flex items-center justify-center gap-4">
             <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
               <span className="text-white font-semibold">JD</span>
             </div>
             <div className="text-left">
-              <div className="font-semibold text-slate-900">Dr. Jennifer Davis</div>
-              <div className="text-slate-600">Chief People Officer, Fortune 500 Company</div>
+              <div className="font-semibold text-slate-900">
+                Dr. Jennifer Davis
+              </div>
+              <div className="text-slate-600">
+                Chief People Officer, Fortune 500 Company
+              </div>
             </div>
           </div>
         </div>
@@ -333,7 +382,8 @@ export default function AboutPage() {
             Ready to Transform Your Hiring?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join the movement toward evidence-based, bias-free hiring. Let's build a future where talent is the only thing that matters.
+            Join the movement toward evidence-based, bias-free hiring. Let's
+            build a future where talent is the only thing that matters.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary">
@@ -342,7 +392,12 @@ export default function AboutPage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600"
+            >
               <Link href="/demo">
                 See It In Action
               </Link>
@@ -364,10 +419,18 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="flex gap-4">
-              <Button asChild variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800">
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-600 text-slate-300 hover:bg-slate-800"
+              >
                 <Link href="/privacy-policy">Privacy Policy</Link>
               </Button>
-              <Button asChild variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800">
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-600 text-slate-300 hover:bg-slate-800"
+              >
                 <Link href="/terms-of-service">Terms of Service</Link>
               </Button>
             </div>
