@@ -70,24 +70,30 @@ export default function HomePage() {
           <div className="relative max-w-4xl mx-auto mb-16">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="order-2 md:order-1">
-                <Image
-                  src="/images/illustrations/job-matching.svg"
-                  alt="AI-powered job matching illustration"
-                  width={640}
-                  height={480}
-                  className="w-full h-auto max-w-md mx-auto"
-                  priority
-                />
+                <div className="w-full h-auto max-w-md mx-auto">
+                  <Image
+                    src="/images/illustrations/job-matching.svg"
+                    alt="AI-powered job matching illustration"
+                    width={640}
+                    height={480}
+                    className="w-full h-auto"
+                    priority
+                    unoptimized
+                  />
+                </div>
               </div>
               <div className="order-1 md:order-2">
-                <Image
-                  src="/images/illustrations/dashboard-preview.svg"
-                  alt="ProofOfFit dashboard preview"
-                  width={640}
-                  height={480}
-                  className="w-full h-auto max-w-md mx-auto"
-                  priority
-                />
+                <div className="w-full h-auto max-w-md mx-auto">
+                  <Image
+                    src="/images/illustrations/dashboard-preview.svg"
+                    alt="ProofOfFit dashboard preview"
+                    width={640}
+                    height={480}
+                    className="w-full h-auto"
+                    priority
+                    unoptimized
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -137,6 +143,7 @@ export default function HomePage() {
               width={1200}
               height={200}
               className="w-full h-auto"
+              unoptimized
             />
           </div>
 

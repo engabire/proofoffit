@@ -24,7 +24,11 @@ export type MonitoringEventType =
     | "EXTERNAL_SERVICE_CALL"
     | "RESOURCE_USAGE"
     | "SECURITY_EVENT"
-    | "BUSINESS_METRIC";
+    | "BUSINESS_METRIC"
+    | "AUTHENTICATION_EVENT"
+    | "PAYMENT_EVENT"
+    | "INTEGRATION_EVENT"
+    | "DEPLOYMENT_EVENT";
 
 export type MonitoringSeverity = "INFO" | "WARNING" | "ERROR" | "CRITICAL";
 
@@ -39,18 +43,32 @@ export interface AlertConfig {
     cooldownMs: number;
     lastTriggered?: Date;
     notificationChannels: NotificationChannel[];
+    escalationPolicy?: EscalationPolicy;
 }
 
 export interface AlertCondition {
     metric: string;
-    operator: "gt" | "lt" | "eq" | "gte" | "lte";
-    threshold: number;
+    operator: "gt" | "lt" | "eq" | "gte" | "lte" | "contains" | "regex";
+    threshold: number | string;
     timeWindowMs: number;
+    aggregation?: "avg" | "sum" | "max" | "min" | "count";
 }
 
 export interface NotificationChannel {
-    type: "email" | "webhook" | "slack" | "sms";
+    type: "email" | "webhook" | "slack" | "sms" | "discord" | "teams";
     config: Record<string, any>;
+    enabled: boolean;
+}
+
+export interface EscalationPolicy {
+    levels: EscalationLevel[];
+    maxEscalations: number;
+}
+
+export interface EscalationLevel {
+    delayMs: number;
+    channels: NotificationChannel[];
+    message?: string;
 }
 
 // Performance Metrics
@@ -65,6 +83,12 @@ export interface PerformanceMetrics {
     cacheHitRate: number;
     databaseQueryTime: number;
     apiResponseTime: number;
+    bundleSize: number;
+    pageLoadTime: number;
+    timeToInteractive: number;
+    firstContentfulPaint: number;
+    largestContentfulPaint: number;
+    cumulativeLayoutShift: number;
 }
 
 // Business Metrics
@@ -77,22 +101,32 @@ export interface BusinessMetrics {
     conversionRate: number;
     userEngagement: number;
     systemUptime: number;
+    subscriptionGrowth: number;
+    churnRate: number;
+    averageSessionDuration: number;
+    pageViews: number;
+    bounceRate: number;
 }
 
+// Enhanced monitoring with real-time capabilities
 class MonitoringEngine {
     private events: MonitoringEvent[] = [];
     private alerts: AlertConfig[] = [];
     private metrics: Map<string, number[]> = new Map();
     private alertHistory: Array<
-        { alertId: string; triggeredAt: Date; resolvedAt?: Date }
+        { alertId: string; triggeredAt: Date; resolvedAt?: Date; escalatedLevel?: number }
     > = [];
+    private realTimeSubscribers: Set<(event: MonitoringEvent) => void> = new Set();
+    private metricsBuffer: Map<string, number[]> = new Map();
+    private flushInterval: NodeJS.Timeout | null = null;
 
     constructor() {
         this.initializeDefaultAlerts();
+        this.startMetricsFlush();
     }
 
     /**
-     * Log a monitoring event
+     * Log a monitoring event with enhanced capabilities
      */
     public logEvent(
         type: MonitoringEventType,
@@ -118,20 +152,18 @@ class MonitoringEngine {
         // Store metrics for alerting
         if (metrics) {
             Object.entries(metrics).forEach(([key, value]) => {
-                if (!this.metrics.has(key)) {
-                    this.metrics.set(key, []);
+                if (!this.metricsBuffer.has(key)) {
+                    this.metricsBuffer.set(key, []);
                 }
-                this.metrics.get(key)!.push(value);
-
-                // Keep only last 1000 values per metric
-                if (this.metrics.get(key)!.length > 1000) {
-                    this.metrics.get(key)!.shift();
-                }
+                this.metricsBuffer.get(key)!.push(value);
             });
         }
 
         // Check for alerts
         this.checkAlerts(event);
+
+        // Notify real-time subscribers
+        this.notifySubscribers(event);
 
         // Log to console (in production, send to monitoring service)
         console.log(`Monitoring Event [${severity}]: ${type}`, {
@@ -144,7 +176,15 @@ class MonitoringEngine {
     }
 
     /**
-     * Get performance metrics
+     * Subscribe to real-time monitoring events
+     */
+    public subscribe(callback: (event: MonitoringEvent) => void): () => void {
+        this.realTimeSubscribers.add(callback);
+        return () => this.realTimeSubscribers.delete(callback);
+    }
+
+    /**
+     * Get performance metrics with enhanced data
      */
     public getPerformanceMetrics(): PerformanceMetrics {
         return {
@@ -156,14 +196,19 @@ class MonitoringEngine {
             diskUsage: this.getMetricAverage("disk_usage") || 0,
             networkLatency: this.getMetricAverage("network_latency") || 0,
             cacheHitRate: this.getMetricAverage("cache_hit_rate") || 0,
-            databaseQueryTime: this.getMetricAverage("database_query_time") ||
-                0,
+            databaseQueryTime: this.getMetricAverage("database_query_time") || 0,
             apiResponseTime: this.getMetricAverage("api_response_time") || 0,
+            bundleSize: this.getMetricAverage("bundle_size") || 0,
+            pageLoadTime: this.getMetricAverage("page_load_time") || 0,
+            timeToInteractive: this.getMetricAverage("time_to_interactive") || 0,
+            firstContentfulPaint: this.getMetricAverage("first_contentful_paint") || 0,
+            largestContentfulPaint: this.getMetricAverage("largest_contentful_paint") || 0,
+            cumulativeLayoutShift: this.getMetricAverage("cumulative_layout_shift") || 0,
         };
     }
 
     /**
-     * Get business metrics
+     * Get business metrics with enhanced data
      */
     public getBusinessMetrics(): BusinessMetrics {
         return {
@@ -175,11 +220,16 @@ class MonitoringEngine {
             conversionRate: this.getMetricAverage("conversion_rate") || 0,
             userEngagement: this.getMetricAverage("user_engagement") || 0,
             systemUptime: this.getMetricAverage("system_uptime") || 0,
+            subscriptionGrowth: this.getMetricAverage("subscription_growth") || 0,
+            churnRate: this.getMetricAverage("churn_rate") || 0,
+            averageSessionDuration: this.getMetricAverage("average_session_duration") || 0,
+            pageViews: this.getMetricAverage("page_views") || 0,
+            bounceRate: this.getMetricAverage("bounce_rate") || 0,
         };
     }
 
     /**
-     * Get monitoring events
+     * Get monitoring events with enhanced filtering
      */
     public getEvents(filters: {
         type?: MonitoringEventType;
@@ -187,6 +237,7 @@ class MonitoringEngine {
         source?: string;
         limit?: number;
         since?: Date;
+        tags?: Record<string, string>;
     }): MonitoringEvent[] {
         let filteredEvents = this.events;
 
@@ -212,6 +263,15 @@ class MonitoringEngine {
             filteredEvents = filteredEvents.filter((event) =>
                 event.timestamp >= filters.since!
             );
+        }
+
+        if (filters.tags) {
+            filteredEvents = filteredEvents.filter((event) => {
+                if (!event.tags) return false;
+                return Object.entries(filters.tags!).every(([key, value]) =>
+                    event.tags![key] === value
+                );
+            });
         }
 
         // Sort by timestamp (newest first)
@@ -280,16 +340,16 @@ class MonitoringEngine {
     }
 
     /**
-     * Get alert history
+     * Get alert history with escalation tracking
      */
     public getAlertHistory(): Array<
-        { alertId: string; triggeredAt: Date; resolvedAt?: Date }
+        { alertId: string; triggeredAt: Date; resolvedAt?: Date; escalatedLevel?: number }
     > {
         return this.alertHistory;
     }
 
     /**
-     * Get monitoring dashboard data
+     * Get monitoring dashboard data with enhanced metrics
      */
     public getDashboardData(): {
         performanceMetrics: PerformanceMetrics;
@@ -301,6 +361,10 @@ class MonitoringEngine {
             score: number;
             issues: string[];
         };
+        trends: {
+            performance: Record<string, number[]>;
+            business: Record<string, number[]>;
+        };
     } {
         const performanceMetrics = this.getPerformanceMetrics();
         const businessMetrics = this.getBusinessMetrics();
@@ -310,13 +374,52 @@ class MonitoringEngine {
         // Calculate system health
         const systemHealth = this.calculateSystemHealth(performanceMetrics);
 
+        // Get trends data
+        const trends = this.getTrendsData();
+
         return {
             performanceMetrics,
             businessMetrics,
             recentEvents,
             activeAlerts,
             systemHealth,
+            trends,
         };
+    }
+
+    /**
+     * Get trends data for charts
+     */
+    public getTrendsData(): {
+        performance: Record<string, number[]>;
+        business: Record<string, number[]>;
+    } {
+        const performance: Record<string, number[]> = {};
+        const business: Record<string, number[]> = {};
+
+        // Performance metrics
+        const perfKeys = [
+            "response_time", "throughput", "error_rate", "cpu_usage",
+            "memory_usage", "cache_hit_rate", "page_load_time"
+        ];
+        
+        perfKeys.forEach(key => {
+            const values = this.metrics.get(key) || [];
+            performance[key] = values.slice(-24); // Last 24 data points
+        });
+
+        // Business metrics
+        const businessKeys = [
+            "active_users", "new_users", "job_applications", "revenue",
+            "conversion_rate", "user_engagement"
+        ];
+        
+        businessKeys.forEach(key => {
+            const values = this.metrics.get(key) || [];
+            business[key] = values.slice(-24); // Last 24 data points
+        });
+
+        return { performance, business };
     }
 
     // Private helper methods
@@ -330,6 +433,40 @@ class MonitoringEngine {
             return 0;
         }
         return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    private startMetricsFlush(): void {
+        // Flush metrics buffer every 30 seconds
+        this.flushInterval = setInterval(() => {
+            this.flushMetricsBuffer();
+        }, 30000);
+    }
+
+    private flushMetricsBuffer(): void {
+        this.metricsBuffer.forEach((values, key) => {
+            if (!this.metrics.has(key)) {
+                this.metrics.set(key, []);
+            }
+            this.metrics.get(key)!.push(...values);
+            
+            // Keep only last 1000 values per metric
+            const currentValues = this.metrics.get(key)!;
+            if (currentValues.length > 1000) {
+                this.metrics.set(key, currentValues.slice(-1000));
+            }
+        });
+        
+        this.metricsBuffer.clear();
+    }
+
+    private notifySubscribers(event: MonitoringEvent): void {
+        this.realTimeSubscribers.forEach(callback => {
+            try {
+                callback(event);
+            } catch (error) {
+                console.error("Error in monitoring subscriber:", error);
+            }
+        });
     }
 
     private checkAlerts(event: MonitoringEvent): void {
@@ -370,6 +507,17 @@ class MonitoringEngine {
                     case "lte":
                         conditionMet = value <= threshold;
                         break;
+                    case "contains":
+                        conditionMet = String(value).includes(String(threshold));
+                        break;
+                    case "regex":
+                        try {
+                            const regex = new RegExp(String(threshold));
+                            conditionMet = regex.test(String(value));
+                        } catch (e) {
+                            console.error("Invalid regex in alert condition:", e);
+                        }
+                        break;
                 }
 
                 if (conditionMet) {
@@ -388,8 +536,15 @@ class MonitoringEngine {
 
         // Send notifications
         alert.notificationChannels.forEach((channel) => {
-            this.sendNotification(channel, alert, event);
+            if (channel.enabled) {
+                this.sendNotification(channel, alert, event);
+            }
         });
+
+        // Handle escalation if configured
+        if (alert.escalationPolicy) {
+            this.scheduleEscalation(alert, event);
+        }
 
         console.log(`Alert triggered: ${alert.name}`, {
             alertId: alert.id,
@@ -399,16 +554,48 @@ class MonitoringEngine {
         });
     }
 
+    private scheduleEscalation(alert: AlertConfig, event: MonitoringEvent): void {
+        if (!alert.escalationPolicy) return;
+
+        alert.escalationPolicy.levels.forEach((level, index) => {
+            setTimeout(() => {
+                // Check if alert is still active
+                const recentHistory = this.alertHistory.filter(
+                    h => h.alertId === alert.id && 
+                    h.triggeredAt >= new Date(Date.now() - alert.escalationPolicy!.levels[index].delayMs)
+                );
+
+                if (recentHistory.length > 0 && !recentHistory[0].resolvedAt) {
+                    level.channels.forEach(channel => {
+                        if (channel.enabled) {
+                            this.sendNotification(channel, alert, event, level.message);
+                        }
+                    });
+
+                    // Update escalation level in history
+                    const historyEntry = this.alertHistory.find(
+                        h => h.alertId === alert.id && h.triggeredAt === alert.lastTriggered
+                    );
+                    if (historyEntry) {
+                        historyEntry.escalatedLevel = index + 1;
+                    }
+                }
+            }, level.delayMs);
+        });
+    }
+
     private sendNotification(
         channel: NotificationChannel,
         alert: AlertConfig,
         event: MonitoringEvent,
+        customMessage?: string,
     ): void {
         const message = {
             alert: alert.name,
             description: alert.description,
             severity: alert.severity,
             timestamp: new Date().toISOString(),
+            customMessage,
             event: {
                 type: event.type,
                 source: event.source,
@@ -435,6 +622,14 @@ class MonitoringEngine {
             case "slack":
                 // In production, send Slack message
                 console.log("Slack notification:", message);
+                break;
+            case "discord":
+                // In production, send Discord message
+                console.log("Discord notification:", message);
+                break;
+            case "teams":
+                // In production, send Teams message
+                console.log("Teams notification:", message);
                 break;
             case "sms":
                 // In production, send SMS
@@ -493,6 +688,26 @@ class MonitoringEngine {
             score -= 10;
         }
 
+        // Check page load time
+        if (metrics.pageLoadTime > 3000) {
+            issues.push("Slow page load time");
+            score -= 15;
+        } else if (metrics.pageLoadTime > 2000) {
+            issues.push("Elevated page load time");
+            score -= 8;
+        }
+
+        // Check Core Web Vitals
+        if (metrics.largestContentfulPaint > 2500) {
+            issues.push("Poor Largest Contentful Paint");
+            score -= 10;
+        }
+
+        if (metrics.cumulativeLayoutShift > 0.1) {
+            issues.push("High Cumulative Layout Shift");
+            score -= 10;
+        }
+
         let status: "healthy" | "warning" | "critical";
         if (score >= 80) {
             status = "healthy";
@@ -523,6 +738,7 @@ class MonitoringEngine {
                 {
                     type: "webhook",
                     config: { url: process.env.MONITORING_WEBHOOK_URL },
+                    enabled: true,
                 },
             ],
         });
@@ -544,8 +760,25 @@ class MonitoringEngine {
                 {
                     type: "webhook",
                     config: { url: process.env.MONITORING_WEBHOOK_URL },
+                    enabled: true,
                 },
             ],
+            escalationPolicy: {
+                levels: [
+                    {
+                        delayMs: 600000, // 10 minutes
+                        channels: [
+                            {
+                                type: "email",
+                                config: { to: process.env.ALERT_EMAIL },
+                                enabled: true,
+                            },
+                        ],
+                        message: "Error rate still elevated after 10 minutes",
+                    },
+                ],
+                maxEscalations: 3,
+            },
         });
 
         // High CPU usage alert
@@ -565,6 +798,7 @@ class MonitoringEngine {
                 {
                     type: "webhook",
                     config: { url: process.env.MONITORING_WEBHOOK_URL },
+                    enabled: true,
                 },
             ],
         });
@@ -586,9 +820,63 @@ class MonitoringEngine {
                 {
                     type: "webhook",
                     config: { url: process.env.MONITORING_WEBHOOK_URL },
+                    enabled: true,
                 },
             ],
         });
+
+        // Authentication failure alert
+        this.createAlert({
+            name: "High Authentication Failures",
+            description: "Unusual number of authentication failures detected",
+            condition: {
+                metric: "auth_failures",
+                operator: "gt",
+                threshold: 10,
+                timeWindowMs: 300000, // 5 minutes
+            },
+            severity: "CRITICAL",
+            enabled: true,
+            cooldownMs: 300000, // 5 minutes
+            notificationChannels: [
+                {
+                    type: "webhook",
+                    config: { url: process.env.SECURITY_WEBHOOK_URL },
+                    enabled: true,
+                },
+            ],
+        });
+
+        // Payment processing alert
+        this.createAlert({
+            name: "Payment Processing Issues",
+            description: "Payment processing error rate is elevated",
+            condition: {
+                metric: "payment_error_rate",
+                operator: "gt",
+                threshold: 2,
+                timeWindowMs: 300000, // 5 minutes
+            },
+            severity: "CRITICAL",
+            enabled: true,
+            cooldownMs: 300000, // 5 minutes
+            notificationChannels: [
+                {
+                    type: "webhook",
+                    config: { url: process.env.PAYMENT_WEBHOOK_URL },
+                    enabled: true,
+                },
+            ],
+        });
+    }
+
+    /**
+     * Cleanup method to stop intervals
+     */
+    public destroy(): void {
+        if (this.flushInterval) {
+            clearInterval(this.flushInterval);
+        }
     }
 }
 

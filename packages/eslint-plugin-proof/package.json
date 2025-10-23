@@ -1,0 +1,13 @@
+{
+  "name": "eslint-plugin-proof",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "type": "commonjs",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "proof-of-fit",
+    "lint"
+  ]
+}

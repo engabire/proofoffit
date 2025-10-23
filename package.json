@@ -36,6 +36,7 @@
     "@vitest/browser": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "8.57.1",
+    "eslint-plugin-proof": "file:packages/eslint-plugin-proof",
     "playwright": "^1.55.1",
     "storybook": "^9.1.10",
     "tsx": "^4.7.0",

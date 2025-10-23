@@ -574,6 +574,7 @@ export function EnhancedEnterpriseLogin({
                       errors.confirmPassword ? "border-red-500" : ""
                     }`}
                     placeholder="Confirm your password"
+                    autoComplete="new-password"
                     required
                   />
                   <button

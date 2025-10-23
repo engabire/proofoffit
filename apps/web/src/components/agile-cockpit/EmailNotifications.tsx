@@ -373,6 +373,7 @@ Agile Cockpit`,
                   }))}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="App password"
+                autoComplete="new-password"
               />
             </div>
 
