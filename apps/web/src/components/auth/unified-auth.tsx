@@ -417,6 +417,7 @@ export function UnifiedAuth({
                                                 setFullName(e.target.value)}
                                             className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                             placeholder="Enter your full name"
+                                            autoComplete="name"
                                             required={isSignup}
                                         />
                                     </div>
@@ -443,6 +444,7 @@ export function UnifiedAuth({
                                             setEmail(e.target.value)}
                                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="you@example.com"
+                                        autoComplete="email"
                                         required
                                     />
                                 </div>
@@ -470,6 +472,7 @@ export function UnifiedAuth({
                                             setPassword(e.target.value)}
                                         className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="Enter your password"
+                                        autoComplete={isSignup ? "new-password" : "current-password"}
                                         required
                                     />
                                     <button
@@ -550,6 +553,7 @@ export function UnifiedAuth({
                                                 )}
                                             className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                             placeholder="Confirm your password"
+                                            autoComplete="new-password"
                                             required={isSignup}
                                         />
                                         <button
