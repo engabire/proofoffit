@@ -26,6 +26,7 @@ import {
   Home,
   ChevronRight
 } from 'lucide-react'
+import { EnhancedDashboard } from '@/components/dashboard/enhanced-dashboard'
 
 function DashboardPageContent() {
   const router = useRouter()
@@ -165,8 +166,11 @@ function DashboardPageContent() {
               ? 'Here\'s your hiring dashboard with candidate insights and team collaboration tools.'
               : 'Here\'s your job search dashboard with fit reports and application tracking.'
             }
-          </p>
-        </div>
+        </p>
+      </div>
+
+        {/* Enhanced Dashboard */}
+        <EnhancedDashboard />
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -204,10 +208,10 @@ function DashboardPageContent() {
                 </p>
               </div>
             </div>
-          </div>
+      </div>
 
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
+              <div className="flex items-center">
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                   <TrendingUp className="h-5 w-5 text-purple-600" />
@@ -222,7 +226,7 @@ function DashboardPageContent() {
                 </p>
               </div>
             </div>
-          </div>
+      </div>
 
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
@@ -230,7 +234,7 @@ function DashboardPageContent() {
                 <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
                   <Calendar className="h-5 w-5 text-orange-600" />
                 </div>
-              </div>
+            </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">
                   {isEmployer ? 'This Week' : 'This Week'}
@@ -241,7 +245,7 @@ function DashboardPageContent() {
               </div>
             </div>
           </div>
-        </div>
+      </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -314,12 +318,12 @@ function DashboardPageContent() {
                       <div className="flex items-center">
                         <Sparkles className="h-4 w-4 mr-3 text-purple-600" />
                         Get Fit Report
-                      </div>
+                  </div>
                       <ArrowRight className="h-4 w-4 text-gray-400" />
                     </button>
                   </>
                 )}
-              </div>
+                </div>
             </div>
           </div>
 
@@ -373,7 +377,7 @@ function DashboardPageContent() {
                     </div>
                     <div className="flex items-center space-x-3">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <div className="flex-1">
+              <div className="flex-1">
                         <p className="text-sm text-gray-900">Profile updated with new skills</p>
                         <p className="text-xs text-gray-500">2 days ago</p>
                       </div>
