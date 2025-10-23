@@ -16,6 +16,7 @@ import {
     Users,
 } from "lucide-react";
 import { logger } from "@/lib/utils/logger";
+import { useAuth } from "@/hooks/use-auth";
 
 interface UnifiedAuthProps {
     mode: "signin" | "signup";
@@ -37,30 +38,98 @@ export function UnifiedAuth({
     const [fullName, setFullName] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [passwordStrength, setPasswordStrength] = useState(0);
     const router = useRouter();
+    const { signIn, signUp, loading: authLoading } = useAuth();
+
+    // Password strength calculation
+    const calculatePasswordStrength = (pwd: string) => {
+        let strength = 0;
+        if (pwd.length >= 8) strength += 1;
+        if (pwd.length >= 12) strength += 1;
+        if (/[a-z]/.test(pwd)) strength += 1;
+        if (/[A-Z]/.test(pwd)) strength += 1;
+        if (/[0-9]/.test(pwd)) strength += 1;
+        if (/[^A-Za-z0-9]/.test(pwd)) strength += 1;
+        return strength;
+    };
+
+    // Update password strength when password changes
+    React.useEffect(() => {
+        if (isSignup && password) {
+            setPasswordStrength(calculatePasswordStrength(password));
+        }
+    }, [password, isSignup]);
 
     const isSignup = mode === "signup";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
+        setError(null);
 
-        // TODO: Implement actual authentication
-        logger.info("Auth attempt:", {
-            mode,
-            userType,
-            hasEmail: Boolean(email),
-            fullName: isSignup ? fullName : undefined,
-            agreedToTerms: isSignup ? agreedToTerms : undefined,
-        });
+        // Validation
+        if (!email || !password) {
+            setError("Please fill in all required fields");
+            return;
+        }
 
-        // Simulate loading
-        setTimeout(() => {
-            setIsLoading(false);
-            router.push(redirectTo);
-        }, 1000);
+        if (isSignup) {
+            if (!fullName) {
+                setError("Please enter your full name");
+                return;
+            }
+            if (password !== confirmPassword) {
+                setError("Passwords do not match");
+                return;
+            }
+            if (password.length < 8) {
+                setError("Password must be at least 8 characters long");
+                return;
+            }
+            if (passwordStrength < 3) {
+                setError("Password is too weak. Please use a stronger password with uppercase, lowercase, numbers, and special characters.");
+                return;
+            }
+            if (!agreedToTerms) {
+                setError("Please agree to the terms and conditions");
+                return;
+            }
+        }
+
+        try {
+            logger.info("Auth attempt:", {
+                mode,
+                userType,
+                email,
+                fullName: isSignup ? fullName : undefined,
+            });
+
+            let result;
+            if (isSignup) {
+                result = await signUp(email, password, {
+                    user_type: userType,
+                    full_name: fullName,
+                });
+            } else {
+                result = await signIn(email, password);
+            }
+
+            if (result.success) {
+                if (isSignup && result.needsConfirmation) {
+                    setError("Please check your email for a confirmation link");
+                } else {
+                    // Redirect will be handled by the auth state change listener
+                    logger.info("Authentication successful");
+                }
+            } else {
+                setError(result.error || "Authentication failed");
+            }
+        } catch (error) {
+            logger.error("Auth error:", error);
+            setError("An unexpected error occurred. Please try again.");
+        }
     };
 
     return (
@@ -318,6 +387,13 @@ export function UnifiedAuth({
                             </button>
                         </div>
 
+                        {/* Error Display */}
+                        {error && (
+                            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                <p className="text-sm text-red-600">{error}</p>
+                            </div>
+                        )}
+
                         {/* Auth Form */}
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Full Name Field (Signup only) */}
@@ -411,6 +487,42 @@ export function UnifiedAuth({
                                             )}
                                     </button>
                                 </div>
+                                
+                                {/* Password Strength Indicator (Signup only) */}
+                                {isSignup && password && (
+                                    <div className="mt-2">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className={`h-2 rounded-full transition-all duration-300 ${
+                                                        passwordStrength <= 2
+                                                            ? "bg-red-500"
+                                                            : passwordStrength <= 4
+                                                            ? "bg-yellow-500"
+                                                            : "bg-green-500"
+                                                    }`}
+                                                    style={{
+                                                        width: `${(passwordStrength / 6) * 100}%`,
+                                                    }}
+                                                />
+                                            </div>
+                                            <span className="text-xs text-gray-500">
+                                                {passwordStrength <= 2
+                                                    ? "Weak"
+                                                    : passwordStrength <= 4
+                                                    ? "Medium"
+                                                    : "Strong"}
+                                            </span>
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                            {password.length < 8 && "At least 8 characters"}
+                                            {password.length >= 8 && !/[A-Z]/.test(password) && " • Add uppercase letter"}
+                                            {password.length >= 8 && !/[a-z]/.test(password) && " • Add lowercase letter"}
+                                            {password.length >= 8 && !/[0-9]/.test(password) && " • Add number"}
+                                            {password.length >= 8 && !/[^A-Za-z0-9]/.test(password) && " • Add special character"}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Confirm Password Field (Signup only) */}
@@ -499,11 +611,11 @@ export function UnifiedAuth({
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isLoading ||
+                                disabled={authLoading ||
                                     (isSignup && !agreedToTerms)}
                                 className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isLoading
+                                {authLoading
                                     ? (isSignup
                                         ? "Creating account..."
                                         : "Signing in...")
