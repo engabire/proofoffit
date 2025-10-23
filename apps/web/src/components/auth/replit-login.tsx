@@ -340,6 +340,7 @@ export function ReplitLogin({
                                             setPassword(e.target.value)}
                                         className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                         placeholder="Enter your password"
+                                        autoComplete="current-password"
                                         required
                                     />
                                     <button

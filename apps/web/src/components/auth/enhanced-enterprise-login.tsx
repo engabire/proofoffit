@@ -511,6 +511,7 @@ export function EnhancedEnterpriseLogin({
                     errors.password ? "border-red-500" : ""
                   }`}
                   placeholder="Enter your password"
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
                   required
                 />
                 <button
