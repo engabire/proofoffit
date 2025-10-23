@@ -478,7 +478,7 @@ export class AIMatchingEngine {
         const batch = candidates.slice(i, i + batchSize)
         
         // Process batch in parallel to avoid N+1 queries
-        const batchPromises = batch.map(candidate => 
+        const batchPromises = batch.map((candidate: any) => 
           this.calculateFitScore(candidate, job)
         )
         
@@ -548,7 +548,7 @@ export class AIMatchingEngine {
         const batch = jobs.slice(i, i + batchSize)
         
         // Process batch in parallel to avoid N+1 queries
-        const batchPromises = batch.map(job => 
+        const batchPromises = batch.map((job: any) => 
           this.calculateFitScore(candidate, job)
         )
         
