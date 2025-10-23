@@ -117,7 +117,7 @@ export function UnifiedAuth({
             }
 
             if (result.success) {
-                if (isSignup && result.needsConfirmation) {
+                if (isSignup && 'needsConfirmation' in result && result.needsConfirmation) {
                     setError("Please check your email for a confirmation link");
                 } else {
                     // Redirect will be handled by the auth state change listener
