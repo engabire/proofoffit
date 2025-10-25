@@ -9,6 +9,7 @@ module.exports = {
     'packages/ui/dist/**'
   ],
   env: { browser: true, es2022: true, node: true, jest: true },
+  plugins: ['proof'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -20,6 +21,7 @@ module.exports = {
     }
   ],
   rules: {
-    'no-console': ['warn', { allow: ['warn', 'error'] }]
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'proof/require-password-autocomplete': 'error'
   }
 }

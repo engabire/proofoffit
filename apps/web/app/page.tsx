@@ -77,7 +77,6 @@ export default function HomePage() {
                     width={640}
                     height={480}
                     className="w-full h-auto"
-                    priority
                     unoptimized
                   />
                 </div>
@@ -90,7 +89,6 @@ export default function HomePage() {
                     width={640}
                     height={480}
                     className="w-full h-auto"
-                    priority
                     unoptimized
                   />
                 </div>

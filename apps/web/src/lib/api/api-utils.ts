@@ -129,11 +129,11 @@ export function handleApiError(
         userId: context.userId,
         requestId: generateRequestId(),
         timestamp: new Date(),
-        environment: process.env.NODE_ENV || 'development',
+        environment: process.env.NODE_ENV || "development",
     });
 
     const statusCode = errorHandler.getHttpStatusCode(appError);
-    
+
     return NextResponse.json(
         {
             error: {
@@ -144,7 +144,7 @@ export function handleApiError(
             timestamp: new Date().toISOString(),
             requestId: generateRequestId(),
         },
-        { status: statusCode }
+        { status: statusCode },
     );
 }
 
