@@ -107,7 +107,8 @@ export function useAuth() {
         email,
         password,
         options: {
-          data: metadata
+          data: metadata,
+          emailRedirectTo: undefined // Disable email confirmation
         }
       })
 
@@ -165,31 +166,33 @@ export function useAuth() {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       
-      if (!supabase) {
-        setState(prev => ({ ...prev, error: 'Authentication service not available', loading: false }))
-        return { success: false, error: 'Authentication service not available' }
-      }
-      
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`
-        }
+      // Use our verification code system instead of Supabase OTP
+      const response = await fetch('/api/auth/verification-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'generate',
+          email,
+        }),
       })
 
-      if (error) {
-        setState(prev => ({ ...prev, error: error.message, loading: false }))
-        return { success: false, error: error.message }
+      const data = await response.json()
+
+      if (!data.success) {
+        setState(prev => ({ ...prev, error: data.error || 'Failed to generate verification code', loading: false }))
+        return { success: false, error: data.error || 'Failed to generate verification code' }
       }
 
       setState(prev => ({ ...prev, loading: false }))
-      return { success: true }
+      return { success: true, needsVerification: true }
     } catch (error) {
-      const errorMessage = 'Failed to send magic link. Please try again.'
+      const errorMessage = 'Failed to generate verification code. Please try again.'
       setState(prev => ({ ...prev, error: errorMessage, loading: false }))
       return { success: false, error: errorMessage }
     }
-  }, [supabase])
+  }, [])
 
   // Initialize auth on mount
   useEffect(() => {

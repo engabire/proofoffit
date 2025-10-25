@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useCSRFHeaders } from "@/components/security/csrf-provider";
 import { createClientSupabaseClient } from "@/lib/supabase/client";
 import { LogoSymbol } from "@/components/branding/logo-symbol";
+import { VerificationCodeForm } from "./verification-code-form";
 import {
   AlertTriangle,
   ArrowRight,
@@ -91,6 +92,8 @@ export default function EnhancedAuth({
   const [suggestedProvider, setSuggestedProvider] = useState<
     { key: string; label: string; hint?: string } | null
   >(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   // Basic validation rules
   const validateEmail = (value: string) =>
@@ -149,18 +152,18 @@ export default function EnhancedAuth({
     setError("");
 
     try {
-      // For signup, use magic link instead of password to avoid email confirmation issues
+      // For signup, use verification code instead of magic link
       if (mode === "signup") {
         const result = await sendMagicLink(email);
         if (!result.success) {
           setError(
-            result.error || "Failed to send magic link. Please try again.",
+            result.error || "Failed to generate verification code. Please try again.",
           );
           return;
         }
-        setError(
-          "Magic link sent! Please check your email (including spam folder).",
-        );
+        // Show verification code form
+        setPendingEmail(email);
+        setShowVerification(true);
         return;
       }
 
@@ -348,6 +351,21 @@ export default function EnhancedAuth({
       {/* Right: Actions */}
       <main className="flex items-center justify-center p-6 md:p-12">
         <div className="w-full max-w-xl bg-white rounded-lg shadow-xl border border-gray-200 p-8">
+          {showVerification ? (
+            <VerificationCodeForm
+              email={pendingEmail}
+              onSuccess={() => {
+                setShowVerification(false);
+                setPendingEmail("");
+                // Redirect to dashboard after successful verification
+                router.push(redirectTo);
+              }}
+              onBack={() => {
+                setShowVerification(false);
+                setPendingEmail("");
+              }}
+            />
+          ) : (
           {/* Audience switcher */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
@@ -640,6 +658,7 @@ export default function EnhancedAuth({
               </Link>. We only send essential account and security emails.
             </div>
           </div>
+          )}
         </div>
       </main>
     </div>

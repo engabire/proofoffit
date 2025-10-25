@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { logger } from "@/lib/utils/logger";
 import { useAuth } from "@/hooks/use-auth";
+import { VerificationCodeForm } from "./verification-code-form";
 
 interface UnifiedAuthProps {
     mode: "signin" | "signup";
@@ -41,6 +42,8 @@ export function UnifiedAuth({
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [passwordStrength, setPasswordStrength] = useState(0);
+    const [showVerification, setShowVerification] = useState(false);
+    const [pendingEmail, setPendingEmail] = useState("");
     const router = useRouter();
     const { signIn, signUp, loading: authLoading } = useAuth();
 
@@ -118,7 +121,9 @@ export function UnifiedAuth({
 
             if (result.success) {
                 if (isSignup && 'needsConfirmation' in result && result.needsConfirmation) {
-                    setError("Please check your email for a confirmation link");
+                    // Show verification code form instead of email confirmation
+                    setPendingEmail(email);
+                    setShowVerification(true);
                 } else {
                     // Redirect will be handled by the auth state change listener
                     logger.info("Authentication successful");
@@ -346,7 +351,22 @@ export function UnifiedAuth({
             {/* Right Column - Auth Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative z-10">
                 <div className="w-full max-w-md">
-                    <div className="bg-white rounded-xl shadow-lg p-8">
+                    {showVerification ? (
+                        <VerificationCodeForm
+                            email={pendingEmail}
+                            onSuccess={() => {
+                                setShowVerification(false);
+                                setPendingEmail("");
+                                // Redirect to dashboard after successful verification
+                                router.push(redirectTo);
+                            }}
+                            onBack={() => {
+                                setShowVerification(false);
+                                setPendingEmail("");
+                            }}
+                        />
+                    ) : (
+                        <div className="bg-white rounded-xl shadow-lg p-8">
                         {/* Title */}
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
                             {isSignup
@@ -656,6 +676,7 @@ export function UnifiedAuth({
                             </p>
                         </div>
                     </div>
+                    )}
                 </div>
             </div>
         </div>
