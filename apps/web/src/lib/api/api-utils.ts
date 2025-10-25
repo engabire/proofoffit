@@ -123,14 +123,28 @@ export function handleApiError(
         operation?: string;
     } = {},
 ): NextResponse<ApiResponse> {
-    return errorHandler.handleApiError(
-        error as Error,
-        request,
+    // Create a proper NextResponse directly instead of converting from Response
+    const appError = errorHandler.handleError(error as Error, {
+        endpoint: context.endpoint,
+        userId: context.userId,
+        requestId: generateRequestId(),
+        timestamp: new Date(),
+        environment: process.env.NODE_ENV || 'development',
+    });
+
+    const statusCode = errorHandler.getHttpStatusCode(appError);
+    
+    return NextResponse.json(
         {
-            endpoint: context.endpoint,
-            userId: context.userId,
+            error: {
+                type: appError.type,
+                code: appError.code,
+                message: appError.userMessage || appError.message,
+            },
+            timestamp: new Date().toISOString(),
             requestId: generateRequestId(),
         },
+        { status: statusCode }
     );
 }
 
